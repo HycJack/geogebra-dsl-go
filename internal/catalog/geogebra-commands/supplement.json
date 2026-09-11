@@ -143,6 +143,54 @@
     { "name": "Logistic", "url": "", "overloads": [
       { "syntax": "Logistic(<Number>,<Number>)", "params": [{"name":"<Mean>","role":"m","type":"Number"},{"name":"<Scale>","role":"s","type":"Number"}]},
       { "syntax": "Logistic(<Number>,<Number>,<Boolean>)", "params": [{"name":"<Mean>","role":"m","type":"Number"},{"name":"<Scale>","role":"s","type":"Number"},{"name":"<Cumulative>","role":"cum","type":"Boolean"}]}
+    ]},
+    { "name": "ConeInfinite", "url": "", "overloads": [
+      { "syntax": "InfiniteCone(<Point>,<Point>,<Number>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"},{"name":"<Radius>","role":"r","type":"Number"}]},
+      { "syntax": "InfiniteCone(<Point>,<Vector>,<Number>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Vector>","role":"v","type":"Vector"},{"name":"<Radius>","role":"r","type":"Number"}]},
+      { "syntax": "InfiniteCone(<Point>,<Line>,<Number>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Line>","role":"l","type":"Line"},{"name":"<Radius>","role":"r","type":"Number"}]}
+    ]},
+    { "name": "CylinderInfinite", "url": "", "overloads": [
+      { "syntax": "InfiniteCylinder(<Point>,<Point>,<Number>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"},{"name":"<Radius>","role":"r","type":"Number"}]},
+      { "syntax": "InfiniteCylinder(<Point>,<Vector>,<Number>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Vector>","role":"v","type":"Vector"},{"name":"<Radius>","role":"r","type":"Number"}]},
+      { "syntax": "InfiniteCylinder(<Point>,<Line>,<Number>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Line>","role":"l","type":"Line"},{"name":"<Radius>","role":"r","type":"Number"}]}
+    ]},
+    { "name": "QuadricSide", "url": "", "overloads": [
+      { "syntax": "QuadricSide(<Quadric>)", "params": [{"name":"<Quadric>","role":"quadric","type":"Quadric"}]}
+    ]},
+    { "name": "ImplicitSurface", "url": "", "overloads": [
+      { "syntax": "ImplicitSurface(<Function>)", "params": [{"name":"<f(x,y,z)>","role":"f","type":"Function"}]}
+    ]},
+    { "name": "Polyhedron", "url": "", "overloads": [
+      { "syntax": "Polyhedron(<Point>,<Point>,<Point>,<Point>,...)", "params": [{"name":"<Point>","role":"p1","type":"Point"},{"name":"<Point>","role":"p2","type":"Point"},{"name":"<Point>","role":"p3","type":"Point"},{"name":"<Point>","role":"p4","type":"Point"}]}
+    ]},
+    { "name": "CornerThreeD", "url": "", "overloads": [
+      { "syntax": "Corner3D(<Number>)", "params": [{"name":"<Number>","role":"corner","type":"Number"}]},
+      { "syntax": "Corner3D(<Number>,<Number>)", "params": [{"name":"<Number>","role":"corner","type":"Number"},{"name":"<Axis>","role":"axis","type":"Number"}]}
+    ]},
+    { "name": "IntersectRegion", "url": "", "overloads": [
+      { "syntax": "IntersectRegion(<Object>,<Object>)", "params": [{"name":"<Object>","role":"a","type":"GeoObject"},{"name":"<Object>","role":"b","type":"GeoObject"}]},
+      { "syntax": "IntersectRegion(<Object>,<Object>,<Object>)", "params": [{"name":"<Object>","role":"a","type":"GeoObject"},{"name":"<Object>","role":"b","type":"GeoObject"},{"name":"<Object>","role":"c","type":"GeoObject"}]}
+    ]},
+    { "name": "IntersectionPaths", "url": "", "overloads": [
+      { "syntax": "IntersectionPaths(<Object>,<Object>)", "params": [{"name":"<Object>","role":"a","type":"GeoObject"},{"name":"<Object>","role":"b","type":"GeoObject"}]},
+      { "syntax": "IntersectionPaths(<Object>,<Object>,<Object>)", "params": [{"name":"<Object>","role":"a","type":"GeoObject"},{"name":"<Object>","role":"b","type":"GeoObject"},{"name":"<Object>","role":"c","type":"GeoObject"}]}
+    ]},
+    { "name": "PenStroke", "url": "", "overloads": [
+      { "syntax": "PenStroke(<Number>,<Number>,<Number>,<Number>,...)", "params": [{"name":"<x>","role":"x","type":"Number"},{"name":"<y>","role":"y","type":"Number"},{"name":"<x>","role":"x2","type":"Number"},{"name":"<y>","role":"y2","type":"Number"}]},
+      { "syntax": "PenStroke(<Point>,<Point>,...)", "params": [{"name":"<Point>","role":"p","type":"Point"}]}
+    ]},
+    { "name": "Excentricity", "url": "", "overloads": [
+      { "syntax": "Excentricity(<Conic>)", "params": [{"name":"<Conic>","role":"conic","type":"Conic"}]}
+    ]},
+    { "name": "PMCC", "url": "", "overloads": [
+      { "syntax": "PMCC(<List>)", "params": [{"name":"<List>","role":"list","type":"List"}]},
+      { "syntax": "PMCC(<List>,<List>)", "params": [{"name":"<List>","role":"x","type":"List"},{"name":"<List>","role":"y","type":"List"}]}
+    ]},
+    { "name": "FitLineY", "url": "", "overloads": [
+      { "syntax": "FitLineY(<List>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
+    ]},
+    { "name": "TableToChart", "url": "", "overloads": [
+      { "syntax": "TableToChart(<Object>,<Text>,<Number>,<Number>)", "params": [{"name":"<Table>","role":"table","type":"GeoObject"},{"name":"<Type>","role":"type","type":"Text"},{"name":"<Column>","role":"col","type":"Number"},{"name":"<EmbedID>","role":"id","type":"Number"}]}
     ]}
   ]
 }

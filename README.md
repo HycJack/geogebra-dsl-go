@@ -60,8 +60,8 @@ ggcm check --input text|ir <file>    # 强制输入形态（默认自动识别�
 
 命令表来自 GeoGebra 官方分类命令库 `geogebra-commands/`（取自
 `ggb-gen-api/geogebra-commands`），内嵌全部 20 个分类 JSON 并合并成一份，
-再补充 `supplement.json`（从 GeoGebra 内核源码
-`org.geogebra.common.kernel.commands` 的手算参数签名），当前 **536 条命令**。
+再补充 `supplement.json`（所有签名逐一对照 GeoGebra 内核源码
+`org.geogebra.common.kernel.commands` 的 Cmd 处理器手动核验），当前 **549 条**。
 
 ### 与内核源码对齐（覆盖核查）
 
@@ -69,10 +69,12 @@ ggcm check --input text|ir <file>    # 强制输入形态（默认自动识别�
 
 - **每一条 JSON 命令都能对到内核命令**，无错误/虚构条目（JSON 侧仅多收一个
   parser 函数名 `REAL`，无碍——它是保留字而非命令）。
-- **已覆盖 535 / 548**；剩余 13 个缺口集中在 3D 曲面体（`ConeInfinite`、
-  `Polyhedron`、`QuadricSide`…）、统计集成（`PMCC`、`FitLineY`、
-  `TableToChart`）、3D 求交（`IntersectRegion`、`IntersectionPaths`）与个别
-  3D 参数别名，均非平面教学构造所需，不影响常见教学通行。
+- **内核 548 条命令已全部覆盖（缺失 0）**，含 3D 曲面体（`ConeInfinite`、
+  `CylinderInfinite`、`Polyhedron`、`QuadricSide`）、统计（`PMCC`、
+  `FitLineY`、`TableToChart`、`Q1/Q3`）、CAS（`Evaluate`、`TaylorSeries`）、
+  变换（`Mirror`、`OrthogonalLine`、`Dilate`）等全部分类。
+- 少数因内核已标 **deprecated**（`IntersectRegion`、`IntersectionPaths`）
+  仍收录，便于兼容老脚本。
 
 > 合并时每个分类文件的 `commands`（map 与 array 两种 shape 均支持）逐一并入；
 > 同一条命令出现在多个分类时 overloads 全部累积，任何分类的签名都能命中。
