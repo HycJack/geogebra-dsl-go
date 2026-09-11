@@ -18,6 +18,7 @@ import (
 
 	"github.com/you/geogebra-dsl-go/internal/diag"
 	"github.com/you/geogebra-dsl-go/internal/ir"
+	"github.com/you/geogebra-dsl-go/internal/number"
 )
 
 // statement is one parsed line.
@@ -199,7 +200,7 @@ func resolveRefs(g *ir.Graph, cmd string, args []string) (refs, undefs []string)
 		if bound[i] {
 			continue // the arg is the command's own iteration/parameter variable, not a ref
 		}
-		if isIdentName(a) && !isNumber(a) {
+		if isIdentName(a) && !isNumber(a) && !number.KnownConstant(a) {
 			if _, ok := g.Get(a); ok {
 				refs = append(refs, a)
 			} else {

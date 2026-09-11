@@ -1,0 +1,4 @@
+A = Point(0, 0)
+c1 = Circle(A, pi)
+c2 = Circle(A, pi/2)
+t = Text(A, "半径π")

@@ -6,10 +6,10 @@ package geo
 
 import (
 	"math/big"
-	"strings"
 
 	"github.com/you/geogebra-dsl-go/internal/diag"
 	"github.com/you/geogebra-dsl-go/internal/ir"
+	"github.com/you/geogebra-dsl-go/internal/number"
 )
 
 // Check walks the topological order and flags degenerate objects. Fail-closed:
@@ -98,16 +98,10 @@ func zeroRadius(g *ir.Graph, o *ir.Object) *diag.Problem {
 	return nil
 }
 
-// parseRat parses a plain decimal number (e.g. "0", "3.5", "-2.25") as *big.Rat,
-// for exact comparison. Non-numeric input returns ok=false.
+// parseRat resolves an argument expression (a decimal, a reserved constant such
+// as pi/e/Euler, or nested arithmetic over them) to an exact *big.Rat value.
+// Non-resolvable expressions (e.g. an undefined name or a bad construct) return
+// ok=false, in which case the degeneracy check conservatively does not flag.
 func parseRat(s string) (*big.Rat, bool) {
-	s = strings.TrimSpace(s)
-	if s == "" {
-		return nil, false
-	}
-	r, ok := new(big.Rat).SetString(s)
-	if !ok {
-		return nil, false
-	}
-	return r, true
+	return number.Eval(s)
 }

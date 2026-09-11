@@ -92,3 +92,21 @@ func TestBoundVariableNotUndefined(t *testing.T) {
 		}
 	}
 }
+
+func TestReservedConstantsNotUndefinedRefs(t *testing.T) {
+	// pi / e are reserved constants, not object references; they must not be
+	// reported as undefined and must not become dependency refs.
+	src := "A = Point(0, 0)\nc1 = Circle(A, pi)\nc2 = Circle(A, 2*e)\n"
+	stmts, _ := Parse(src)
+	g, probs := Build(stmts)
+	if len(probs) != 0 {
+		t.Fatalf("expected no problems for reserved constants, got %v", probs)
+	}
+	for _, id := range []string{"c1", "c2"} {
+		for _, r := range g.Objects[id].Refs {
+			if r == "pi" || r == "e" {
+				t.Fatalf("reserved %q leaked into refs of %s: %v", r, id, g.Objects[id].Refs)
+			}
+		}
+	}
+}
