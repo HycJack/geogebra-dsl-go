@@ -32,6 +32,7 @@ type statement struct {
 
 // Parse splits a script into statements. Returns parse errors (fail-closed).
 func Parse(src string) ([]statement, []diag.Problem) {
+	src = strings.TrimPrefix(src, "\uFEFF") // strip UTF-8 BOM
 	var stmts []statement
 	var probs []diag.Problem
 	lines := strings.Split(src, "\n")

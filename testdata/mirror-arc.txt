@@ -1,0 +1,6 @@
+﻿A = Point(0, 0)
+B = Point(4, 0)
+l = Line(A, B)
+M = Midpoint(A, B)
+m = Mirror(l, M)
+arc = CircleArc(M, A, B)
