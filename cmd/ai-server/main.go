@@ -51,6 +51,13 @@ type server struct {
 	sessions *sessionStore
 }
 
+// chatResponse wraps the generation result with the resolved session id so the
+// client can attach subsequent "append" turns to the same conversation.
+type chatResponse struct {
+	SessionID string `json:"session_id"`
+	*ai.Result
+}
+
 // chatRequest mirrors DESIGN-AI.md §7.2.
 type chatRequest struct {
 	SessionID string `json:"session_id"`
@@ -78,18 +85,12 @@ func (s *server) handleChat(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	usrMsg, err := buildUserMessage(s.cfg, req)
-	if err != nil {
-		writeError(w, 400, err.Error())
-		return
-	}
-
 	sess := s.sessions.Get(req.SessionID)
-
-	// A follow-up "append" instruction reuses the problem (text) as context and
-	// asks the dialog to modify the prior output; the last assistant script is
-	// kept in history so the model can build on it.
 	sysMsg := ai.SystemMessage()
+
+	// A follow-up "append" instruction modifies the dialog's prior result; it can
+	// arrive without a fresh problem `text`, so it gets its own validation and
+	// does not require a non-empty text field.
 	var userMsg ai.Message
 	if strings.TrimSpace(req.Append) != "" {
 		combined := "对上一版结果做如下追加修改：\n" + req.Append
@@ -98,6 +99,11 @@ func (s *server) handleChat(w http.ResponseWriter, r *http.Request) {
 		}
 		userMsg = ai.TextUserMessage(combined)
 	} else {
+		usrMsg, err := buildUserMessage(s.cfg, req)
+		if err != nil {
+			writeError(w, 400, err.Error())
+			return
+		}
 		userMsg = *usrMsg
 	}
 	sess.Append(userMsg)
@@ -108,12 +114,14 @@ func (s *server) handleChat(w http.ResponseWriter, r *http.Request) {
 		UserMsg:   userMsg,
 	})
 
+	envelope := &chatResponse{SessionID: sess.ID}
+	envelope.Result = res
 	if req.Stream {
-		s.streamResult(w, res)
+		s.streamResult(w, envelope)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	_ = json.NewEncoder(w).Encode(res)
+	_ = json.NewEncoder(w).Encode(envelope)
 }
 
 // buildUserMessage validates the request and builds the user turn, preferring
@@ -143,9 +151,10 @@ func buildUserMessage(cfg ai.Config, req chatRequest) (*ai.Message, error) {
 	}
 }
 
-// streamResult emits the final Result as a single SSE "result" event.
-func (s *server) streamResult(w http.ResponseWriter, res *ai.Result) {
-	w.Header().Set("Content-Type", "text/event-stream")
+// streamResult emits the final (enveloped: result + session id) response as a
+// single SSE "result" event.
+func (s *server) streamResult(w http.ResponseWriter, env *chatResponse) {
+	w.Header().Set("Content-Type", "text/event-stream; charset=utf-8")
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Connection", "keep-alive")
 	fl, ok := w.(http.Flusher)
@@ -153,7 +162,7 @@ func (s *server) streamResult(w http.ResponseWriter, res *ai.Result) {
 		http.Error(w, "streaming unsupported", http.StatusInternalServerError)
 		return
 	}
-	data, _ := json.Marshal(res)
+	data, _ := json.Marshal(env)
 	fmt.Fprintf(w, "event: result\ndata: %s\n\n", data)
 	fl.Flush()
 }
