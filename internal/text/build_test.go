@@ -110,3 +110,47 @@ func TestReservedConstantsNotUndefinedRefs(t *testing.T) {
 		}
 	}
 }
+
+func TestNestedCommandMaterialized(t *testing.T) {
+	// Circle(Midpoint(A,B), 3) creates a synthetic object for Midpoint(A,B)
+	// that participates in the graph with correct dependencies.
+	src := "A = Point(0, 0)\nB = Point(4, 0)\nc = Circle(Midpoint(A, B), 3)\n"
+	stmts, _ := Parse(src)
+	g, probs := Build(stmts)
+	if len(probs) != 0 {
+		t.Fatalf("expected no problems, got %v", probs)
+	}
+	// synthetic nested object exists with cmd=Midpoint
+	if _, ok := g.Get("c.Midpoint1"); !ok {
+		t.Fatalf("synthetic Midpoint object missing; objects=%v", g.Order)
+	}
+	inner := g.Objects["c.Midpoint1"]
+	if inner.Cmd != "Midpoint" {
+		t.Fatalf("synthetic cmd=%q", inner.Cmd)
+	}
+	if len(inner.Refs) != 2 || inner.Refs[0] != "A" || inner.Refs[1] != "B" {
+		t.Fatalf("synthetic refs=%v", inner.Refs)
+	}
+	// outer circle depends on the synthetic object
+	if g.Objects["c"].Refs[0] != "c.Midpoint1" {
+		t.Fatalf("circle should depend on synthetic midpoint, refs=%v", g.Objects["c"].Refs)
+	}
+}
+
+func TestNestedCommandUnknown(t *testing.T) {
+	// An unknown command nested in an arg is not silently dropped: build flags it.
+	src := "A = Point(0, 0)\nB = Point(4, 0)\nc = Circle(Nope(A, B), 2)\n"
+	stmts, _ := Parse(src)
+	g, probs := Build(stmts)
+	// build itself doesn't know the command table; it synthesizes the object.
+	// The existence of "c.Nope1" is what the sig stage checks. No dep problems here.
+	if len(probs) != 0 {
+		t.Fatalf("unexpected build problems: %v", probs)
+	}
+	if _, ok := g.Get("c.Nope1"); !ok {
+		t.Fatalf("synthetic Nope object missing")
+	}
+	if g.Objects["c.Nope1"].Cmd != "Nope" {
+		t.Fatalf("synthetic cmd=%q", g.Objects["c.Nope1"].Cmd)
+	}
+}

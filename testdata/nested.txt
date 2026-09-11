@@ -1,0 +1,7 @@
+A = Point(0, 0)
+B = Point(4, 0)
+C = Point(2, 3)
+M = Midpoint(A, B)
+# 嵌套命令：Circle 的参数是 Midpoint(A,C) 这个子命令
+c = Circle(Midpoint(A, C), 2)
+d = Distance(A, Midpoint(B, C))

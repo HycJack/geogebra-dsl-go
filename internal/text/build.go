@@ -13,6 +13,7 @@
 package text
 
 import (
+	"strconv"
 	"strings"
 	"unicode"
 
@@ -174,9 +175,14 @@ func Build(stmts []statement) (*ir.Graph, []diag.Problem) {
 			o.Kind = ir.KNumber
 			o.Args = []string{s.numberLiteral}
 		default:
-			// command object; resolve refs from args
-			o.Args = s.args
-			refs, undefs := resolveRefs(g, s.cmd, s.args)
+			// command object; first flatten any nested command calls in the
+			// arguments (each becomes a synthetic object in the graph), then
+			// resolve refs from the partly-flattened args.
+			seq := &synthSeq{}
+			var nested []diag.Problem
+			o.Args, nested = flattenArgs(g, s.id, s.args, s.lineNo, seq)
+			probs = append(probs, nested...)
+			refs, undefs := resolveRefs(g, s.cmd, o.Args)
 			o.Refs = refs
 			for _, u := range undefs {
 				probs = append(probs, diag.Problem{
@@ -186,6 +192,77 @@ func Build(stmts []statement) (*ir.Graph, []diag.Problem) {
 		}
 	}
 	return g, probs
+}
+
+// synthSeq is a counter for generating unique synthetic object ids for nested
+// command calls.
+type synthSeq struct{ n int }
+
+// flattenArgs rewrites an argument list so that any argument that is itself a
+// command call (e.g. Midpoint(A,B) inside Circle(Midpoint(A,B),3)) becomes a
+// synthetic object added to the graph, with the argument position replaced by
+// that synthetic object's id. It recurses so arbitrarily deep nesting is
+// captured, and each nested command gets its own dependency edges.
+func flattenArgs(g *ir.Graph, owner string, args []string, lineNo int, seq *synthSeq) ([]string, []diag.Problem) {
+	var probs []diag.Problem
+	out := make([]string, len(args))
+	for i, a := range args {
+		a = strings.TrimSpace(a)
+		sub, ok, prob := parseArgCommand(a, lineNo)
+		if !ok {
+			out[i] = a // not a command call: keep as literal/ref
+			if prob != nil {
+				probs = append(probs, *prob)
+			}
+			continue
+		}
+		// a is `SubCmd(inner...)`: materialize as synthetic object.
+		seq.n++
+		sid := owner + "." + sub.cmd + strconv.Itoa(seq.n)
+		if _, exists := g.Get(sid); exists {
+			probs = append(probs, diag.Problem{
+				Code: diag.CodeDepRedefine, Msg: "嵌套命令 id 冲突：" + sid, Obj: owner, Line: lineNo,
+			})
+			out[i] = sid
+			continue
+		}
+		g.Add(&ir.Object{ID: sid, Cmd: sub.cmd, Line: lineNo})
+		subArgs, subProbs := flattenArgs(g, sid, sub.args, lineNo, seq)
+		probs = append(probs, subProbs...)
+		obj, _ := g.Get(sid)
+		obj.Args = subArgs
+		refs, undefs := resolveRefs(g, sub.cmd, subArgs)
+		obj.Refs = refs
+		for _, u := range undefs {
+			probs = append(probs, diag.Problem{
+				Code: diag.CodeDepUndefined, Msg: "引用了未定义对象（嵌套）：" + u, Obj: sid, Line: lineNo,
+			})
+		}
+		out[i] = sid
+	}
+	return out, probs
+}
+
+// argCommand is a decomposed nested command call found inside an argument.
+type argCommand struct {
+	cmd  string
+	args []string
+}
+
+// parseArgCommand detects whether s parses as `Cmd(...)` and, if so, returns
+// its command name and inner args. Non-command expression returns ok=false.
+func parseArgCommand(s string, lineNo int) (argCommand, bool, *diag.Problem) {
+	lp := strings.IndexByte(s, '(')
+	if lp <= 0 || !strings.HasSuffix(s, ")") {
+		return argCommand{}, false, nil
+	}
+	cmd := strings.TrimSpace(s[:lp])
+	// the command name must be a plain identifier (no operators inside)
+	if !isIdentName(cmd) {
+		return argCommand{}, false, nil
+	}
+	inner := strings.TrimSpace(s[lp+1 : len(s)-1])
+	return argCommand{cmd: cmd, args: splitArgs(inner)}, true, nil
 }
 
 // resolveRefs finds which args are bare identifiers referring to defined objects,
@@ -200,12 +277,16 @@ func resolveRefs(g *ir.Graph, cmd string, args []string) (refs, undefs []string)
 		if bound[i] {
 			continue // the arg is the command's own iteration/parameter variable, not a ref
 		}
-		if isIdentName(a) && !isNumber(a) && !number.KnownConstant(a) {
-			if _, ok := g.Get(a); ok {
-				refs = append(refs, a)
-			} else {
-				undefs = append(undefs, a)
-			}
+		if isNumber(a) || number.KnownConstant(a) {
+			continue // literal or reserved constant, not a reference
+		}
+		if _, ok := g.Get(a); ok {
+			// a defined object (a named object, or a synthetic nested-command
+			// id like A.Midpoint1) is a dependency ref regardless of whether it
+			// is a "clean" identifier.
+			refs = append(refs, a)
+		} else if isIdentName(a) {
+			undefs = append(undefs, a)
 		}
 	}
 	return refs, undefs
