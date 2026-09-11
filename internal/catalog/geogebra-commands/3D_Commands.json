@@ -1,0 +1,1938 @@
+{
+  "command_category": "3D Commands",
+  "total_commands": 53,
+  "commands": {
+    "Angle": {
+        "name": "Angle",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Angle/",
+        "overloads": [
+        {
+            "syntax": "Angle(<Object>)",
+            "params": [
+            {
+                "name": "<Object>",
+                "role": "obj",
+                "type": "Conic/Vector/Point/Number/Polygon",
+                "optional": false
+            }
+            ],
+            "description": "对不同对象返回不同意义的角度：圆锥曲线主轴扭转角、向量与 x 轴夹角、点位置向量与 x 轴夹角、数值映射到 [0,360°] 或 [0,2π] 的角、多边形各顶点处的角"
+        },
+        {
+            "syntax": "Angle(<Vector>, <Vector>)",
+            "params": [
+            {
+                "name": "<Vector>",
+                "role": "vec1",
+                "type": "Vector",
+                "optional": false
+            },
+            {
+                "name": "<Vector>",
+                "role": "vec2",
+                "type": "Vector",
+                "optional": false
+            }
+            ],
+            "description": "两向量之间的夹角"
+        },
+        {
+            "syntax": "Angle(<Line>, <Line>)",
+            "params": [
+            {
+                "name": "<Line>",
+                "role": "line1",
+                "type": "Line",
+                "optional": false
+            },
+            {
+                "name": "<Line>",
+                "role": "line2",
+                "type": "Line",
+                "optional": false
+            }
+            ],
+            "description": "两条直线方向向量之间的夹角"
+        },
+        {
+            "syntax": "Angle(<Line>, <Plane>)",
+            "params": [
+            {
+                "name": "<Line>",
+                "role": "line",
+                "type": "Line",
+                "optional": false
+            },
+            {
+                "name": "<Plane>",
+                "role": "plane",
+                "type": "Plane",
+                "optional": false
+            }
+            ],
+            "description": "直线与平面之间的夹角"
+        },
+        {
+            "syntax": "Angle(<Plane>, <Plane>)",
+            "params": [
+            {
+                "name": "<Plane>",
+                "role": "plane1",
+                "type": "Plane",
+                "optional": false
+            },
+            {
+                "name": "<Plane>",
+                "role": "plane2",
+                "type": "Plane",
+                "optional": false
+            }
+            ],
+            "description": "两个平面之间的夹角"
+        },
+        {
+            "syntax": "Angle(<Point>, <Apex>, <Point>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "point1",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Apex>",
+                "role": "apex",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "point2",
+                "type": "Point",
+                "optional": false
+            }
+            ],
+            "description": "由三点定义的角，第二个点为顶点"
+        },
+        {
+            "syntax": "Angle(<Point>, <Apex>, <Angle>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "point",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Apex>",
+                "role": "apex",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Angle>",
+                "role": "angle",
+                "type": "Number",
+                "optional": false
+            }
+            ],
+            "description": "以给定点和顶点构造一个指定大小的角，同时创建旋转后的点"
+        },
+        {
+            "syntax": "Angle(<Point>, <Point>, <Point>, <Direction>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "point1",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "point2",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "point3",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Direction>",
+                "role": "direction",
+                "type": "Line/Plane",
+                "optional": false
+            }
+            ],
+            "description": "在给定方向约束下由三点定义的 3D 角，可得到真实 [0,360°] 或 [0,2π] 范围的角"
+        }
+        ]
+    },
+
+    "Axes": {
+        "name": "Axes",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Axes/",
+        "overloads": [
+        {
+            "syntax": "Axes(<Conic>)",
+            "params": [
+            {
+                "name": "<Conic>",
+                "role": "conic",
+                "type": "Conic",
+                "optional": false
+            }
+            ],
+            "description": "返回圆锥曲线的主轴和次轴两条直线"
+        },
+        {
+            "syntax": "Axes(<Quadric>)",
+            "params": [
+            {
+                "name": "<Quadric>",
+                "role": "quadric",
+                "type": "Quadric",
+                "optional": false
+            }
+            ],
+            "description": "创建给定二次曲面的三条坐标轴（如球体时得到三条与坐标轴平行的直线）"
+        }
+        ]
+    },
+
+    "Bottom": {
+        "name": "Bottom",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Bottom/",
+        "overloads": [
+        {
+            "syntax": "Bottom(<Quadric>)",
+            "params": [
+            {
+                "name": "<Quadric>",
+                "role": "quadric",
+                "type": "Quadric",
+                "optional": false
+            }
+            ],
+            "description": "创建受限二次曲面的底面，例如圆柱的底面圆"
+        }
+        ]
+    },
+
+    "Center": {
+        "name": "Center",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Center/",
+        "overloads": [
+        {
+            "syntax": "Center(<Conic>)",
+            "params": [
+            {
+                "name": "<Conic>",
+                "role": "conic",
+                "type": "Conic",
+                "optional": false
+            }
+            ],
+            "description": "返回圆、椭圆或双曲线的中心点（英式拼写 Centre 也可）"
+        },
+        {
+            "syntax": "Center(<Quadric>)",
+            "params": [
+            {
+                "name": "<Quadric>",
+                "role": "quadric",
+                "type": "Quadric",
+                "optional": false
+            }
+            ],
+            "description": "返回二次曲面（如球、圆锥等）的中心点"
+        }
+        ]
+    },
+
+    "Circle": {
+        "name": "Circle",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Circle/",
+        "overloads": [
+        {
+            "syntax": "Circle(<Point>, <Radius Number>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "center",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Radius Number>",
+                "role": "radius",
+                "type": "Number",
+                "optional": false
+            }
+            ],
+            "description": "指定圆心与半径数值的圆"
+        },
+        {
+            "syntax": "Circle(<Point>, <Segment>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "center",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Segment>",
+                "role": "radiusSegment",
+                "type": "Segment",
+                "optional": false
+            }
+            ],
+            "description": "圆心为给定点，半径为线段长度的圆"
+        },
+        {
+            "syntax": "Circle(<Point>, <Point>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "center",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "onCircle",
+                "type": "Point",
+                "optional": false
+            }
+            ],
+            "description": "以第一个点为圆心、经过第二个点的圆"
+        },
+        {
+            "syntax": "Circle(<Point>, <Point>, <Point>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "A",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "B",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "C",
+                "type": "Point",
+                "optional": false
+            }
+            ],
+            "description": "过三个不共线点的圆"
+        },
+        {
+            "syntax": "Circle(<Line>, <Point>)",
+            "params": [
+            {
+                "name": "<Line>",
+                "role": "axis",
+                "type": "Line",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "onCircle",
+                "type": "Point",
+                "optional": false
+            }
+            ],
+            "description": "以给定直线为轴、经过给定点的 3D 圆"
+        },
+        {
+            "syntax": "Circle(<Point>, <Radius>, <Direction>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "center",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Radius>",
+                "role": "radius",
+                "type": "Number",
+                "optional": false
+            },
+            {
+                "name": "<Direction>",
+                "role": "axisDirection",
+                "type": "Line/Vector/Plane",
+                "optional": false
+            }
+            ],
+            "description": "在 3D 中指定圆心、半径以及轴方向（与 Direction 平行）的圆"
+        },
+        {
+            "syntax": "Circle(<Point>, <Point>, <Direction>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "center",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "onCircle",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Direction>",
+                "role": "axisDirection",
+                "type": "Line/Vector/Plane",
+                "optional": false
+            }
+            ],
+            "description": "在 3D 中以给定中心点和圆上点、轴方向平行于 Direction 的圆"
+        }
+        ]
+    },
+
+    "CircularArc": {
+        "name": "CircularArc",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/CircularArc/",
+        "overloads": [
+        {
+            "syntax": "CircularArc(<Midpoint>, <Point A>, <Point B>)",
+            "params": [
+            {
+                "name": "<Midpoint>",
+                "role": "midpoint",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point A>",
+                "role": "start",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point B>",
+                "role": "end",
+                "type": "Point",
+                "optional": false
+            }
+            ],
+            "description": "以给定中点和两端点构造圆弧（B 不必在弧线上），弧长在代数视图中显示"
+        }
+        ]
+    },
+
+    "CircularSector": {
+        "name": "CircularSector",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/CircularSector/",
+        "overloads": [
+        {
+            "syntax": "CircularSector(<Midpoint>, <Point A>, <Point B>)",
+            "params": [
+            {
+                "name": "<Midpoint>",
+                "role": "midpoint",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point A>",
+                "role": "start",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point B>",
+                "role": "end",
+                "type": "Point",
+                "optional": false
+            }
+            ],
+            "description": "创建一段圆扇形，扇形弧以 A 为起点、B 为终点，中点为 Midpoint；面积显示在代数视图"
+        }
+        ]
+    },
+
+    "CircumcircularArc": {
+        "name": "CircumcircularArc",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/CircumcircularArc/",
+        "overloads": [
+        {
+            "syntax": "CircumcircularArc(<Point>, <Point>, <Point>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "start",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "mid",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "end",
+                "type": "Point",
+                "optional": false
+            }
+            ],
+            "description": "通过三点的圆弧，第一点为起点，第三点为终点"
+        }
+        ]
+    },
+
+    "CircumcircularSector": {
+        "name": "CircumcircularSector",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/CircumcircularSector/",
+        "overloads": [
+        {
+            "syntax": "CircumcircularSector(<Point>, <Point>, <Point>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "start",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "mid",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "end",
+                "type": "Point",
+                "optional": false
+            }
+            ],
+            "description": "弧经过三个点的圆扇形，第一点为弧起点，第三点为弧终点"
+        }
+        ]
+    },
+
+    "Circumference": {
+        "name": "Circumference",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Circumference/",
+        "overloads": [
+        {
+            "syntax": "Circumference(<Circle/Conic>)",
+            "params": [
+            {
+                "name": "<Circle/Conic>",
+                "role": "conic",
+                "type": "Conic",
+                "optional": false
+            }
+            ],
+            "description": "返回圆或圆锥曲线的周长"
+        }
+        ]
+    },
+
+    "Cone": {
+        "name": "Cone",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Cone/",
+        "overloads": [
+        {
+            "syntax": "Cone(<Circle>, <Height>)",
+            "params": [
+            {
+                "name": "<Circle>",
+                "role": "base",
+                "type": "Circle",
+                "optional": false
+            },
+            {
+                "name": "<Height>",
+                "role": "height",
+                "type": "Number",
+                "optional": false
+            }
+            ],
+            "description": "以给定底面圆和高度创建有限圆锥"
+        },
+        {
+            "syntax": "Cone(<Point>, <Point>, <Radius>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "center",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "apex",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Radius>",
+                "role": "radius",
+                "type": "Number",
+                "optional": false
+            }
+            ],
+            "description": "以第一点为底面圆心、第二点为顶点、给定半径的圆锥"
+        },
+        {
+            "syntax": "Cone(<Point>, <Vector>, <Angle>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "apex",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Vector>",
+                "role": "axis",
+                "type": "Vector",
+                "optional": false
+            },
+            {
+                "name": "<Angle>",
+                "role": "halfApexAngle",
+                "type": "Number",
+                "optional": false
+            }
+            ],
+            "description": "顶点为给定点、轴向平行于向量、顶角为 2α 的无限圆锥，α≥π/2 时结果未定义"
+        }
+        ]
+    },
+
+    "Cube": {
+        "name": "Cube",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Cube/",
+        "overloads": [
+        {
+            "syntax": "Cube(<Square>)",
+            "params": [
+            {
+                "name": "<Square>",
+                "role": "base",
+                "type": "Polygon",
+                "optional": false
+            }
+            ],
+            "description": "以给定正方形为底面的立方体"
+        },
+        {
+            "syntax": "Cube(<Point>, <Point>, <Direction>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "vertex1",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "vertex2",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Direction>",
+                "role": "direction",
+                "type": "Vector/Line/Ray/Segment/Polygon/Plane",
+                "optional": false
+            }
+            ],
+            "description": "以两点间线段为一条棱，方向由 direction 唯一确定其他顶点的立方体"
+        },
+        {
+            "syntax": "Cube(<Point>, <Point>, <Point>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "vertex1",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "vertex2",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "vertex3",
+                "type": "Point",
+                "optional": false
+            }
+            ],
+            "description": "以第一面上三个相邻顶点创建立方体，三点需能构成正方形"
+        },
+        {
+            "syntax": "Cube(<Point>, <Point>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "vertex1",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "vertex2",
+                "type": "Point",
+                "optional": false
+            }
+            ],
+            "description": "以第一面上两个相邻顶点创建立方体，第三点自动在圆上生成，使立方体可绕首棱旋转"
+        }
+        ]
+    },
+
+    "Curve": {
+        "name": "Curve",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Curve/",
+        "overloads": [
+        {
+            "syntax": "Curve(<Expression x>, <Expression y>, <Parameter>, <Start>, <End>)",
+            "params": [
+            {
+                "name": "<Expression x>",
+                "role": "xExpr",
+                "type": "Expression",
+                "optional": false
+            },
+            {
+                "name": "<Expression y>",
+                "role": "yExpr",
+                "type": "Expression",
+                "optional": false
+            },
+            {
+                "name": "<Parameter>",
+                "role": "param",
+                "type": "Variable",
+                "optional": false
+            },
+            {
+                "name": "<Start>",
+                "role": "start",
+                "type": "Number",
+                "optional": false
+            },
+            {
+                "name": "<End>",
+                "role": "end",
+                "type": "Number",
+                "optional": false
+            }
+            ],
+            "description": "在给定参数区间上由 (x(t), y(t)) 定义的 2D 参数曲线"
+        },
+        {
+            "syntax": "Curve(<Expression x>, <Expression y>, <Expression z>, <Parameter>, <Start>, <End>)",
+            "params": [
+            {
+                "name": "<Expression x>",
+                "role": "xExpr",
+                "type": "Expression",
+                "optional": false
+            },
+            {
+                "name": "<Expression y>",
+                "role": "yExpr",
+                "type": "Expression",
+                "optional": false
+            },
+            {
+                "name": "<Expression z>",
+                "role": "zExpr",
+                "type": "Expression",
+                "optional": false
+            },
+            {
+                "name": "<Parameter>",
+                "role": "param",
+                "type": "Variable",
+                "optional": false
+            },
+            {
+                "name": "<Start>",
+                "role": "start",
+                "type": "Number",
+                "optional": false
+            },
+            {
+                "name": "<End>",
+                "role": "end",
+                "type": "Number",
+                "optional": false
+            }
+            ],
+            "description": "在给定参数区间上由 (x(t), y(t), z(t)) 定义的 3D 参数曲线（如螺旋线）"
+        }
+        ]
+    },
+
+    "Cylinder": {
+        "name": "Cylinder",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Cylinder/",
+        "overloads": [
+        {
+            "syntax": "Cylinder(<Circle>, <Height>)",
+            "params": [
+            {
+                "name": "<Circle>",
+                "role": "base",
+                "type": "Circle",
+                "optional": false
+            },
+            {
+                "name": "<Height>",
+                "role": "height",
+                "type": "Number",
+                "optional": false
+            }
+            ],
+            "description": "以给定底面圆和高度创建有限圆柱"
+        },
+        {
+            "syntax": "Cylinder(<Point>, <Point>, <Radius>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "center1",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Point>",
+                "role": "center2",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Radius>",
+                "role": "radius",
+                "type": "Number",
+                "optional": false
+            }
+            ],
+            "description": "以两点为上下底面圆心、给定半径的圆柱"
+        }
+        ]
+    },
+
+    "Distance": {
+        "name": "Distance",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Distance/",
+        "overloads": [
+        {
+            "syntax": "Distance(<Point>, <Object>)",
+            "params": [
+            {
+                "name": "<Point>",
+                "role": "point",
+                "type": "Point",
+                "optional": false
+            },
+            {
+                "name": "<Object>",
+                "role": "target",
+                "type": "GeoObject",
+                "optional": false
+            }
+            ],
+            "description": "点到对象（点/线段/直线/圆锥/函数/隐函数曲线等）的最短距离"
+        },
+        {
+            "syntax": "Distance(<Line>, <Line>)",
+            "params": [
+            {
+                "name": "<Line>",
+                "role": "line1",
+                "type": "Line",
+                "optional": false
+            },
+            {
+                "name": "<Line>",
+                "role": "line2",
+                "type": "Line",
+                "optional": false
+            }
+            ],
+            "description": "两条直线之间的距离（相交时为 0，多用于平行直线）"
+        },
+        {
+            "syntax": "Distance(<Plane>, <Plane>)",
+            "params": [
+            {
+                "name": "<Plane>",
+                "role": "plane1",
+                "type": "Plane",
+                "optional": false
+            },
+            {
+                "name": "<Plane>",
+                "role": "plane2",
+                "type": "Plane",
+                "optional": false
+            }
+            ],
+            "description": "两平面之间的距离（相交时为 0，多用于平行平面）"
+        }
+        ]
+    },
+    "Dodecahedron": {
+  "name": "Dodecahedron",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Dodecahedron/",
+  "overloads": [
+    {
+      "syntax": "Dodecahedron(<Regular pentagon>)",
+      "params": [
+        { "name": "<Regular pentagon>", "role": "base", "type": "Polygon", "optional": false }
+      ],
+      "description": "以给定正五边形为底面构造正十二面体。"
+    },
+    {
+      "syntax": "Dodecahedron(<Point>, <Point>, <Direction>)",
+      "params": [
+        { "name": "<Point>",     "role": "vertex1",   "type": "Point",                         "optional": false },
+        { "name": "<Point>",     "role": "vertex2",   "type": "Point",                         "optional": false },
+        { "name": "<Direction>", "role": "direction", "type": "Vector/Line/Ray/Segment/Plane", "optional": false }
+      ],
+      "description": "以两点间线段为一条棱，并由 direction 唯一确定其他顶点的正十二面体。"
+    },
+    {
+      "syntax": "Dodecahedron(<Point>, <Point>, <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "vertex1", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "vertex2", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "vertex3", "type": "Point", "optional": false }
+      ],
+      "description": "以第一面上三个位于同一正五边形上的相邻点构造正十二面体。三点必须能构成正五边形的一条边及其相邻顶点。"
+    },
+    {
+      "syntax": "Dodecahedron(<Point>, <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "vertex1", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "vertex2", "type": "Point", "optional": false }
+      ],
+      "description": "只给出第一面上两个相邻顶点，第三个顶点自动放在一条圆上，从而整个正十二面体可以绕首棱旋转。"
+    }
+  ]
+},
+
+"Ends": {
+  "name": "Ends",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Ends/",
+  "overloads": [
+    {
+      "syntax": "Ends(<Quadric>)",
+      "params": [
+        { "name": "<Quadric>", "role": "quadric", "type": "Quadric", "optional": false }
+      ],
+      "description": "对有限二次曲面，创建其“顶”和“底”两个端面：如圆柱得到两个圆，圆锥得到一个圆和顶点等。"
+    }
+  ]
+},
+
+"Function": {
+  "name": "Function",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Function/",
+  "overloads": [
+    {
+      "syntax": "Function(<List of Numbers>)",
+      "params": [
+        { "name": "<List of Numbers>", "role": "samples", "type": "List", "optional": false }
+      ],
+      "description": "由数值列表生成分段函数：前两个数是起止 x 值，其余为等距采样点的 y 值。"
+    },
+    {
+      "syntax": "Function(<Function>, <Start x-value>, <End x-value>)",
+      "params": [
+        { "name": "<Function>",       "role": "func",  "type": "Function", "optional": false },
+        { "name": "<Start x-value>", "role": "start", "type": "Number",   "optional": false },
+        { "name": "<End x-value>",   "role": "end",   "type": "Number",   "optional": false }
+      ],
+      "description": "限制给定函数在区间 [start, end] 上的可视化。"
+    },
+    {
+      "syntax": "Function(<Expression>, <Parameter Variable 1>, <Start 1>, <End 1>, <Parameter Variable 2>, <Start 2>, <End 2>)",
+      "params": [
+        { "name": "<Expression>",            "role": "expr", "type": "Expression", "optional": false },
+        { "name": "<Parameter Variable 1>",  "role": "u",    "type": "Variable",   "optional": false },
+        { "name": "<Start 1>",               "role": "uMin", "type": "Number",     "optional": false },
+        { "name": "<End 1>",                 "role": "uMax", "type": "Number",     "optional": false },
+        { "name": "<Parameter Variable 2>",  "role": "v",    "type": "Variable",   "optional": false },
+        { "name": "<Start 2>",               "role": "vMin", "type": "Number",     "optional": false },
+        { "name": "<End 2>",                 "role": "vMax", "type": "Number",     "optional": false }
+      ],
+      "description": "在 3D 中定义二元函数的代表曲面，并限制在给定参数矩形 [uMin,uMax]×[vMin,vMax] 上。"
+    }
+  ]
+},
+
+"Height": {
+  "name": "Height",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Height/",
+  "overloads": [
+    {
+      "syntax": "Height(<Solid>)",
+      "params": [
+        { "name": "<Solid>", "role": "solid", "type": "Solid/Polyhedron/Quadric", "optional": false }
+      ],
+      "description": "返回给定立体的“有向高度”，适用于圆锥、圆柱、多面体等。"
+    }
+  ]
+},
+
+"Icosahedron": {
+  "name": "Icosahedron",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Icosahedron/",
+  "overloads": [
+    {
+      "syntax": "Icosahedron(<Equilateral Triangle>)",
+      "params": [
+        { "name": "<Equilateral Triangle>", "role": "base", "type": "Polygon", "optional": false }
+      ],
+      "description": "以给定正三角形为底面构造正二十面体。"
+    },
+    {
+      "syntax": "Icosahedron(<Point>, <Point>, <Direction>)",
+      "params": [
+        { "name": "<Point>",     "role": "vertex1",   "type": "Point",                         "optional": false },
+        { "name": "<Point>",     "role": "vertex2",   "type": "Point",                         "optional": false },
+        { "name": "<Direction>", "role": "direction", "type": "Vector/Line/Ray/Segment/Plane", "optional": false }
+      ],
+      "description": "以两点间线段为一条棱，并由 direction 唯一定义其他顶点的正二十面体。"
+    },
+    {
+      "syntax": "Icosahedron(<Point>, <Point>, <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "vertex1", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "vertex2", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "vertex3", "type": "Point", "optional": false }
+      ],
+      "description": "以第一面上三个点（需构成正三角形）构造正二十面体。"
+    },
+    {
+      "syntax": "Icosahedron(<Point>, <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "vertex1", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "vertex2", "type": "Point", "optional": false }
+      ],
+      "description": "只给出第一面上两点，第三点自动在一条圆上生成，使正二十面体可绕首棱旋转。"
+    }
+  ]
+},
+
+"Incircle": {
+  "name": "Incircle",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Incircle/",
+  "overloads": [
+    {
+      "syntax": "Incircle(<Point>, <Point>, <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "B", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "C", "type": "Point", "optional": false }
+      ],
+      "description": "返回由三点 A, B, C 构成三角形的内切圆。"
+    }
+  ]
+},
+
+"InfiniteCone": {
+  "name": "InfiniteCone",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/InfiniteCone/",
+  "overloads": [
+    {
+      "syntax": "InfiniteCone(<Point>, <Vector>, <Angle α>)",
+      "params": [
+        { "name": "<Point>",  "role": "apex",  "type": "Point",  "optional": false },
+        { "name": "<Vector>", "role": "axis",  "type": "Vector", "optional": false },
+        { "name": "<Angle α>","role": "alpha", "type": "Number", "optional": false }
+      ],
+      "description": "顶点为点、轴向平行于向量、顶角为 2α 的无限圆锥。"
+    },
+    {
+      "syntax": "InfiniteCone(<Point>, <Point>, <Angle α>)",
+      "params": [
+        { "name": "<Point>",  "role": "apex",  "type": "Point", "optional": false },
+        { "name": "<Point>",  "role": "axisPt","type": "Point", "optional": false },
+        { "name": "<Angle α>","role": "alpha", "type": "Number","optional": false }
+      ],
+      "description": "顶点在第一个点，轴为两点连线，顶角为 2α 的无限圆锥。"
+    },
+    {
+      "syntax": "InfiniteCone(<Point>, <Line>, <Angle α>)",
+      "params": [
+        { "name": "<Point>",  "role": "apex",  "type": "Point", "optional": false },
+        { "name": "<Line>",   "role": "axis",  "type": "Line",  "optional": false },
+        { "name": "<Angle α>","role": "alpha", "type": "Number","optional": false }
+      ],
+      "description": "顶点在点，轴向平行于给定直线，顶角为 2α 的无限圆锥。"
+    }
+  ]
+},
+
+"InfiniteCylinder": {
+  "name": "InfiniteCylinder",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/InfiniteCylinder/",
+  "overloads": [
+    {
+      "syntax": "InfiniteCylinder(<Line>, <Radius>)",
+      "params": [
+        { "name": "<Line>",   "role": "axis",   "type": "Line",   "optional": false },
+        { "name": "<Radius>", "role": "radius", "type": "Number", "optional": false }
+      ],
+      "description": "以给定直线为轴、给定半径的无限圆柱面。"
+    },
+    {
+      "syntax": "InfiniteCylinder(<Point>, <Vector>, <Radius>)",
+      "params": [
+        { "name": "<Point>",  "role": "point",  "type": "Point",  "optional": false },
+        { "name": "<Vector>", "role": "axis",   "type": "Vector", "optional": false },
+        { "name": "<Radius>", "role": "radius", "type": "Number", "optional": false }
+      ],
+      "description": "通过给定点、轴向平行于向量、半径为给定值的无限圆柱面。"
+    },
+    {
+      "syntax": "InfiniteCylinder(<Point>, <Point>, <Radius>)",
+      "params": [
+        { "name": "<Point>",  "role": "p1",     "type": "Point",  "optional": false },
+        { "name": "<Point>",  "role": "p2",     "type": "Point",  "optional": false },
+        { "name": "<Radius>", "role": "radius", "type": "Number", "optional": false }
+      ],
+      "description": "轴为两点连线、半径为给定值的无限圆柱面。"
+    }
+  ]
+},
+
+"InteriorAngles": {
+  "name": "InteriorAngles",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/InteriorAngles/",
+  "overloads": [
+    {
+      "syntax": "InteriorAngles(<Polygon>)",
+      "params": [
+        { "name": "<Polygon>", "role": "polygon", "type": "Polygon", "optional": false }
+      ],
+      "description": "生成给定多边形的所有内角对象。"
+    }
+  ]
+},
+
+"Intersect": {
+  "name": "Intersect",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Intersect/",
+  "overloads": [
+    {
+      "syntax": "Intersect(<Object>, <Object>)",
+      "params": [
+        { "name": "<Object>", "role": "obj1", "type": "GeoObject", "optional": false },
+        { "name": "<Object>", "role": "obj2", "type": "GeoObject", "optional": false }
+      ],
+      "description": "求两个对象的所有交集（交点、交线或交曲线，取决于对象类型）。"
+    },
+    {
+      "syntax": "Intersect(<Object>, <Object>, <Index of Intersection Point>)",
+      "params": [
+        { "name": "<Object>",                    "role": "obj1",  "type": "GeoObject", "optional": false },
+        { "name": "<Object>",                    "role": "obj2",  "type": "GeoObject", "optional": false },
+        { "name": "<Index of Intersection Point>","role": "index", "type": "Number",   "optional": false }
+      ],
+      "description": "返回两个对象的第 n 个交点（适用于直线、圆锥曲线、多项式函数、隐函数曲线等）。"
+    },
+    {
+      "syntax": "Intersect(<Object>, <Object>, <Initial Point>)",
+      "params": [
+        { "name": "<Object>",       "role": "obj1",    "type": "GeoObject", "optional": false },
+        { "name": "<Object>",       "role": "obj2",    "type": "GeoObject", "optional": false },
+        { "name": "<Initial Point>","role": "initial", "type": "Point",     "optional": false }
+      ],
+      "description": "使用迭代数值方法，从给定初始点附近求一个交点。"
+    },
+    {
+      "syntax": "Intersect(<Function>, <Function>, <Start x-Value>, <End x-Value>)",
+      "params": [
+        { "name": "<Function>",        "role": "f1",     "type": "Function", "optional": false },
+        { "name": "<Function>",        "role": "f2",     "type": "Function", "optional": false },
+        { "name": "<Start x-Value>",   "role": "startX", "type": "Number",   "optional": false },
+        { "name": "<End x-Value>",     "role": "endX",   "type": "Number",   "optional": false }
+      ],
+      "description": "在给定 x 区间内对两函数进行数值求交。"
+    },
+    {
+      "syntax": "Intersect(<Curve 1>, <Curve 2>, <Parameter 1>, <Parameter 2>)",
+      "params": [
+        { "name": "<Curve 1>",    "role": "curve1", "type": "Curve",  "optional": false },
+        { "name": "<Curve 2>",    "role": "curve2", "type": "Curve",  "optional": false },
+        { "name": "<Parameter 1>","role": "t1",     "type": "Number", "optional": false },
+        { "name": "<Parameter 2>","role": "t2",     "type": "Number", "optional": false }
+      ],
+      "description": "对两条参数曲线，从给定初始参数 (t1,t2) 出发用数值方法求一个交点。"
+    }
+  ]
+},
+
+"IntersectConic": {
+  "name": "IntersectConic",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/IntersectConic/",
+  "overloads": [
+    {
+      "syntax": "IntersectConic(<Plane>, <Quadric>)",
+      "params": [
+        { "name": "<Plane>",   "role": "plane",  "type": "Plane",  "optional": false },
+        { "name": "<Quadric>", "role": "quadric","type": "Quadric","optional": false }
+      ],
+      "description": "计算平面与二次曲面（球、圆锥、圆柱等）的交圆锥曲线。"
+    },
+    {
+      "syntax": "IntersectConic(<Quadric>, <Quadric>)",
+      "params": [
+        { "name": "<Quadric>", "role": "q1", "type": "Quadric", "optional": false },
+        { "name": "<Quadric>", "role": "q2", "type": "Quadric", "optional": false }
+      ],
+      "description": "在交集为圆锥曲线的情形下，返回两个二次曲面的交圆锥曲线。"
+    }
+  ]
+},
+
+"IntersectPath": {
+  "name": "IntersectPath",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/IntersectPath/",
+  "overloads": [
+    {
+      "syntax": "IntersectPath(<Line>, <Polygon>)",
+      "params": [
+        { "name": "<Line>",    "role": "line",    "type": "Line",    "optional": false },
+        { "name": "<Polygon>", "role": "polygon", "type": "Polygon", "optional": false }
+      ],
+      "description": "在多边形所在平面中，返回直线与多边形之间的交路径（通常是一条线段）。"
+    },
+    {
+      "syntax": "IntersectPath(<Polygon>, <Polygon>)",
+      "params": [
+        { "name": "<Polygon>", "role": "poly1", "type": "Polygon", "optional": false },
+        { "name": "<Polygon>", "role": "poly2", "type": "Polygon", "optional": false }
+      ],
+      "description": "返回两个多边形的交集多边形（根据位置可能为四边形、五边形或六边形）。"
+    },
+    {
+      "syntax": "IntersectPath(<Plane>, <Polygon>)",
+      "params": [
+        { "name": "<Plane>",   "role": "plane",   "type": "Plane",   "optional": false },
+        { "name": "<Polygon>", "role": "polygon", "type": "Polygon", "optional": false }
+      ],
+      "description": "在多边形平面中，返回平面与多边形的交路径（线段）。"
+    },
+    {
+      "syntax": "IntersectPath(<Plane>, <Quadric>)",
+      "params": [
+        { "name": "<Plane>",   "role": "plane",  "type": "Plane",   "optional": false },
+        { "name": "<Quadric>", "role": "quadric","type": "Quadric", "optional": false }
+      ],
+      "description": "返回平面与二次曲面的交路径，如平面与球的交圆。"
+    }
+  ]
+},
+
+"Line": {
+  "name": "Line",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Line/",
+  "overloads": [
+    {
+      "syntax": "Line(<Point>, <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "p1", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "p2", "type": "Point", "optional": false }
+      ],
+      "description": "通过两点创建直线（2D 或 3D）。"
+    },
+    {
+      "syntax": "Line(<Point>, <Parallel Line>)",
+      "params": [
+        { "name": "<Point>", "role": "point",   "type": "Point", "optional": false },
+        { "name": "<Line>",  "role": "parallel","type": "Line",  "optional": false }
+      ],
+      "description": "通过给定点作一条与给定直线平行的直线。"
+    },
+    {
+      "syntax": "Line(<Point>, <Direction Vector>)",
+      "params": [
+        { "name": "<Point>",  "role": "point",     "type": "Point",  "optional": false },
+        { "name": "<Vector>", "role": "direction", "type": "Vector", "optional": false }
+      ],
+      "description": "通过给定点、方向向量为给定向量的直线（可用于 3D 参数式）。"
+    }
+  ]
+},
+
+"Midpoint": {
+  "name": "Midpoint",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Midpoint/",
+  "overloads": [
+    {
+      "syntax": "Midpoint(<Segment>)",
+      "params": [
+        { "name": "<Segment>", "role": "segment", "type": "Segment", "optional": false }
+      ],
+      "description": "返回线段的中点。"
+    },
+    {
+      "syntax": "Midpoint(<Conic>)",
+      "params": [
+        { "name": "<Conic>", "role": "conic", "type": "Conic", "optional": false }
+      ],
+      "description": "返回圆锥曲线（圆、椭圆等）的中心。"
+    },
+    {
+      "syntax": "Midpoint(<Interval>)",
+      "params": [
+        { "name": "<Interval>", "role": "interval", "type": "Interval", "optional": false }
+      ],
+      "description": "返回区间的中点（结果为数值）。"
+    },
+    {
+      "syntax": "Midpoint(<Point>, <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "B", "type": "Point", "optional": false }
+      ],
+      "description": "返回两点的中点。"
+    },
+    {
+      "syntax": "Midpoint(<Quadric>)",
+      "params": [
+        { "name": "<Quadric>", "role": "quadric", "type": "Quadric", "optional": false }
+      ],
+      "description": "返回二次曲面（球、圆锥等）的中心。"
+    }
+  ]
+},
+
+"Net": {
+  "name": "Net",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Net/",
+  "overloads": [
+    {
+      "syntax": "Net(<Polyhedron>, <Number>)",
+      "params": [
+        { "name": "<Polyhedron>", "role": "polyhedron", "type": "Polyhedron", "optional": false },
+        { "name": "<Number>",     "role": "t",          "type": "Number",     "optional": false }
+      ],
+      "description": "在包含构造用面的平面上生成凸多面体的展开图，t∈[0,1] 为展开进度，t=1 时完全展开。"
+    },
+    {
+      "syntax": "Net(<Polyhedron>, <Number>, <Face>, <Edge>, <Edge>, …)",
+      "params": [
+        { "name": "<Polyhedron>", "role": "polyhedron", "type": "Polyhedron", "optional": false },
+        { "name": "<Number>",     "role": "t",          "type": "Number",     "optional": false },
+        { "name": "<Face>",       "role": "startFace",  "type": "Face",       "optional": false },
+        { "name": "<Edge>",       "role": "cutEdge1",   "type": "Edge",       "optional": false }
+      ],
+      "description": "目前只支持立方体：通过指定基面和需要切开的棱，生成不同形状的立方体展开图，t 控制展开进度。"
+    }
+  ]
+},
+
+"Octahedron": {
+  "name": "Octahedron",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Octahedron/",
+  "overloads": [
+    {
+      "syntax": "Octahedron(<Equilateral Triangle>)",
+      "params": [
+        { "name": "<Equilateral Triangle>", "role": "base", "type": "Polygon", "optional": false }
+      ],
+      "description": "以给定正三角形为底面构造正八面体。"
+    },
+    {
+      "syntax": "Octahedron(<Point>, <Point>, <Direction>)",
+      "params": [
+        { "name": "<Point>",     "role": "vertex1",   "type": "Point",                         "optional": false },
+        { "name": "<Point>",     "role": "vertex2",   "type": "Point",                         "optional": false },
+        { "name": "<Direction>", "role": "direction", "type": "Vector/Line/Ray/Segment/Plane", "optional": false }
+      ],
+      "description": "以两点间线段为一条棱，并由 direction 确定其他顶点的正八面体。"
+    },
+    {
+      "syntax": "Octahedron(<Point>, <Point>, <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "vertex1", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "vertex2", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "vertex3", "type": "Point", "optional": false }
+      ],
+      "description": "第一面上三个点需构成正三角形，据此构造正八面体。"
+    },
+    {
+      "syntax": "Octahedron(<Point>, <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "vertex1", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "vertex2", "type": "Point", "optional": false }
+      ],
+      "description": "只给出第一面上两点，第三点自动在一条圆上生成，使正八面体可绕首棱旋转。"
+    }
+  ]
+},
+
+"Perimeter": {
+  "name": "Perimeter",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Perimeter/",
+  "overloads": [
+    {
+      "syntax": "Perimeter(<Polygon>)",
+      "params": [
+        { "name": "<Polygon>", "role": "polygon", "type": "Polygon", "optional": false }
+      ],
+      "description": "返回多边形的周长。"
+    },
+    {
+      "syntax": "Perimeter(<Conic>)",
+      "params": [
+        { "name": "<Conic>", "role": "conic", "type": "Conic", "optional": false }
+      ],
+      "description": "若给定圆锥曲线为圆或椭圆，则返回其周长，否则结果未定义。"
+    },
+    {
+      "syntax": "Perimeter(<Locus>)",
+      "params": [
+        { "name": "<Locus>", "role": "locus", "type": "Locus", "optional": false }
+      ],
+      "description": "若轨迹有限，则返回其近似周长；否则结果未定义。"
+    }
+  ]
+},
+
+"PerpendicularBisector": {
+  "name": "PerpendicularBisector",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/PerpendicularBisector/",
+  "overloads": [
+    {
+      "syntax": "PerpendicularBisector(<Segment>)",
+      "params": [
+        { "name": "<Segment>", "role": "segment", "type": "Segment", "optional": false }
+      ],
+      "description": "构造线段的垂直平分线（在 3D 中是垂直平分面）。"
+    },
+    {
+      "syntax": "PerpendicularBisector(<Point>, <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "B", "type": "Point", "optional": false }
+      ],
+      "description": "构造两点连线的垂直平分线或平分面。"
+    },
+    {
+      "syntax": "PerpendicularBisector(<Point>, <Point>, <Direction>)",
+      "params": [
+        { "name": "<Point>",     "role": "A",         "type": "Point",                  "optional": false },
+        { "name": "<Point>",     "role": "B",         "type": "Point",                  "optional": false },
+        { "name": "<Direction>", "role": "direction", "type": "Vector/Line/Segment/Axes","optional": false }
+      ],
+      "description": "在给定方向约束下，两点连线的垂直平分线或平面，direction 可为向量、坐标轴、直线或线段。"
+    }
+  ]
+},
+
+"PerpendicularLine": {
+  "name": "PerpendicularLine",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/PerpendicularLine/",
+  "overloads": [
+    {
+      "syntax": "PerpendicularLine(<Point>, <Line>)",
+      "params": [
+        { "name": "<Point>", "role": "point", "type": "Point", "optional": false },
+        { "name": "<Line>",  "role": "line",  "type": "Line",  "optional": false }
+      ],
+      "description": "通过点作一条垂直于给定直线的直线。"
+    },
+    {
+      "syntax": "PerpendicularLine(<Point>, <Segment>)",
+      "params": [
+        { "name": "<Point>",  "role": "point",   "type": "Point",   "optional": false },
+        { "name": "<Segment>","role": "segment", "type": "Segment", "optional": false }
+      ],
+      "description": "通过点作一条垂直于给定线段的直线。"
+    },
+    {
+      "syntax": "PerpendicularLine(<Point>, <Vector>)",
+      "params": [
+        { "name": "<Point>",  "role": "point",   "type": "Point",  "optional": false },
+        { "name": "<Vector>", "role": "vector",  "type": "Vector", "optional": false }
+      ],
+      "description": "通过点作一条垂直于给定向量的直线。"
+    },
+    {
+      "syntax": "PerpendicularLine(<Point>, <Plane>)",
+      "params": [
+        { "name": "<Point>", "role": "point", "type": "Point", "optional": false },
+        { "name": "<Plane>", "role": "plane", "type": "Plane", "optional": false }
+      ],
+      "description": "通过点作一条垂直于给定平面的直线。"
+    },
+    {
+      "syntax": "PerpendicularLine(<Line>, <Line>)",
+      "params": [
+        { "name": "<Line>", "role": "l1", "type": "Line", "optional": false },
+        { "name": "<Line>", "role": "l2", "type": "Line", "optional": false }
+      ],
+      "description": "在两直线交点处作一条同时垂直于两条直线的直线。"
+    },
+    {
+      "syntax": "PerpendicularLine(<Point>, <Direction>, <Direction>)",
+      "params": [
+        { "name": "<Point>",     "role": "point", "type": "Point",             "optional": false },
+        { "name": "<Direction>", "role": "dir1",  "type": "Line/Vector",       "optional": false },
+        { "name": "<Direction>", "role": "dir2",  "type": "Line/Vector",       "optional": false }
+      ],
+      "description": "通过点作一条同时垂直于两个方向（直线或向量）的直线。"
+    },
+    {
+      "syntax": "PerpendicularLine(<Point>, <Line>, <Context>)",
+      "params": [
+        { "name": "<Point>",   "role": "point",   "type": "Point",          "optional": false },
+        { "name": "<Line>",    "role": "line",    "type": "Line",           "optional": false },
+        { "name": "<Context>", "role": "context", "type": "Plane/Keyword",  "optional": false }
+      ],
+      "description": "在给定上下文中作垂线：若 context 为 Plane，则垂线通过点且与平面平行；若为 space，则作与给定线相交且垂直的直线（点若在该线且为 3D 时可能未定义）。"
+    }
+  ]
+},
+
+"PerpendicularPlane": {
+  "name": "PerpendicularPlane",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/PerpendicularPlane/",
+  "overloads": [
+    {
+      "syntax": "PerpendicularPlane(<Point>, <Line>)",
+      "params": [
+        { "name": "<Point>", "role": "point", "type": "Point", "optional": false },
+        { "name": "<Line>",  "role": "line",  "type": "Line",  "optional": false }
+      ],
+      "description": "通过给定点作一平面，使其垂直于给定直线。"
+    }
+  ]
+},"Plane": {
+  "name": "Plane",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Plane/",
+  "overloads": [
+    {
+      "syntax": "Plane(<Polygon>)",
+      "params": [
+        { "name": "<Polygon>", "role": "polygon", "type": "Polygon", "optional": false }
+      ],
+      "description": "生成包含给定多边形的平面。"
+    },
+    {
+      "syntax": "Plane(<Conic>)",
+      "params": [
+        { "name": "<Conic>", "role": "conic", "type": "Conic", "optional": false }
+      ],
+      "description": "生成包含给定圆锥曲线的平面。"
+    },
+    {
+      "syntax": "Plane(<Point>, <Plane>)",
+      "params": [
+        { "name": "<Point>", "role": "point", "type": "Point", "optional": false },
+        { "name": "<Plane>", "role": "plane", "type": "Plane", "optional": false }
+      ],
+      "description": "通过给定点、且与给定平面平行的平面。"
+    },
+    {
+      "syntax": "Plane(<Point>, <Line>)",
+      "params": [
+        { "name": "<Point>", "role": "point", "type": "Point", "optional": false },
+        { "name": "<Line>",  "role": "line",  "type": "Line",  "optional": false }
+      ],
+      "description": "通过给定点并包含给定直线的平面。"
+    },
+    {
+      "syntax": "Plane(<Line>, <Line>)",
+      "params": [
+        { "name": "<Line>", "role": "line1", "type": "Line", "optional": false },
+        { "name": "<Line>", "role": "line2", "type": "Line", "optional": false }
+      ],
+      "description": "若两直线相交或平行，则生成包含它们的平面。"
+    },
+    {
+      "syntax": "Plane(<Point>, <Point>, <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "p1", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "p2", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "p3", "type": "Point", "optional": false }
+      ],
+      "description": "由三个不共线的点唯一确定的平面。"
+    },
+    {
+      "syntax": "Plane(<Point>, <Vector>, <Vector>)",
+      "params": [
+        { "name": "<Point>",  "role": "point", "type": "Point",  "optional": false },
+        { "name": "<Vector>", "role": "v1",    "type": "Vector", "optional": false },
+        { "name": "<Vector>", "role": "v2",    "type": "Vector", "optional": false }
+      ],
+      "description": "通过一点，法向量为 v1×v2 的平面。"
+    }
+  ]
+},
+
+"PlaneBisector": {
+  "name": "PlaneBisector",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/PlaneBisector/",
+  "overloads": [
+    {
+      "syntax": "PlaneBisector(<Point>, <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "B", "type": "Point", "optional": false }
+      ],
+      "description": "通过 AB 中点、且垂直于 AB 的平面（线段 AB 的“平分面”）。"
+    }
+  ]
+},
+
+"Point": {
+  "name": "Point",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Point/",
+  "overloads": [
+    {
+      "syntax": "Point(<Object>)",
+      "params": [
+        { "name": "<Object>", "role": "obj", "type": "GeoObject", "optional": false }
+      ],
+      "description": "在给定对象（路径、区域、曲线等）上创建可拖动点（2D/3D）。"
+    },
+    {
+      "syntax": "Point(<Object>, <Parameter>)",
+      "params": [
+        { "name": "<Object>",    "role": "obj",   "type": "GeoObject", "optional": false },
+        { "name": "<Parameter>", "role": "param", "type": "Number",    "optional": false }
+      ],
+      "description": "按路径参数指定的位置，在对象上创建点。"
+    },
+    {
+      "syntax": "Point(<Point>, <Vector>)",
+      "params": [
+        { "name": "<Point>",  "role": "start", "type": "Point",  "optional": false },
+        { "name": "<Vector>", "role": "vec",   "type": "Vector", "optional": false }
+      ],
+      "description": "从起点沿向量平移得到的新点。"
+    },
+    {
+      "syntax": "Point(<List>)",
+      "params": [
+        { "name": "<List>", "role": "coords", "type": "List", "optional": false }
+      ],
+      "description": "将 [x, y] 或 [x, y, z] 列表转换为 2D/3D 点。"
+    }
+  ]
+},
+
+"PointIn": {
+  "name": "PointIn",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/PointIn/",
+  "overloads": [
+    {
+      "syntax": "PointIn(<Region>)",
+      "params": [
+        { "name": "<Region>", "role": "region", "type": "Region/Polygon/Circle", "optional": false }
+      ],
+      "description": "在给定区域内部创建一个可拖动点，始终保持在区域内部。"
+    }
+  ]
+},
+
+"Polygon": {
+  "name": "Polygon",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Polygon/",
+  "overloads": [
+    {
+      "syntax": "Polygon(<Point>, <Point>, ..., <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "vertex1", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "vertex2", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "vertex3", "type": "Point", "optional": false }
+      ],
+      "description": "按给定顶点顺序创建多边形。"
+    },
+    {
+      "syntax": "Polygon(<List of Points>)",
+      "params": [
+        { "name": "<List of Points>", "role": "vertices", "type": "List", "optional": false }
+      ],
+      "description": "由点列表创建多边形。"
+    }
+  ]
+},
+
+"Polyline": {
+  "name": "Polyline",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Polyline/",
+  "overloads": [
+    {
+      "syntax": "Polyline(<Point>, <Point>, ..., <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "p1", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "p2", "type": "Point", "optional": false }
+      ],
+      "description": "按给定顶点顺序连接成折线（不自动封闭）。"
+    },
+    {
+      "syntax": "Polyline(<List of Points>)",
+      "params": [
+        { "name": "<List of Points>", "role": "points", "type": "List", "optional": false }
+      ],
+      "description": "由点列表创建折线。"
+    }
+  ]
+},
+
+"Prism": {
+  "name": "Prism",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Prism/",
+  "overloads": [
+    {
+      "syntax": "Prism(<Polygon>, <Height>)",
+      "params": [
+        { "name": "<Polygon>", "role": "base",   "type": "Polygon", "optional": false },
+        { "name": "<Height>",  "role": "height", "type": "Number",  "optional": false }
+      ],
+      "description": "以多边形为底面、高度为给定值的棱柱。"
+    }
+  ]
+},
+
+"Pyramid": {
+  "name": "Pyramid",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Pyramid/",
+  "overloads": [
+    {
+      "syntax": "Pyramid(<Polygon>, <Height>)",
+      "params": [
+        { "name": "<Polygon>", "role": "base",   "type": "Polygon", "optional": false },
+        { "name": "<Height>",  "role": "height", "type": "Number",  "optional": false }
+      ],
+      "description": "以多边形为底面、高度为给定值的棱锥。"
+    }
+  ]
+},
+
+"Radius": {
+  "name": "Radius",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Radius/",
+  "overloads": [
+    {
+      "syntax": "Radius(<Circle/Conic>)",
+      "params": [
+        { "name": "<Circle/Conic>", "role": "conic", "type": "Conic", "optional": false }
+      ],
+      "description": "返回圆或圆锥曲线的半径（对椭圆返回准半径）。"
+    }
+  ]
+},
+
+"Ray": {
+  "name": "Ray",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Ray/",
+  "overloads": [
+    {
+      "syntax": "Ray(<Point>, <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "start", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "through","type": "Point", "optional": false }
+      ],
+      "description": "以第一个点为起点，经过第二个点方向无限延长的射线。"
+    }
+  ]
+},
+
+"Segment": {
+  "name": "Segment",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Segment/",
+  "overloads": [
+    {
+      "syntax": "Segment(<Point>, <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "start", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "end",   "type": "Point", "optional": false }
+      ],
+      "description": "连接两点的线段。"
+    },
+    {
+      "syntax": "Segment(<Point>, <Length>)",
+      "params": [
+        { "name": "<Point>",  "role": "start", "type": "Point",  "optional": false },
+        { "name": "<Length>", "role": "len",   "type": "Number", "optional": false }
+      ],
+      "description": "从给定起点出发、长度为给定值的线段。"
+    }
+  ]
+},
+
+"Side": {
+  "name": "Side",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Side/",
+  "overloads": [
+    {
+      "syntax": "Side(<Polygon>, <Index>)",
+      "params": [
+        { "name": "<Polygon>", "role": "polygon", "type": "Polygon", "optional": false },
+        { "name": "<Index>",   "role": "index",   "type": "Number",  "optional": false }
+      ],
+      "description": "返回多边形按顺序编号的第 index 条边。"
+    }
+  ]
+},
+
+"Sphere": {
+  "name": "Sphere",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Sphere/",
+  "overloads": [
+    {
+      "syntax": "Sphere(<Point>, <Radius>)",
+      "params": [
+        { "name": "<Point>",  "role": "center", "type": "Point",  "optional": false },
+        { "name": "<Radius>", "role": "radius", "type": "Number", "optional": false }
+      ],
+      "description": "以给定点为球心、给定半径的球面/球体。"
+    },
+    {
+      "syntax": "Sphere(<Point>, <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "center",   "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "onSphere", "type": "Point", "optional": false }
+      ],
+      "description": "以第一个点为球心，经过第二个点的球。"
+    }
+  ]
+},
+
+"Surface": {
+  "name": "Surface",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Surface/",
+  "overloads": [
+    {
+      "syntax": "Surface(<Expression>, <u>, <u_min>, <u_max>, <v>, <v_min>, <v_max>)",
+      "params": [
+        { "name": "<Expression>", "role": "expr", "type": "Expression", "optional": false },
+        { "name": "<u>",          "role": "u",    "type": "Variable",   "optional": false },
+        { "name": "<u_min>",      "role": "uMin", "type": "Number",     "optional": false },
+        { "name": "<u_max>",      "role": "uMax", "type": "Number",     "optional": false },
+        { "name": "<v>",          "role": "v",    "type": "Variable",   "optional": false },
+        { "name": "<v_min>",      "role": "vMin", "type": "Number",     "optional": false },
+        { "name": "<v_max>",      "role": "vMax", "type": "Number",     "optional": false }
+      ],
+      "description": "通过两个参数的表达式在给定参数矩形上定义参数曲面。"
+    }
+  ]
+},
+
+"Tetrahedron": {
+  "name": "Tetrahedron",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Tetrahedron/",
+  "overloads": [
+    {
+      "syntax": "Tetrahedron(<Equilateral Triangle>)",
+      "params": [
+        { "name": "<Equilateral Triangle>", "role": "base", "type": "Polygon", "optional": false }
+      ],
+      "description": "以给定正三角形为底面构造正四面体。"
+    },
+    {
+      "syntax": "Tetrahedron(<Point>, <Point>, <Direction>)",
+      "params": [
+        { "name": "<Point>",     "role": "vertex1",   "type": "Point",                         "optional": false },
+        { "name": "<Point>",     "role": "vertex2",   "type": "Point",                         "optional": false },
+        { "name": "<Direction>", "role": "direction", "type": "Vector/Line/Ray/Segment/Plane", "optional": false }
+      ],
+      "description": "以一条棱和方向确定正四面体。"
+    },
+    {
+      "syntax": "Tetrahedron(<Point>, <Point>, <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "vertex1", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "vertex2", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "vertex3", "type": "Point", "optional": false }
+      ],
+      "description": "以第一面上三个点（需构成正三角形）构造正四面体。"
+    },
+    {
+      "syntax": "Tetrahedron(<Point>, <Point>)",
+      "params": [
+        { "name": "<Point>", "role": "vertex1", "type": "Point", "optional": false },
+        { "name": "<Point>", "role": "vertex2", "type": "Point", "optional": false }
+      ],
+      "description": "第一面上两个相邻顶点，第三点自动放在一条圆上，使正四面体可绕首棱旋转。"
+    }
+  ]
+},
+
+"Top": {
+  "name": "Top",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Top/",
+  "overloads": [
+    {
+      "syntax": "Top(<Quadric>)",
+      "params": [
+        { "name": "<Quadric>", "role": "quadric", "type": "Quadric", "optional": false }
+      ],
+      "description": "返回有限二次曲面的顶面，如圆柱上底面圆，圆锥顶端面等。"
+    }
+  ]
+},
+
+"Vertex": {
+  "name": "Vertex",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Vertex/",
+  "overloads": [
+    {
+      "syntax": "Vertex(<Polygon>, <Index>)",
+      "params": [
+        { "name": "<Polygon>", "role": "polygon", "type": "Polygon", "optional": false },
+        { "name": "<Index>",   "role": "index",   "type": "Number",  "optional": false }
+      ],
+      "description": "返回多边形指定序号的顶点。"
+    },
+    {
+      "syntax": "Vertex(<Polyhedron>, <Index>)",
+      "params": [
+        { "name": "<Polyhedron>", "role": "polyhedron", "type": "Polyhedron", "optional": false },
+        { "name": "<Index>",      "role": "index",      "type": "Number",     "optional": false }
+      ],
+      "description": "返回多面体指定序号的顶点。"
+    }
+  ]
+},
+
+"Volume": {
+  "name": "Volume",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Volume/",
+  "overloads": [
+    {
+      "syntax": "Volume(<Solid>)",
+      "params": [
+        { "name": "<Solid>", "role": "solid", "type": "Solid/Polyhedron/Quadric", "optional": false }
+      ],
+      "description": "返回三维立体的体积（圆柱、圆锥、多面体等）。"
+    }
+  ]
+}
+  }
+}

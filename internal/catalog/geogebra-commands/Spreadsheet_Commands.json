@@ -1,0 +1,216 @@
+{
+  "command_category": "Spreadsheet_Commands",
+  "total_commands": 8,
+  "commands": {
+    "Cell": {
+      "name": "Cell",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Cell/",
+      "overloads": [
+        {
+          "syntax": "Cell( <Column>, <Row> )",
+          "params": [
+            {
+              "name": "Column",
+              "role": "column",
+              "type": "Column",
+              "optional": false
+            },
+            {
+              "name": "Row",
+              "role": "row",
+              "type": "Row",
+              "optional": false
+            }
+          ],
+          "description": "Returns copy of spreadsheet cell in given column and row."
+        }
+      ]
+    },
+    "CellRange": {
+      "name": "CellRange",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CellRange/",
+      "overloads": [
+        {
+          "syntax": "CellRange( <Start Cell>, <End Cell> )",
+          "params": [
+            {
+              "name": "Start Cell",
+              "role": "start_cell",
+              "type": "Start Cell",
+              "optional": false
+            },
+            {
+              "name": "End Cell",
+              "role": "end_cell",
+              "type": "End Cell",
+              "optional": false
+            }
+          ],
+          "description": "Creates a list containing the cell values in this cell range."
+        }
+      ]
+    },
+    "Column": {
+      "name": "Column",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Column/",
+      "overloads": [
+        {
+          "syntax": "Column( <Spreadsheet Cell> )",
+          "params": [
+            {
+              "name": "Spreadsheet Cell",
+              "role": "spreadsheet_cell",
+              "type": "Spreadsheet Cell",
+              "optional": false
+            }
+          ],
+          "description": "Returns the column of the cell as a number (starting at 1)."
+        }
+      ]
+    },
+    "ColumnName": {
+      "name": "ColumnName",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ColumnName/",
+      "overloads": [
+        {
+          "syntax": "ColumnName( <Spreadsheet Cell> )",
+          "params": [
+            {
+              "name": "Spreadsheet Cell",
+              "role": "spreadsheet_cell",
+              "type": "Spreadsheet Cell",
+              "optional": false
+            }
+          ],
+          "description": "Returns the column name of the cell as a text."
+        }
+      ]
+    },
+    "FillCells": {
+      "name": "FillCells",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FillCells/",
+      "overloads": [
+        {
+          "syntax": "FillCells( <CellRange>, <Object> )",
+          "params": [
+            {
+              "name": "CellRange",
+              "role": "cellrange",
+              "type": "CellRange",
+              "optional": false
+            },
+            {
+              "name": "Object",
+              "role": "object",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "Copies the value/equation etc. of the object to the given cellrange. Resulting cells are free objects, i.e. independent of object."
+        },
+        {
+          "syntax": "FillCells( <Cell>, <List> )",
+          "params": [
+            {
+              "name": "Cell",
+              "role": "cell",
+              "type": "Cell",
+              "optional": false
+            },
+            {
+              "name": "List",
+              "role": "list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Copies values from the list to the first cells on the right of the given cell. Resulting cells are free objects, i.e. independent of the list."
+        },
+        {
+          "syntax": "FillCells( <Cell>, <Matrix> )",
+          "params": [
+            {
+              "name": "Cell",
+              "role": "cell",
+              "type": "Cell",
+              "optional": false
+            },
+            {
+              "name": "Matrix",
+              "role": "matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Copies values from the matrix into the spreadsheet. The upper left corner of the matrix is matched to the given cell. Resulting cells are free objects, i.e. independent of the matrix."
+        }
+      ]
+    },
+    "FillColumn": {
+      "name": "FillColumn",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FillColumn/",
+      "overloads": [
+        {
+          "syntax": "FillColumn( <Column>, <List> )",
+          "params": [
+            {
+              "name": "Column",
+              "role": "column",
+              "type": "Column",
+              "optional": false
+            },
+            {
+              "name": "List",
+              "role": "list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Copies values from the list to the first cells of the column given by number (1 for A, 2 for B, etc.). Resulting cells are free objects, i.e. independent of the list."
+        }
+      ]
+    },
+    "FillRow": {
+      "name": "FillRow",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FillRow/",
+      "overloads": [
+        {
+          "syntax": "FillRow( <Row>, <List> )",
+          "params": [
+            {
+              "name": "Row",
+              "role": "row",
+              "type": "Row",
+              "optional": false
+            },
+            {
+              "name": "List",
+              "role": "list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Copies values from the list to the first cells of the row given by number. Resulting cells are free objects, i.e. independent of the list."
+        }
+      ]
+    },
+    "Row": {
+      "name": "Row",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Row/",
+      "overloads": [
+        {
+          "syntax": "Row( <Spreadsheet Cell> )",
+          "params": [
+            {
+              "name": "Spreadsheet Cell",
+              "role": "spreadsheet_cell",
+              "type": "Spreadsheet Cell",
+              "optional": false
+            }
+          ],
+          "description": "Returns the row number of the spreadsheet cell (starting at 1)."
+        }
+      ]
+    }
+  }
+}

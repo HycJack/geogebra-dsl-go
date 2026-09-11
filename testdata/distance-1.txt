@@ -1,0 +1,10 @@
+# 距离为 1 的点 — 教学构造
+A = Point(0, 2)
+B = Point(4, 2)
+U1 = Point(0, 3)
+U2 = Point(0, 1)
+C = Point(0, -2)
+T = Point(0, 4)
+l = Line(A, B)
+c = Circle(C, T)
+P1 = Intersect(c, l)

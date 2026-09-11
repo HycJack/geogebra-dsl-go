@@ -1,0 +1,2387 @@
+{
+  "command_category": "Algebra Commands",
+  "total_commands": 68,
+  "commands": {
+    "AreEqual": {
+      "name": "AreEqual",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/AreEqual/",
+      "overloads": [
+        {
+          "syntax": "AreEqual( <Object>, <Object> )",
+          "params": [
+            {
+              "name": "object1",
+              "role": "first_object",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "object2",
+              "role": "second_object",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "Decides if the objects are equal. Normally this command computes the result numerically. This behavior can be changed by using the Prove command."
+        }
+      ]
+    },
+    "Assume": {
+      "name": "Assume",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Assume/",
+      "overloads": [
+        {
+          "syntax": "Assume( <Condition>, <Expression> )",
+          "params": [
+            {
+              "name": "Condition",
+              "role": "condition",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Expression",
+              "role": "expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "Evaluates the expression according to the condition"
+        }
+      ]
+    },
+    "CompleteSquare": {
+      "name": "CompleteSquare",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CompleteSquare/",
+      "overloads": [
+        {
+          "syntax": "CompleteSquare( <Quadratic Function> )",
+          "params": [
+            {
+              "name": "Quadratic Function",
+              "role": "input",
+              "type": "Quadratic Function",
+              "optional": false
+            }
+          ],
+          "description": "Returns the quadratic function in the form: a(x−h)²+k. Example: CompleteSquare(x^2 - 4x + 7) yields (x - 2)² + 3."
+        }
+      ]
+    },
+    "Div": {
+      "name": "Div",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Div/",
+      "overloads": [
+        {
+          "syntax": "Div( <Dividend Number>, <Divisor Number> )",
+          "params": [
+            {
+              "name": "Dividend Number",
+              "role": "dividend",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Divisor Number",
+              "role": "divisor",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns the quotient (integer part of the result) of the two numbers."
+        },
+        {
+          "syntax": "Div( <Dividend Polynomial>, <Divisor Polynomial> )",
+          "params": [
+            {
+              "name": "Dividend Polynomial",
+              "role": "dividend",
+              "type": "Polynomial",
+              "optional": false
+            },
+            {
+              "name": "Divisor Polynomial",
+              "role": "divisor",
+              "type": "Polynomial",
+              "optional": false
+            }
+          ],
+          "description": "Returns the quotient of the two polynomials."
+        }
+      ]
+    },
+    "GCD": {
+      "name": "GCD",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/GCD/",
+      "overloads": [
+        {
+          "syntax": "GCD( <Number>, <Number> )",
+          "params": [
+            {
+              "name": "Number1",
+              "role": "first_number",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Number2",
+              "role": "second_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the greatest common divisor of the two numbers."
+        }
+      ]
+    },
+    "Root": {
+      "name": "Root",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Root/",
+      "overloads": [
+        {
+          "syntax": "Root( <Polynomial> )",
+          "params": [
+            {
+              "name": "Polynomial",
+              "role": "polynomial",
+              "type": "Polynomial",
+              "optional": false
+            }
+          ],
+          "description": "Yields all roots of the polynomial as intersection points of the function graph and the x-axis."
+        },
+        {
+          "syntax": "Root( <Function>, <Initial x-Value> )",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Initial x-Value",
+              "role": "initial_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Yields one root of the function using the initial value a for a numerical iterative method."
+        }
+      ]
+    },
+    "Solve": {
+      "name": "Solve",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Solve/",
+      "overloads": [
+        {
+          "syntax": "Solve( <Equation in x> )",
+          "params": [
+            {
+              "name": "Equation in x",
+              "role": "equation",
+              "type": "Equation",
+              "optional": false
+            }
+          ],
+          "description": "Solves a given equation for the main variable and returns a list of all solutions."
+        },
+        {
+          "syntax": "Solve( <Equation>, <Variable> )",
+          "params": [
+            {
+              "name": "Equation",
+              "role": "equation",
+              "type": "Equation",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "Solves an equation for a given unknown variable and returns a list of all solutions."
+        }
+      ]
+    },
+  "BinomialCoefficient": {
+    "name": "BinomialCoefficient",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/BinomialCoefficient/",
+    "overloads": [
+      {
+        "syntax": "BinomialCoefficient( <Number n>, <Number r> )",
+        "params": [
+          {
+            "name": "n",
+            "role": "total_elements",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "r",
+            "role": "chosen_elements",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Computes the binomial coefficient C(n, r). In CAS View, if n or r are symbolic, returns the binomial coefficient expression."
+      }
+    ]
+  },
+
+  "CFactor": {
+    "name": "CFactor",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/CFactor/",
+    "overloads": [
+      {
+        "syntax": "CFactor( <Expression> )",
+        "params": [
+          {
+            "name": "Expression",
+            "role": "expression",
+            "type": "Expression",
+            "optional": false
+          }
+        ],
+        "description": "Factorizes the given expression over complex rational numbers (allows complex factors)."
+      },
+      {
+        "syntax": "CFactor( <Expression>, <Variable> )",
+        "params": [
+          {
+            "name": "Expression",
+            "role": "expression",
+            "type": "Expression",
+            "optional": false
+          },
+          {
+            "name": "Variable",
+            "role": "variable",
+            "type": "Variable",
+            "optional": false
+          }
+        ],
+        "description": "Factorizes the expression with respect to the given variable over complex rational numbers."
+      }
+    ]
+  },
+
+  "CIFactor": {
+    "name": "CIFactor",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/CIFactor/",
+    "overloads": [
+      {
+        "syntax": "CIFactor( <Expression> )",
+        "params": [
+          {
+            "name": "Expression",
+            "role": "expression",
+            "type": "Expression",
+            "optional": false
+          }
+        ],
+        "description": "Factors the expression over complex irrationals."
+      },
+      {
+        "syntax": "CIFactor( <Expression>, <Variable> )",
+        "params": [
+          {
+            "name": "Expression",
+            "role": "expression",
+            "type": "Expression",
+            "optional": false
+          },
+          {
+            "name": "Variable",
+            "role": "variable",
+            "type": "Variable",
+            "optional": false
+          }
+        ],
+        "description": "Factors the expression with respect to the given variable over complex irrationals."
+      }
+    ]
+  },
+
+  "CSolutions": {
+    "name": "CSolutions",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/CSolutions/",
+    "overloads": [
+      {
+        "syntax": "CSolutions( <Equation> )",
+        "params": [
+          {
+            "name": "Equation",
+            "role": "equation",
+            "type": "Equation",
+            "optional": false
+          }
+        ],
+        "description": "Solves an equation for its main variable and returns a list of all solutions, allowing complex solutions."
+      },
+      {
+        "syntax": "CSolutions( <Equation>, <Variable> )",
+        "params": [
+          {
+            "name": "Equation",
+            "role": "equation",
+            "type": "Equation",
+            "optional": false
+          },
+          {
+            "name": "Variable",
+            "role": "variable",
+            "type": "Variable",
+            "optional": false
+          }
+        ],
+        "description": "Solves the equation for the given unknown variable and returns a list of all (possibly complex) solutions."
+      },
+      {
+        "syntax": "CSolutions( <List of Equations>, <List of Variables> )",
+        "params": [
+          {
+            "name": "Equations",
+            "role": "equations_list",
+            "type": "List",
+            "optional": false
+          },
+          {
+            "name": "Variables",
+            "role": "variables_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Solves a system of equations for the given list of variables and returns all (possibly complex) solution tuples."
+      }
+    ]
+  },
+
+  "CSolve": {
+    "name": "CSolve",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/CSolve/",
+    "overloads": [
+      {
+        "syntax": "CSolve( <Equation> )",
+        "params": [
+          {
+            "name": "Equation",
+            "role": "equation",
+            "type": "Equation",
+            "optional": false
+          }
+        ],
+        "description": "Solves a given equation for the main variable and returns a list of all solutions, allowing complex solutions."
+      },
+      {
+        "syntax": "CSolve( <Equation>, <Variable> )",
+        "params": [
+          {
+            "name": "Equation",
+            "role": "equation",
+            "type": "Equation",
+            "optional": false
+          },
+          {
+            "name": "Variable",
+            "role": "variable",
+            "type": "Variable",
+            "optional": false
+          }
+        ],
+        "description": "Solves an equation for the specified variable and returns a list of all (possibly complex) solutions."
+      },
+      {
+        "syntax": "CSolve( <List of Equations>, <List of Variables> )",
+        "params": [
+          {
+            "name": "Equations",
+            "role": "equations_list",
+            "type": "List",
+            "optional": false
+          },
+          {
+            "name": "Variables",
+            "role": "variables_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Solves a system of equations for the given list of variables and returns all (possibly complex) solution tuples."
+      }
+    ]
+  },
+
+  "Coefficients": {
+    "name": "Coefficients",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Coefficients/",
+    "overloads": [
+      {
+        "syntax": "Coefficients( <Polynomial> )",
+        "params": [
+          {
+            "name": "Polynomial",
+            "role": "polynomial",
+            "type": "Polynomial",
+            "optional": false
+          }
+        ],
+        "description": "Returns a list of all coefficients of the polynomial in its main variable (from highest to constant term). In CAS View the same syntax is available."
+      },
+      {
+        "syntax": "Coefficients( <Polynomial>, <Variable> )",
+        "params": [
+          {
+            "name": "Polynomial",
+            "role": "polynomial",
+            "type": "Polynomial",
+            "optional": false
+          },
+          {
+            "name": "Variable",
+            "role": "variable",
+            "type": "Variable",
+            "optional": false
+          }
+        ],
+        "description": "Returns a list of all coefficients of the polynomial with respect to the given variable."
+      },
+      {
+        "syntax": "Coefficients( <Conic> )",
+        "params": [
+          {
+            "name": "Conic",
+            "role": "conic",
+            "type": "Conic",
+            "optional": false
+          }
+        ],
+        "description": "Returns the list of coefficients {a, b, c, d, e, f} of the conic in standard form a x² + b y² + c x y + d x + e y + f = 0."
+      }
+    ]
+  },
+
+  "CommonDenominator": {
+    "name": "CommonDenominator",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/CommonDenominator/",
+    "overloads": [
+      {
+        "syntax": "CommonDenominator( <Expression>, <Expression> )",
+        "params": [
+          {
+            "name": "Expression1",
+            "role": "first_expression",
+            "type": "Expression",
+            "optional": false
+          },
+          {
+            "name": "Expression2",
+            "role": "second_expression",
+            "type": "Expression",
+            "optional": false
+          }
+        ],
+        "description": "Returns a function whose equation is the lowest common denominator of the two given expressions."
+      }
+    ]
+  },
+
+  "ComplexRoot": {
+    "name": "ComplexRoot",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/ComplexRoot/",
+    "overloads": [
+      {
+        "syntax": "ComplexRoot( <Polynomial> )",
+        "params": [
+          {
+            "name": "Polynomial",
+            "role": "polynomial",
+            "type": "Polynomial",
+            "optional": false
+          }
+        ],
+        "description": "Finds the complex roots of the given polynomial in x. Creates complex points in the Graphics View; in CAS View returns a list of roots. (Use CSolve for more general complex solving.)"
+      }
+    ]
+  },
+
+  "ContinuedFraction": {
+    "name": "ContinuedFraction",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/ContinuedFraction/",
+    "overloads": [
+      {
+        "syntax": "ContinuedFraction( <Number> )",
+        "params": [
+          {
+            "name": "Number",
+            "role": "number",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns the (finite or truncated) continued fraction representation of the given number."
+      }
+    ]
+  },
+
+  "Degree": {
+    "name": "Degree",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Degree/",
+    "overloads": [
+      {
+        "syntax": "Degree( <Polynomial> )",
+        "params": [
+          {
+            "name": "Polynomial",
+            "role": "polynomial",
+            "type": "Polynomial",
+            "optional": false
+          }
+        ],
+        "description": "Gives the degree of the polynomial in its main variable."
+      },
+      {
+        "syntax": "Degree( <Polynomial>, <Variable> )",
+        "params": [
+          {
+            "name": "Polynomial",
+            "role": "polynomial",
+            "type": "Polynomial",
+            "optional": false
+          },
+          {
+            "name": "Variable",
+            "role": "variable",
+            "type": "Variable",
+            "optional": false
+          }
+        ],
+        "description": "Gives the degree of the polynomial with respect to the specified variable."
+      }
+    ]
+  },
+
+  "Denominator": {
+    "name": "Denominator",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Denominator/",
+    "overloads": [
+      {
+        "syntax": "Denominator( <Number> )",
+        "params": [
+          {
+            "name": "Number",
+            "role": "number",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns the denominator of a rational number."
+      }
+    ]
+  },
+
+  "Division": {
+    "name": "Division",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Division/",
+    "overloads": [
+      {
+        "syntax": "Division( <Dividend Number>, <Divisor Number> )",
+        "params": [
+          {
+            "name": "Dividend",
+            "role": "dividend",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Divisor",
+            "role": "divisor",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns a list {q, r} where q is the integer quotient and r is the remainder of the Euclidean division of the two numbers."
+      },
+      {
+        "syntax": "Division( <Dividend Polynomial>, <Divisor Polynomial> )",
+        "params": [
+          {
+            "name": "Dividend",
+            "role": "dividend",
+            "type": "Polynomial",
+            "optional": false
+          },
+          {
+            "name": "Divisor",
+            "role": "divisor",
+            "type": "Polynomial",
+            "optional": false
+          }
+        ],
+        "description": "Returns a list {Q(x), R(x)} where Q is the quotient and R is the remainder of the polynomial division."
+      }
+    ]
+  },
+
+  "Divisors": {
+    "name": "Divisors",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Divisors/",
+    "overloads": [
+      {
+        "syntax": "Divisors( <Number> )",
+        "params": [
+          {
+            "name": "Number",
+            "role": "number",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns the number of positive divisors of the given integer."
+      }
+    ]
+  },
+
+  "DivisorsList": {
+    "name": "DivisorsList",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/DivisorsList/",
+    "overloads": [
+      {
+        "syntax": "DivisorsList( <Number> )",
+        "params": [
+          {
+            "name": "Number",
+            "role": "number",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns the list of all positive divisors of the given integer."
+      }
+    ]
+  },
+
+  "DivisorsSum": {
+    "name": "DivisorsSum",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/DivisorsSum/",
+    "overloads": [
+      {
+        "syntax": "DivisorsSum( <Number> )",
+        "params": [
+          {
+            "name": "Number",
+            "role": "number",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns the sum of all positive divisors of the given integer."
+      }
+    ]
+  },
+
+  "Eliminate": {
+    "name": "Eliminate",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Eliminate/",
+    "overloads": [
+      {
+        "syntax": "Eliminate( <List of Polynomials>, <List of Variables> )",
+        "params": [
+          {
+            "name": "Polynomials",
+            "role": "polynomials_list",
+            "type": "List",
+            "optional": false
+          },
+          {
+            "name": "Variables",
+            "role": "variables_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Eliminates the given variables from the polynomial system and returns the resulting elimination ideal generators."
+      }
+    ]
+  },
+
+  "Expand": {
+    "name": "Expand",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Expand/",
+    "overloads": [
+      {
+        "syntax": "Expand( <Expression> )",
+        "params": [
+          {
+            "name": "Expression",
+            "role": "expression",
+            "type": "Expression",
+            "optional": false
+          }
+        ],
+        "description": "Expands and simplifies products and powers in the expression."
+      }
+    ]
+  },
+
+  "ExtendedGCD": {
+    "name": "ExtendedGCD",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/ExtendedGCD/",
+    "overloads": [
+      {
+        "syntax": "ExtendedGCD( <Integer a>, <Integer b> )",
+        "params": [
+          {
+            "name": "a",
+            "role": "first_integer",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "b",
+            "role": "second_integer",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns a list {s, t, g} such that s a + t b = g and g = GCD(a, b) (Bézout's identity coefficients and the gcd)."
+      }
+    ]
+  },
+
+  "Factor": {
+    "name": "Factor",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Factor/",
+    "overloads": [
+      {
+        "syntax": "Factor( <Expression> )",
+        "params": [
+          {
+            "name": "Expression",
+            "role": "expression",
+            "type": "Expression",
+            "optional": false
+          }
+        ],
+        "description": "Factors the given expression over rational numbers. For factoring over irrationals or complex numbers, see IFactor, CFactor, CIFactor."
+      }
+    ]
+  },
+
+  "Factors": {
+    "name": "Factors",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Factors/",
+    "overloads": [
+      {
+        "syntax": "Factors( <Integer> )",
+        "params": [
+          {
+            "name": "Integer",
+            "role": "integer",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns the list of prime factors of the given integer, each shown with multiplicity."
+      }
+    ]
+  },
+
+  "FromBase": {
+    "name": "FromBase",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/FromBase/",
+    "overloads": [
+      {
+        "syntax": "FromBase( <Text>, <Base> )",
+        "params": [
+          {
+            "name": "Digits",
+            "role": "digits_text",
+            "type": "Text",
+            "optional": false
+          },
+          {
+            "name": "Base",
+            "role": "base",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Interprets the given text as a number written in the specified base and converts it to a decimal integer."
+      }
+    ]
+  },
+  "GeometricMean": {
+    "name": "GeometricMean",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/GeometricMean/",
+    "overloads": [
+      {
+        "syntax": "GeometricMean( <List of Numbers> )",
+        "params": [
+          {
+            "name": "Numbers",
+            "role": "numbers_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Returns the geometric mean of the given list of numbers."
+      }
+    ]
+  },
+
+  "HarmonicMean": {
+    "name": "HarmonicMean",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/HarmonicMean/",
+    "overloads": [
+      {
+        "syntax": "HarmonicMean( <List of Numbers> )",
+        "params": [
+          {
+            "name": "Numbers",
+            "role": "numbers_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Returns the harmonic mean of the given list of numbers."
+      }
+    ]
+  },
+
+  "IFactor": {
+    "name": "IFactor",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/IFactor/",
+    "overloads": [
+      {
+        "syntax": "IFactor( <Expression> )",
+        "params": [
+          {
+            "name": "Expression",
+            "role": "expression",
+            "type": "Expression",
+            "optional": false
+          }
+        ],
+        "description": "Factors the given expression over the irrationals."
+      },
+      {
+        "syntax": "IFactor( <Expression>, <Variable> )",
+        "params": [
+          {
+            "name": "Expression",
+            "role": "expression",
+            "type": "Expression",
+            "optional": false
+          },
+          {
+            "name": "Variable",
+            "role": "variable",
+            "type": "Variable",
+            "optional": false
+          }
+        ],
+        "description": "Factors the expression with respect to the given variable over the irrationals."
+      }
+    ]
+  },
+
+  "IsFactored": {
+    "name": "IsFactored",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/IsFactored/",
+    "overloads": [
+      {
+        "syntax": "IsFactored( <Polynomial> )",
+        "params": [
+          {
+            "name": "Polynomial",
+            "role": "polynomial",
+            "type": "Polynomial",
+            "optional": false
+          }
+        ],
+        "description": "Returns true if the polynomial is written as a factorization over the rationals (with positive leading coefficients), and false otherwise."
+      }
+    ]
+  },
+
+  "IsInteger": {
+    "name": "IsInteger",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/IsInteger/",
+    "overloads": [
+      {
+        "syntax": "IsInteger( <Number> )",
+        "params": [
+          {
+            "name": "Number",
+            "role": "number",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns true if the given number is an integer, and false otherwise."
+      }
+    ]
+  },
+
+  "IsPrime": {
+    "name": "IsPrime",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/IsPrime/",
+    "overloads": [
+      {
+        "syntax": "IsPrime( <Number> )",
+        "params": [
+          {
+            "name": "Number",
+            "role": "number",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns true if the number is prime, and false otherwise."
+      }
+    ]
+  },
+
+  "LCM": {
+    "name": "LCM",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/LCM/",
+    "overloads": [
+      {
+        "syntax": "LCM( <Number>, <Number> )",
+        "params": [
+          {
+            "name": "Number1",
+            "role": "first_number",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Number2",
+            "role": "second_number",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Calculates the least common multiple of the two numbers."
+      },
+      {
+        "syntax": "LCM( <List of Numbers> )",
+        "params": [
+          {
+            "name": "Numbers",
+            "role": "numbers_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Calculates the least common multiple of all numbers in the list."
+      },
+      {
+        "syntax": "LCM( <Polynomial>, <Polynomial> )",
+        "params": [
+          {
+            "name": "Polynomial1",
+            "role": "first_polynomial",
+            "type": "Polynomial",
+            "optional": false
+          },
+          {
+            "name": "Polynomial2",
+            "role": "second_polynomial",
+            "type": "Polynomial",
+            "optional": false
+          }
+        ],
+        "description": "Calculates the least common multiple of the two polynomials."
+      },
+      {
+        "syntax": "LCM( <List of Polynomials> )",
+        "params": [
+          {
+            "name": "Polynomials",
+            "role": "polynomials_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Calculates the least common multiple of all polynomials in the list."
+      }
+    ]
+  },
+
+  "LeftSide": {
+    "name": "LeftSide",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/LeftSide/",
+    "overloads": [
+      {
+        "syntax": "LeftSide( <Equation> )",
+        "params": [
+          {
+            "name": "Equation",
+            "role": "equation",
+            "type": "Equation",
+            "optional": false
+          }
+        ],
+        "description": "Returns the left-hand side of the simplified equation."
+      },
+      {
+        "syntax": "LeftSide( <List of Equations> )",
+        "params": [
+          {
+            "name": "Equations",
+            "role": "equations_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Returns a list containing the left-hand sides of each equation."
+      },
+      {
+        "syntax": "LeftSide( <List of Equations>, <Index> )",
+        "params": [
+          {
+            "name": "Equations",
+            "role": "equations_list",
+            "type": "List",
+            "optional": false
+          },
+          {
+            "name": "Index",
+            "role": "index",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns the left-hand side of the equation at the specified index in the list."
+      }
+    ]
+  },
+
+  "Max": {
+    "name": "Max",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Max/",
+    "overloads": [
+      {
+        "syntax": "Max( <Number>, <Number> )",
+        "params": [
+          {
+            "name": "Number1",
+            "role": "first_number",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Number2",
+            "role": "second_number",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns the larger of the two numbers."
+      },
+      {
+        "syntax": "Max( <List of Numbers> )",
+        "params": [
+          {
+            "name": "Numbers",
+            "role": "numbers_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Returns the maximum element of the list."
+      }
+    ]
+  },
+
+  "Mean": {
+    "name": "Mean",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Mean/",
+    "overloads": [
+      {
+        "syntax": "Mean( <List of Numbers> )",
+        "params": [
+          {
+            "name": "Numbers",
+            "role": "numbers_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Calculates the arithmetic mean of the list elements."
+      },
+      {
+        "syntax": "Mean( <List of Numbers>, <List of Frequencies> )",
+        "params": [
+          {
+            "name": "Numbers",
+            "role": "numbers_list",
+            "type": "List",
+            "optional": false
+          },
+          {
+            "name": "Frequencies",
+            "role": "frequencies_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Calculates the weighted mean of the numbers using the given frequencies."
+      }
+    ]
+  },
+
+  "Midpoint": {
+    "name": "Midpoint",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Midpoint/",
+    "overloads": [
+      {
+        "syntax": "Midpoint( <Point>, <Point> )",
+        "params": [
+          {
+            "name": "Point1",
+            "role": "first_point",
+            "type": "Point",
+            "optional": false
+          },
+          {
+            "name": "Point2",
+            "role": "second_point",
+            "type": "Point",
+            "optional": false
+          }
+        ],
+        "description": "Returns the midpoint of the segment joining the two points."
+      },
+      {
+        "syntax": "Midpoint( <Segment> )",
+        "params": [
+          {
+            "name": "Segment",
+            "role": "segment",
+            "type": "Segment",
+            "optional": false
+          }
+        ],
+        "description": "Returns the midpoint of the given segment."
+      },
+      {
+        "syntax": "Midpoint( <Interval> )",
+        "params": [
+          {
+            "name": "Interval",
+            "role": "interval",
+            "type": "Interval",
+            "optional": false
+          }
+        ],
+        "description": "Returns the midpoint of the given interval."
+      }
+    ]
+  },
+
+  "Min": {
+    "name": "Min",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Min/",
+    "overloads": [
+      {
+        "syntax": "Min( <Number>, <Number> )",
+        "params": [
+          {
+            "name": "Number1",
+            "role": "first_number",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Number2",
+            "role": "second_number",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns the smaller of the two numbers."
+      },
+      {
+        "syntax": "Min( <List of Numbers> )",
+        "params": [
+          {
+            "name": "Numbers",
+            "role": "numbers_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Returns the minimum element of the list."
+      }
+    ]
+  },
+
+  "MixedNumber": {
+    "name": "MixedNumber",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/MixedNumber/",
+    "overloads": [
+      {
+        "syntax": "MixedNumber( <Number> )",
+        "params": [
+          {
+            "name": "Number",
+            "role": "number",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Writes a rational number as a mixed number (integer part and proper fraction)."
+      }
+    ]
+  },
+
+  "Mod": {
+    "name": "Mod",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Mod/",
+    "overloads": [
+      {
+        "syntax": "Mod( <Dividend>, <Divisor> )",
+        "params": [
+          {
+            "name": "Dividend",
+            "role": "dividend",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Divisor",
+            "role": "divisor",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns the remainder of the Euclidean division of the two numbers."
+      }
+    ]
+  },
+
+  "ModularExponent": {
+    "name": "ModularExponent",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/ModularExponent/",
+    "overloads": [
+      {
+        "syntax": "ModularExponent( <Base>, <Exponent>, <Modulus> )",
+        "params": [
+          {
+            "name": "Base",
+            "role": "base",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Exponent",
+            "role": "exponent",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Modulus",
+            "role": "modulus",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Computes (Base^Exponent) modulo Modulus efficiently."
+      }
+    ]
+  },
+
+  "NSolutions": {
+    "name": "NSolutions",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/NSolutions/",
+    "overloads": [
+      {
+        "syntax": "NSolutions( <Equation> )",
+        "params": [
+          {
+            "name": "Equation",
+            "role": "equation",
+            "type": "Equation",
+            "optional": false
+          }
+        ],
+        "description": "Finds numerical solutions of the equation for its main variable and returns them as a list."
+      },
+      {
+        "syntax": "NSolutions( <Equation>, <Variable> )",
+        "params": [
+          {
+            "name": "Equation",
+            "role": "equation",
+            "type": "Equation",
+            "optional": false
+          },
+          {
+            "name": "Variable",
+            "role": "variable",
+            "type": "Variable",
+            "optional": false
+          }
+        ],
+        "description": "Finds numerical solutions of the equation for the specified variable."
+      },
+      {
+        "syntax": "NSolutions( <List of Equations>, <List of Variables> )",
+        "params": [
+          {
+            "name": "Equations",
+            "role": "equations_list",
+            "type": "List",
+            "optional": false
+          },
+          {
+            "name": "Variables",
+            "role": "variables_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Finds numerical solutions of a system of equations for the given list of variables."
+      }
+    ]
+  },
+
+  "NSolve": {
+    "name": "NSolve",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/NSolve/",
+    "overloads": [
+      {
+        "syntax": "NSolve( <Equation> )",
+        "params": [
+          {
+            "name": "Equation",
+            "role": "equation",
+            "type": "Equation",
+            "optional": false
+          }
+        ],
+        "description": "Numerically solves the equation for its main variable and returns a list of solutions."
+      },
+      {
+        "syntax": "NSolve( <Equation>, <Variable> )",
+        "params": [
+          {
+            "name": "Equation",
+            "role": "equation",
+            "type": "Equation",
+            "optional": false
+          },
+          {
+            "name": "Variable",
+            "role": "variable",
+            "type": "Variable",
+            "optional": false
+          }
+        ],
+        "description": "Numerically solves the equation for the specified variable."
+      },
+      {
+        "syntax": "NSolve( <List of Equations>, <List of Variables> )",
+        "params": [
+          {
+            "name": "Equations",
+            "role": "equations_list",
+            "type": "List",
+            "optional": false
+          },
+          {
+            "name": "Variables",
+            "role": "variables_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Numerically solves a system of equations for the given list of variables."
+      }
+    ]
+  },
+
+  "NextPrime": {
+    "name": "NextPrime",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/NextPrime/",
+    "overloads": [
+      {
+        "syntax": "NextPrime( <Number> )",
+        "params": [
+          {
+            "name": "Number",
+            "role": "number",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns the smallest prime greater than the given number."
+      }
+    ]
+  },
+
+  "Normalize": {
+    "name": "Normalize",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Normalize/",
+    "overloads": [
+      {
+        "syntax": "Normalize( <List of Numbers> )",
+        "params": [
+          {
+            "name": "Numbers",
+            "role": "numbers_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Normalizes the list of numbers, typically so that the sum of the elements equals 1."
+      }
+    ]
+  },
+
+  "Numerator": {
+    "name": "Numerator",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Numerator/",
+    "overloads": [
+      {
+        "syntax": "Numerator( <Number> )",
+        "params": [
+          {
+            "name": "Number",
+            "role": "number",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns the numerator of a rational number written in lowest terms."
+      }
+    ]
+  },
+  "Numeric": {
+    "name": "Numeric",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Numeric/",
+    "overloads": [
+      {
+        "syntax": "Numeric( <Expression> )",
+        "params": [
+          {
+            "name": "Expression",
+            "role": "expression",
+            "type": "Expression",
+            "optional": false
+          }
+        ],
+        "description": "Tries to determine a numerical approximation of the given expression. The number of decimals depends on the global rounding option."
+      },
+      {
+        "syntax": "Numeric( <Expression>, <Significant Figures> )",
+        "params": [
+          {
+            "name": "Expression",
+            "role": "expression",
+            "type": "Expression",
+            "optional": false
+          },
+          {
+            "name": "Significant Figures",
+            "role": "significant_figures",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Determines a numerical approximation of the expression using the specified number of significant figures."
+      }
+    ]
+  },
+
+  "ParseToNumber": {
+    "name": "ParseToNumber",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/ParseToNumber/",
+    "overloads": [
+      {
+        "syntax": "ParseToNumber( <Number>, <Text> )",
+        "params": [
+          {
+            "name": "Number",
+            "role": "target_number",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Text",
+            "role": "expression_text",
+            "type": "Text",
+            "optional": false
+          }
+        ],
+        "description": "Parses the text as an expression and stores the result into a pre‑defined free number. Scripting command, assigns the value once."
+      },
+      {
+        "syntax": "ParseToNumber( <Text> )",
+        "params": [
+          {
+            "name": "Text",
+            "role": "expression_text",
+            "type": "Text",
+            "optional": false
+          }
+        ],
+        "description": "Parses the text as an expression and creates a new number containing the result."
+      }
+    ]
+  },
+
+  "PartialFractions": {
+    "name": "PartialFractions",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/PartialFractions/",
+    "overloads": [
+      {
+        "syntax": "PartialFractions( <Function> )",
+        "params": [
+          {
+            "name": "Function",
+            "role": "function",
+            "type": "Function",
+            "optional": false
+          }
+        ],
+        "description": "If possible, returns the partial fraction decomposition of the function in its main variable."
+      },
+      {
+        "syntax": "PartialFractions( <Function>, <Variable> )",
+        "params": [
+          {
+            "name": "Function",
+            "role": "function",
+            "type": "Function",
+            "optional": false
+          },
+          {
+            "name": "Variable",
+            "role": "variable",
+            "type": "Variable",
+            "optional": false
+          }
+        ],
+        "description": "If possible, returns the partial fraction decomposition of the function with respect to the given variable."
+      }
+    ]
+  },
+
+  "PlotSolve": {
+    "name": "PlotSolve",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/PlotSolve/",
+    "overloads": [
+      {
+        "syntax": "PlotSolve( <Equation in x> )",
+        "params": [
+          {
+            "name": "Equation in x",
+            "role": "equation",
+            "type": "Equation",
+            "optional": false
+          }
+        ],
+        "description": "Solves the equation in x, returns a list of all solutions and plots the corresponding points in the Graphics View."
+      }
+    ]
+  },
+
+  "Polynomial": {
+    "name": "Polynomial",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Polynomial/",
+    "overloads": [
+      {
+        "syntax": "Polynomial( <Function> )",
+        "params": [
+          {
+            "name": "Function",
+            "role": "function",
+            "type": "Function",
+            "optional": false
+          }
+        ],
+        "description": "Expands the expression of a polynomial function and simplifies the result, written as a polynomial in its main variable."
+      },
+      {
+        "syntax": "Polynomial( <List of Points> )",
+        "params": [
+          {
+            "name": "Points",
+            "role": "points_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Creates the interpolation polynomial of degree n−1 through the given n points."
+      },
+      {
+        "syntax": "Polynomial( <Function> )",
+        "params": [
+          {
+            "name": "Function",
+            "role": "function",
+            "type": "Function",
+            "optional": false
+          }
+        ],
+        "description": "CAS: Expands the function and writes it as a polynomial in x, grouping coefficients."
+      },
+      {
+        "syntax": "Polynomial( <Function>, <Variable> )",
+        "params": [
+          {
+            "name": "Function",
+            "role": "function",
+            "type": "Function",
+            "optional": false
+          },
+          {
+            "name": "Variable",
+            "role": "variable",
+            "type": "Variable",
+            "optional": false
+          }
+        ],
+        "description": "CAS: Expands the function and writes it as a polynomial in the specified variable, grouping coefficients."
+      }
+    ]
+  },
+
+  "PreviousPrime": {
+    "name": "PreviousPrime",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/PreviousPrime/",
+    "overloads": [
+      {
+        "syntax": "PreviousPrime( <Number> )",
+        "params": [
+          {
+            "name": "Number",
+            "role": "number",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns the greatest prime strictly smaller than the given number."
+      }
+    ]
+  },
+
+  "PrimeFactors": {
+    "name": "PrimeFactors",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/PrimeFactors/",
+    "overloads": [
+      {
+        "syntax": "PrimeFactors( <Number> )",
+        "params": [
+          {
+            "name": "Number",
+            "role": "number",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns a list of prime numbers whose product equals the given integer (with multiplicity)."
+      }
+    ]
+  },
+
+  "Product": {
+    "name": "Product",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Product/",
+    "overloads": [
+      {
+        "syntax": "Product( <List of Raw Data> )",
+        "params": [
+          {
+            "name": "List",
+            "role": "values_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Calculates the product of all numbers in the list."
+      },
+      {
+        "syntax": "Product( <List of Numbers>, <Number of Elements> )",
+        "params": [
+          {
+            "name": "List",
+            "role": "values_list",
+            "type": "List",
+            "optional": false
+          },
+          {
+            "name": "Number of Elements",
+            "role": "count",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Calculates the product of the first n elements of the list."
+      },
+      {
+        "syntax": "Product( <List of Numbers>, <List of Frequencies> )",
+        "params": [
+          {
+            "name": "Numbers",
+            "role": "values_list",
+            "type": "List",
+            "optional": false
+          },
+          {
+            "name": "Frequencies",
+            "role": "frequencies_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Calculates the product of all list elements raised to their corresponding frequencies."
+      },
+      {
+        "syntax": "Product( <Expression>, <Variable>, <Start Value>, <End Value> )",
+        "params": [
+          {
+            "name": "Expression",
+            "role": "expression",
+            "type": "Expression",
+            "optional": false
+          },
+          {
+            "name": "Variable",
+            "role": "variable",
+            "type": "Variable",
+            "optional": false
+          },
+          {
+            "name": "Start Value",
+            "role": "start_value",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "End Value",
+            "role": "end_value",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Computes the product of the expression for all integer values of the variable from start to end."
+      },
+      {
+        "syntax": "Product( <List of Expressions> )",
+        "params": [
+          {
+            "name": "Expressions",
+            "role": "expressions_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "CAS: Calculates the product of all expressions in the list."
+      },
+      {
+        "syntax": "Product( <Expression>, <Variable>, <Start Value>, <End Value> )",
+        "params": [
+          {
+            "name": "Expression",
+            "role": "expression",
+            "type": "Expression",
+            "optional": false
+          },
+          {
+            "name": "Variable",
+            "role": "variable",
+            "type": "Variable",
+            "optional": false
+          },
+          {
+            "name": "Start Value",
+            "role": "start_value",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "End Value",
+            "role": "end_value",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "CAS: Symbolically computes the product of the expression over the given integer range."
+      }
+    ]
+  },
+
+  "RandomBetween": {
+    "name": "RandomBetween",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/RandomBetween/",
+    "overloads": [
+      {
+        "syntax": "RandomBetween( <Minimum Integer>, <Maximum Integer> )",
+        "params": [
+          {
+            "name": "Minimum Integer",
+            "role": "min",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Maximum Integer",
+            "role": "max",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns a random integer between min and max (inclusive)."
+      },
+      {
+        "syntax": "RandomBetween( <Minimum Integer>, <Maximum Integer>, <Boolean Fixed> )",
+        "params": [
+          {
+            "name": "Minimum Integer",
+            "role": "min",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Maximum Integer",
+            "role": "max",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Boolean Fixed",
+            "role": "fixed",
+            "type": "Boolean",
+            "optional": false
+          }
+        ],
+        "description": "If fixed is true, generates a random integer once (on file load / undo‑redo), otherwise updates on each recomputation."
+      },
+      {
+        "syntax": "RandomBetween( <Minimum Integer>, <Maximum Integer>, <Number of Samples> )",
+        "params": [
+          {
+            "name": "Minimum Integer",
+            "role": "min",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Maximum Integer",
+            "role": "max",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Number of Samples",
+            "role": "samples",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns a list of the specified number of random integers between min and max (inclusive)."
+      }
+    ]
+  },
+
+  "RandomPolynomial": {
+    "name": "RandomPolynomial",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/RandomPolynomial/",
+    "overloads": [
+      {
+        "syntax": "RandomPolynomial( <Degree>, <Minimum for Coefficients>, <Maximum for Coefficients> )",
+        "params": [
+          {
+            "name": "Degree",
+            "role": "degree",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Minimum for Coefficients",
+            "role": "min_coeff",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Maximum for Coefficients",
+            "role": "max_coeff",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns a random polynomial in x of the given degree with integer coefficients between the given bounds (inclusive)."
+      },
+      {
+        "syntax": "RandomPolynomial( <Variable>, <Degree>, <Minimum for Coefficients>, <Maximum for Coefficients> )",
+        "params": [
+          {
+            "name": "Variable",
+            "role": "variable",
+            "type": "Variable",
+            "optional": false
+          },
+          {
+            "name": "Degree",
+            "role": "degree",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Minimum for Coefficients",
+            "role": "min_coeff",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Maximum for Coefficients",
+            "role": "max_coeff",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "CAS: Returns a random polynomial in the given variable, with specified degree and integer coefficient range."
+      }
+    ]
+  },
+
+  "Rationalize": {
+    "name": "Rationalize",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Rationalize/",
+    "overloads": [
+      {
+        "syntax": "Rationalize( <Number> )",
+        "params": [
+          {
+            "name": "Number",
+            "role": "number",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Creates a fraction equal to the given number and rationalizes the denominator if it contains square roots."
+      }
+    ]
+  },
+
+  "RightSide": {
+    "name": "RightSide",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/RightSide/",
+    "overloads": [
+      {
+        "syntax": "RightSide( <Equation> )",
+        "params": [
+          {
+            "name": "Equation",
+            "role": "equation",
+            "type": "Equation",
+            "optional": false
+          }
+        ],
+        "description": "Returns the right‑hand side of the simplified equation."
+      },
+      {
+        "syntax": "RightSide( <List of Equations> )",
+        "params": [
+          {
+            "name": "Equations",
+            "role": "equations_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Returns a list with the right‑hand sides of each equation in the list."
+      },
+      {
+        "syntax": "RightSide( <List of Equations>, <Index> )",
+        "params": [
+          {
+            "name": "Equations",
+            "role": "equations_list",
+            "type": "List",
+            "optional": false
+          },
+          {
+            "name": "Index",
+            "role": "index",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns the right‑hand side of the equation at the specified position in the list."
+      }
+    ]
+  },
+
+  "Simplify": {
+    "name": "Simplify",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Simplify/",
+    "overloads": [
+      {
+        "syntax": "Simplify( <Function> )",
+        "params": [
+          {
+            "name": "Function",
+            "role": "function",
+            "type": "Function",
+            "optional": false
+          }
+        ],
+        "description": "Simplifies the given expression or function, combining like terms when possible. May load the CAS."
+      },
+      {
+        "syntax": "Simplify( <Text> )",
+        "params": [
+          {
+            "name": "Text",
+            "role": "text",
+            "type": "Text",
+            "optional": false
+          }
+        ],
+        "description": "Tries to tidy up text expressions, for example by removing repeated negatives. FormulaText is usually preferred for formatted output."
+      }
+    ]
+  },
+
+  "Solutions": {
+    "name": "Solutions",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Solutions/",
+    "overloads": [
+      {
+        "syntax": "Solutions( <Equation> )",
+        "params": [
+          {
+            "name": "Equation",
+            "role": "equation",
+            "type": "Equation",
+            "optional": false
+          }
+        ],
+        "description": "Solves the equation for its main variable and returns a list of all (real) solutions."
+      },
+      {
+        "syntax": "Solutions( <Equation>, <Variable> )",
+        "params": [
+          {
+            "name": "Equation",
+            "role": "equation",
+            "type": "Equation",
+            "optional": false
+          },
+          {
+            "name": "Variable",
+            "role": "variable",
+            "type": "Variable",
+            "optional": false
+          }
+        ],
+        "description": "CAS: Solves the equation for the specified variable and returns a list of all solutions."
+      },
+      {
+        "syntax": "Solutions( <List of Equations>, <List of Variables> )",
+        "params": [
+          {
+            "name": "Equations",
+            "role": "equations_list",
+            "type": "List",
+            "optional": false
+          },
+          {
+            "name": "Variables",
+            "role": "variables_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Solves a system of equations for the given list of unknowns and returns a list of all solution tuples."
+      }
+    ]
+  },
+
+  "SolveCubic": {
+    "name": "SolveCubic",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/SolveCubic/",
+    "overloads": [
+      {
+        "syntax": "SolveCubic( <Cubic Polynomial> )",
+        "params": [
+          {
+            "name": "Cubic Polynomial",
+            "role": "polynomial",
+            "type": "Polynomial",
+            "optional": false
+          }
+        ],
+        "description": "Solves the given cubic polynomial and returns a list of all (possibly complex) solutions. CAS command."
+      }
+    ]
+  },
+
+  "SolveQuartic": {
+    "name": "SolveQuartic",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/SolveQuartic/",
+    "overloads": [
+      {
+        "syntax": "SolveQuartic( <Quartic Polynomial> )",
+        "params": [
+          {
+            "name": "Quartic Polynomial",
+            "role": "polynomial",
+            "type": "Polynomial",
+            "optional": false
+          }
+        ],
+        "description": "Solves the given quartic polynomial and returns a list of all (possibly complex) solutions. CAS command."
+      }
+    ]
+  },
+
+  "Substitute": {
+    "name": "Substitute",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Substitute/",
+    "overloads": [
+      {
+        "syntax": "Substitute( <Expression>, <from>, <to> )",
+        "params": [
+          {
+            "name": "Expression",
+            "role": "expression",
+            "type": "Expression",
+            "optional": false
+          },
+          {
+            "name": "from",
+            "role": "from_pattern",
+            "type": "Expression",
+            "optional": false
+          },
+          {
+            "name": "to",
+            "role": "to_replacement",
+            "type": "Expression",
+            "optional": false
+          }
+        ],
+        "description": "Replaces all occurrences of ‘from’ by ‘to’ in the expression and evaluates numeric substitutions."
+      },
+      {
+        "syntax": "Substitute( <Expression>, <Substitution List> )",
+        "params": [
+          {
+            "name": "Expression",
+            "role": "expression",
+            "type": "Expression",
+            "optional": false
+          },
+          {
+            "name": "Substitution List",
+            "role": "substitutions",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Replaces variables in the expression according to the substitution list (e.g. {x = a, y = 2, z = b}) and evaluates resulting numeric parts."
+      }
+    ]
+  },
+
+  "Sum": {
+    "name": "Sum",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Sum/",
+    "overloads": [
+      {
+        "syntax": "Sum( <List> )",
+        "params": [
+          {
+            "name": "List",
+            "role": "values_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Calculates the sum of all elements in the list. Works for numbers, points, vectors, text and functions."
+      },
+      {
+        "syntax": "Sum( <List>, <Number of Elements> )",
+        "params": [
+          {
+            "name": "List",
+            "role": "values_list",
+            "type": "List",
+            "optional": false
+          },
+          {
+            "name": "Number of Elements",
+            "role": "count",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Calculates the sum of the first n elements in the list."
+      },
+      {
+        "syntax": "Sum( <List>, <List of Frequencies> )",
+        "params": [
+          {
+            "name": "List",
+            "role": "values_list",
+            "type": "List",
+            "optional": false
+          },
+          {
+            "name": "Frequencies",
+            "role": "frequencies_list",
+            "type": "List",
+            "optional": false
+          }
+        ],
+        "description": "Returns the weighted sum of the list elements, using the given frequencies."
+      },
+      {
+        "syntax": "Sum( <Expression>, <Variable>, <Start Value>, <End Value> )",
+        "params": [
+          {
+            "name": "Expression",
+            "role": "expression",
+            "type": "Expression",
+            "optional": false
+          },
+          {
+            "name": "Variable",
+            "role": "variable",
+            "type": "Variable",
+            "optional": false
+          },
+          {
+            "name": "Start Value",
+            "role": "start_value",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "End Value",
+            "role": "end_value",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "CAS: Computes the sum of the expression for all integer values of the variable from start to end (end may be infinity)."
+      }
+    ]
+  },
+
+  "ToBase": {
+    "name": "ToBase",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/ToBase/",
+    "overloads": [
+      {
+        "syntax": "ToBase( <Number>, <Base> )",
+        "params": [
+          {
+            "name": "Number",
+            "role": "number",
+            "type": "Number",
+            "optional": false
+          },
+          {
+            "name": "Base",
+            "role": "base",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Converts an integer to its representation in the specified base (2–36) and returns it as text."
+      }
+    ]
+  },
+
+  "Vertex": {
+    "name": "Vertex",
+    "url": "https://geogebra.github.io/docs/manual/en/commands/Vertex/",
+    "overloads": [
+      {
+        "syntax": "Vertex( <Conic> )",
+        "params": [
+          {
+            "name": "Conic",
+            "role": "conic",
+            "type": "Conic",
+            "optional": false
+          }
+        ],
+        "description": "Returns all vertices of the conic section."
+      },
+      {
+        "syntax": "Vertex( <Inequality> )",
+        "params": [
+          {
+            "name": "Inequality",
+            "role": "inequality",
+            "type": "Inequality",
+            "optional": false
+          }
+        ],
+        "description": "Returns the intersection points of the boundary lines of the inequality region."
+      },
+      {
+        "syntax": "Vertex( <Polygon> )",
+        "params": [
+          {
+            "name": "Polygon",
+            "role": "polygon",
+            "type": "Polygon",
+            "optional": false
+          }
+        ],
+        "description": "Returns all vertices of the polygon."
+      },
+      {
+        "syntax": "Vertex( <Polygon>, <Index n> )",
+        "params": [
+          {
+            "name": "Polygon",
+            "role": "polygon",
+            "type": "Polygon",
+            "optional": false
+          },
+          {
+            "name": "Index n",
+            "role": "index",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns the n‑th vertex of the polygon."
+      },
+      {
+        "syntax": "Vertex( <Segment>, <Index> )",
+        "params": [
+          {
+            "name": "Segment",
+            "role": "segment",
+            "type": "Segment",
+            "optional": false
+          },
+          {
+            "name": "Index",
+            "role": "index",
+            "type": "Number",
+            "optional": false
+          }
+        ],
+        "description": "Returns the start point (Index = 1) or end point (Index = 2) of the segment."
+      }
+    ]
+  }
+
+  }
+}

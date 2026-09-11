@@ -1,0 +1,4236 @@
+{
+  "command_category": "Functions_and_Calculus_Commands",
+  "total_commands": 73,
+  "commands": {
+    "Asymptote": {
+      "name": "Asymptote",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Asymptote/",
+      "overloads": [
+        {
+          "syntax": "Asymptote(<Conic>)",
+          "params": [
+            {
+              "name": "conic",
+              "role": "input_conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "返回给定二次曲线的两条渐近线。"
+        },
+        {
+          "syntax": "Asymptote(<Function>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "尝试求给定函数的所有渐近线，并以列表形式返回（可能找不全，例如 ln(x) 这样的非有理函数的竖直渐近线）。在 Graphing / Geometry App 中不可用。"
+        },
+        {
+          "syntax": "Asymptote(<Implicit Curve>)",
+          "params": [
+            {
+              "name": "implicitCurve",
+              "role": "input_implicit_curve",
+              "type": "ImplicitCurve",
+              "optional": false
+            }
+          ],
+          "description": "返回包含该隐式曲线所有渐近线的列表。"
+        }
+      ]
+    },
+    "Coefficients": {
+      "name": "Coefficients",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Coefficients/",
+      "overloads": [
+        {
+          "syntax": "Coefficients(<Polynomial>)",
+          "params": [
+            {
+              "name": "polynomial",
+              "role": "input_polynomial",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "返回多项式 a_k x^k + ... + a_0 的所有系数列表 {a_k, ..., a_0}。对拟合得到的非多项式曲线（比如 f(x) = FitExp(l1)），返回其参数列表。"
+        },
+        {
+          "syntax": "Coefficients(<Polynomial>, <Variable>)",
+          "params": [
+            {
+              "name": "polynomial",
+              "role": "input_polynomial",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "按指定变量给出多项式的各项系数列表。"
+        },
+        {
+          "syntax": "Coefficients(<Conic>)",
+          "params": [
+            {
+              "name": "conic",
+              "role": "input_conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "返回二次曲线标准形式 a x² + b y² + c + d x y + e x + f y = 0 的系数列表 {a, b, c, d, e, f}。"
+        }
+      ]
+    },
+    "ComplexRoot": {
+      "name": "ComplexRoot",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ComplexRoot/",
+      "overloads": [
+        {
+          "syntax": "ComplexRoot(<Polynomial>)",
+          "params": [
+            {
+              "name": "polynomial",
+              "role": "input_polynomial",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "在 x 变量上求给定多项式的所有复根，在图形视图中创建对应点。"
+        },
+        {
+          "syntax": "ComplexRoot(<Polynomial>)",
+          "params": [
+            {
+              "name": "polynomial",
+              "role": "input_polynomial",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "CAS 语法：在 x 变量上求给定多项式的所有复根并以列表返回。建议优先使用 CSolve 命令。"
+        }
+      ]
+    },
+    "Cubic": {
+      "name": "Cubic",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Cubic/",
+      "overloads": [
+        {
+          "syntax": "Cubic(<Point>, <Point>, <Point>, <Number>)",
+          "params": [
+            {
+              "name": "A",
+              "role": "triangle_vertex_A",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "B",
+              "role": "triangle_vertex_B",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "C",
+              "role": "triangle_vertex_C",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "n",
+              "role": "cubic_index",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对三角形 ABC 返回第 n 个 triangle cubic，对应一个三次曲线（命令仍在开发中，可用的 n 集合会变化）。"
+        }
+      ]
+    },
+    "Curvature": {
+      "name": "Curvature",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Curvature/",
+      "overloads": [
+        {
+          "syntax": "Curvature(<Point>, <Object>)",
+          "params": [
+            {
+              "name": "point",
+              "role": "evaluation_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "object",
+              "role": "target_object",
+              "type": "Function/Curve/Conic",
+              "optional": false
+            }
+          ],
+          "description": "在给定点处返回对象（函数、参数曲线或二次曲线）的曲率标量值。"
+        }
+      ]
+    },
+    "CurvatureVector": {
+      "name": "CurvatureVector",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CurvatureVector/",
+      "overloads": [
+        {
+          "syntax": "CurvatureVector(<Point>, <Object>)",
+          "params": [
+            {
+              "name": "point",
+              "role": "evaluation_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "object",
+              "role": "target_object",
+              "type": "Function/Curve/Conic",
+              "optional": false
+            }
+          ],
+          "description": "在给定点处返回对象（函数、参数曲线或二次曲线）的曲率向量。"
+        }
+      ]
+    },
+    "Curve": {
+      "name": "Curve",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Curve/",
+      "overloads": [
+        {
+          "syntax": "Curve(<Expression>, <Expression>, <Parameter Variable>, <Start Value>, <End Value>)",
+          "params": [
+            {
+              "name": "xExpr",
+              "role": "x_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "yExpr",
+              "role": "y_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "parameter",
+              "role": "parameter_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "parameter_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "parameter_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在 [start, end] 区间上，生成平面笛卡尔参数曲线 (x(t), y(t))。"
+        },
+        {
+          "syntax": "Curve(<Expression>, <Expression>, <Expression>, <Parameter Variable>, <Start Value>, <End Value>)",
+          "params": [
+            {
+              "name": "xExpr",
+              "role": "x_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "yExpr",
+              "role": "y_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "zExpr",
+              "role": "z_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "parameter",
+              "role": "parameter_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "parameter_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "parameter_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在 [start, end] 区间上，生成 3D 笛卡尔参数曲线 (x(t), y(t), z(t))。要求 end ≥ start，且两者有限；x、y、z 不能作为参数名。"
+        }
+      ]
+    },
+    "DataFunction": {
+      "name": "DataFunction",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/DataFunction/",
+      "overloads": [
+        {
+          "syntax": "DataFunction(<List of Numbers>, <List of Numbers>)",
+          "params": [
+            {
+              "name": "xList",
+              "role": "x_values",
+              "type": "List<Number>",
+              "optional": false
+            },
+            {
+              "name": "yList",
+              "role": "y_values",
+              "type": "List<Number>",
+              "optional": false
+            }
+          ],
+          "description": "给定两列数值 {x1,...,xn} 与 {y1,...,yn}，生成通过点 (xi, yi) 的函数，在这些点之间用线性插值连接。该命令常用于传感器数据。"
+        }
+      ]
+    },
+    "Degree": {
+      "name": "Degree",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Degree/",
+      "overloads": [
+        {
+          "syntax": "Degree(<Polynomial>)",
+          "params": [
+            {
+              "name": "polynomial",
+              "role": "input_polynomial",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "返回多项式（按主变量）总次数。"
+        },
+        {
+          "syntax": "Degree(<Polynomial>, <Variable>)",
+          "params": [
+            {
+              "name": "polynomial",
+              "role": "input_polynomial",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "返回多项式在指定变量上的次数。"
+        }
+      ]
+    },
+    "Denominator": {
+      "name": "Denominator",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Denominator/",
+      "overloads": [
+        {
+          "syntax": "Denominator(<Function>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "返回给定函数的分母部分（作为函数表达式）。"
+        },
+        {
+          "syntax": "Denominator(<Number>)",
+          "params": [
+            {
+              "name": "number",
+              "role": "input_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对有理数返回其（约简后的）分母。对某些无理数返回其连分数近似的分母，内部采用数值方法，适用于分母较小的情况。"
+        },
+        {
+          "syntax": "Denominator(<Expression>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "input_expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "CAS 语法：返回有理数或有理表达式的分母。"
+        }
+      ]
+    },
+    "Derivative": {
+      "name": "Derivative",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Derivative/",
+      "overloads": [
+        {
+          "syntax": "Derivative(<Function>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "对函数关于其主变量求一阶导数。"
+        },
+        {
+          "syntax": "Derivative(<Function>, <Number>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "n",
+              "role": "order",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对函数关于其主变量求 n 阶导数。"
+        },
+        {
+          "syntax": "Derivative(<Function>, <Variable>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "对多元函数关于给定变量求一阶偏导数。"
+        },
+        {
+          "syntax": "Derivative(<Function>, <Variable>, <Number>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "n",
+              "role": "order",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对多元函数关于给定变量求 n 阶偏导数。"
+        },
+        {
+          "syntax": "Derivative(<Curve>)",
+          "params": [
+            {
+              "name": "curve",
+              "role": "input_curve",
+              "type": "Curve",
+              "optional": false
+            }
+          ],
+          "description": "对参数曲线求一阶导曲线（坐标对参数求导），仅对参数曲线有效。"
+        },
+        {
+          "syntax": "Derivative(<Curve>, <Number>)",
+          "params": [
+            {
+              "name": "curve",
+              "role": "input_curve",
+              "type": "Curve",
+              "optional": false
+            },
+            {
+              "name": "n",
+              "role": "order",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对参数曲线求 n 阶导曲线，仅对参数曲线有效。"
+        },
+        {
+          "syntax": "Derivative(<Expression>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "input_expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "CAS：对表达式关于主变量求导。"
+        },
+        {
+          "syntax": "Derivative(<Expression>, <Variable>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "input_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "CAS：对表达式关于给定变量求导。"
+        },
+        {
+          "syntax": "Derivative(<Expression>, <Variable>, <Number>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "input_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "n",
+              "role": "order",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS：对表达式关于给定变量求 n 阶导数。"
+        }
+      ]
+    },
+    "Extremum": {
+      "name": "Extremum",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Extremum/",
+      "overloads": [
+        {
+          "syntax": "Extremum(<Polynomial>)",
+          "params": [
+            {
+              "name": "polynomial",
+              "role": "input_polynomial",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "返回多项式函数所有局部极值点，作为曲线上的点对象。"
+        },
+        {
+          "syntax": "Extremum(<Function>, <Start x-Value>, <End x-Value>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "startX",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "endX",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在开区间 (startX, endX) 上数值计算函数的一个极值。函数应在闭区间 [startX, endX] 上连续，否则可能在间断点附近得到伪极值。"
+        },
+        {
+          "syntax": "Extremum(<Function>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "CAS 语法：尝试返回函数的所有局部极值（要求函数连续且可导）。"
+        }
+      ]
+    },
+    "Factor": {
+      "name": "Factor",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Factor/",
+      "overloads": [
+        {
+          "syntax": "Factor(<Polynomial>)",
+          "params": [
+            {
+              "name": "polynomial",
+              "role": "input_polynomial",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "对多项式进行因式分解。会调用 CAS，可能较慢。"
+        },
+        {
+          "syntax": "Factor(<Number>)",
+          "params": [
+            {
+              "name": "number",
+              "role": "input_integer",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "将整数分解为素因子乘积形式（带指数）。"
+        },
+        {
+          "syntax": "Factor(<Expression>, <Variable>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "input_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "factor_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "按指定变量对表达式进行因式分解。"
+        }
+      ]
+    },
+    "Factors": {
+      "name": "Factors",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Factors/",
+      "overloads": [
+        {
+          "syntax": "Factors(<Polynomial>)",
+          "params": [
+            {
+              "name": "polynomial",
+              "role": "input_polynomial",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "返回形如 {factor, exponent} 的列表的列表，其乘积等于给定多项式。因子按次数升序排列，因子不一定都是实数不可约。"
+        },
+        {
+          "syntax": "Factors(<Number>)",
+          "params": [
+            {
+              "name": "number",
+              "role": "input_integer",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回一个矩阵：第一行是素数，第二行是对应指数，使得它们的乘积等于给定正整数。素数按升序排列。"
+        }
+      ]
+    },
+    "Function": {
+      "name": "Function",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Function/",
+      "overloads": [
+        {
+          "syntax": "Function(<List of Numbers>)",
+          "params": [
+            {
+              "name": "values",
+              "role": "definition_numbers",
+              "type": "List<Number>",
+              "optional": false
+            }
+          ],
+          "description": "根据一列数构造分段函数：前两个数为起始和结束 x 值，之后的数为等距采样点上的 y 值。"
+        },
+        {
+          "syntax": "Function(<Function>, <Start x-value>, <End x-value>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "base_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "startX",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "endX",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "限制给定函数在 [startX, endX] 区间上的图形显示。"
+        },
+        {
+          "syntax": "Function(<Expression>, <Parameter Variable 1>, <Start Value>, <End Value>, <Parameter Variable 2>, <Start Value>, <End Value>)",
+          "params": [
+            {
+              "name": "expr",
+              "role": "surface_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "uVar",
+              "role": "parameter1",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "uStart",
+              "role": "parameter1_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "uEnd",
+              "role": "parameter1_end",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "vVar",
+              "role": "parameter2",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "vStart",
+              "role": "parameter2_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "vEnd",
+              "role": "parameter2_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "限定一个二元函数图形在 3D 空间中的参数矩形区域（用于构造有界曲面片）。"
+        }
+      ]
+    },
+    "ImplicitCurve": {
+      "name": "ImplicitCurve",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ImplicitCurve/",
+      "overloads": [
+        {
+          "syntax": "ImplicitCurve(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "through_points",
+              "type": "List<Point>",
+              "optional": false
+            }
+          ],
+          "description": "构造一条通过给定点集的隐式曲线。若曲线次数为 n，则点的个数需满足 n(n+3)/2。"
+        },
+        {
+          "syntax": "ImplicitCurve(<f(x,y)>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "implicit_equation",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "构造隐式曲线 f(x,y) = 0。"
+        }
+      ]
+    },
+    "ImplicitDerivative": {
+      "name": "ImplicitDerivative",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ImplicitDerivative/",
+      "overloads": [
+        {
+          "syntax": "ImplicitDerivative(<f(x, y)>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "relation_expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "对含有 x, y 的关系 f(x,y) 计算隐式导数 dy/dx。"
+        },
+        {
+          "syntax": "ImplicitDerivative(<Expression>, <Dependent Variable>, <Independent Variable>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "relation_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "dependentVar",
+              "role": "dependent_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "independentVar",
+              "role": "independent_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "对给定表达式按指定依赖变量和自变量计算隐式导数 d(dependentVar)/d(independentVar)。"
+        }
+      ]
+    },
+    "InflectionPoint": {
+      "name": "InflectionPoint",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InflectionPoint/",
+      "overloads": [
+        {
+          "syntax": "InflectionPoint(<Polynomial>)",
+          "params": [
+            {
+              "name": "polynomial",
+              "role": "input_polynomial",
+              "type": "Polynomial",
+              "optional": false
+            }
+          ],
+          "description": "返回给定多项式函数的所有拐点，作为函数图上的点。"
+        },
+        {
+          "syntax": "InflectionPoint(<Function>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "在可能的情况下，返回给定函数的所有拐点，以列表形式给出。"
+        }
+      ]
+    },
+    "Integral": {
+      "name": "Integral",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Integral/",
+      "overloads": [
+        {
+          "syntax": "Integral(<Function>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_integrate",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "对函数关于其主变量给出不定积分。"
+        },
+        {
+          "syntax": "Integral(<Function>, <Variable>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_integrate",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "integration_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "对多元函数关于指定变量给出不定积分。"
+        },
+        {
+          "syntax": "Integral(<Function>, <Start x-Value>, <End x-Value>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_integrate",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对函数在区间 [start, end] 上关于主变量求定积分。"
+        },
+        {
+          "syntax": "Integral(<Function>, <Start x-Value>, <End x-Value>, <Boolean Evaluate>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_integrate",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "evaluate",
+              "role": "evaluate_flag",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "对函数在 [start, end] 上求定积分并着色对应面积；若 Evaluate 为 false，则只着色面积但不计算数值。"
+        },
+        {
+          "syntax": "Integral(<Function>, <Variable>, <Start Value>, <End Value>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_integrate",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "integration_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS 语法：对函数在 [start, end] 上、关于给定变量计算定积分。"
+        }
+      ]
+    },
+    "IntegralBetween": {
+      "name": "IntegralBetween",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/IntegralBetween/",
+      "overloads": [
+        {
+          "syntax": "IntegralBetween(<Function>, <Function>, <Number>, <Number>)",
+          "params": [
+            {
+              "name": "f",
+              "role": "first_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "g",
+              "role": "second_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "a",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "b",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对差函数 f(x) − g(x) 在区间 [a, b] 上关于主变量求定积分。"
+        },
+        {
+          "syntax": "IntegralBetween(<Function>, <Function>, <Number>, <Number>, <Boolean Evaluate>)",
+          "params": [
+            {
+              "name": "f",
+              "role": "first_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "g",
+              "role": "second_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "a",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "b",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "evaluate",
+              "role": "evaluate_flag",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "同上，并根据 Evaluate 控制是否计算数值，同时在图形中着色对应面积。"
+        },
+        {
+          "syntax": "IntegralBetween(<Function>, <Function>, <Variable>, <Number>, <Number>)",
+          "params": [
+            {
+              "name": "f",
+              "role": "first_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "g",
+              "role": "second_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "integration_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "a",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "b",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS 语法：对 f−g 关于指定变量在 [a, b] 上求定积分。"
+        }
+      ]
+    },
+    "IntegralSymbolic": {
+      "name": "IntegralSymbolic",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/IntegralSymbolic/",
+      "overloads": [
+        {
+          "syntax": "IntegralSymbolic(<Function>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "给出关于主变量的不定积分的符号表达式（积分常数 c 不自动作为滑块显示）。"
+        },
+        {
+          "syntax": "IntegralSymbolic(<Function>, <Variable>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "integration_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "给出关于指定变量的不定积分符号表达式。"
+        }
+      ]
+    },
+    "Intersect": {
+      "name": "Intersect",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Intersect/",
+      "overloads": [
+        {
+          "syntax": "Intersect(<Object>, <Object>)",
+          "params": [
+            {
+              "name": "first_object",
+              "role": "first_object",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "second_object",
+              "role": "second_object",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "返回两个对象的所有交点。"
+        },
+        {
+          "syntax": "Intersect(<Object>, <Object>, <Index of Intersection Point>)",
+          "params": [
+            {
+              "name": "first_object",
+              "role": "first_object",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "second_object",
+              "role": "second_object",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "index",
+              "role": "intersection_point_index",
+              "type": "Index",
+              "optional": false
+            }
+          ],
+          "description": "返回两个对象的第 n 个交点（用于多交点情形）。"
+        },
+        {
+          "syntax": "Intersect(<Object>, <Object>, <Initial Point>)",
+          "params": [
+            {
+              "name": "first_object",
+              "role": "first_object",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "second_object",
+              "role": "second_object",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "initial_point",
+              "role": "initial_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "用迭代数值方法，从给定初始点附近寻找两个对象的一个交点。"
+        },
+        {
+          "syntax": "Intersect(<Function>, <Function>, <Start x-Value>, <End x-Value>)",
+          "params": [
+            {
+              "name": "first_function",
+              "role": "first_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "second_function",
+              "role": "second_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在给定区间内数值求两函数的交点。"
+        },
+        {
+          "syntax": "Intersect(<Curve 1>, <Curve 2>, <Parameter 1>, <Parameter 2>)",
+          "params": [
+            {
+              "name": "curve_1",
+              "role": "curve_1",
+              "type": "Curve",
+              "optional": false
+            },
+            {
+              "name": "curve_2",
+              "role": "curve_2",
+              "type": "Curve",
+              "optional": false
+            },
+            {
+              "name": "parameter_1",
+              "role": "parameter_1",
+              "type": "Parameter",
+              "optional": false
+            },
+            {
+              "name": "parameter_2",
+              "role": "parameter_2",
+              "type": "Parameter",
+              "optional": false
+            }
+          ],
+          "description": "对两条参数曲线，以给定参数值为起点，用数值法求一个交点。"
+        },
+        {
+          "syntax": "Intersect(<Function>, <Function>)",
+          "params": [
+            {
+              "name": "first_function",
+              "role": "first_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "second_function",
+              "role": "second_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "CAS 语法：返回两函数交点组成的列表。"
+        },
+        {
+          "syntax": "Intersect(<Object>, <Object>)  // CAS / 3D 变体",
+          "params": [
+            {
+              "name": "first_object",
+              "role": "first_object",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "second_object",
+              "role": "second_object",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "广义交集：如线与平面、平面与多面体、二次曲面等，返回相应交点、交线或交多边形。"
+        }
+      ]
+    },
+    "Invert": {
+      "name": "Invert",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Invert/",
+      "overloads": [
+        {
+          "syntax": "Invert(<Matrix>)",
+          "params": [
+            {
+              "name": "matrix",
+              "role": "input_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "对给定矩阵求逆矩阵。"
+        },
+        {
+          "syntax": "Invert(<Function>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "返回函数的反函数表达式（不自动考虑定义域与值域限制）。"
+        }
+      ]
+    },
+    "InverseLaplace": {
+      "name": "InverseLaplace",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InverseLaplace/",
+      "overloads": [
+        {
+          "syntax": "InverseLaplace(<Function>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "返回给定函数的拉普拉斯反变换。"
+        },
+        {
+          "syntax": "InverseLaplace(<Function>, <Variable>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "transform_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "关于指定变量返回拉普拉斯反变换。"
+        }
+      ]
+    },
+    "IsVertexForm": {
+      "name": "IsVertexForm",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/IsVertexForm/",
+      "overloads": [
+        {
+          "syntax": "IsVertexForm(<function>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "检测给定函数是否写成二次函数的顶点式。"
+        }
+      ]
+    },
+    "Iteration": {
+      "name": "Iteration",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Iteration/",
+      "overloads": [
+        {
+          "syntax": "Iteration(<Function>, <Start Value>, <Number of Iterations>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_iterate",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "start_value",
+              "role": "starting_value",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "iterations",
+              "role": "iterations_count",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "从起始值出发，对函数迭代 n 次，结果为第 n 次迭代值。"
+        },
+        {
+          "syntax": "Iteration(<Expression>, <Variable Name>, ..., <Start Values>, <Number of Iterations>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "expression_to_iterate",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "variable_name",
+              "role": "variable_name",
+              "type": "String",
+              "optional": false
+            },
+            {
+              "name": "start_values",
+              "role": "start_values",
+              "type": "List/Sequence",
+              "optional": false
+            },
+            {
+              "name": "iterations",
+              "role": "iterations_count",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "对多变量表达式进行迭代，结果等同于用相同参数调用 IterationList 后返回列表的最后一个元素。"
+        }
+      ]
+    },
+    "IterationList": {
+      "name": "IterationList",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/IterationList/",
+      "overloads": [
+        {
+          "syntax": "IterationList(<Function>, <Start Value>, <Number of Iterations>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_iterate",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "start_value",
+              "role": "starting_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "iterations",
+              "role": "iterations_count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回长度为 n+1 的列表，包含从起始值开始的每次函数迭代结果。"
+        },
+        {
+          "syntax": "IterationList(<Expression>, <Variable Name>, ..., <Start Values>, <Number of Iterations>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "expression_to_iterate",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "variable_name",
+              "role": "variable_name",
+              "type": "Name/Variable",
+              "optional": false
+            },
+            {
+              "name": "start_values",
+              "role": "start_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "iterations",
+              "role": "iterations_count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对表达式进行迭代，返回从起始值开始的所有迭代结果列表。"
+        }
+      ]
+    },
+    "Laplace": {
+      "name": "Laplace",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Laplace/",
+      "overloads": [
+        {
+          "syntax": "Laplace(<Function>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "返回函数的拉普拉斯变换。"
+        },
+        {
+          "syntax": "Laplace(<Function>, <Variable>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "transform_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "关于给定变量返回拉普拉斯变换。"
+        }
+      ]
+    },
+    "LeftSum": {
+      "name": "LeftSum",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/LeftSum/",
+      "overloads": [
+        {
+          "syntax": "LeftSum(<Function>, <Start x-Value>, <End x-Value>, <Number of Rectangles>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_sum",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "rectangles",
+              "role": "rectangles_count",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "在区间 [start, end] 上用 n 个矩形计算左端黎曼和，并在图形视图中画出这些矩形（偏重可视化）。"
+        }
+      ]
+    },
+    "Length": {
+      "name": "Length",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Length/",
+      "overloads": [
+        {
+          "syntax": "Length(<Object>)",
+          "params": [
+            {
+              "name": "object",
+              "role": "input_object",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "返回对象的“长度”，含义依具体对象类型而定。"
+        },
+        {
+          "syntax": "Length(<Vector>)",
+          "params": [
+            {
+              "name": "vector",
+              "role": "input_vector",
+              "type": "Vector",
+              "optional": false
+            }
+          ],
+          "description": "返回向量的模长。"
+        },
+        {
+          "syntax": "Length(<Point>)",
+          "params": [
+            {
+              "name": "point",
+              "role": "input_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "返回点的位矢长度（到原点的距离）。"
+        },
+        {
+          "syntax": "Length(<List>)",
+          "params": [
+            {
+              "name": "list",
+              "role": "input_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回列表长度，即元素个数。"
+        },
+        {
+          "syntax": "Length(<Text>)",
+          "params": [
+            {
+              "name": "text",
+              "role": "input_text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "返回文本的字符数。"
+        },
+        {
+          "syntax": "Length(<Locus>)",
+          "params": [
+            {
+              "name": "locus",
+              "role": "input_locus",
+              "type": "Locus",
+              "optional": false
+            }
+          ],
+          "description": "返回轨迹对象包含的点数量（若要轨迹的弧长请用 Perimeter）。"
+        },
+        {
+          "syntax": "Length(<Arc>)",
+          "params": [
+            {
+              "name": "arc",
+              "role": "input_arc",
+              "type": "Arc",
+              "optional": false
+            }
+          ],
+          "description": "返回弧或扇形的弧长。"
+        },
+        {
+          "syntax": "Length(<Function>, <Start x-Value>, <End x-Value>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回函数图像在区间 [start, end] 上的弧长。"
+        },
+        {
+          "syntax": "Length(<Function>, <Start Point>, <End Point>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "start_point",
+              "role": "start_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "end_point",
+              "role": "end_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "返回函数图像在两给定点之间的弧长。"
+        },
+        {
+          "syntax": "Length(<Curve>, <Start t-Value>, <End t-Value>)",
+          "params": [
+            {
+              "name": "curve",
+              "role": "input_curve",
+              "type": "Curve",
+              "optional": false
+            },
+            {
+              "name": "start_t",
+              "role": "parameter_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end_t",
+              "role": "parameter_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回参数曲线在参数区间 [start_t, end_t] 上的弧长。"
+        },
+        {
+          "syntax": "Length(<Curve>, <Start Point>, <End Point>)",
+          "params": [
+            {
+              "name": "curve",
+              "role": "input_curve",
+              "type": "Curve",
+              "optional": false
+            },
+            {
+              "name": "start_point",
+              "role": "start_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "end_point",
+              "role": "end_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "返回曲线在两给定点间的弧长。"
+        },
+        {
+          "syntax": "Length(<Function>, <Variable>, <Start x-Value>, <End x-Value>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "integration_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS 语法：对函数在 [start, end] 上的图像弧长进行符号或精确计算。"
+        }
+      ]
+    },
+    "Limit": {
+      "name": "Limit",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Limit/",
+      "overloads": [
+        {
+          "syntax": "Limit(<Function>, <Value>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "main_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "limit_value",
+              "type": "Value",
+              "optional": false
+            }
+          ],
+          "description": "计算函数在主变量趋于给定值时的极限（可能为无穷）。"
+        },
+        {
+          "syntax": "Limit(<Expression>, <Value>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "main_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "limit_value",
+              "type": "Value",
+              "optional": false
+            }
+          ],
+          "description": "对表达式在主变量趋于给定值时求极限。"
+        },
+        {
+          "syntax": "Limit(<Expression>, <Variable>, <Value>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "main_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "limit_value",
+              "type": "Value",
+              "optional": false
+            }
+          ],
+          "description": "对表达式关于指定变量，在该变量趋于给定值时求极限。"
+        }
+      ]
+    },
+    "LimitAbove": {
+      "name": "LimitAbove",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/LimitAbove/",
+      "overloads": [
+        {
+          "syntax": "LimitAbove(<Function>, <Value>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "main_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "limit_value",
+              "type": "Value",
+              "optional": false
+            }
+          ],
+          "description": "计算函数在主变量从右侧趋于给定值时的右极限。"
+        },
+        {
+          "syntax": "LimitAbove(<Expression>, <Value>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "main_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "limit_value",
+              "type": "Value",
+              "optional": false
+            }
+          ],
+          "description": "对表达式求右极限。"
+        },
+        {
+          "syntax": "LimitAbove(<Expression>, <Variable>, <Value>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "main_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "limit_value",
+              "type": "Value",
+              "optional": false
+            }
+          ],
+          "description": "对多元表达式，关于指定变量求右侧单边极限。"
+        }
+      ]
+    },
+    "LimitBelow": {
+      "name": "LimitBelow",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/LimitBelow/",
+      "overloads": [
+        {
+          "syntax": "LimitBelow(<Function>, <Value>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "main_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "limit_value",
+              "type": "Value",
+              "optional": false
+            }
+          ],
+          "description": "计算函数在主变量从左侧趋于给定值时的左极限。"
+        },
+        {
+          "syntax": "LimitBelow(<Expression>, <Value>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "main_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "limit_value",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "对表达式求左侧单边极限。"
+        },
+        {
+          "syntax": "LimitBelow(<Expression>, <Variable>, <Value>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "main_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "limit_value",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "对多元表达式，关于指定变量求左侧单边极限。"
+        }
+      ]
+    },
+    "LowerSum": {
+      "name": "LowerSum",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/LowerSum/",
+      "overloads": [
+        {
+          "syntax": "LowerSum(<Function>, <Start x-Value>, <End x-Value>, <Number of Rectangles>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_sum",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "rectangles",
+              "role": "rectangles_count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在区间 [start, end] 上，用 n 个矩形计算下和（每小区间取最小函数值），并绘制这些矩形，主要用于可视化。"
+        }
+      ]
+    },
+    "Max": {
+      "name": "Max",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Max/",
+      "overloads": [
+        {
+          "syntax": "Max(<List>)",
+          "params": [
+            {
+              "name": "list",
+              "role": "input_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回列表中数值的最大值；若为几何对象列表，则使用其相关数值（如线段长度）。"
+        },
+        {
+          "syntax": "Max(<Interval>)",
+          "params": [
+            {
+              "name": "interval",
+              "role": "input_interval",
+              "type": "Interval",
+              "optional": false
+            }
+          ],
+          "description": "返回区间的上界（不区分开闭）。"
+        },
+        {
+          "syntax": "Max(<Number>, <Number>)",
+          "params": [
+            {
+              "name": "first_number",
+              "role": "first_number",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "second_number",
+              "role": "second_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回两数中的较大者。"
+        },
+        {
+          "syntax": "Max(<Function>, <Start x-Value>, <End x-Value>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "数值计算函数在给定区间内的一个局部极大点（假定区间内只有一个局部最大且无局部最小）。"
+        },
+        {
+          "syntax": "Max(<List of Data>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "data_list",
+              "role": "input_data_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequency_list",
+              "role": "frequency_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "在频数大于 0 的数据中，返回数值最大的那个。"
+        },
+        {
+          "syntax": "Max(<Function>, <Start x-Value>, <End x-Value>)  // CAS",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS 语法：返回函数在闭区间上的最大点（包括端点）。"
+        }
+      ]
+    },
+    "Min": {
+      "name": "Min",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Min/",
+      "overloads": [
+        {
+          "syntax": "Min(<List>)",
+          "params": [
+            {
+              "name": "list",
+              "role": "input_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回列表中数值的最小值；若为几何对象列表，则使用其相关数值（如线段长度）。"
+        },
+        {
+          "syntax": "Min(<Interval>)",
+          "params": [
+            {
+              "name": "interval",
+              "role": "input_interval",
+              "type": "Interval",
+              "optional": false
+            }
+          ],
+          "description": "返回区间的下界（不区分开闭）。"
+        },
+        {
+          "syntax": "Min(<Number>, <Number>)",
+          "params": [
+            {
+              "name": "first_number",
+              "role": "first_number",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "second_number",
+              "role": "second_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回两数中的较小者。"
+        },
+        {
+          "syntax": "Min(<Function>, <Start x-Value>, <End x-Value>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "数值计算函数在给定区间内的一个局部极小点（假定区间内只有一个局部最小且无局部最大）。"
+        },
+        {
+          "syntax": "Min(<List of Data>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "data_list",
+              "role": "input_data_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequency_list",
+              "role": "frequency_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "在频数大于 0 的数据中，返回数值最小的那个。"
+        }
+      ]
+    },
+    "NDerivative": {
+      "name": "NDerivative",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/NDerivative/",
+      "overloads": [
+        {
+          "syntax": "NDerivative(<Function>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "以数值方式绘制给定函数的一阶导函数。"
+        },
+        {
+          "syntax": "NDerivative(<Function>, <Order n>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "order",
+              "role": "derivative_order",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "以数值方式绘制给定函数的 n 阶导函数。"
+        }
+      ]
+    },
+    "NIntegral": {
+      "name": "NIntegral",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/NIntegral/",
+      "overloads": [
+        {
+          "syntax": "NIntegral( <Function> )",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_integrate",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "数值方式绘制给定函数的不定积分图像 y = F(x) + c（这里 c = 0）。原函数只以数值方式计算，不在代数视图中给出解析式。"
+        },
+        {
+          "syntax": "NIntegral( <Function>, <Start x-Value>, <End x-Value> )",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_integrate",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "startX",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "endX",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "数值计算并绘制函数 f 在区间 [startX, endX] 上的定积分 ∫_{startX}^{endX} f(x) dx。"
+        },
+        {
+          "syntax": "NIntegral( <Function>, <Start x-Value>, <Start y-Value>, <End x-Value> )",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_integrate",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "startX",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "startY",
+              "role": "start_y_initial_condition",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "endX",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "数值计算不定积分，并绘制一条通过点 (startX, startY) 的积分曲线，终点为 (endX, ·)。"
+        },
+        {
+          "syntax": "NIntegral( <Function>, <Variable>, <Start Value>, <End Value> )",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_integrate",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "integration_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对多元函数 f 关于给定变量，数值计算其在 [start, end] 上的定积分 ∫_{start}^{end} f(t) dt。"
+        }
+      ]
+    },
+    "NInvert": {
+      "name": "NInvert",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/NInvert/",
+      "overloads": [
+        {
+          "syntax": "NInvert( <Function> )",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "返回给定函数的“数值反函数”，但不显示解析式。若需要解析式请用 Invert 命令。示例：NInvert(sin(x)) 得到 f，使得在 -1 < x < 1 上有 sin(f(x)) = x。不会自动考虑定义域/值域拆分。对只含一个 x 的函数效率更高。"
+        }
+      ]
+    },
+    "NSolveODE": {
+      "name": "NSolveODE",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/NSolveODE/",
+      "overloads": [
+        {
+          "syntax": "NSolveODE({f', g', h'}, 0, {1, 2, -2}, 10)",
+          "params": [
+            {
+              "name": "derivatives",
+              "role": "ode_system_derivatives",
+              "type": "List<Expression>",
+              "optional": false
+            },
+            {
+              "name": "x0",
+              "role": "initial_independent_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "y0_list",
+              "role": "initial_dependent_values",
+              "type": "List<Number>",
+              "optional": false
+            },
+            {
+              "name": "x1",
+              "role": "final_independent_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对给定的一阶常微分方程组进行数值求解，从 x0 的初始条件 y0_list 穿行到 x1。"
+        }
+      ]
+    },
+    "Normalize": {
+      "name": "Normalize",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Normalize/",
+      "overloads": [
+        {
+          "syntax": "Normalize( <List of Numbers> )",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "input_numbers",
+              "type": "List<Number>",
+              "optional": false
+            }
+          ],
+          "description": "对一列数做线性归一化，返回区间 [0,1] 内的新数列。示例：Normalize({1,2,3,4,5}) 返回 {0, 0.25, 0.5, 0.75, 1}。"
+        },
+        {
+          "syntax": "Normalize( <List of Points> )",
+          "params": [
+            {
+              "name": "points",
+              "role": "input_points",
+              "type": "List<Point>",
+              "optional": false
+            }
+          ],
+          "description": "分别对点的 x、y 坐标做线性归一化，使其在 [0,1]×[0,1] 范围内。示例：Normalize({(1,5), (2,4), (3,3), (4,2), (5,1)}) 返回 {(0,1), (0.25,0.75), (0.5,0.5), (0.75,0.25), (1,0)}。"
+        }
+      ]
+    },
+    "Numerator": {
+      "name": "Numerator",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Numerator/",
+      "overloads": [
+        {
+          "syntax": "Numerator( <Function> )",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "返回函数的分子部分（作为函数表达式）。例如：Numerator((3x² + 1)/(2x - 1)) 得到 f(x) = 3x² + 1。"
+        },
+        {
+          "syntax": "Numerator( <Number> )",
+          "params": [
+            {
+              "name": "number",
+              "role": "input_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对有理数返回其约分后的分子。对某些无理数返回其连分数近似的分子，内部采用数值方法，因此仅适用于分母较小的情形。"
+        },
+        {
+          "syntax": "Numerator( <Expression> )",
+          "params": [
+            {
+              "name": "expression",
+              "role": "input_expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "返回有理数或有理表达式的分子。例如：Numerator(2/3 + 1/15) = 11；若 a,b,c 未事先定义，Numerator(a/b) 返回 a，Numerator(Simplify(a + b/c)) 返回 a c + b。"
+        }
+      ]
+    },
+    "OsculatingCircle": {
+      "name": "OsculatingCircle",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/OsculatingCircle/",
+      "overloads": [
+        {
+          "syntax": "OsculatingCircle( <Point>, <Function> )",
+          "params": [
+            {
+              "name": "point",
+              "role": "evaluation_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "function",
+              "role": "target_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "返回函数图像在给定点处的密切圆。"
+        },
+        {
+          "syntax": "OsculatingCircle( <Point>, <Curve> )",
+          "params": [
+            {
+              "name": "point",
+              "role": "evaluation_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "curve",
+              "role": "target_curve",
+              "type": "Curve",
+              "optional": false
+            }
+          ],
+          "description": "返回参数曲线在给定点处的密切圆。"
+        },
+        {
+          "syntax": "OsculatingCircle( <Point>, <Object> )",
+          "params": [
+            {
+              "name": "point",
+              "role": "evaluation_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "object",
+              "role": "target_object",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "对 2D 中的函数 / 曲线 / 圆锥曲线对象，在指定点返回其密切圆。3D 情况需自定义工具。"
+        }
+      ]
+    },
+    "ParametricDerivative": {
+      "name": "ParametricDerivative",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ParametricDerivative/",
+      "overloads": [
+        {
+          "syntax": "ParametricDerivative( <Curve> )",
+          "params": [
+            {
+              "name": "curve",
+              "role": "input_curve",
+              "type": "Curve",
+              "optional": false
+            }
+          ],
+          "description": "对参数曲线 (x(t), y(t)) 返回新曲线 (x(t), y'(t)/x'(t))，即以 x 为自变量的导函数图像。"
+        }
+      ]
+    },
+    "ParseToFunction": {
+      "name": "ParseToFunction",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ParseToFunction/",
+      "overloads": [
+        {
+          "syntax": "ParseToFunction( <Text> )",
+          "params": [
+            {
+              "name": "text",
+              "role": "function_definition_text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "把给定文本解析为函数 f，并自动选择变量名。例：ParseToFunction(\"x^2\") 生成 f(x) = x^2；ParseToFunction(\"t+2/t\") 生成 f(t) = t + 2/t。"
+        },
+        {
+          "syntax": "ParseToFunction( <Function>, <Text> )",
+          "params": [
+            {
+              "name": "f",
+              "role": "target_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "text",
+              "role": "function_definition_text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "将解析结果写回到已存在且自由的函数 f 中（重定义 f）。"
+        },
+        {
+          "syntax": "ParseToFunction( <Text>, <List of variables> )",
+          "params": [
+            {
+              "name": "text",
+              "role": "function_definition_text",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "variables",
+              "role": "variable_names",
+              "type": "List<String>",
+              "optional": false
+            }
+          ],
+          "description": "将文本解析为一个多元函数，变量名由字符串列表指定。例：ParseToFunction(\"2u+3v\", {\"u\",\"v\"}) 得到 a(u,v) = 2u + 3v。"
+        }
+      ]
+    },
+    "PartialFractions": {
+      "name": "PartialFractions",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/PartialFractions/",
+      "overloads": [
+        {
+          "syntax": "PartialFractions( <Function> )",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "就主变量而言，若可能，将有理函数进行部分分式分解。"
+        },
+        {
+          "syntax": "PartialFractions( <Function>, <Variable> )",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "decomposition_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "对给定变量执行部分分式分解。"
+        }
+      ]
+    },
+    "PathParameter": {
+      "name": "PathParameter",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/PathParameter/",
+      "overloads": [
+        {
+          "syntax": "PathParameter( <Point On Path> )",
+          "params": [
+            {
+              "name": "pointOnPath",
+              "role": "point_on_path",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "返回属于某条路径（线段、曲线等）上的点的路径参数，数值在 [0,1] 范围。"
+        }
+      ]
+    },
+    "PlotSolve": {
+      "name": "PlotSolve",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/PlotSolve/",
+      "overloads": [
+        {
+          "syntax": "PlotSolve( <Equation in x> )",
+          "params": [
+            {
+              "name": "equation",
+              "role": "equation_in_x",
+              "type": "Equation",
+              "optional": false
+            }
+          ],
+          "description": "对关于 x 的方程做数值求解，返回所有解的列表，并在图形视图中画出相应图像/解点。"
+        }
+      ]
+    },
+    "Polynomial": {
+      "name": "Polynomial",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Polynomial/",
+      "overloads": [
+        {
+          "syntax": "Polynomial( <Function> )",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_polynomial_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "展开并化简一个多项式函数的表达式。"
+        },
+        {
+          "syntax": "Polynomial( <List of Points> )",
+          "params": [
+            {
+              "name": "points",
+              "role": "interpolation_points",
+              "type": "List<Point>",
+              "optional": false
+            }
+          ],
+          "description": "生成通过给定 n 个点的插值多项式（次数为 n−1）。"
+        },
+        {
+          "syntax": "Polynomial( <Function>, <Variable> )",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "polynomial_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "按指定变量展开函数，并写成该变量的多项式形式（收集并整理系数）。"
+        }
+      ]
+    },
+    "Product": {
+      "name": "Product",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Product/",
+      "overloads": [
+        {
+          "syntax": "Product( <List of Raw Data> )",
+          "params": [
+            {
+              "name": "data",
+              "role": "data_values",
+              "type": "List<Number>",
+              "optional": false
+            }
+          ],
+          "description": "返回列表中所有数的乘积。"
+        },
+        {
+          "syntax": "Product( <List of Numbers>, <Number of Elements> )",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List<Number>",
+              "optional": false
+            },
+            {
+              "name": "n",
+              "role": "elements_count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回列表前 n 个元素的乘积。"
+        },
+        {
+          "syntax": "Product( <List of Numbers>, <List of Frequencies> )",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "distinct_values",
+              "type": "List<Number>",
+              "optional": false
+            },
+            {
+              "name": "frequencies",
+              "role": "frequencies",
+              "type": "List<Number>",
+              "optional": false
+            }
+          ],
+          "description": "返回 ∏ numbers_i^{frequencies_i}，两列表长度需相同。"
+        },
+        {
+          "syntax": "Product( <Expression>, <Variable>, <Start Value>, <End Value> )",
+          "params": [
+            {
+              "name": "expression",
+              "role": "term_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "index_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "start_index",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "end_index",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "按整数索引从 start 到 end，对表达式做乘积 ∏_{k=start}^{end} expr(variable=k)。"
+        },
+        {
+          "syntax": "Product( <List of Expressions> )",
+          "params": [
+            {
+              "name": "expressions",
+              "role": "expression_list",
+              "type": "List<Expression>",
+              "optional": false
+            }
+          ],
+          "description": "返回表达式列表中所有元素的乘积。"
+        }
+      ]
+    },
+    "RandomPolynomial": {
+      "name": "RandomPolynomial",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RandomPolynomial/",
+      "overloads": [
+        {
+          "syntax": "RandomPolynomial( <Degree>, <Minimum for Coefficients>, <Maximum for Coefficients> )",
+          "params": [
+            {
+              "name": "degree",
+              "role": "polynomial_degree",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "minCoeff",
+              "role": "min_coefficient",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "maxCoeff",
+              "role": "max_coefficient",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "生成关于 x 的随机多项式，次数为 degree，整系数在 [minCoeff, maxCoeff] 内。"
+        },
+        {
+          "syntax": "RandomPolynomial( <Variable>, <Degree>, <Minimum for Coefficients>, <Maximum for Coefficients> )",
+          "params": [
+            {
+              "name": "variable",
+              "role": "polynomial_variable",
+              "type": "Symbol",
+              "optional": false
+            },
+            {
+              "name": "degree",
+              "role": "polynomial_degree",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "minCoeff",
+              "role": "min_coefficient",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "maxCoeff",
+              "role": "max_coefficient",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "同上，但多项式变量由 variable 指定；若最小/最大值非整数，会自动取 round。"
+        }
+      ]
+    },
+    "RectangleSum": {
+      "name": "RectangleSum",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RectangleSum/",
+      "overloads": [
+        {
+          "syntax": "RectangleSum( <Function>, <Start x-Value>, <End x-Value>, <Number of Rectangles>, <Position for rectangle start> )",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_approximate",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "startX",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "endX",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "rectangles",
+              "role": "rectangles_count",
+              "type": "Integer",
+              "optional": false
+            },
+            {
+              "name": "position",
+              "role": "offset_fraction",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在 [startX, endX] 上用 n 个矩形近似积分，矩形高度取每小区间中偏移 position（0≤position≤1）处的函数值。position=0 等价 LeftSum，position=1 得到右和。会在图形视图中绘制矩形。"
+        }
+      ]
+    },
+    "RemovableDiscontinuity": {
+      "name": "RemovableDiscontinuity",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RemovableDiscontinuity/",
+      "overloads": [
+        {
+          "syntax": "RemovableDiscontinuity( <Function> )",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "检测并计算“可去间断点”（主要针对裂口型有理函数，包括预览场景）。通常返回间断点位置。"
+        }
+      ]
+    },
+    "Root": {
+      "name": "Root",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Root/",
+      "overloads": [
+        {
+          "syntax": "Root( <Polynomial> )",
+          "params": [
+            {
+              "name": "polynomial",
+              "role": "input_polynomial",
+              "type": "Polynomial",
+              "optional": false
+            }
+          ],
+          "description": "对多项式求所有实根，在图形视图中以 x 轴交点形式返回。"
+        },
+        {
+          "syntax": "Root( <Function>, <Initial x-Value> )",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "initialX",
+              "role": "initial_guess",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "基于初值 initialX，用迭代法数值求函数的一个零点。"
+        },
+        {
+          "syntax": "Root( <Function>, <Start x-Value>, <End x-Value> )",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "startX",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "endX",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在闭区间 [startX, endX] 内用数值方法寻找一个根。"
+        },
+        {
+          "syntax": "Root( <Polynomial> ) // CAS 变体",
+          "params": [
+            {
+              "name": "polynomial",
+              "role": "input_polynomial",
+              "type": "Polynomial",
+              "optional": false
+            }
+          ],
+          "description": "CAS：返回多项式所有根组成的列表，如 {x = -2, x = 2, x = 3}。"
+        }
+      ]
+    },
+    "RootList": {
+      "name": "RootList",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RootList/",
+      "overloads": [
+        {
+          "syntax": "RootList(<List>)",
+          "params": [
+            {
+              "name": "list",
+              "role": "input_number_list",
+              "type": "List<Number>",
+              "optional": false
+            }
+          ],
+          "description": "把数值列表 {a1, a2, …, an} 转换为点列表 {(a1, 0), (a2, 0), …, (an, 0)}，并在图形视图中显示这些点。"
+        }
+      ]
+    },
+    "Roots": {
+      "name": "Roots",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Roots/",
+      "overloads": [
+        {
+          "syntax": "Roots(<Function>, <Start x-Value>, <End x-Value>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "startX",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "endX",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在区间 [startX, endX] 上数值求给定连续函数的所有零点，并在图形视图中创建对应的交点。算法为数值算法，在某些情形下可能找不全所有根。"
+        }
+      ]
+    },
+    "Simplify": {
+      "name": "Simplify",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Simplify/",
+      "overloads": [
+        {
+          "syntax": "Simplify(<Function>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_expression",
+              "type": "Expression/Function",
+              "optional": false
+            }
+          ],
+          "description": "CAS：在可能的情况下对给定函数或代数表达式做代数化简（合并同类项、提取公因子等），表达式中可以包含未定义符号。"
+        },
+        {
+          "syntax": "Simplify(<Text>)",
+          "params": [
+            {
+              "name": "text",
+              "role": "input_text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "对文本进行简单整理，例如消去多余的负号等。通常推荐优先使用 FormulaText 命令来生成公式文本。该命令会调用 CAS，因此可能较慢。"
+        }
+      ]
+    },
+    "SlopeField": {
+      "name": "SlopeField",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SlopeField/",
+      "overloads": [
+        {
+          "syntax": "SlopeField(<f(x,y)>)",
+          "params": [
+            {
+              "name": "f",
+              "role": "slope_function",
+              "type": "Expression f(x,y)",
+              "optional": false
+            }
+          ],
+          "description": "为一阶常微分方程 dy/dx = f(x,y) 在图形视图中绘制默认密度的方向场（斜率场）。"
+        },
+        {
+          "syntax": "SlopeField(<f(x,y)>, <Number n>)",
+          "params": [
+            {
+              "name": "f",
+              "role": "slope_function",
+              "type": "Expression f(x,y)",
+              "optional": false
+            },
+            {
+              "name": "n",
+              "role": "grid_resolution",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在 n×n 的网格（若视图非正方形则为稍小的网格）上绘制方程 dy/dx = f(x,y) 的斜率场，n 的默认值为 40。"
+        },
+        {
+          "syntax": "SlopeField(<f(x,y)>, <Number n>, <Length Multiplier a>)",
+          "params": [
+            {
+              "name": "f",
+              "role": "slope_function",
+              "type": "Expression f(x,y)",
+              "optional": false
+            },
+            {
+              "name": "n",
+              "role": "grid_resolution",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "a",
+              "role": "segment_length_multiplier",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "绘制 dy/dx = f(x,y) 的斜率场，长度因子 a（0 < a ≤ 1）控制斜率线段的长度。"
+        },
+        {
+          "syntax": "SlopeField(<f(x,y)>, <Number n>, <Length Multiplier a>, <Min x>, <Min y>, <Max x>, <Max y>)",
+          "params": [
+            {
+              "name": "f",
+              "role": "slope_function",
+              "type": "Expression f(x,y)",
+              "optional": false
+            },
+            {
+              "name": "n",
+              "role": "grid_resolution",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "a",
+              "role": "segment_length_multiplier",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "minX",
+              "role": "region_min_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "minY",
+              "role": "region_min_y",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "maxX",
+              "role": "region_max_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "maxY",
+              "role": "region_max_y",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "只在矩形区域 [minX, maxX]×[minY, maxY] 内绘制微分方程 dy/dx = f(x,y) 的斜率场，而不是填满整个图形视图。"
+        }
+      ]
+    },
+    "SolveODE": {
+      "name": "SolveODE",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SolveODE/",
+      "overloads": [
+        {
+          "syntax": "SolveODE(<f'(x, y)>)",
+          "params": [
+            {
+              "name": "fPrime",
+              "role": "ode_rhs",
+              "type": "Expression f'(x,y)",
+              "optional": false
+            }
+          ],
+          "description": "尝试符号求解一阶常微分方程 dy/dx = f'(x, y(x))，返回通解。"
+        },
+        {
+          "syntax": "SolveODE(<f'(x, y)>, <Point on f>)",
+          "params": [
+            {
+              "name": "fPrime",
+              "role": "ode_rhs",
+              "type": "Expression f'(x,y)",
+              "optional": false
+            },
+            {
+              "name": "point",
+              "role": "initial_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "求解一阶 ODE dy/dx = f'(x, y(x)) 的精确解，并满足给定点处的初值条件（柯西问题）。"
+        },
+        {
+          "syntax": "SolveODE(<f'(x, y)>, <Start x>, <Start y>, <End x>, <Step>)",
+          "params": [
+            {
+              "name": "fPrime",
+              "role": "ode_rhs",
+              "type": "Expression f'(x,y)",
+              "optional": false
+            },
+            {
+              "name": "startX",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "startY",
+              "role": "start_y",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "endX",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "step",
+              "role": "step_size",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "数值求解一阶 ODE dy/dx = f'(x,y)，从 (startX, startY) 穿行到 endX，步长为 step，结果以轨迹形式给出。"
+        },
+        {
+          "syntax": "SolveODE(<y'>, <x'>, <Start x>, <Start y>, <End t>, <Step>)",
+          "params": [
+            {
+              "name": "yPrime",
+              "role": "y_derivative",
+              "type": "Expression y'(t)",
+              "optional": false
+            },
+            {
+              "name": "xPrime",
+              "role": "x_derivative",
+              "type": "Expression x'(t)",
+              "optional": false
+            },
+            {
+              "name": "startX",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "startY",
+              "role": "start_y",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "endT",
+              "role": "end_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "step",
+              "role": "step_size",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "把解曲线视为参数曲线 (x(t), y(t))，给出 x'(t)、y'(t)，并从给定初始点沿参数 t 数值积分到 endT，适用于解曲线存在竖直切线等情形。"
+        },
+        {
+          "syntax": "SolveODE(<b(x)>, <c(x)>, <f(x)>, <Start x>, <Start y>, <Start y'>, <End x>, <Step>)",
+          "params": [
+            {
+              "name": "b",
+              "role": "ode_b_coefficient",
+              "type": "Function b(x)",
+              "optional": false
+            },
+            {
+              "name": "c",
+              "role": "ode_c_coefficient",
+              "type": "Function c(x)",
+              "optional": false
+            },
+            {
+              "name": "f",
+              "role": "ode_rhs",
+              "type": "Function f(x)",
+              "optional": false
+            },
+            {
+              "name": "startX",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "startY",
+              "role": "start_y",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "startYPrime",
+              "role": "start_y_derivative",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "endX",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "step",
+              "role": "step_size",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "数值求解二阶常微分方程 y'' + b(x) y' + c(x) y = f(x)，给定 y(startX)、y'(startX)、endX 和步长 step，结果以轨迹形式返回，内部使用 Runge–Kutta 数值算法。"
+        },
+        {
+          "syntax": "SolveODE(<Equation>)",
+          "params": [
+            {
+              "name": "equation",
+              "role": "ode_equation",
+              "type": "Equation",
+              "optional": false
+            }
+          ],
+          "description": "CAS：尝试符号求解一阶或二阶微分方程，方程中用 y'、y'' 表示导数；若只给出右端表达式，则被解释为 y' = expression。"
+        },
+        {
+          "syntax": "SolveODE(<Equation>, <Point(s) on f>)",
+          "params": [
+            {
+              "name": "equation",
+              "role": "ode_equation",
+              "type": "Equation",
+              "optional": false
+            },
+            {
+              "name": "pointsOnF",
+              "role": "points_on_solution",
+              "type": "Point/List<Point>",
+              "optional": false
+            }
+          ],
+          "description": "CAS：在给定的一阶或二阶 ODE 上，求过指定解曲线点（或点列）的解。"
+        },
+        {
+          "syntax": "SolveODE(<Equation>, <Point(s) on f>, <Point(s) on f'>)",
+          "params": [
+            {
+              "name": "equation",
+              "role": "ode_equation",
+              "type": "Equation",
+              "optional": false
+            },
+            {
+              "name": "pointsOnF",
+              "role": "points_on_solution",
+              "type": "Point/List<Point>",
+              "optional": false
+            },
+            {
+              "name": "pointsOnFPrime",
+              "role": "points_on_derivative",
+              "type": "Point/List<Point>",
+              "optional": false
+            }
+          ],
+          "description": "CAS：寻求满足给定位置点与导数点条件的一阶或二阶 ODE 的精确解。"
+        },
+        {
+          "syntax": "SolveODE(<Equation>, <Dependent Variable>, <Independent Variable>, <Point(s) on f>)",
+          "params": [
+            {
+              "name": "equation",
+              "role": "ode_equation",
+              "type": "Equation",
+              "optional": false
+            },
+            {
+              "name": "depVar",
+              "role": "dependent_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "indepVar",
+              "role": "independent_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "pointsOnF",
+              "role": "points_on_solution",
+              "type": "Point/List<Point>",
+              "optional": false
+            }
+          ],
+          "description": "CAS：显式指定因变量和自变量，对一阶或二阶 ODE 求解，并使解曲线通过给定点。"
+        },
+        {
+          "syntax": "SolveODE(<Equation>, <Dependent Variable>, <Independent Variable>, <Point(s) on f>, <Point(s) on f'>)",
+          "params": [
+            {
+              "name": "equation",
+              "role": "ode_equation",
+              "type": "Equation",
+              "optional": false
+            },
+            {
+              "name": "depVar",
+              "role": "dependent_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "indepVar",
+              "role": "independent_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "pointsOnF",
+              "role": "points_on_solution",
+              "type": "Point/List<Point>",
+              "optional": false
+            },
+            {
+              "name": "pointsOnFPrime",
+              "role": "points_on_derivative",
+              "type": "Point/List<Point>",
+              "optional": false
+            }
+          ],
+          "description": "CAS：指定自变量、因变量以及解和其导数经过的点，求一阶或二阶 ODE 的符号解。"
+        }
+      ]
+    },
+    "Spline": {
+      "name": "Spline",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Spline/",
+      "overloads": [
+        {
+          "syntax": "Spline(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "control_points",
+              "type": "List<Point>",
+              "optional": false
+            }
+          ],
+          "description": "构造通过所有给定点的三次样条曲线。"
+        },
+        {
+          "syntax": "Spline(<List of Points>, <Order ≥ 3>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "control_points",
+              "type": "List<Point>",
+              "optional": false
+            },
+            {
+              "name": "order",
+              "role": "spline_order",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "构造指定阶数（≥3）的插值样条，通过所有给定点。"
+        },
+        {
+          "syntax": "Spline(<List of Points>, <Order ≥ 3>, <Weight Function>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "control_points",
+              "type": "List<Point>",
+              "optional": false
+            },
+            {
+              "name": "order",
+              "role": "spline_order",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "weightFunction",
+              "role": "parameter_spacing_function",
+              "type": "Expression in (x,y)",
+              "optional": false
+            }
+          ],
+          "description": "使用给定阶数和“权函数”构造样条。权函数给出两个相邻点 Pi, P_{i+1} 间的参数差，参数由向量 (x,y) = P_{i+1}−P_i 决定。例如 abs(x)+0*y 产生类似 Function 命令的分段行为，sqrt(x^2+y^2) 为 GeoGebra 默认样条，具有良好的变换协变性（如旋转后再 Spline 与对样条整体旋转一致）。"
+        }
+      ]
+    },
+    "Sum": {
+      "name": "Sum",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Sum/",
+      "overloads": [
+        {
+          "syntax": "Sum(<List>)",
+          "params": [
+            {
+              "name": "list",
+              "role": "input_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回列表中所有元素的和。列表可由数、点、向量、文本或函数构成，但元素类型必须一致；对非数值类型使用相应的“加法”规则。"
+        },
+        {
+          "syntax": "Sum(<List>, <Number of Elements>)",
+          "params": [
+            {
+              "name": "list",
+              "role": "input_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "n",
+              "role": "elements_count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回列表前 n 个元素的和。"
+        },
+        {
+          "syntax": "Sum(<List>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "list",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequencies",
+              "role": "frequency_list",
+              "type": "List<Number>",
+              "optional": false
+            }
+          ],
+          "description": "对给定数值列表和对应频数列表，返回按频数加权后的总和。两列表长度必须一致。"
+        },
+        {
+          "syntax": "Sum(<Expression>, <Variable>, <Start Value>, <End Value>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "term_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "index_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "start_index",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "end_index",
+              "type": "Number/Infinity",
+              "optional": false
+            }
+          ],
+          "description": "CAS：计算从 variable = start 到 end 的求和 ∑ expression。终止上限可以是无穷大（Infinity）。"
+        }
+      ]
+    },
+    "Tangent": {
+      "name": "Tangent",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Tangent/",
+      "overloads": [
+        {
+          "syntax": "Tangent(<Point>, <Conic>)",
+          "params": [
+            {
+              "name": "point",
+              "role": "through_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "conic",
+              "role": "target_conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "构造通过给定点、与给定二次曲线相切的所有切线。"
+        },
+        {
+          "syntax": "Tangent(<Point>, <Function>)",
+          "params": [
+            {
+              "name": "point",
+              "role": "through_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "function",
+              "role": "target_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "在 x = x(point) 处构造函数图像的切线。"
+        },
+        {
+          "syntax": "Tangent(<Point on Curve>, <Curve>)",
+          "params": [
+            {
+              "name": "pointOnCurve",
+              "role": "point_on_curve",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "curve",
+              "role": "target_curve",
+              "type": "Curve",
+              "optional": false
+            }
+          ],
+          "description": "在参数曲线给定点处构造切线。"
+        },
+        {
+          "syntax": "Tangent(<x-Value>, <Function>)",
+          "params": [
+            {
+              "name": "xValue",
+              "role": "x_coordinate",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "function",
+              "role": "target_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "在指定 x 值处构造函数图像的切线。"
+        },
+        {
+          "syntax": "Tangent(<Line>, <Conic>)",
+          "params": [
+            {
+              "name": "line",
+              "role": "direction_line",
+              "type": "Line",
+              "optional": false
+            },
+            {
+              "name": "conic",
+              "role": "target_conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "构造与给定直线平行、且与二次曲线相切的所有切线。"
+        },
+        {
+          "syntax": "Tangent(<Circle>, <Circle>)",
+          "params": [
+            {
+              "name": "circle1",
+              "role": "first_circle",
+              "type": "Conic/Circle",
+              "optional": false
+            },
+            {
+              "name": "circle2",
+              "role": "second_circle",
+              "type": "Conic/Circle",
+              "optional": false
+            }
+          ],
+          "description": "构造两圆的全部公共切线（最多 4 条）。"
+        },
+        {
+          "syntax": "Tangent(<Point>, <Spline>)",
+          "params": [
+            {
+              "name": "point",
+              "role": "through_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "spline",
+              "role": "target_spline",
+              "type": "Spline",
+              "optional": false
+            }
+          ],
+          "description": "在样条曲线经过的给定点处构造其切线。"
+        },
+        {
+          "syntax": "Tangent(<Point>, <Implicit Curve>)",
+          "params": [
+            {
+              "name": "point",
+              "role": "through_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "implicitCurve",
+              "role": "target_implicit_curve",
+              "type": "ImplicitCurve",
+              "optional": false
+            }
+          ],
+          "description": "在隐式曲线通过的给定点处构造切线。"
+        }
+      ]
+    },
+    "TaylorPolynomial": {
+      "name": "TaylorPolynomial",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TaylorPolynomial/",
+      "overloads": [
+        {
+          "syntax": "TaylorPolynomial(<Function>, <x-Value>, <Order Number>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "x0",
+              "role": "expansion_point",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "order",
+              "role": "taylor_order",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在点 x0 处对函数做泰勒展开，保留到给定阶数的多项式部分。order 必须是≥0 的整数。"
+        },
+        {
+          "syntax": "TaylorPolynomial(<Expression>, <x-Value>, <Order Number>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "input_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "x0",
+              "role": "expansion_point",
+              "type": "Number/Symbol",
+              "optional": false
+            },
+            {
+              "name": "order",
+              "role": "taylor_order",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS：对一元表达式在给定点 x0 做泰勒展开，保留到指定阶数。"
+        },
+        {
+          "syntax": "TaylorPolynomial(<Expression>, <Variable>, <Variable Value>, <Order Number>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "input_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "expansion_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "expansion_point",
+              "type": "Number/Symbol",
+              "optional": false
+            },
+            {
+              "name": "order",
+              "role": "taylor_order",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS：对多元表达式就指定变量 variable 在给定点 value 做泰勒展开，保留到给定阶数，其它变量视为常量。"
+        }
+      ]
+    },
+    "ToComplex": {
+      "name": "ToComplex",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ToComplex/",
+      "overloads": [
+        {
+          "syntax": "ToComplex(<Vector>)",
+          "params": [
+            {
+              "name": "vector",
+              "role": "input_vector_or_point",
+              "type": "Vector/Point",
+              "optional": false
+            }
+          ],
+          "description": "CAS：将一个向量或点 (x, y) 转换为代数形式的复数 x + y·i，其中复数单位 i 可通过 ALT+i 输入。"
+        }
+      ]
+    },
+    "ToExponential": {
+      "name": "ToExponential",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ToExponential/",
+      "overloads": [
+        {
+          "syntax": "ToExponential(<Complex Number>)",
+          "params": [
+            {
+              "name": "z",
+              "role": "input_complex",
+              "type": "ComplexNumber",
+              "optional": false
+            }
+          ],
+          "description": "将给定复数转换为指数形式 r·e^{iθ}。例如 ToExponential(1 + i) 得到模长和辐角的指数表示。"
+        }
+      ]
+    },
+    "ToPoint": {
+      "name": "ToPoint",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ToPoint/",
+      "overloads": [
+        {
+          "syntax": "ToPoint(<Complex Number>)",
+          "params": [
+            {
+              "name": "z",
+              "role": "input_complex",
+              "type": "ComplexNumber",
+              "optional": false
+            }
+          ],
+          "description": "把复数 a + b·i 转换为平面上的点 (a, b)。复数单位 i 可通过 ALT+i 输入。"
+        }
+      ]
+    },
+    "ToPolar": {
+      "name": "ToPolar",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ToPolar/",
+      "overloads": [
+        {
+          "syntax": "ToPolar(<Vector>)",
+          "params": [
+            {
+              "name": "vector",
+              "role": "input_vector",
+              "type": "Vector",
+              "optional": false
+            }
+          ],
+          "description": "将一个向量转换为极坐标形式 (r; φ)，在代数视图中显示为长度与角度（度数或弧度）。"
+        },
+        {
+          "syntax": "ToPolar(<Complex Number>)",
+          "params": [
+            {
+              "name": "z",
+              "role": "input_complex",
+              "type": "ComplexNumber",
+              "optional": false
+            }
+          ],
+          "description": "将复数转换为极坐标表示 (r; φ)。复数单位 i 可通过 ALT+i 输入。"
+        }
+      ]
+    },
+    "TrapezoidalSum": {
+      "name": "TrapezoidalSum",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TrapezoidalSum/",
+      "overloads": [
+        {
+          "syntax": "TrapezoidalSum(<Function>, <Start x-Value>, <End x-Value>, <Number of Trapezoids>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_approximate",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "startX",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "endX",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "n",
+              "role": "trapezoid_count",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "在区间 [startX, endX] 上，用 n 个梯形计算函数的梯形和，近似定积分，并在图形视图中绘制这些梯形。英文变体中命令名在美式为 TrapezoidalSum，英澳式为 TrapeziumSum。该命令主要用于可视化，当梯形数过大时数值精度不再可靠。"
+        }
+      ]
+    },
+    "TriangleCurve": {
+      "name": "TriangleCurve",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TriangleCurve/",
+      "overloads": [
+        {
+          "syntax": "TriangleCurve(<Point P>, <Point Q>, <Point R>, <Equation in A, B, C>)",
+          "params": [
+            {
+              "name": "P",
+              "role": "triangle_vertex_P",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "Q",
+              "role": "triangle_vertex_Q",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "R",
+              "role": "triangle_vertex_R",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "equation",
+              "role": "barycentric_equation",
+              "type": "Equation in A,B,C",
+              "optional": false
+            }
+          ],
+          "description": "以点 P、Q、R 为顶点的三角形为参考，用重心坐标 A,B,C 的多项式方程构造一个隐式代数曲线。可用于生成三角形的各类特殊三次曲线、内切/外接椭圆等。注意若 P、Q、R 本身命名为 A、B、C，则在方程中 A、B、C 被解释为重心坐标，不能再用 x(A) 这类语法。"
+        }
+      ]
+    },
+    "TrigCombine": {
+      "name": "TrigCombine",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TrigCombine/",
+      "overloads": [
+        {
+          "syntax": "TrigCombine(<Expression>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "input_trig_expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "把三角函数的乘积转换为和，或把若干三角函数项合并为更简洁的形式（例如单一三角函数的表达）。"
+        },
+        {
+          "syntax": "TrigCombine(<Expression>, <Target Function>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "input_trig_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "targetFunction",
+              "role": "target_trig_function",
+              "type": "FunctionName",
+              "optional": false
+            }
+          ],
+          "description": "将给定三角表达式化简为只含指定目标三角函数（如 sin、cos、tan 等）的等价表达式。CAS 中可含未定义符号。"
+        }
+      ]
+    },
+    "TrigExpand": {
+      "name": "TrigExpand",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TrigExpand/",
+      "overloads": [
+        {
+          "syntax": "TrigExpand(<Expression>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "input_trig_expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "展开三角函数：将和角公式拆成单变量的三角函数，或将三角函数的积展开为线性组合（和/差）的形式。"
+        },
+        {
+          "syntax": "TrigExpand(<Expression>, <Target Function>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "input_trig_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "targetFunction",
+              "role": "target_trig_function",
+              "type": "FunctionName",
+              "optional": false
+            }
+          ],
+          "description": "将和角三角函数展开，并尽量只用单一的目标三角函数来表示结果。"
+        },
+        {
+          "syntax": "TrigExpand(<Expression>, <Target Function>, <Target Variable>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "input_trig_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "targetFunction",
+              "role": "target_trig_function",
+              "type": "FunctionName",
+              "optional": false
+            },
+            {
+              "name": "targetVariable",
+              "role": "target_variable",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "将三角表达式展开为只含给定目标函数和给定变量（例如 x/2）的形式（若可能）。"
+        },
+        {
+          "syntax": "TrigExpand(<Expression>, <Target Function>, <Target Variable 1>, <Target Variable 2>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "input_trig_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "targetFunction",
+              "role": "target_trig_function",
+              "type": "FunctionName",
+              "optional": false
+            },
+            {
+              "name": "targetVar1",
+              "role": "first_target_variable",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "targetVar2",
+              "role": "second_target_variable",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "将三角表达式展开为只含指定目标三角函数及两个目标变量（例如 x/2 和 y/2）的表达式（若可能）。"
+        }
+      ]
+    },
+    "TrigSimplify": {
+      "name": "TrigSimplify",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TrigSimplify/",
+      "overloads": [
+        {
+          "syntax": "TrigSimplify(<Expression>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "input_trig_expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "对给定三角表达式做代数化简（利用三角恒等式）。在代数视图中只支持变量 x、y、z，在 CAS 视图中可对任意变量工作。"
+        }
+      ]
+    },
+    "UpperSum": {
+      "name": "UpperSum",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/UpperSum/",
+      "overloads": [
+        {
+          "syntax": "UpperSum(<Function>, <Start x-Value>, <End x-Value>, <Number of Rectangles>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_sum",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "startX",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "endX",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "rectangles",
+              "role": "rectangles_count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在区间 [startX, endX] 上，用 n 个子区间的上确界值构造上和（上黎曼和），并在图形视图中绘制对应矩形，主要用于展示黎曼积分概念。"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,4986 @@
+{
+  "command_category": "CAS_Specific_Commands",
+  "total_commands": 119,
+  "commands": [
+    {
+      "name": "Assume",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Assume/",
+      "overloads": [
+        {
+          "syntax": "Assume(<Condition>, <Expression>)",
+          "params": [
+            {
+              "name": "Condition",
+              "role": "condition_on_variables",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Expression",
+              "role": "expression_to_evaluate",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "Evaluates the expression according to the condition（在给定条件下对表达式求值，允许在积分、求解、化简等命令中施加变量约束）"
+        }
+      ]
+    },
+    {
+      "name": "BinomialCoefficient",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/BinomialCoefficient/",
+      "overloads": [
+        {
+          "syntax": "nCr(n, r)",
+          "params": [
+            {
+              "name": "n",
+              "role": "number_of_items",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "r",
+              "role": "number_of_choices",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the binomial coefficient (n r) = number of ways to choose r objects out of n without repetitions（计算组合数，可数值也可符号形式）"
+        }
+      ]
+    },
+    {
+      "name": "BinomialDist",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/BinomialDist/",
+      "overloads": [
+        {
+          "syntax": "BinomialDist(<Number of Trials>, <Probability of Success>)",
+          "params": [
+            {
+              "name": "NumberOfTrials",
+              "role": "binomial_n",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "ProbabilityOfSuccess",
+              "role": "binomial_p",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns a histogram of a Binomial distribution（返回二项分布直方图）"
+        },
+        {
+          "syntax": "BinomialDist(<Number of Trials>, <Probability of Success>, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "NumberOfTrials",
+              "role": "binomial_n",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "ProbabilityOfSuccess",
+              "role": "binomial_p",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "is_cumulative",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "If Cumulative = false 返回二项分布直方图；若 Cumulative = true 返回二项分布累积分布图"
+        },
+        {
+          "syntax": "BinomialDist(<Number of Trials>, <Probability of Success>, <Variable Value>, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "NumberOfTrials",
+              "role": "binomial_n",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "ProbabilityOfSuccess",
+              "role": "binomial_p",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "VariableValue",
+              "role": "x_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "is_cumulative",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "令 X 为二项分布随机变量，v 为变量值：若 Cumulative=false 返回 P(X = v)，若 Cumulative=true 返回 P(X ≤ v)"
+        },
+        {
+          "syntax": "BinomialDist(<Number of Trials>, <Probability of Success>, <List of values>)",
+          "params": [
+            {
+              "name": "NumberOfTrials",
+              "role": "binomial_n",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "ProbabilityOfSuccess",
+              "role": "binomial_p",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Values",
+              "role": "value_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对列表中的每个值使用非累积形式 P(X = v) 并求和，例如 BinomialDist(10, 0.2, {1,2,3})"
+        }
+      ]
+    },
+    {
+      "name": "CFactor",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CFactor/",
+      "overloads": [
+        {
+          "syntax": "CFactor(<Expression>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression_to_factor",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "Factorizes a given expression, allowing for complex factors（在复数域上因式分解表达式，复有理系数）"
+        },
+        {
+          "syntax": "CFactor(<Expression>, <Variable>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression_to_factor",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "factor_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "Factorizes an expression with respect to a given variable, allowing for complex factors（指定变量并在复数域上因式分解）"
+        }
+      ]
+    },
+    {
+      "name": "CIFactor",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CIFactor/",
+      "overloads": [
+        {
+          "syntax": "CIFactor(<Expression>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression_to_factor",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "Factors over the complex irrationals（在复无理数域上分解因式）"
+        },
+        {
+          "syntax": "CIFactor(<Expression>, <Variable>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression_to_factor",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "factor_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "Factors over the complex irrationals with respect to a given variable（相对于给定变量，在复无理数域上因式分解）"
+        }
+      ]
+    },
+    {
+      "name": "CSolutions",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CSolutions/",
+      "overloads": [
+        {
+          "syntax": "CSolutions(<Equation>)",
+          "params": [
+            {
+              "name": "Equation",
+              "role": "equation_to_solve",
+              "type": "Equation",
+              "optional": false
+            }
+          ],
+          "description": "Solves a given equation for the main variable and returns a list of all solutions, allowing for complex solutions（对主变量求解，返回所有实/复解的列表）"
+        },
+        {
+          "syntax": "CSolutions(<Equation>, <Variable>)",
+          "params": [
+            {
+              "name": "Equation",
+              "role": "equation_to_solve",
+              "type": "Equation",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "solve_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "Solves an equation for a given unknown variable and returns a list of all (possibly complex) solutions（指定未知量求解）"
+        },
+        {
+          "syntax": "CSolutions(<List of Equations>, <List of Variables>)",
+          "params": [
+            {
+              "name": "Equations",
+              "role": "equation_system",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Variables",
+              "role": "solve_variables",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Solves a set of equations for a given set of unknown variables and returns all (possibly complex) solutions（复数域联立方程组求解，返回解向量列表）"
+        }
+      ]
+    },
+    {
+      "name": "CSolve",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CSolve/",
+      "overloads": [
+        {
+          "syntax": "CSolve(<Equation>)",
+          "params": [
+            {
+              "name": "Equation",
+              "role": "equation_to_solve",
+              "type": "Equation",
+              "optional": false
+            }
+          ],
+          "description": "Solves a given equation for the main variable and returns a list of all solutions, allowing for complex solutions（返回形如 x = … 的解列表）"
+        },
+        {
+          "syntax": "CSolve(<Equation>, <Variable>)",
+          "params": [
+            {
+              "name": "Equation",
+              "role": "equation_to_solve",
+              "type": "Equation",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "solve_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "Solves an equation for a given unknown variable and returns a list of all complex solutions（指定未知数，解以赋值形式返回）"
+        },
+        {
+          "syntax": "CSolve(<List of Equations>, <List of Variables>)",
+          "params": [
+            {
+              "name": "Equations",
+              "role": "equation_system",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Variables",
+              "role": "solve_variables",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Solves a set of equations for a given set of unknown variables and returns all complex solutions as assignments for each variable（复数域联立方程组求解，结果以变量=值的集合形式给出）"
+        }
+      ]
+    },
+    {
+      "name": "Cauchy",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Cauchy/",
+      "overloads": [
+        {
+          "syntax": "Cauchy(<Median>, <Scale>, <Variable value>)",
+          "params": [
+            {
+              "name": "Median",
+              "role": "cauchy_median",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Scale",
+              "role": "cauchy_scale",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Value",
+              "role": "x_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算给定 Cauchy 分布在指定值处的累积分布函数值 P(X ≤ v)，即曲线左侧面积"
+        },
+        {
+          "syntax": "Cauchy(<Median>, <Scale>, <Variable value>, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "Median",
+              "role": "cauchy_median",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Scale",
+              "role": "cauchy_scale",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Value",
+              "role": "x_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "is_cumulative",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative=true 时返回累积分布函数值；为 false 时返回密度函数值（pdf）"
+        },
+        {
+          "syntax": "Cauchy(<Median>, <Scale>, x, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "Median",
+              "role": "cauchy_median",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Scale",
+              "role": "cauchy_scale",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "symbolic_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "is_cumulative",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative=true 时生成该 Cauchy 分布的累积分布函数；否则生成密度函数"
+        }
+      ]
+    },
+    {
+      "name": "ChiSquared",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ChiSquared/",
+      "overloads": [
+        {
+          "syntax": "ChiSquared(<Degrees of Freedom>, <Variable Value>)",
+          "params": [
+            {
+              "name": "DegreesOfFreedom",
+              "role": "chisq_df",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Value",
+              "role": "x_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算给定自由度卡方分布在指定值处的累积分布函数 P(X ≤ v)"
+        },
+        {
+          "syntax": "ChiSquared(<Degrees of Freedom>, <Variable Value>, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "DegreesOfFreedom",
+              "role": "chisq_df",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Value",
+              "role": "x_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "is_cumulative",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative=true 时为累积分布函数值；否则为给定点的概率密度函数值"
+        },
+        {
+          "syntax": "ChiSquared(<Degrees of Freedom>, x, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "DegreesOfFreedom",
+              "role": "chisq_df",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "symbolic_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "is_cumulative",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative=true 时生成给定自由度卡方分布的累积分布函数；否则生成密度函数"
+        }
+      ]
+    },
+    {
+      "name": "CharacteristicPolynomial",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CharacteristicPolynomial/",
+      "overloads": [
+        {
+          "syntax": "CharacteristicPolynomial(<Matrix>)",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "input_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Returns the characteristic polynomial of the given matrix（返回矩阵的特征多项式）"
+        }
+      ]
+    },
+    {
+      "name": "Coefficients",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Coefficients/",
+      "overloads": [
+        {
+          "syntax": "Coefficients(<Polynomial>)",
+          "params": [
+            {
+              "name": "Polynomial",
+              "role": "polynomial_expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "返回多项式在主变量下的全部系数列表，从最高次到常数项；对拟合函数等也可返回参数列表"
+        },
+        {
+          "syntax": "Coefficients(<Conic>)",
+          "params": [
+            {
+              "name": "Conic",
+              "role": "conic_object",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "对二次曲线 ax² + by² + c + dxy + ex + fy = 0，返回 {a,b,c,d,e,f} 系数列表"
+        },
+        {
+          "syntax": "Coefficients(<Polynomial>, <Variable>)",
+          "params": [
+            {
+              "name": "Polynomial",
+              "role": "polynomial_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "coefficient_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "CAS 语法：按指定变量列出多项式的全部系数"
+        }
+      ]
+    },
+    {
+      "name": "CommonDenominator",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CommonDenominator/",
+      "overloads": [
+        {
+          "syntax": "CommonDenominator(<Expression>, <Expression>)",
+          "params": [
+            {
+              "name": "Expression1",
+              "role": "first_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Expression2",
+              "role": "second_expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "返回两个表达式的最小公分母；在函数视图中为该分母对应的函数，在 CAS 中直接返回分母表达式"
+        }
+      ]
+    },
+    {
+      "name": "CompleteSquare",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CompleteSquare/",
+      "overloads": [
+        {
+          "syntax": "CompleteSquare(<Quadratic Function>)",
+          "params": [
+            {
+              "name": "QuadraticFunction",
+              "role": "quadratic_to_transform",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "将二次函数化为顶点式 a(x − h)² + k 的形式（配方），如 x² - 4x + 7 → (x - 2)² + 3"
+        }
+      ]
+    },
+    {
+      "name": "ComplexRoot",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ComplexRoot/",
+      "overloads": [
+        {
+          "syntax": "ComplexRoot(<Polynomial>)",
+          "params": [
+            {
+              "name": "Polynomial",
+              "role": "polynomial_in_x",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "Finds the complex roots of a given polynomial in x（在图形视图中创建对应复数点，在 CAS 中返回复根列表）"
+        }
+      ]
+    },
+    {
+      "name": "Covariance",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Covariance/",
+      "overloads": [
+        {
+          "syntax": "Covariance(<List of Numbers>, <List of Numbers>)",
+          "params": [
+            {
+              "name": "List1",
+              "role": "sample_x_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List2",
+              "role": "sample_y_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the covariance between the elements of the specified lists（计算两个数值列表的协方差）"
+        },
+        {
+          "syntax": "Covariance(<List of Points>)",
+          "params": [
+            {
+              "name": "Points",
+              "role": "sample_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the covariance between the x and y coordinates of the specified points（点列表的 x 与 y 坐标间协方差）"
+        }
+      ]
+    },
+    {
+      "name": "Cross",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Cross/",
+      "overloads": [
+        {
+          "syntax": "Cross(<Vector u>, <Vector v>)",
+          "params": [
+            {
+              "name": "u",
+              "role": "left_vector",
+              "type": "VectorOrList",
+              "optional": false
+            },
+            {
+              "name": "v",
+              "role": "right_vector",
+              "type": "VectorOrList",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the cross product of u and v；支持 3D 向量或 3 元列表，2D 情况返回叉积的 z 分量；CAS 中可返回符号公式"
+        }
+      ]
+    },
+    {
+      "name": "Degree",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Degree/",
+      "overloads": [
+        {
+          "syntax": "Degree(<Polynomial>)",
+          "params": [
+            {
+              "name": "Polynomial",
+              "role": "polynomial_expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "Gives the degree of a polynomial in the main variable（返回多项式在主变量下的次数）"
+        },
+        {
+          "syntax": "Degree(<Polynomial>, <Variable>)",
+          "params": [
+            {
+              "name": "Polynomial",
+              "role": "polynomial_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "degree_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "Gives the degree of a polynomial in the given variable（按指定变量计算次数）"
+        }
+      ]
+    },
+    {
+      "name": "Delete",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Delete/",
+      "overloads": [
+        {
+          "syntax": "Delete(<Object>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "object_to_delete",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "Deletes the object and all its dependent objects；在 CAS 中也会清除该对象在 CAS 视图中的已赋值内容"
+        }
+      ]
+    },
+    {
+      "name": "Denominator",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Denominator/",
+      "overloads": [
+        {
+          "syntax": "Denominator(<Function>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function_expression",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "Returns the denominator of a function（返回函数表达式的分母部分）"
+        },
+        {
+          "syntax": "Denominator(<Number>)",
+          "params": [
+            {
+              "name": "Number",
+              "role": "input_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对有理数返回约简后的分母；对无理数返回其连分数表示中的分母（使用数值近似方法且倾向小分母）"
+        },
+        {
+          "syntax": "Denominator(<Expression>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "CAS 语法：返回有理数或有理表达式的分母部分"
+        }
+      ]
+    },
+    {
+      "name": "Derivative",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Derivative/",
+      "overloads": [
+        {
+          "syntax": "Derivative(<Function>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "Returns the derivative of the function with respect to the main variable（返回函数关于主变量的导数）"
+        },
+        {
+          "syntax": "Derivative(<Function>, <Number>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Number",
+              "role": "derivative_order",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns the nth derivative of the function with respect to the main variable, where n equals the given number（返回函数关于主变量的 n 阶导数，其中 n 为给定数值）"
+        },
+        {
+          "syntax": "Derivative(<Function>, <Variable>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "differentiation_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "Returns the partial derivative of the function with respect to the given variable（返回函数关于给定变量的偏导数）"
+        },
+        {
+          "syntax": "Derivative(<Function>, <Variable>, <Number>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "differentiation_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Number",
+              "role": "derivative_order",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns the nth partial derivative of the function with respect to the given variable, where n equals the given number（返回函数关于给定变量的 n 阶偏导数）"
+        },
+        {
+          "syntax": "Derivative(<Curve>)",
+          "params": [
+            {
+              "name": "Curve",
+              "role": "input_curve",
+              "type": "Curve",
+              "optional": false
+            }
+          ],
+          "description": "Returns the derivative of the curve. This only works for parametric curves（返回曲线的导数，仅适用于参数曲线）"
+        },
+        {
+          "syntax": "Derivative(<Curve>, <Number>)",
+          "params": [
+            {
+              "name": "Curve",
+              "role": "input_curve",
+              "type": "Curve",
+              "optional": false
+            },
+            {
+              "name": "Number",
+              "role": "derivative_order",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns the nth derivative of the curve, where n equals the given number. This only works for parametric curves（返回曲线的 n 阶导数，仅适用于参数曲线）"
+        },
+        {
+          "syntax": "Derivative(<Expression>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "input_expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "Returns derivative of an expression with respect to the main variable（返回表达式关于主变量的导数）"
+        },
+        {
+          "syntax": "Derivative(<Expression>, <Variable>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "input_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "differentiation_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "Returns derivative of an expression with respect to the given variable（返回表达式关于给定变量的导数）"
+        },
+        {
+          "syntax": "Derivative(<Expression>, <Variable>, <Number>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "input_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "differentiation_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Number",
+              "role": "derivative_order",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns the nth derivative of an expression with respect to the given variable, where n equals the given number（返回表达式关于给定变量的 n 阶导数）"
+        }
+      ]
+    },
+    {
+      "name": "Determinant",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Determinant/",
+      "overloads": [
+        {
+          "syntax": "Determinant(<Matrix>)",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "input_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Gives the determinant of the matrix（返回矩阵的行列式值；若含未定变量则给出符号表达式）"
+        }
+      ]
+    },
+    {
+      "name": "Dimension",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Dimension/",
+      "overloads": [
+        {
+          "syntax": "Dimension(<Object>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "input_object",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "Gives the dimension of a vector or a matrix（返回向量或矩阵的维度；向量给出长度，矩阵给出行列数如 {行, 列}）"
+        }
+      ]
+    },
+    {
+      "name": "Div",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Div/",
+      "overloads": [
+        {
+          "syntax": "Div(<Dividend Number>, <Divisor Number>)",
+          "params": [
+            {
+              "name": "Dividend Number",
+              "role": "dividend_number",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Divisor Number",
+              "role": "divisor_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns the quotient (integer part of the result) of the two numbers（返回两个数相除所得结果的整数部分）"
+        },
+        {
+          "syntax": "Div(<Dividend Polynomial>, <Divisor Polynomial>)",
+          "params": [
+            {
+              "name": "Dividend Polynomial",
+              "role": "dividend_polynomial",
+              "type": "Polynomial",
+              "optional": false
+            },
+            {
+              "name": "Divisor Polynomial",
+              "role": "divisor_polynomial",
+              "type": "Polynomial",
+              "optional": false
+            }
+          ],
+          "description": "Returns the quotient of the two polynomials（返回两个多项式相除的商多项式）"
+        }
+      ]
+    },
+    {
+      "name": "Division",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Division/",
+      "overloads": [
+        {
+          "syntax": "Division(<Dividend Number>, <Divisor Number>)",
+          "params": [
+            {
+              "name": "Dividend Number",
+              "role": "dividend_number",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Divisor Number",
+              "role": "divisor_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Gives the quotient (integer part) and the remainder of the division of the two numbers（返回两数相除的商（整数部分）与余数，结果为 {商, 余数}）"
+        },
+        {
+          "syntax": "Division(<Dividend Polynomial>, <Divisor Polynomial>)",
+          "params": [
+            {
+              "name": "Dividend Polynomial",
+              "role": "dividend_polynomial",
+              "type": "Polynomial",
+              "optional": false
+            },
+            {
+              "name": "Divisor Polynomial",
+              "role": "divisor_polynomial",
+              "type": "Polynomial",
+              "optional": false
+            }
+          ],
+          "description": "Gives the quotient and the remainder of the division of the two polynomials（返回两个多项式相除的商和余数，结果为 {商, 余数}，CAS 视图可多元除法）"
+        }
+      ]
+    },
+    {
+      "name": "Divisors",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Divisors/",
+      "overloads": [
+        {
+          "syntax": "Divisors(<Number>)",
+          "params": [
+            {
+              "name": "Number",
+              "role": "input_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the number of all the positive divisors, including the number itself（计算一个正整数所有正因数的个数，包括它本身）"
+        }
+      ]
+    },
+    {
+      "name": "DivisorsList",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/DivisorsList/",
+      "overloads": [
+        {
+          "syntax": "DivisorsList(<Number>)",
+          "params": [
+            {
+              "name": "Number",
+              "role": "input_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Gives the list of all the positive divisors, including the number itself（返回一个正整数所有正因数的列表，包括它本身）"
+        }
+      ]
+    },
+    {
+      "name": "DivisorsSum",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/DivisorsSum/",
+      "overloads": [
+        {
+          "syntax": "DivisorsSum(<Number>)",
+          "params": [
+            {
+              "name": "Number",
+              "role": "input_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the sum of all the positive divisors, including the number itself（计算一个正整数所有正因数的和，包括它本身）"
+        }
+      ]
+    },
+    {
+      "name": "Dot",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Dot/",
+      "overloads": [
+        {
+          "syntax": "Dot(<Vector>, <Vector>)",
+          "params": [
+            {
+              "name": "Vector",
+              "role": "vector_u",
+              "type": "VectorOrList",
+              "optional": false
+            },
+            {
+              "name": "Vector",
+              "role": "vector_v",
+              "type": "VectorOrList",
+              "optional": false
+            }
+          ],
+          "description": "Returns the dot product (scalar product) of the two vectors（返回两个向量的点积 / 标量积）"
+        }
+      ]
+    },
+    {
+      "name": "Eigenvalues",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Eigenvalues/",
+      "overloads": [
+        {
+          "syntax": "Eigenvalues(<Matrix>)",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "input_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Finds the eigenvalues of the given matrix（求给定矩阵的特征值）"
+        }
+      ]
+    },
+    {
+      "name": "Eigenvectors",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Eigenvectors/",
+      "overloads": [
+        {
+          "syntax": "Eigenvectors(<Matrix>)",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "input_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Finds the eigenvectors of the given matrix（求给定矩阵的特征向量）"
+        }
+      ]
+    },
+    {
+      "name": "Element",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Element/",
+      "overloads": [
+        {
+          "syntax": "Element(<List>, <Position of Element n>)",
+          "params": [
+            {
+              "name": "List",
+              "role": "input_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Position of Element n",
+              "role": "element_position",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Yields the nth element of the list（返回列表中的第 n 个元素）"
+        },
+        {
+          "syntax": "Element(<Matrix>, <Row>, <Column>)",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "matrix",
+              "type": "Matrix",
+              "optional": false
+            },
+            {
+              "name": "Row",
+              "role": "row_index",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Column",
+              "role": "column_index",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Yields the element of the matrix in the given row and column（返回矩阵中指定行、列位置的元素）"
+        },
+        {
+          "syntax": "Element(<List>, <Index1>, <Index2>, …)",
+          "params": [
+            {
+              "name": "List",
+              "role": "input_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Index1",
+              "role": "index1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Index2",
+              "role": "index2",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "For an n 维列表 / 矩阵，使用多重索引返回给定坐标处的元素或子列表（用于高维嵌套列表 / 矩阵）"
+        }
+      ]
+    },
+    {
+      "name": "Eliminate",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Eliminate/",
+      "overloads": [
+        {
+          "syntax": "Eliminate(<List of Polynomials>, <List of Variables>)",
+          "params": [
+            {
+              "name": "List of Polynomials",
+              "role": "polynomial_system",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Variables",
+              "role": "variables_to_eliminate",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Treats the polynomials as an algebraic system and computes an equivalent system after eliminating all variables in the given list（将多项式列表视为方程组，对给定变量列表进行消元，得到等价系统）"
+        }
+      ]
+    },
+    {
+      "name": "Expand",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Expand/",
+      "overloads": [
+        {
+          "syntax": "Expand(<Expression>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression_to_expand",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "Expands the expression（代数展开给定表达式；需要 CAS，可能较慢）"
+        }
+      ]
+    },
+    {
+      "name": "Exponential",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Exponential/",
+      "overloads": [
+        {
+          "syntax": "Exponential(<Lambda>, <Variable Value>)",
+          "params": [
+            {
+              "name": "Lambda",
+              "role": "exponential_lambda",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Variable Value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the value of the cumulative distribution function of an Exponential distribution at value v, i.e. P(X ≤ v)（计算参数 λ 的指数分布在 v 处的累积分布函数值 P(X ≤ v)）"
+        },
+        {
+          "syntax": "Exponential(<Lambda>, <Variable Value>, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "Lambda",
+              "role": "exponential_lambda",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Variable Value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "cumulative_flag",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时返回指数分布在给定值处的 CDF；否则返回该点的 PDF（true 为累积分布值，false 为密度值）"
+        },
+        {
+          "syntax": "Exponential(<Lambda>, x, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "Lambda",
+              "role": "exponential_lambda",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "distribution_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "cumulative_flag",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时生成指数分布的 CDF 函数；否则生成该分布的 PDF 函数（以 x 为自变量）"
+        }
+      ]
+    },
+    {
+      "name": "ExtendedGCD",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ExtendedGCD/",
+      "overloads": [
+        {
+          "syntax": "ExtendedGCD(<Integer>, <Integer>)",
+          "params": [
+            {
+              "name": "Integer",
+              "role": "integer_a",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Integer",
+              "role": "integer_b",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns a list containing Bézout 系数 s, t 与 gcd(a,b)，满足 a·s + b·t = gcd(a,b)（对整数应用扩展欧几里得算法）"
+        },
+        {
+          "syntax": "ExtendedGCD(<Polynomial>, <Polynomial>)",
+          "params": [
+            {
+              "name": "Polynomial",
+              "role": "polynomial_A",
+              "type": "Polynomial",
+              "optional": false
+            },
+            {
+              "name": "Polynomial",
+              "role": "polynomial_B",
+              "type": "Polynomial",
+              "optional": false
+            }
+          ],
+          "description": "Returns a list containing polynomial coefficients S(x), T(x) 和 gcd(A(x),B(x)，满足 A·S + B·T = gcd(A,B)（对多项式应用扩展欧几里得算法）"
+        }
+      ]
+    },
+    {
+      "name": "FDistribution",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FDistribution/",
+      "overloads": [
+        {
+          "syntax": "FDistribution(<Numerator Degrees of Freedom>, <Denominator Degrees of Freedom>, <Variable Value>)",
+          "params": [
+            {
+              "name": "Numerator Degrees of Freedom",
+              "role": "numerator_df",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Denominator Degrees of Freedom",
+              "role": "denominator_df",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Variable Value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the value of the cumulative distribution function of an F-distribution at v, i.e. P(X ≤ v)（计算给定自由度 F 分布在 v 处的 CDF 值）"
+        },
+        {
+          "syntax": "FDistribution(<Numerator Degrees of Freedom>, <Denominator Degrees of Freedom>, <Variable Value>, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "Numerator Degrees of Freedom",
+              "role": "numerator_df",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Denominator Degrees of Freedom",
+              "role": "denominator_df",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Variable Value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "cumulative_flag",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时返回 F 分布在该值处的 CDF；否则返回该点的 PDF（密度）"
+        },
+        {
+          "syntax": "FDistribution(<Numerator Degrees of Freedom>, <Denominator Degrees of Freedom>, x, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "Numerator Degrees of Freedom",
+              "role": "numerator_df",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Denominator Degrees of Freedom",
+              "role": "denominator_df",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "distribution_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "cumulative_flag",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时生成给定自由度 F 分布的 CDF 函数；否则生成其 PDF 函数"
+        }
+      ]
+    },
+    {
+      "name": "Factor",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Factor/",
+      "overloads": [
+        {
+          "syntax": "Factor(<Polynomial>)",
+          "params": [
+            {
+              "name": "Polynomial",
+              "role": "input_polynomial",
+              "type": "Polynomial",
+              "optional": false
+            }
+          ],
+          "description": "Factors the polynomial（将多项式在有理数域上因式分解）"
+        },
+        {
+          "syntax": "Factor(<Number>)",
+          "params": [
+            {
+              "name": "Number",
+              "role": "input_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Expresses a number in its prime factorization（对整数做素因数分解表示，如 360 = 2³·3²·5）"
+        },
+        {
+          "syntax": "Factor(<Expression>, <Variable>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "input_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "factor_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "Factors an expression with respect to a given variable（关于给定变量对表达式进行因式分解）"
+        }
+      ]
+    },
+    {
+      "name": "Factors",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Factors/",
+      "overloads": [
+        {
+          "syntax": "Factors(<Polynomial>)",
+          "params": [
+            {
+              "name": "Polynomial",
+              "role": "input_polynomial",
+              "type": "Polynomial",
+              "optional": false
+            }
+          ],
+          "description": "Returns a list of {factor, exponent} pairs whose product equals the polynomial, factors sorted by degree（返回形如 {因子, 指数} 的列表，乘积等于原多项式）"
+        },
+        {
+          "syntax": "Factors(<Number>)",
+          "params": [
+            {
+              "name": "Number",
+              "role": "input_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns a 2×n matrix [primes; exponents] whose product equals the number, primes sorted ascending（返回素因子及其指数组成的矩阵表示）"
+        }
+      ]
+    },
+    {
+      "name": "First",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/First/",
+      "overloads": [
+        {
+          "syntax": "First(<List>)",
+          "params": [
+            {
+              "name": "List",
+              "role": "input_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Gives a new list that contains the first element of the given list（返回只包含原列表第一个元素的新列表）"
+        },
+        {
+          "syntax": "First(<List>, <Number n of elements>)",
+          "params": [
+            {
+              "name": "List",
+              "role": "input_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Number n of elements",
+              "role": "element_count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Gives a new list that contains just the first n elements of the given list（返回只包含原列表前 n 个元素的新列表）"
+        },
+        {
+          "syntax": "First(<Text>)",
+          "params": [
+            {
+              "name": "Text",
+              "role": "input_text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "Gives first character of the text（返回文本的第一个字符）"
+        },
+        {
+          "syntax": "First(<Text>, <Number n of elements>)",
+          "params": [
+            {
+              "name": "Text",
+              "role": "input_text",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "Number n of elements",
+              "role": "character_count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Gives the first n characters of the text（返回文本的前 n 个字符）"
+        },
+        {
+          "syntax": "First(<Locus>, <Number n of elements>)",
+          "params": [
+            {
+              "name": "Locus",
+              "role": "input_locus",
+              "type": "Locus",
+              "optional": false
+            },
+            {
+              "name": "Number n of elements",
+              "role": "step_count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对由 NSolveODE 或多种图论命令生成的轨迹，返回前 n 步对应的点或图的前 n 个顶点（用于截取轨迹 / 图的一部分）"
+        }
+      ]
+    },
+    {
+      "name": "FitExp",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitExp/",
+      "overloads": [
+        {
+          "syntax": "FitExp(<List of Points>)",
+          "params": [
+            {
+              "name": "Points",
+              "role": "points_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算形如 y = a·e^(b·x) 的指数回归曲线（指数拟合）。"
+        }
+      ]
+    },
+    {
+      "name": "FitLog",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitLog/",
+      "overloads": [
+        {
+          "syntax": "FitLog(<List of Points>)",
+          "params": [
+            {
+              "name": "Points",
+              "role": "points_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算对数回归曲线（形如 a + b·ln(x) 的拟合）。"
+        }
+      ]
+    },
+    {
+      "name": "FitPoly",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitPoly/",
+      "overloads": [
+        {
+          "syntax": "FitPoly(<List of Points>, <Degree of Polynomial>)",
+          "params": [
+            {
+              "name": "Points",
+              "role": "points_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Degree",
+              "role": "polynomial_degree",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对给定点列表做 n 次多项式回归（n 为 Degree），返回拟合多项式；点数至少为 n+1。"
+        },
+        {
+          "syntax": "FitPoly(<Freehand Function>, <Degree of Polynomial>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "freehand_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Degree",
+              "role": "polynomial_degree",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对用“自由手绘函数”工具画出的函数做 n 次多项式拟合。"
+        }
+      ]
+    },
+    {
+      "name": "FitPow",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitPow/",
+      "overloads": [
+        {
+          "syntax": "FitPow(<List of Points>)",
+          "params": [
+            {
+              "name": "Points",
+              "role": "points_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算形如 y = a·x^b 的幂回归曲线；要求所有点在第一象限。"
+        }
+      ]
+    },
+    {
+      "name": "FitSin",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitSin/",
+      "overloads": [
+        {
+          "syntax": "FitSin(<List of Points>)",
+          "params": [
+            {
+              "name": "Points",
+              "role": "points_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算形如 y = a + b·sin(c·x + d) 的正弦回归曲线；建议点数不少于 4 且覆盖至少两个极值点。"
+        }
+      ]
+    },
+    {
+      "name": "GCD",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/GCD/",
+      "overloads": [
+        {
+          "syntax": "GCD(<Number>, <Number>)",
+          "params": [
+            {
+              "name": "Number1",
+              "role": "number1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Number2",
+              "role": "number2",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算两个整数的最大公约数。"
+        },
+        {
+          "syntax": "GCD(<List of Numbers>)",
+          "params": [
+            {
+              "name": "Numbers",
+              "role": "numbers_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算一个整数列表所有元素的最大公约数。"
+        },
+        {
+          "syntax": "GCD(<Polynomial>, <Polynomial>)",
+          "params": [
+            {
+              "name": "Polynomial1",
+              "role": "polynomial1",
+              "type": "Polynomial",
+              "optional": false
+            },
+            {
+              "name": "Polynomial2",
+              "role": "polynomial2",
+              "type": "Polynomial",
+              "optional": false
+            }
+          ],
+          "description": "CAS：计算两个多项式的最大公因式。"
+        },
+        {
+          "syntax": "GCD(<List of Polynomials>)",
+          "params": [
+            {
+              "name": "Polynomials",
+              "role": "polynomials_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "CAS：计算多项式列表的最大公因式。"
+        }
+      ]
+    },
+    {
+      "name": "Gamma",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Gamma/",
+      "overloads": [
+        {
+          "syntax": "Gamma(<Alpha>, <Beta>, <Variable Value>)",
+          "params": [
+            {
+              "name": "Alpha",
+              "role": "gamma_alpha",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Beta",
+              "role": "gamma_beta",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Value",
+              "role": "x_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算参数 Alpha, Beta 的 Gamma 分布在给定值处的累积分布函数值 P(X ≤ v)。"
+        },
+        {
+          "syntax": "Gamma(<Alpha>, <Beta>, <Variable Value>, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "Alpha",
+              "role": "gamma_alpha",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Beta",
+              "role": "gamma_beta",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Value",
+              "role": "x_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "is_cumulative",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative=true 时返回 CDF 值；false 时返回 PDF（密度）值。"
+        },
+        {
+          "syntax": "Gamma(<Alpha>, <Beta>, x, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "Alpha",
+              "role": "gamma_alpha",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Beta",
+              "role": "gamma_beta",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "symbolic_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "is_cumulative",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative=true 时生成该 Gamma 分布的 CDF 函数；否则生成 PDF 函数。"
+        }
+      ]
+    },
+    {
+      "name": "GroebnerDegRevLex",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/GroebnerDegRevLex/",
+      "overloads": [
+        {
+          "syntax": "GroebnerDegRevLex(<List of Polynomials>)",
+          "params": [
+            {
+              "name": "Polynomials",
+              "role": "polynomials_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按总次数逆字典序（degrevlex / grevlex）计算多项式列表的 Gröbner 基。"
+        },
+        {
+          "syntax": "GroebnerDegRevLex(<List of Polynomials>, <List of Variables>)",
+          "params": [
+            {
+              "name": "Polynomials",
+              "role": "polynomials_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Variables",
+              "role": "variables_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按给定变量顺序、使用总次数逆字典序计算 Gröbner 基。"
+        }
+      ]
+    },
+    {
+      "name": "GroebnerLex",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/GroebnerLex/",
+      "overloads": [
+        {
+          "syntax": "GroebnerLex(<List of Polynomials>)",
+          "params": [
+            {
+              "name": "Polynomials",
+              "role": "polynomials_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按纯字典序（lex / plex）计算多项式列表的 Gröbner 基。"
+        },
+        {
+          "syntax": "GroebnerLex(<List of Polynomials>, <List of Variables>)",
+          "params": [
+            {
+              "name": "Polynomials",
+              "role": "polynomials_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Variables",
+              "role": "variables_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按给定变量顺序、使用字典序计算 Gröbner 基。"
+        }
+      ]
+    },
+    {
+      "name": "GroebnerLexDeg",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/GroebnerLexDeg/",
+      "overloads": [
+        {
+          "syntax": "GroebnerLexDeg(<List of Polynomials>)",
+          "params": [
+            {
+              "name": "Polynomials",
+              "role": "polynomials_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按总次数字典序（graded lex / lexdeg）计算多项式列表的 Gröbner 基。"
+        },
+        {
+          "syntax": "GroebnerLexDeg(<List of Polynomials>, <List of Variables>)",
+          "params": [
+            {
+              "name": "Polynomials",
+              "role": "polynomials_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Variables",
+              "role": "variables_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按给定变量顺序、使用总次数字典序计算 Gröbner 基。"
+        }
+      ]
+    },
+    {
+      "name": "HyperGeometric",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/HyperGeometric/",
+      "overloads": [
+        {
+          "syntax": "HyperGeometric(<Population Size>, <Number of Successes>, <Sample Size>)",
+          "params": [
+            {
+              "name": "Population",
+              "role": "population_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Successes",
+              "role": "successes",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Sample",
+              "role": "sample_size",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "基于超几何分布生成条形概率图，模拟不放回抽样中样本成功次数的分布。"
+        },
+        {
+          "syntax": "HyperGeometric(<Population Size>, <Number of Successes>, <Sample Size>, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "Population",
+              "role": "population_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Successes",
+              "role": "successes",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Sample",
+              "role": "sample_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "is_cumulative",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative=false 返回超几何分布的条形图；true 返回累积概率图。"
+        },
+        {
+          "syntax": "HyperGeometric(<Population Size>, <Number of Successes>, <Sample Size>, <Variable Value>, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "Population",
+              "role": "population_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Successes",
+              "role": "successes",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Sample",
+              "role": "sample_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Value",
+              "role": "x_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "is_cumulative",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "令 X 为超几何分布随机变量：Cumulative=false 返回 P(X = v)，true 返回 P(X ≤ v)。"
+        }
+      ]
+    },
+    {
+      "name": "IFactor",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/IFactor/",
+      "overloads": [
+        {
+          "syntax": "IFactor(<Polynomial>)",
+          "params": [
+            {
+              "name": "Polynomial",
+              "role": "polynomial_expression",
+              "type": "Polynomial",
+              "optional": false
+            }
+          ],
+          "description": "在无理数域上对多项式分解因式。"
+        },
+        {
+          "syntax": "IFactor(<Expression>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "在无理数域上对一般表达式分解因式。"
+        },
+        {
+          "syntax": "IFactor(<Expression>, <Variable>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "factor_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "关于指定变量，在无理数域上对表达式分解因式。"
+        }
+      ]
+    },
+    {
+      "name": "Identity",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Identity/",
+      "overloads": [
+        {
+          "syntax": "Identity(<Number>)",
+          "params": [
+            {
+              "name": "Order",
+              "role": "order",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回给定阶数的单位矩阵（n×n）。"
+        }
+      ]
+    },
+    {
+      "name": "ImplicitDerivative",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ImplicitDerivative/",
+      "overloads": [
+        {
+          "syntax": "ImplicitDerivative(<Expression>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "对含 x, y 的表达式求隐式导数 dy/dx。"
+        },
+        {
+          "syntax": "ImplicitDerivative(<Expression>, <Dependent Variable>, <Independent Variable>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Dependent",
+              "role": "dependent_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Independent",
+              "role": "independent_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "对给定表达式按指定自变量 / 因变量求隐式导数。"
+        }
+      ]
+    },
+    {
+      "name": "Integral",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Integral/",
+      "overloads": [
+        {
+          "syntax": "Integral(<Function>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "给出关于主变量的不定积分。"
+        },
+        {
+          "syntax": "Integral(<Function>, <Variable>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "integration_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "给出关于指定变量的偏积分。"
+        },
+        {
+          "syntax": "Integral(<Function>, <Start x-Value>, <End x-Value>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Start",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算在区间 [Start, End] 上的定积分，并在图形视图中填充对应面积。"
+        },
+        {
+          "syntax": "Integral(<Function>, <Start x-Value>, <End x-Value>, <Boolean Evaluate>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Start",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Evaluate",
+              "role": "evaluate_flag",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "同上，但 Evaluate=false 时只着色面积不计算数值；true 时计算定积分数值。"
+        }
+      ]
+    },
+    {
+      "name": "IntegralBetween",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/IntegralBetween/",
+      "overloads": [
+        {
+          "syntax": "IntegralBetween(<Function>, <Function>, <Number>, <Number>)",
+          "params": [
+            {
+              "name": "Function1",
+              "role": "function1",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Function2",
+              "role": "function2",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Start",
+              "role": "lower_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End",
+              "role": "upper_bound",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算两函数 f, g 在 [Start, End] 上的面积差 ∫(f(x)−g(x))dx，并填充两曲线间区域。"
+        },
+        {
+          "syntax": "IntegralBetween(<Function>, <Function>, <Number>, <Number>, <Boolean Evaluate>)",
+          "params": [
+            {
+              "name": "Function1",
+              "role": "function1",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Function2",
+              "role": "function2",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Start",
+              "role": "lower_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End",
+              "role": "upper_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Evaluate",
+              "role": "evaluate_flag",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "同上，Evaluate=false 只着色区域；true 时同时给出定积分数值。"
+        },
+        {
+          "syntax": "IntegralBetween(<Function>, <Function>, <Variable>, <Number>, <Number>)",
+          "params": [
+            {
+              "name": "Function1",
+              "role": "function1",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Function2",
+              "role": "function2",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "integration_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Start",
+              "role": "lower_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End",
+              "role": "upper_bound",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "按指定自变量计算两函数差的定积分（支持符号形式），并可用于 CAS 示例。"
+        }
+      ]
+    },
+    {
+      "name": "IntegralSymbolic",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/IntegralSymbolic/",
+      "overloads": [
+        {
+          "syntax": "IntegralSymbolic(<Function>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "返回关于主变量的不定积分的“符号形式”，结果显式带积分常数 c。"
+        },
+        {
+          "syntax": "IntegralSymbolic(<Function>, <Variable>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "integration_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "关于给定变量返回符号不定积分，结果包含积分常数 c。"
+        }
+      ]
+    },
+    {
+      "name": "Intersect",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Intersect/",
+      "overloads": [
+        {
+          "syntax": "Intersect(<Object>, <Object>)",
+          "params": [
+            {
+              "name": "Object1",
+              "role": "object1",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Object2",
+              "role": "object2",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "返回两个对象的所有交点（线、圆锥曲线、函数、隐式曲线等）。"
+        },
+        {
+          "syntax": "Intersect(<Object>, <Object>, <Index of Intersection Point>)",
+          "params": [
+            {
+              "name": "Object1",
+              "role": "object1",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Object2",
+              "role": "object2",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Index",
+              "role": "intersection_index",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回给定序号的第 n 个交点。"
+        },
+        {
+          "syntax": "Intersect(<Object>, <Object>, <Initial Point>)",
+          "params": [
+            {
+              "name": "Object1",
+              "role": "object1",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Object2",
+              "role": "object2",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "InitialPoint",
+              "role": "initial_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "利用给定初始点，通过迭代数值方法寻找一个交点。"
+        },
+        {
+          "syntax": "Intersect(<Function>, <Function>, <Start x-Value>, <End x-Value>)",
+          "params": [
+            {
+              "name": "Function1",
+              "role": "function1",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Function2",
+              "role": "function2",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Start",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "数值方式在指定区间内求两函数的交点。"
+        },
+        {
+          "syntax": "Intersect(<Curve 1>, <Curve 2>, <Parameter 1>, <Parameter 2>)",
+          "params": [
+            {
+              "name": "Curve1",
+              "role": "curve1",
+              "type": "Curve",
+              "optional": false
+            },
+            {
+              "name": "Curve2",
+              "role": "curve2",
+              "type": "Curve",
+              "optional": false
+            },
+            {
+              "name": "Parameter1",
+              "role": "parameter1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Parameter2",
+              "role": "parameter2",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对两条参数曲线，从给定参数起点出发数值求一个交点。"
+        }
+      ]
+    },
+    {
+      "name": "InverseLaplace",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InverseLaplace/",
+      "overloads": [
+        {
+          "syntax": "InverseLaplace(<Function>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "返回给定函数的拉普拉斯反变换。"
+        },
+        {
+          "syntax": "InverseLaplace(<Function>, <Variable>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "laplace_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "关于指定变量返回拉普拉斯反变换。"
+        }
+      ]
+    },
+    {
+      "name": "Invert",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Invert/",
+      "overloads": [
+        {
+          "syntax": "Invert(<Matrix>)",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "对给定矩阵求逆矩阵。"
+        },
+        {
+          "syntax": "Invert(<Function>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "返回函数的反函数表达式（不自动处理定义域 / 值域限制）。"
+        }
+      ]
+    },
+    {
+      "name": "IsPrime",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/IsPrime/",
+      "overloads": [
+        {
+          "syntax": "IsPrime( <Number> )",
+          "params": [
+            {
+              "name": "Number",
+              "role": "input_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "判断给定整数是否为素数，返回 true 或 false。"
+        }
+      ]
+    },
+    {
+      "name": "JordanDiagonalization",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/JordanDiagonalization/",
+      "overloads": [
+        {
+          "syntax": "JordanDiagonalization( <Matrix> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "matrix_to_decompose",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "将矩阵分解为 S J S⁻¹ 的形式，其中 J 为 Jordan 标准形，通常返回 {S, J}。"
+        }
+      ]
+    },
+    {
+      "name": "Laplace",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Laplace/",
+      "overloads": [
+        {
+          "syntax": "Laplace( <Function> )",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function_to_transform",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "对给定函数（关于主变量）求拉普拉斯变换。"
+        },
+        {
+          "syntax": "Laplace( <Function>, <Variable> )",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function_to_transform",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "transform_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "对给定函数关于指定变量求拉普拉斯变换。"
+        }
+      ]
+    },
+    {
+      "name": "Last",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Last/",
+      "overloads": [
+        {
+          "syntax": "Last( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "list_to_extract_last_element",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回只包含原列表最后一个元素的新列表。"
+        },
+        {
+          "syntax": "Last( <List>, <Number of elements> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "list_to_extract_last_elements",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Number of elements",
+              "role": "element_count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回只包含原列表最后 n 个元素的新列表。"
+        },
+        {
+          "syntax": "Last( <Text> )",
+          "params": [
+            {
+              "name": "Text",
+              "role": "text_to_extract_last_character",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "返回文本的最后一个字符。"
+        },
+        {
+          "syntax": "Last( <Text>, <Number of elements> )",
+          "params": [
+            {
+              "name": "Text",
+              "role": "text_to_extract_last_characters",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "Number of elements",
+              "role": "character_count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回文本的最后 n 个字符。"
+        }
+      ]
+    },
+    {
+      "name": "LCM",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/LCM/",
+      "overloads": [
+        {
+          "syntax": "LCM( <Number>, <Number> )",
+          "params": [
+            {
+              "name": "Number1",
+              "role": "first_number",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Number2",
+              "role": "second_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算两个整数的最小公倍数。"
+        },
+        {
+          "syntax": "LCM( <List of Numbers> )",
+          "params": [
+            {
+              "name": "Numbers",
+              "role": "list_of_numbers",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算一组整数的最小公倍数。"
+        },
+        {
+          "syntax": "LCM( <Polynomial>, <Polynomial> )",
+          "params": [
+            {
+              "name": "Polynomial1",
+              "role": "first_polynomial",
+              "type": "Polynomial",
+              "optional": false
+            },
+            {
+              "name": "Polynomial2",
+              "role": "second_polynomial",
+              "type": "Polynomial",
+              "optional": false
+            }
+          ],
+          "description": "CAS：计算两个多项式的最小公倍式。"
+        },
+        {
+          "syntax": "LCM( <List of Polynomials> )",
+          "params": [
+            {
+              "name": "Polynomials",
+              "role": "list_of_polynomials",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "CAS：计算多项式列表的最小公倍式。"
+        }
+      ]
+    },
+    {
+      "name": "LeftSide",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/LeftSide/",
+      "overloads": [
+        {
+          "syntax": "LeftSide( <Equation> )",
+          "params": [
+            {
+              "name": "Equation",
+              "role": "equation",
+              "type": "Equation",
+              "optional": false
+            }
+          ],
+          "description": "返回化简后方程的左端表达式（CAS 中返回原方程左端）。"
+        },
+        {
+          "syntax": "LeftSide( <List of Equations> )",
+          "params": [
+            {
+              "name": "Equations",
+              "role": "list_of_equations",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对方程列表，返回由各方程左端组成的列表。"
+        },
+        {
+          "syntax": "LeftSide( <List of Equations>, <Index> )",
+          "params": [
+            {
+              "name": "Equations",
+              "role": "list_of_equations",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Index",
+              "role": "equation_index",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对方程列表，返回给定序号方程的左端表达式。"
+        }
+      ]
+    },
+    {
+      "name": "Length",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Length/",
+      "overloads": [
+        {
+          "syntax": "Length( <Object> )",
+          "params": [
+            {
+              "name": "Object",
+              "role": "object_to_measure",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "返回对象的“长度”：向量或点为向量长度，列表为元素个数，文本为字符数，轨迹为点数，弧/扇形为弧长。"
+        },
+        {
+          "syntax": "Length( <Function>, <Start x-Value>, <End x-Value> )",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function_to_measure",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Start x-Value",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End x-Value",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回函数图像在给定区间上的弧长。"
+        },
+        {
+          "syntax": "Length( <Function>, <Start Point>, <End Point> )",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function_to_measure",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Start Point",
+              "role": "start_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "End Point",
+              "role": "end_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "返回函数图像在两点间的弧长（若点不在图像上，用其 x 坐标确定区间）。"
+        },
+        {
+          "syntax": "Length( <Curve>, <Start t-Value>, <End t-Value> )",
+          "params": [
+            {
+              "name": "Curve",
+              "role": "curve_to_measure",
+              "type": "Curve",
+              "optional": false
+            },
+            {
+              "name": "Start t-Value",
+              "role": "start_t",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End t-Value",
+              "role": "end_t",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回参数曲线在参数区间 [t_start, t_end] 上的弧长。"
+        },
+        {
+          "syntax": "Length( <Curve>, <Start Point>, <End Point> )",
+          "params": [
+            {
+              "name": "Curve",
+              "role": "curve_to_measure",
+              "type": "Curve",
+              "optional": false
+            },
+            {
+              "name": "Start Point",
+              "role": "start_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "End Point",
+              "role": "end_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "返回参数曲线在两给定点之间的弧长。"
+        },
+        {
+          "syntax": "Length( <Function>, <Variable>, <Start x-Value>, <End x-Value> )",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function_to_measure",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "integration_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Start x-Value",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End x-Value",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS：按指定自变量，计算函数图像在给定区间上的弧长。"
+        }
+      ]
+    },
+    {
+      "name": "Limit",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Limit/",
+      "overloads": [
+        {
+          "syntax": "Limit( <Function>, <Value> )",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function_to_take_limit",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Value",
+              "role": "limit_point",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在给定点对函数（主变量）求极限，结果可能为无穷。"
+        },
+        {
+          "syntax": "Limit( <Expression>, <Value> )",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression_to_take_limit",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Value",
+              "role": "limit_point",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS：对表达式在给定点求极限，以主变量为自变量。"
+        },
+        {
+          "syntax": "Limit( <Expression>, <Variable>, <Value> )",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression_to_take_limit",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "limit_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Value",
+              "role": "limit_point",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS：对多元表达式按指定变量在给定点求极限。"
+        }
+      ]
+    },
+    {
+      "name": "LimitAbove",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/LimitAbove/",
+      "overloads": [
+        {
+          "syntax": "LimitAbove( <Function>, <Value> )",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function_to_take_limit",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Value",
+              "role": "limit_point",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对函数在给定点求右极限（从右侧趋近）。"
+        },
+        {
+          "syntax": "LimitAbove( <Expression>, <Value> )",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression_to_take_limit",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Value",
+              "role": "limit_point",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS：对表达式在给定点求右极限。"
+        },
+        {
+          "syntax": "LimitAbove( <Expression>, <Variable>, <Value> )",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression_to_take_limit",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "limit_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Value",
+              "role": "limit_point",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS：对多元表达式按指定变量在给定点求右极限。"
+        }
+      ]
+    },
+    {
+      "name": "LimitBelow",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/LimitBelow/",
+      "overloads": [
+        {
+          "syntax": "LimitBelow( <Function>, <Value> )",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function_to_take_limit",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Value",
+              "role": "limit_point",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对函数在给定点求左极限（从左侧趋近）。"
+        },
+        {
+          "syntax": "LimitBelow( <Expression>, <Value> )",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression_to_take_limit",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Value",
+              "role": "limit_point",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS：对表达式在给定点求左极限。"
+        },
+        {
+          "syntax": "LimitBelow( <Expression>, <Variable>, <Value> )",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression_to_take_limit",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "limit_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Value",
+              "role": "limit_point",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS：对多元表达式按指定变量在给定点求左极限。"
+        }
+      ]
+    },
+    {
+      "name": "LUDecomposition",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/LUDecomposition/",
+      "overloads": [
+        {
+          "syntax": "LUDecomposition( <Matrix> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "matrix_to_decompose",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "计算给定矩阵的 LU 分解（下三角矩阵 L 与上三角矩阵 U）。"
+        }
+      ]
+    },
+    {
+      "name": "MatrixRank",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/MatrixRank/",
+      "overloads": [
+        {
+          "syntax": "MatrixRank( <Matrix> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "matrix_to_rank",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "返回矩阵的秩；CAS 视图中可处理含未定元的符号矩阵。"
+        }
+      ]
+    },
+    {
+      "name": "Max",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Max/",
+      "overloads": [
+        {
+          "syntax": "Max( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "list_of_numbers",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回列表中数值的最大值；若元素为几何对象，则取其相关数值（如线段长度）再比较。"
+        },
+        {
+          "syntax": "Max( <Interval> )",
+          "params": [
+            {
+              "name": "Interval",
+              "role": "interval",
+              "type": "Interval",
+              "optional": false
+            }
+          ],
+          "description": "返回区间的上界（不区分开区间/闭区间）。"
+        },
+        {
+          "syntax": "Max( <Number>, <Number> )",
+          "params": [
+            {
+              "name": "Number1",
+              "role": "first_number",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Number2",
+              "role": "second_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回两个数中的较大者。"
+        },
+        {
+          "syntax": "Max( <Function>, <Start x-Value>, <End x-Value> )",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function_to_maximize",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Start x-Value",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End x-Value",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在给定区间内数值寻找函数的局部最大点（要求区间内只有一个极大点且无极小点）。"
+        },
+        {
+          "syntax": "Max( <List of Data>, <List of Frequencies> )",
+          "params": [
+            {
+              "name": "Data",
+              "role": "list_of_data",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Frequencies",
+              "role": "list_of_frequencies",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回按频数加权后的数据最大值（频数为 0 的元素会被忽略）。"
+        },
+        {
+          "syntax": "Max( <Function>, <Start x-Value>, <End x-Value> )",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function_to_maximize",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Start x-Value",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End x-Value",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS：返回闭区间上的全局最大点（包括端点）。"
+        }
+      ]
+    },
+    {
+      "name": "Mean",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Mean/",
+      "overloads": [
+        {
+          "syntax": "Mean( <List of Raw Data> )",
+          "params": [
+            {
+              "name": "Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算一组数据的算术平均数。"
+        },
+        {
+          "syntax": "Mean( <List of Numbers>, <List of Frequencies> )",
+          "params": [
+            {
+              "name": "Numbers",
+              "role": "numbers_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Frequencies",
+              "role": "frequencies_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按频数计算加权平均数。"
+        }
+      ]
+    },
+    {
+      "name": "Median",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Median/",
+      "overloads": [
+        {
+          "syntax": "Median( <List of Raw Data> )",
+          "params": [
+            {
+              "name": "Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算数据列表的中位数；偶数个数据时取中间两项的平均。"
+        },
+        {
+          "syntax": "Median( <List of Numbers>, <List of Frequencies> )",
+          "params": [
+            {
+              "name": "Numbers",
+              "role": "numbers_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Frequencies",
+              "role": "frequencies_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按频数计算加权中位数。"
+        }
+      ]
+    },
+    {
+      "name": "Min",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Min/",
+      "overloads": [
+        {
+          "syntax": "Min( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "list_of_numbers",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回列表中数值的最小值；几何对象列表使用其相关数值（如长度）比较。"
+        },
+        {
+          "syntax": "Min( <Interval> )",
+          "params": [
+            {
+              "name": "Interval",
+              "role": "interval",
+              "type": "Interval",
+              "optional": false
+            }
+          ],
+          "description": "返回区间的下界。"
+        },
+        {
+          "syntax": "Min( <Number>, <Number> )",
+          "params": [
+            {
+              "name": "Number1",
+              "role": "first_number",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Number2",
+              "role": "second_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回两个数中的较小者。"
+        },
+        {
+          "syntax": "Min( <Function>, <Start x-Value>, <End x-Value> )",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function_to_minimize",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Start x-Value",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End x-Value",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在给定区间内数值寻找函数的局部最小点（要求区间内只有一个极小点且无极大点）。"
+        },
+        {
+          "syntax": "Min( <List of Data>, <List of Frequencies> )",
+          "params": [
+            {
+              "name": "Data",
+              "role": "list_of_data",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Frequencies",
+              "role": "list_of_frequencies",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回按频数加权后的数据最小值（忽略频数为 0 的元素）。"
+        },
+        {
+          "syntax": "Min( <Function>, <Start x-Value>, <End x-Value> )",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function_to_minimize",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Start x-Value",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End x-Value",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS：返回闭区间上的全局最小点（包括端点）。"
+        }
+      ]
+    },
+    {
+      "name": "MinimalPolynomial",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/MinimalPolynomial/",
+      "overloads": [
+        {
+          "syntax": "MinimalPolynomial( <Matrix> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "matrix_to_find_polynomial",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "返回给定矩阵的最小多项式。"
+        }
+      ]
+    },
+    {
+      "name": "MixedNumber",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/MixedNumber/",
+      "overloads": [
+        {
+          "syntax": "MixedNumber( <Number> )",
+          "params": [
+            {
+              "name": "Number",
+              "role": "input_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS：将给定数转换为带分数形式（整数部分 + 真分数部分）。"
+        }
+      ]
+    },
+    {
+      "name": "Mod",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Mod/",
+      "overloads": [
+        {
+          "syntax": "Mod( <Dividend Number>, <Divisor Number> )",
+          "params": [
+            {
+              "name": "Dividend Number",
+              "role": "dividend",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Divisor Number",
+              "role": "divisor",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回两整数相除的余数（a mod b）。"
+        },
+        {
+          "syntax": "Mod( <Dividend Polynomial>, <Divisor Polynomial> )",
+          "params": [
+            {
+              "name": "Dividend Polynomial",
+              "role": "dividend_polynomial",
+              "type": "Polynomial",
+              "optional": false
+            },
+            {
+              "name": "Divisor Polynomial",
+              "role": "divisor_polynomial",
+              "type": "Polynomial",
+              "optional": false
+            }
+          ],
+          "description": "返回多项式整除时的余式。"
+        }
+      ]
+    },
+    {
+      "name": "ModularExponent",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ModularExponent/",
+      "overloads": [
+        {
+          "syntax": "ModularExponent( <Number>, <Number>, <Number> )",
+          "params": [
+            {
+              "name": "Base",
+              "role": "base",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Exponent",
+              "role": "exponent",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Modulus",
+              "role": "modulus",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS：高效计算 base^exponent mod modulus 的结果，用于模幂运算 / 密码学等。"
+        }
+      ]
+    },
+    {
+      "name": "NIntegral",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/NIntegral/",
+      "overloads": [
+        {
+          "syntax": "NIntegral(<Function>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "数值方式计算并绘制给定函数的不定积分 y = F(x) + c（取积分常数 c = 0），原函数方程不在代数视图中显示，仅以数值方式生成图像。"
+        },
+        {
+          "syntax": "NIntegral(<Function>, <Start x-Value>, <End x-Value>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Start x-Value",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End x-Value",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在区间 [Start, End] 上数值计算定积分 ∫_Start^End f(x)dx，并在图形视图中着色对应面积。"
+        },
+        {
+          "syntax": "NIntegral(<Function>, <Start x-Value>, <Start y-Value>, <End x-Value>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Start x-Value",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Start y-Value",
+              "role": "start_y",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End x-Value",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "数值计算给定函数的不定积分，并绘制通过点 (Start x-Value, Start y-Value) 的积分曲线，积分在 x 从 Start 到 End 的区间上结束，积分常数由起始点给定。"
+        },
+        {
+          "syntax": "NIntegral(<Function>, <Variable>, <Start Value>, <End Value>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "integration_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Start Value",
+              "role": "start_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End Value",
+              "role": "end_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS 语法：按指定变量，在区间 [Start, End] 上数值计算定积分 ∫_Start^End f(Variable)d(Variable)。"
+        }
+      ]
+    },
+    {
+      "name": "Normal",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Normal/",
+      "overloads": [
+        {
+          "syntax": "Normal(<Mean>, <Standard Deviation>, <Variable Value>)",
+          "params": [
+            {
+              "name": "Mean",
+              "role": "normal_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Standard Deviation",
+              "role": "normal_sd",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Variable Value",
+              "role": "x_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回给定正态分布 N(Mean, StandardDeviation) 在 x = 值 处的累积分布函数值 P(X ≤ x)。"
+        },
+        {
+          "syntax": "Normal(<Mean>, <Standard Deviation>, <Variable Value>, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "Mean",
+              "role": "normal_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Standard Deviation",
+              "role": "normal_sd",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Variable Value",
+              "role": "x_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "is_cumulative",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative=true 时返回给定点的 CDF 值 P(X ≤ x)；false 时返回该点的 PDF（密度）值。"
+        },
+        {
+          "syntax": "Normal(<Mean>, <Standard Deviation>, <Variable Value u>, <Variable Value v>)",
+          "params": [
+            {
+              "name": "Mean",
+              "role": "normal_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Standard Deviation",
+              "role": "normal_sd",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "u",
+              "role": "lower_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "v",
+              "role": "upper_bound",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回正态分布 N(Mean, StandardDeviation) 在区间 [u, v] 上的概率 P(u ≤ X ≤ v)。"
+        },
+        {
+          "syntax": "Normal(<Mean>, <Standard Deviation>, x, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "Mean",
+              "role": "normal_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Standard Deviation",
+              "role": "normal_sd",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "distribution_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "is_cumulative",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative=true 时生成该正态分布的 CDF 函数 F(x)；否则生成 PDF 密度函数 f(x)。"
+        }
+      ]
+    },
+    {
+      "name": "Numeric",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Numeric/",
+      "overloads": [
+        {
+          "syntax": "Numeric(<Expression>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression_to_approximate",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "对给定表达式求数值近似，保留的小数位数取决于“选项”菜单中的全局舍入设置。"
+        },
+        {
+          "syntax": "Numeric(<Expression>, <Significant Figures>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "expression_to_approximate",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Significant Figures",
+              "role": "significant_figures",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "按给定有效数字位数对表达式进行数值近似，例如 Numeric(sin(1), 20)。"
+        }
+      ]
+    },
+    {
+      "name": "PartialFractions",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/PartialFractions/",
+      "overloads": [
+        {
+          "syntax": "PartialFractions(<Function>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "rational_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "以主变量为自变量，将有理函数尽可能分解为部分分式之和。"
+        },
+        {
+          "syntax": "PartialFractions(<Function>, <Variable>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "rational_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "decomposition_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "在 CAS 中，关于指定变量对给定有理函数做部分分式分解。"
+        }
+      ]
+    },
+    {
+      "name": "Product",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Product/",
+      "overloads": [
+        {
+          "syntax": "Product(<List of Raw Data>)",
+          "params": [
+            {
+              "name": "List",
+              "role": "data_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回列表中所有元素的乘积。"
+        },
+        {
+          "syntax": "Product(<List of Numbers>, <Number of Elements>)",
+          "params": [
+            {
+              "name": "List",
+              "role": "data_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "NumberOfElements",
+              "role": "element_count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回列表前 n 个元素的乘积。"
+        },
+        {
+          "syntax": "Product(<List of Numbers>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "Numbers",
+              "role": "value_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Frequencies",
+              "role": "frequency_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回 ∏ value_i^(freq_i)，即对每个数按对应频数作为指数相乘的结果。"
+        },
+        {
+          "syntax": "Product(<Expression>, <Variable>, <Start Value>, <End Value>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "term_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "product_index",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Start Value",
+              "role": "start_index",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End Value",
+              "role": "end_index",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS 语法：计算从 Start 到 End 的乘积 ∏_k Expression(Variable=k)，例如 Product(k, k, 1, 7)。"
+        }
+      ]
+    },
+    {
+      "name": "RandomBetween",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RandomBetween/",
+      "overloads": [
+        {
+          "syntax": "RandomBetween(<Minimum Integer>, <Maximum Integer>)",
+          "params": [
+            {
+              "name": "Min",
+              "role": "min_int",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Max",
+              "role": "max_int",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "生成一个介于 Min 与 Max 之间（含端点）的随机整数。"
+        },
+        {
+          "syntax": "RandomBetween(<Minimum Integer>, <Maximum Integer>, <Boolean Fixed>)",
+          "params": [
+            {
+              "name": "Min",
+              "role": "min_int",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Max",
+              "role": "max_int",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Fixed",
+              "role": "is_fixed",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "若 Fixed=true，则该随机整数只在文件加载或撤销/重做时重新生成；否则每次 F9 都会改变。"
+        },
+        {
+          "syntax": "RandomBetween(<Minimum Integer>, <Maximum Integer>, <Number of Samples>)",
+          "params": [
+            {
+              "name": "Min",
+              "role": "min_int",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Max",
+              "role": "max_int",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Samples",
+              "role": "sample_count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "生成一个由 Samples 个整数组成的列表，每个整数均在 [Min, Max] 区间内（含端点）。"
+        }
+      ]
+    },
+    {
+      "name": "RandomNormal",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RandomNormal/",
+      "overloads": [
+        {
+          "syntax": "RandomNormal(<Mean>, <Standard Deviation>)",
+          "params": [
+            {
+              "name": "Mean",
+              "role": "normal_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "StandardDeviation",
+              "role": "normal_sd",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "从均值 Mean、标准差 StandardDeviation 的正态分布中抽取一个随机数。"
+        }
+      ]
+    },
+    {
+      "name": "RandomPoisson",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RandomPoisson/",
+      "overloads": [
+        {
+          "syntax": "RandomPoisson(<Mean>)",
+          "params": [
+            {
+              "name": "Mean",
+              "role": "poisson_mean",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "从均值 Mean 的 Poisson 分布中生成一个随机数。"
+        }
+      ]
+    },
+    {
+      "name": "Real",
+      "url": "https://geogebra.github.io/docs/manual/en/Real_Function/",
+      "overloads": [
+        {
+          "syntax": "Real(<Complex Number>)",
+          "params": [
+            {
+              "name": "ComplexNumber",
+              "role": "input_complex",
+              "type": "ComplexNumber",
+              "optional": false
+            }
+          ],
+          "description": "返回给定复数的实部，例如 Real(17 + 3ί) = 17。"
+        }
+      ]
+    },
+    {
+      "name": "RightSide",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RightSide/",
+      "overloads": [
+        {
+          "syntax": "RightSide(<Equation>)",
+          "params": [
+            {
+              "name": "Equation",
+              "role": "input_equation",
+              "type": "Equation",
+              "optional": false
+            }
+          ],
+          "description": "在代数视图中：返回化简后方程的右端数值；在 CAS 中：返回方程的右端表达式。"
+        },
+        {
+          "syntax": "RightSide(<List of Equations>)",
+          "params": [
+            {
+              "name": "Equations",
+              "role": "equation_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对方程列表返回其右端构成的列表。"
+        },
+        {
+          "syntax": "RightSide(<List of Equations>, <Index>)",
+          "params": [
+            {
+              "name": "Equations",
+              "role": "equation_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Index",
+              "role": "equation_index",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回方程列表中第 Index 个方程的右端。"
+        }
+      ]
+    },
+    {
+      "name": "Simplify",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Simplify/",
+      "overloads": [
+        {
+          "syntax": "Simplify(<Function>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function_or_expression",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "在 CAS 中尽量对给定函数/表达式做代数化简，可结合 Assume 条件使用。"
+        },
+        {
+          "syntax": "Simplify(<Text>)",
+          "params": [
+            {
+              "name": "Text",
+              "role": "input_text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "对字符串做简单“整理”，如合并多重负号等；更复杂的公式排版推荐使用 FormulaText。"
+        }
+      ]
+    },
+    {
+      "name": "Slope",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Slope/",
+      "overloads": [
+        {
+          "syntax": "Slope(<Line>)",
+          "params": [
+            {
+              "name": "Line",
+              "role": "input_line",
+              "type": "Line",
+              "optional": false
+            }
+          ],
+          "description": "返回给定直线的斜率，并在图形视图中画出对应的斜率三角形（可在属性中调整大小）。"
+        }
+      ]
+    },
+    {
+      "name": "Solve",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Solve/",
+      "overloads": [
+        {
+          "syntax": "Solve(<Equation in x>)",
+          "params": [
+            {
+              "name": "Equation",
+              "role": "equation_in_main_variable",
+              "type": "Equation",
+              "optional": false
+            }
+          ],
+          "description": "按主变量求解一元方程，返回解集合，形式为 {x = …, x = …}。"
+        },
+        {
+          "syntax": "Solve(<Equation>, <Variable>)",
+          "params": [
+            {
+              "name": "Equation",
+              "role": "equation",
+              "type": "Equation",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "solve_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "对给定未知量 Variable 求解方程，并返回所有实解的赋值列表。"
+        },
+        {
+          "syntax": "Solve(<Equation in x>, <Assumption>)",
+          "params": [
+            {
+              "name": "Equation",
+              "role": "equation_in_x",
+              "type": "Equation",
+              "optional": false
+            },
+            {
+              "name": "Assumption",
+              "role": "solve_assumption",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "在给定条件 Assumption（如 x>0）下对方程求解，只返回满足条件的解。"
+        },
+        {
+          "syntax": "Solve(<List of Equations>, <List of Variables>)",
+          "params": [
+            {
+              "name": "Equations",
+              "role": "equation_system",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Variables",
+              "role": "unknowns",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "联立求解多元方程组，返回所有实解，每个解为 {var1 = …, var2 = …} 的集合。"
+        },
+        {
+          "syntax": "Solve(<Equation>, <Variable>, <List of assumptions>)",
+          "params": [
+            {
+              "name": "Equation",
+              "role": "equation",
+              "type": "Equation",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "solve_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Assumptions",
+              "role": "assumption_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "在多条假设（如 {u<0, a<0} 或 u>0）下对方程进行条件求解，返回满足所有假设的解集。"
+        },
+        {
+          "syntax": "Solve(<List of Parametric Equations>, <List of Variables>)",
+          "params": [
+            {
+              "name": "ParametricEquations",
+              "role": "parametric_system",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Variables",
+              "role": "unknowns",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对参数形式的方程组求解（如两条参数直线相交），返回所有解（包括参数与坐标）。"
+        }
+      ]
+    },
+    {
+      "name": "Sum",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Sum/",
+      "overloads": [
+        {
+          "syntax": "Sum(<List>)",
+          "params": [
+            {
+              "name": "List",
+              "role": "input_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "求列表中所有元素之和；对点、向量、文本、函数列表同样适用（分别为向量和、字符串连接、函数和）。"
+        },
+        {
+          "syntax": "Sum(<List>, <Number of Elements>)",
+          "params": [
+            {
+              "name": "List",
+              "role": "input_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "NumberOfElements",
+              "role": "element_count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "求列表前 n 个元素之和。"
+        },
+        {
+          "syntax": "Sum(<List>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "List",
+              "role": "value_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Frequencies",
+              "role": "frequency_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按频数列表加权求和，等价于 ∑ value_i·freq_i。"
+        },
+        {
+          "syntax": "Sum(<Expression>, <Variable>, <Start Value>, <End Value>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "term_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "sum_index",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Start Value",
+              "role": "start_index",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End Value",
+              "role": "end_index",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS 语法：计算离散和 ∑_{k=Start}^{End} Expression(Variable=k)，End 也可为 Infinity 表示无穷级数。"
+        }
+      ]
+    },
+    {
+      "name": "TrigExpand",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TrigExpand/",
+      "overloads": [
+        {
+          "syntax": "TrigExpand(<Expression>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "trig_expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "对三角表达式做展开：和差公式展开、积化和差等，将多变量和/积形式化为单角函数的线性组合。"
+        },
+        {
+          "syntax": "TrigExpand(<Expression>, <Target Function>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "trig_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "TargetFunction",
+              "role": "target_trig_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "在可能的情况下，将结果主要用指定的三角函数（如 tan、sin 等）来表示。"
+        },
+        {
+          "syntax": "TrigExpand(<Expression>, <Target Function>, <Target Variable>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "trig_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "TargetFunction",
+              "role": "target_trig_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "TargetVariable",
+              "role": "target_variable1",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "尽量只用给定变量及指定的三角函数来表示展开后的结果，例如按 x/2 展开 sin(x)。"
+        },
+        {
+          "syntax": "TrigExpand(<Expression>, <Target Function>, <Target Variable>, <Target Variable>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "trig_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "TargetFunction",
+              "role": "target_trig_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "TargetVariable1",
+              "role": "target_variable1",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "TargetVariable2",
+              "role": "target_variable2",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "与上一重载类似，但允许使用两个目标变量（如 x/2, y/2）来表示展开形式。"
+        }
+      ]
+    },
+    {
+      "name": "TrigSimplify",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TrigSimplify/",
+      "overloads": [
+        {
+          "syntax": "TrigSimplify(<Expression>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "trig_expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "对三角表达式进行化简，例如利用恒等式将 1 - sin²x 化为 cos²x；在 CAS 视图中对任意变量均可使用。"
+        }
+      ]
+    },
+    {
+      "name": "TrigCombine",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TrigCombine/",
+      "overloads": [
+        {
+          "syntax": "TrigCombine(<Expression>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "trig_expression",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "将三角函数的和或积“合并”为更紧凑的形式，例如应用和差化积、积化和差，将 sin(x)cos(3x) 合并成若干 sin(…) 的线性组合。"
+        },
+        {
+          "syntax": "TrigCombine(<Expression>, <Target Function>)",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "trig_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "TargetFunction",
+              "role": "target_trig_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "尽量把三角表达式重写为只含某个指定三角函数（如 sin 或 cos）的形式。"
+        }
+      ]
+    },
+    {
+      "name": "Variance",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Variance/",
+      "overloads": [
+        {
+          "syntax": "Variance(<List of Raw Data>)",
+          "params": [
+            {
+              "name": "Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算数据列表的方差（总体方差或样本方差，依 GeoGebra 当前定义）。"
+        },
+        {
+          "syntax": "Variance(<List of Numbers>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "Numbers",
+              "role": "value_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Frequencies",
+              "role": "frequency_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按给定频数计算加权方差。"
+        },
+        {
+          "syntax": "Variance(<List of Numbers>)",
+          "params": [
+            {
+              "name": "Numbers",
+              "role": "value_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "CAS 语法：对含符号的数值列表给出方差的公式表达，如 Variable 列表会得到关于变量的解析式。"
+        }
+      ]
+    },
+    {
+      "name": "Vector",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Vector/",
+      "overloads": [
+        {
+          "syntax": "Vector(<Point>)",
+          "params": [
+            {
+              "name": "Point",
+              "role": "end_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "返回从原点 (0,0) 指向该点的位矢向量。"
+        },
+        {
+          "syntax": "Vector(<Start Point>, <End Point>)",
+          "params": [
+            {
+              "name": "StartPoint",
+              "role": "start_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "EndPoint",
+              "role": "end_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "构造从 StartPoint 指向 EndPoint 的向量。"
+        }
+      ]
+    },
+    {
+      "name": "Vertex",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Vertex/",
+      "overloads": [
+        {
+          "syntax": "Vertex(<Conic>)",
+          "params": [
+            {
+              "name": "Conic",
+              "role": "conic_object",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "返回给定二次曲线（椭圆、抛物线、双曲线等）的所有顶点。"
+        },
+        {
+          "syntax": "Vertex(<Inequality>)",
+          "params": [
+            {
+              "name": "Inequality",
+              "role": "inequality_region",
+              "type": "Inequality",
+              "optional": false
+            }
+          ],
+          "description": "对由不等式描述的区域，返回其边界交点（多边形区域的顶点）。"
+        },
+        {
+          "syntax": "Vertex(<Polygon>)",
+          "params": [
+            {
+              "name": "Polygon",
+              "role": "polygon_object",
+              "type": "Polygon",
+              "optional": false
+            }
+          ],
+          "description": "返回多边形的全部顶点列表。"
+        },
+        {
+          "syntax": "Vertex(<Polygon>, <Index n>)",
+          "params": [
+            {
+              "name": "Polygon",
+              "role": "polygon_object",
+              "type": "Polygon",
+              "optional": false
+            },
+            {
+              "name": "Index",
+              "role": "vertex_index",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回多边形的第 n 个顶点。"
+        },
+        {
+          "syntax": "Vertex(<Segment>, <Index>)",
+          "params": [
+            {
+              "name": "Segment",
+              "role": "segment_object",
+              "type": "Segment",
+              "optional": false
+            },
+            {
+              "name": "Index",
+              "role": "endpoint_index",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "当 Index=1 时返回线段起点，Index=2 时返回线段终点。"
+        }
+      ]
+    },
+    {
+      "name": "Weibull",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Weibull/",
+      "overloads": [
+        {
+          "syntax": "Weibull(<Shape>, <Scale>, <Variable Value>)",
+          "params": [
+            {
+              "name": "Shape",
+              "role": "shape_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Scale",
+              "role": "scale_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Variable Value",
+              "role": "x_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Evaluates the cumulative distribution function of a Weibull distribution at variable value v, i.e. calculates the probability P(X ≤ v) where X is a random variable with a Weibull distribution defined by the given parameters shape and scale.（在给定形状和尺度参数下，计算韦伯分布在指定值 v 处的累积分布函数 P(X ≤ v)）"
+        },
+        {
+          "syntax": "Weibull(<Shape>, <Scale>, <Variable Value>, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "Shape",
+              "role": "shape_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Scale",
+              "role": "scale_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Variable Value",
+              "role": "x_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "is_cumulative",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "If Cumulative = true, evaluates the cumulative distribution function (CDF) of the Weibull distribution; otherwise evaluates the probability density function (PDF) at the given variable value.（Cumulative=true 时返回 CDF，false 时返回该点的 PDF 密度值）"
+        },
+        {
+          "syntax": "Weibull(<Shape>, <Scale>, x, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "Shape",
+              "role": "shape_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Scale",
+              "role": "scale_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "distribution_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "is_cumulative",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "If Cumulative = true, creates the CDF function of the Weibull distribution; otherwise creates the PDF function.（Cumulative=true 时生成对应的累积分布函数 F(x)，否则生成密度函数 f(x)）"
+        }
+      ]
+    },
+    {
+      "name": "Zipf",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Zipf/",
+      "overloads": [
+        {
+          "syntax": "Zipf(<Number of Elements>, <Exponent>)",
+          "params": [
+            {
+              "name": "Number of Elements",
+              "role": "number_of_elements",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Exponent",
+              "role": "zipf_exponent",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns a bar graph of a Zipf distribution.（基于给定元素个数与指数，返回 Zipf 分布的概率条形图）"
+        },
+        {
+          "syntax": "Zipf(<Number of Elements>, <Exponent>, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "Number of Elements",
+              "role": "number_of_elements",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Exponent",
+              "role": "zipf_exponent",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "is_cumulative",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "When Cumulative = false, returns the bar graph of the Zipf distribution; when Cumulative = true, returns the cumulative Zipf distribution graph.（Cumulative=false 时给出 Zipf 概率条形图；true 时给出累积概率图）"
+        },
+        {
+          "syntax": "Zipf(<Number of Elements>, <Exponent>, <Variable Value v>, <Boolean Cumulative>)",
+          "params": [
+            {
+              "name": "Number of Elements",
+              "role": "number_of_elements",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Exponent",
+              "role": "zipf_exponent",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Variable Value v",
+              "role": "x_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "is_cumulative",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Let X be a Zipf random variable. Returns P(X = v) when Cumulative = false, and P(X ≤ v) when Cumulative = true.（令 X 服从 Zipf 分布：Cumulative=false 时返回 P(X = v)，true 时返回 P(X ≤ v)）"
+        }
+      ]
+    }
+  ]
+}

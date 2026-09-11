@@ -1,0 +1,3 @@
+A = Point(0, 2)
+B = Point(4, 2)
+l = Foobar(A, B)

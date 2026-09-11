@@ -1,0 +1,144 @@
+{
+  "command_category": "Discrete_Math_Commands",
+  "total_commands": 6,
+  "commands": {
+    "ConvexHull": {
+      "name": "ConvexHull",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ConvexHull/",
+      "overloads": [
+        {
+          "syntax": "ConvexHull( <List of Points> )",
+          "params": [
+            {
+              "name": "<List of Points>",
+              "role": "input",
+              "type": "List of Point",
+              "optional": false
+            }
+          ],
+          "description": "Creates convex hull of given set of points. Returned object is a locus, so it is auxiliary."
+        }
+      ]
+    },
+    "DelaunayTriangulation": {
+      "name": "DelaunayTriangulation",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/DelaunayTriangulation/",
+      "overloads": [
+        {
+          "syntax": "DelaunayTriangulation( <List of Points> )",
+          "params": [
+            {
+              "name": "<List of Points>",
+              "role": "input",
+              "type": "List of Point",
+              "optional": false
+            }
+          ],
+          "description": "Creates a Delaunay Triangulation of the list of points. Returned object is a locus, so it is auxiliary."
+        }
+      ]
+    },
+    "MinimumSpanningTree": {
+      "name": "MinimumSpanningTree",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/MinimumSpanningTree/",
+      "overloads": [
+        {
+          "syntax": "MinimumSpanningTree( <List of Points> )",
+          "params": [
+            {
+              "name": "<List of Points>",
+              "role": "input",
+              "type": "List of Point",
+              "optional": false
+            }
+          ],
+          "description": "Returns the minimum spanning tree of a complete graph on given vertices in which weight of edge (u,v) is the Euclidean distance between u and v. The resulting object is a locus."
+        }
+      ]
+    },
+    "ShortestDistance": {
+      "name": "ShortestDistance",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ShortestDistance/",
+      "overloads": [
+        {
+          "syntax": "ShortestDistance( <List of Segments>, <Start Point>, <End Point>, <Boolean Weighted> )",
+          "params": [
+            {
+              "name": "<List of Segments>",
+              "role": "graph_edges",
+              "type": "List of Segment",
+              "optional": false
+            },
+            {
+              "name": "<Start Point>",
+              "role": "start_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "<End Point>",
+              "role": "end_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "<Boolean Weighted>",
+              "role": "weighted",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Finds shortest path between start point and endpoint in a graph given by list of segments. If weighted is false, weight of each edge is 1 (least number of edges), otherwise it is the length of the segment (geometrically shortest path)."
+        }
+      ]
+    },
+    "TravelingSalesman": {
+      "name": "TravelingSalesman",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TravelingSalesman/",
+      "overloads": [
+        {
+          "syntax": "TravelingSalesman( <List of Points> )",
+          "params": [
+            {
+              "name": "<List of Points>",
+              "role": "input",
+              "type": "List of Point",
+              "optional": false
+            }
+          ],
+          "description": "Returns the shortest closed path which goes through each point exactly once. Returned object is a locus, so it is auxiliary."
+        },
+        {
+          "syntax": "TravellingSalesman( <List of Points> )",
+          "params": [
+            {
+              "name": "<List of Points>",
+              "role": "input",
+              "type": "List of Point",
+              "optional": false
+            }
+          ],
+          "description": "Returns the shortest closed path which goes through each point exactly once. Returned object is a locus, so it is auxiliary."
+        }
+      ]
+    },
+    "Voronoi": {
+      "name": "Voronoi",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Voronoi/",
+      "overloads": [
+        {
+          "syntax": "Voronoi( <List of Points> )",
+          "params": [
+            {
+              "name": "<List of Points>",
+              "role": "input",
+              "type": "List of Point",
+              "optional": false
+            }
+          ],
+          "description": "Draws the Voronoi diagram for given list of points. Returned object is a locus, so it is auxiliary."
+        }
+      ]
+    }
+  }
+}

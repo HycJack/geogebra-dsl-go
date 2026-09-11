@@ -1,0 +1,3134 @@
+{
+  "command_category": "Statistics_Commands",
+  "total_commands": 69,
+  "commands": {
+    "ANOVA": {
+      "name": "ANOVA",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ANOVA/",
+      "overloads": [
+        {
+          "syntax": "ANOVA(<List>, <List>, ...)",
+          "params": [
+            {
+              "name": "list1",
+              "role": "sample_group_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "list2",
+              "role": "sample_group_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Performs a one-way ANOVA test on one or more lists of numbers. Results are returned as a list {P value, F test statistic}."
+        }
+      ]
+    },
+
+    "ChiSquaredTest": {
+      "name": "ChiSquaredTest",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ChiSquaredTest/",
+      "overloads": [
+        {
+          "syntax": "ChiSquaredTest(<Matrix>)",
+          "params": [
+            {
+              "name": "observedMatrix",
+              "role": "observed_counts_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Performs a chi-squared test of independence using the given matrix of observed counts. Expected counts are computed internally. Returns {P value, chi-squared test statistic}."
+        },
+        {
+          "syntax": "ChiSquaredTest(<ObservedList>, <ExpectedList>)",
+          "params": [
+            {
+              "name": "observedList",
+              "role": "observed_counts_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "expectedList",
+              "role": "expected_counts_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Performs a chi-squared Goodness of Fit test comparing observed counts to expected counts. Uses n−1 degrees of freedom where n is the length of the lists. Returns {P value, chi-squared test statistic}."
+        },
+        {
+          "syntax": "ChiSquaredTest(<ObservedMatrix>, <ExpectedMatrix>)",
+          "params": [
+            {
+              "name": "observedMatrix",
+              "role": "observed_counts_matrix",
+              "type": "Matrix",
+              "optional": false
+            },
+            {
+              "name": "expectedMatrix",
+              "role": "expected_counts_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Performs a chi-squared test comparing an observed counts matrix to a given expected counts matrix. Uses (r−1)*(c−1) degrees of freedom. Returns {P value, chi-squared test statistic}."
+        },
+        {
+          "syntax": "ChiSquaredTest(<List>, <List>, <DegreesOfFreedom>)",
+          "params": [
+            {
+              "name": "observedList",
+              "role": "observed_counts_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "expectedList",
+              "role": "expected_counts_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "df",
+              "role": "degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Performs a chi-squared Goodness of Fit test using a specified number of degrees of freedom. Returns {P value, chi-squared test statistic}."
+        }
+      ]
+    },
+
+    "Classes": {
+      "name": "Classes",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Classes/",
+      "overloads": [
+        {
+          "syntax": "Classes(<DataList>, <Start>, <ClassWidth>)",
+          "params": [
+            {
+              "name": "data",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "class_start_boundary",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "width",
+              "role": "class_width",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns a list of equally spaced class boundaries starting from Start with given class width. Last boundary is at least the maximum of data. Uses a ≤ x < b for all but last class, and a ≤ x ≤ b for the last class."
+        },
+        {
+          "syntax": "Classes(<DataList>, <NumClasses>)",
+          "params": [
+            {
+              "name": "data",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "numClasses",
+              "role": "number_of_classes",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns a list of equally spaced class boundaries from the minimum to the maximum of the data, using the specified number of classes. Uses the same boundary convention a ≤ x < b except for the last class."
+        }
+      ]
+    },
+
+    "ContingencyTable": {
+      "name": "ContingencyTable",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ContingencyTable/",
+      "overloads": [
+        {
+          "syntax": "ContingencyTable(<TextListRows>, <TextListCols>)",
+          "params": [
+            {
+              "name": "rowTextList",
+              "role": "row_category_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "colTextList",
+              "role": "column_category_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Builds and displays a contingency table from two lists of text values. Unique values from the first list become row labels; unique values from the second list become column labels."
+        },
+        {
+          "syntax": "ContingencyTable(<TextListRows>, <TextListCols>, <Options>)",
+          "params": [
+            {
+              "name": "rowTextList",
+              "role": "row_category_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "colTextList",
+              "role": "column_category_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "options",
+              "role": "display_options",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "Same as the basic form, but the Options string controls display of additional calculations: \"|\" column percentages, \"_\" row percentages, \"+\" total percentages, \"e\" expected counts, \"k\" chi-squared contributions, \"=\" chi-squared test results."
+        },
+        {
+          "syntax": "ContingencyTable(<RowValues>, <ColumnValues>, <FrequencyTable>)",
+          "params": [
+            {
+              "name": "rowValues",
+              "role": "row_labels",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "columnValues",
+              "role": "column_labels",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequencyTable",
+              "role": "frequency_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Draws a contingency table using explicit row labels, column labels and a corresponding frequency table (e.g., a matrix of counts)."
+        },
+        {
+          "syntax": "ContingencyTable(<RowValues>, <ColumnValues>, <FrequencyTable>, <Options>)",
+          "params": [
+            {
+              "name": "rowValues",
+              "role": "row_labels",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "columnValues",
+              "role": "column_labels",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequencyTable",
+              "role": "frequency_matrix",
+              "type": "Matrix",
+              "optional": false
+            },
+            {
+              "name": "options",
+              "role": "display_options",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "Draws a contingency table from row values, column values, and frequency table, with options string controlling additional information such as percentages, expected counts, chi-squared contributions, and test results."
+        }
+      ]
+    },
+
+    "CorrelationCoefficient": {
+      "name": "CorrelationCoefficient",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CorrelationCoefficient/",
+      "overloads": [
+        {
+          "syntax": "CorrelationCoefficient(<XList>, <YList>)",
+          "params": [
+            {
+              "name": "xList",
+              "role": "x_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "yList",
+              "role": "y_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the product moment correlation coefficient (Pearson r) from separate lists of x- and y-coordinates."
+        },
+        {
+          "syntax": "CorrelationCoefficient(<PointList>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the product moment correlation coefficient using the coordinates of a list of points."
+        }
+      ]
+    },
+
+    "Covariance": {
+      "name": "Covariance",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Covariance/",
+      "overloads": [
+        {
+          "syntax": "Covariance(<NumberList1>, <NumberList2>)",
+          "params": [
+            {
+              "name": "list1",
+              "role": "first_variable_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "list2",
+              "role": "second_variable_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the covariance between the elements of two given lists of numbers."
+        },
+        {
+          "syntax": "Covariance(<PointList>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the covariance between the x and y coordinates of the given points."
+        }
+      ]
+    },
+
+    "Fit": {
+      "name": "Fit",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Fit/",
+      "overloads": [
+        {
+          "syntax": "Fit(<PointList>, <FunctionList>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "functions",
+              "role": "basis_functions",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns a linear combination of the given functions that best fits the list of points (least squares fit)."
+        },
+        {
+          "syntax": "Fit(<PointList>, <ModelFunction>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "model",
+              "role": "model_function_with_sliders",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "Returns a function that fits the given points with minimal squared error for a specified nonlinear model function that depends on one or more sliders (sliders act as initial parameter values for optimization)."
+        }
+      ]
+    },
+
+    "FitExp": {
+      "name": "FitExp",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitExp/",
+      "overloads": [
+        {
+          "syntax": "FitExp(<PointList>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the exponential regression curve of the form a e^(b x) that best fits the given list of points."
+        }
+      ]
+    },
+
+    "FitGrowth": {
+      "name": "FitGrowth",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitGrowth/",
+      "overloads": [
+        {
+          "syntax": "FitGrowth(<PointList>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Calculates a growth-type regression function of the form a b^x to the given list of points (similar conceptually to exponential regression in an alternative parameterization)."
+        }
+      ]
+    },
+
+    "FitImplicit": {
+      "name": "FitImplicit",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitImplicit/",
+      "overloads": [
+        {
+          "syntax": "FitImplicit(<PointList>, <Order>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "order",
+              "role": "implicit_curve_order",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Attempts to find a best-fit implicit curve of order n ≥ 2 through the given points. Requires at least n(n+3)/2 points."
+        }
+      ]
+    },
+
+    "FitLine": {
+      "name": "FitLine",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitLine/",
+      "overloads": [
+        {
+          "syntax": "FitLine(<PointList>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the y-on-x regression line (least squares regression line predicting y from x) for the given points."
+        }
+      ]
+    },
+
+    "FitLineX": {
+      "name": "FitLineX",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitLineX/",
+      "overloads": [
+        {
+          "syntax": "FitLineX(<PointList>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the x-on-y regression line of the given points (regressing x on y)."
+        }
+      ]
+    },
+
+    "FitLog": {
+      "name": "FitLog",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitLog/",
+      "overloads": [
+        {
+          "syntax": "FitLog(<PointList>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Calculates a logarithmic regression curve fitted to the given list of points."
+        }
+      ]
+    },
+
+    "FitLogistic": {
+      "name": "FitLogistic",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitLogistic/",
+      "overloads": [
+        {
+          "syntax": "FitLogistic(<PointList>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Calculates a logistic regression curve of the form a / (1 + b e^(−k x)) that fits the given points. Typically requires at least 3 points with positive y-values and well-chosen end points; normalizing large/small numbers is recommended."
+        }
+      ]
+    },
+
+    "FitPoly": {
+      "name": "FitPoly",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitPoly/",
+      "overloads": [
+        {
+          "syntax": "FitPoly(<PointList>, <Degree>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "degree",
+              "role": "polynomial_degree",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Calculates a polynomial regression model of the given degree that best fits the specified points. Requires at least degree+1 points."
+        },
+        {
+          "syntax": "FitPoly(<FreehandFunction>, <Degree>)",
+          "params": [
+            {
+              "name": "freehandFunction",
+              "role": "source_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "degree",
+              "role": "polynomial_degree",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Calculates a polynomial regression model of the given degree that fits a function drawn with the Freehand Shape Tool."
+        }
+      ]
+    },
+    "FitPow": {
+      "name": "FitPow",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitPow/",
+      "overloads": [
+        {
+          "syntax": "FitPow(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对给定点列表做幂函数回归，得到形如 a·x^b 的最佳拟合曲线（幂回归曲线）。所有点需要在第一象限。"
+        }
+      ]
+    },
+    "FitSin": {
+      "name": "FitSin",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitSin/",
+      "overloads": [
+        {
+          "syntax": "FitSin(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对给定点列表做正弦回归，得到形如 a + b sin(c x + d) 的回归曲线。通常至少需要 4 个点，并且应覆盖至少两个极值点。"
+        }
+      ]
+    },
+    "Frequency": {
+      "name": "Frequency",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Frequency/",
+      "overloads": [
+        {
+          "syntax": "Frequency(<List of Raw Data>)",
+          "params": [
+            {
+              "name": "data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回一个列表，表示原始数据中每个唯一值的出现次数，按唯一值升序排列。"
+        },
+        {
+          "syntax": "Frequency(<Boolean Cumulative>, <List of Raw Data>)",
+          "params": [
+            {
+              "name": "cumulative",
+              "role": "cumulative_flag",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = false 时与 Frequency(<List of Raw Data>) 相同；Cumulative = true 时返回累积频数列表。"
+        },
+        {
+          "syntax": "Frequency(<List of Class Boundaries>, <List of Raw Data>)",
+          "params": [
+            {
+              "name": "class_boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按给定组界（类边界）生成区间 [a,b)（最高一组为 [a,b]），返回各区间内数据点的频数列表。"
+        },
+        {
+          "syntax": "Frequency(<List of Text>, <List of Text>)",
+          "params": [
+            {
+              "name": "list1",
+              "role": "text_list_rows",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "list2",
+              "role": "text_list_cols",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对两个文本列表生成对应的列联表矩阵：行对应第一个列表的唯一值，列对应第二个列表的唯一值，元素为对应组合出现次数。"
+        },
+        {
+          "syntax": "Frequency(<Boolean Cumulative>, <List of Class Boundaries>, <List of Raw Data>)",
+          "params": [
+            {
+              "name": "cumulative",
+              "role": "cumulative_flag",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "class_boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = false 时与 Frequency(<List of Class Boundaries>, <List of Raw Data>) 相同；Cumulative = true 时返回各组的累积频数。"
+        },
+        {
+          "syntax": "Frequency(<List of Class Boundaries>, <List of Raw Data>, <Use Density>, <Density Scale Factor>(optional))",
+          "params": [
+            {
+              "name": "class_boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "use_density",
+              "role": "use_density",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "density_scale_factor",
+              "role": "density_scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "返回与 Histogram 命令相对应的频数列表。UseDensity = false 时为普通频数；UseDensity = true 时为按区间宽度缩放后的“密度频数”（可再乘以 Density Scale Factor）。"
+        },
+        {
+          "syntax": "Frequency(<Boolean Cumulative>, <List of Class Boundaries>, <List of Raw Data>, <Use Density>, <Density Scale Factor>(optional))",
+          "params": [
+            {
+              "name": "cumulative",
+              "role": "cumulative_flag",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "class_boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "use_density",
+              "role": "use_density",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "density_scale_factor",
+              "role": "density_scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "返回与 Histogram 命令对应的（可选密度、可选累积）频数列表；Cumulative = true 时返回累积频数。"
+        }
+      ]
+    },
+    "FrequencyPolygon": {
+      "name": "FrequencyPolygon",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FrequencyPolygon/",
+      "overloads": [
+        {
+          "syntax": "FrequencyPolygon(<List of Class Boundaries>, <List of Heights>)",
+          "params": [
+            {
+              "name": "class_boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "heights",
+              "role": "class_heights",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "根据给定组界与各组高度绘制频率折线图，多边形顶点的 x 坐标由组界决定，y 坐标为给定高度。"
+        },
+        {
+          "syntax": "FrequencyPolygon(<List of Class Boundaries>, <List of Raw Data>, <Boolean Use Density>, <Density Scale Factor>(optional))",
+          "params": [
+            {
+              "name": "class_boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "raw_data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "use_density",
+              "role": "use_density",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "density_scale_factor",
+              "role": "density_scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "使用原始数据按给定组界绘制频率折线图。UseDensity = true 时，顶点高度 = Density Scale Factor × 组频数 / 组宽；UseDensity = false 时高度 = 组频数。默认 UseDensity = true，Density Scale Factor = 1。"
+        },
+        {
+          "syntax": "FrequencyPolygon(<Boolean Cumulative>, <List of Class Boundaries>, <List of Raw Data>, <Boolean Use Density>, <Density Scale Factor>(optional))",
+          "params": [
+            {
+              "name": "cumulative",
+              "role": "cumulative_flag",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "class_boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "raw_data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "use_density",
+              "role": "use_density",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "density_scale_factor",
+              "role": "density_scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "在前一形式基础上，若 Cumulative = true，则每个顶点的 y 坐标为当前组频数加上之前所有组的频数（累积频率折线图）。"
+        }
+      ]
+    },
+    "FrequencyTable": {
+      "name": "FrequencyTable",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FrequencyTable/",
+      "overloads": [
+        {
+          "syntax": "FrequencyTable(<List of Raw Data>)",
+          "params": [
+            {
+              "name": "data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回一个文本表格：第一列为升序排列的唯一值，第二列为各值的频数。"
+        },
+        {
+          "syntax": "FrequencyTable(<Boolean Cumulative>, <List of Raw Data>)",
+          "params": [
+            {
+              "name": "cumulative",
+              "role": "cumulative_flag",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = false 时与 FrequencyTable(<List of Raw Data>) 相同；Cumulative = true 时第二列为累积频数。"
+        },
+        {
+          "syntax": "FrequencyTable(<List of Class Boundaries>, <List of Raw Data>)",
+          "params": [
+            {
+              "name": "class_boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回文本表格：第一列为由组界形成的区间（除最后一组外均为 [a,b)，最后一组为 [a,b]），第二列为各区间内数据个数。"
+        },
+        {
+          "syntax": "FrequencyTable(<Boolean Cumulative>, <List of Class Boundaries>, <List of Raw Data>)",
+          "params": [
+            {
+              "name": "cumulative",
+              "role": "cumulative_flag",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "class_boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = false 时与 FrequencyTable(<List of Class Boundaries>, <List of Raw Data>) 相同；Cumulative = true 时第二列为累积频数。"
+        },
+        {
+          "syntax": "FrequencyTable(<List of Class Boundaries>, <List of Raw Data>, <Use Density>, <Density Scale Factor>(optional))",
+          "params": [
+            {
+              "name": "class_boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "use_density",
+              "role": "use_density",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "density_scale_factor",
+              "role": "density_scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "返回文本表格：第一列为区间，第二列为与 Histogram 命令相对应的（可能按区间宽度和 Scale Factor 缩放的）频数 / 密度。"
+        },
+        {
+          "syntax": "FrequencyTable(<Boolean Cumulative>, <List of Class Boundaries>, <List of Raw Data>, <Use Density>, <Density Scale Factor>(optional))",
+          "params": [
+            {
+              "name": "cumulative",
+              "role": "cumulative_flag",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "class_boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "use_density",
+              "role": "use_density",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "density_scale_factor",
+              "role": "density_scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "返回文本表格：第一列为区间，第二列为与 Histogram 对应的（可选密度、可选累积）频数。"
+        },
+        {
+          "syntax": "FrequencyTable(<List of Raw Data>, <Scale Factor>(optional))",
+          "params": [
+            {
+              "name": "data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "scale_factor",
+              "role": "scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "返回文本表：第一列为唯一值，第二列为对应频数乘以 Scale Factor。列表元素可以是数值或文本。"
+        }
+      ]
+    },
+    "GeometricMean": {
+      "name": "GeometricMean",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/GeometricMean/",
+      "overloads": [
+        {
+          "syntax": "GeometricMean(<List of Numbers>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回给定数值列表的几何平均数。"
+        }
+      ]
+    },
+    "HarmonicMean": {
+      "name": "HarmonicMean",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/HarmonicMean/",
+      "overloads": [
+        {
+          "syntax": "HarmonicMean(<List of Numbers>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回给定数值列表的调和平均数。"
+        }
+      ]
+    },
+    "MAD": {
+      "name": "MAD",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/MAD/",
+      "overloads": [
+        {
+          "syntax": "MAD(<List of Numbers>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算给定数列的平均绝对偏差（Mean Absolute Deviation）。"
+        },
+        {
+          "syntax": "MAD(<List of Numbers>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequencies",
+              "role": "frequencies",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按给定频数计算加权平均绝对偏差。"
+        }
+      ]
+    },
+    "Max": {
+      "name": "Max",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Max/",
+      "overloads": [
+        {
+          "syntax": "Max(<List>)",
+          "params": [
+            {
+              "name": "list",
+              "role": "list_of_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回列表中数值的最大值；若列表为几何对象，则使用与对象相关的数值（如线段长度）。"
+        },
+        {
+          "syntax": "Max(<Interval>)",
+          "params": [
+            {
+              "name": "interval",
+              "role": "interval",
+              "type": "Interval",
+              "optional": false
+            }
+          ],
+          "description": "返回区间的上界。开闭区间在此不做区分。"
+        },
+        {
+          "syntax": "Max(<Number>, <Number>)",
+          "params": [
+            {
+              "name": "num1",
+              "role": "first_number",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "num2",
+              "role": "second_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回两个数中的较大者。"
+        },
+        {
+          "syntax": "Max(<Function>, <Start x-Value>, <End x-Value>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "start_x",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end_x",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在给定区间内数值求解函数的局部最大点。函数应连续且区间内只有一个局部极大点（且无局部极小）。多项式推荐使用 Extremum 命令。"
+        },
+        {
+          "syntax": "Max(<List of Data>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "data",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequencies",
+              "role": "frequencies",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对带有频数的数据列表返回频数大于 0 的最大数据值。"
+        },
+        {
+          "syntax": "Max(<Function>, <Start x-Value>, <End x-Value>) (CAS)",
+          "params": [
+            {
+              "name": "function",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "start_x",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end_x",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS 视图中使用同样语法时，返回区间（含端点）上的最大点。"
+        }
+      ]
+    },
+    "Mean": {
+      "name": "Mean",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Mean/",
+      "overloads": [
+        {
+          "syntax": "Mean(<List of Raw Data>)",
+          "params": [
+            {
+              "name": "data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算列表元素的算术平均数。"
+        },
+        {
+          "syntax": "Mean(<List of Numbers>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequencies",
+              "role": "frequencies",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按给定频数计算加权平均数。"
+        }
+      ]
+    },
+    "MeanX": {
+      "name": "MeanX",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/MeanX/",
+      "overloads": [
+        {
+          "syntax": "MeanX(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算给定点列表中 x 坐标的平均值。"
+        }
+      ]
+    },
+    "MeanY": {
+      "name": "MeanY",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/MeanY/",
+      "overloads": [
+        {
+          "syntax": "MeanY(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算给定点列表中 y 坐标的平均值。"
+        }
+      ]
+    },
+    "Median": {
+      "name": "Median",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Median/",
+      "overloads": [
+        {
+          "syntax": "Median(<List of Raw Data>)",
+          "params": [
+            {
+              "name": "data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "确定列表元素的中位数。"
+        },
+        {
+          "syntax": "Median(<List of Numbers>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequencies",
+              "role": "frequencies",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按频数计算加权中位数。若总个数为偶数，则返回中间两个值的算术平均。"
+        }
+      ]
+    },
+    "Min": {
+      "name": "Min",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Min/",
+      "overloads": [
+        {
+          "syntax": "Min(<List>)",
+          "params": [
+            {
+              "name": "list",
+              "role": "list_of_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回列表中数值的最小值；若为几何对象列表，则基于对象关联的数值（如线段长度）取最小值。"
+        },
+        {
+          "syntax": "Min(<Interval>)",
+          "params": [
+            {
+              "name": "interval",
+              "role": "interval",
+              "type": "Interval",
+              "optional": false
+            }
+          ],
+          "description": "返回区间的下界（开闭不区分）。"
+        },
+        {
+          "syntax": "Min(<Number>, <Number>)",
+          "params": [
+            {
+              "name": "num1",
+              "role": "first_number",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "num2",
+              "role": "second_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回两个数中的较小者。"
+        },
+        {
+          "syntax": "Min(<Function>, <Start x-Value>, <End x-Value>)",
+          "params": [
+            {
+              "name": "function",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "start_x",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end_x",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在给定区间内数值求解函数的局部最小点。函数应连续且区间内只有一个局部极小点（且无局部极大）。多项式可优先用 Extremum 命令。"
+        },
+        {
+          "syntax": "Min(<List of Data>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "data",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequencies",
+              "role": "frequencies",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "在频数大于 0 的数据中返回最小的数据值。"
+        },
+        {
+          "syntax": "Min(<Function>, <Start x-Value>, <End x-Value>) (CAS)",
+          "params": [
+            {
+              "name": "function",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "start_x",
+              "role": "start_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end_x",
+              "role": "end_x",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS 视图中，该语法返回区间（含端点）上的最小点。"
+        }
+      ]
+    },
+    "Mode": {
+      "name": "Mode",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Mode/",
+      "overloads": [
+        {
+          "syntax": "Mode(<List of Numbers>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "确定列表元素的众数（可以返回多个众数）。"
+        }
+      ]
+    },
+    "Normalize": {
+      "name": "Normalize",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Normalize/",
+      "overloads": [
+        {
+          "syntax": "Normalize(<List of Numbers>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "将数值列表线性归一化到区间 [0,1]，返回归一化后的新列表。"
+        },
+        {
+          "syntax": "Normalize(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "将点列表按 x、y 范围分别映射到 [0,1]×[0,1] 单位正方形，返回归一化后的点列表。"
+        }
+      ]
+    },
+    "Percentile": {
+      "name": "Percentile",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Percentile/",
+      "overloads": [
+        {
+          "syntax": "Percentile(<List of Numbers>, <Percent>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "percent",
+              "role": "percent",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "设 P = Percent，0 < P ≤ 1。将列表升序排序后，返回截断前 P 百分比数据的位置对应的数值（分位数）。"
+        }
+      ]
+    },
+    "Product": {
+      "name": "Product",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Product/",
+      "overloads": [
+        {
+          "syntax": "Product(<List of Raw Data>)",
+          "params": [
+            {
+              "name": "data",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算列表中所有数的连乘积。"
+        },
+        {
+          "syntax": "Product(<List of Numbers>, <Number of Elements>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "count",
+              "role": "number_of_elements",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算列表前 n 个元素的乘积。"
+        },
+        {
+          "syntax": "Product(<List of Numbers>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequencies",
+              "role": "frequencies",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算 ∏ (numbers[i] ^ frequencies[i])，即每个数按对应频数为指数进行连乘。"
+        },
+        {
+          "syntax": "Product(<Expression>, <Variable>, <Start Value>, <End Value>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "start_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "end_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对 variable 从起始值到终止值的所有整数，计算给定表达式的连乘积。"
+        },
+        {
+          "syntax": "Product(<List of Expressions>) (CAS)",
+          "params": [
+            {
+              "name": "expressions",
+              "role": "expressions",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "在 CAS 中，对表达式列表做符号或数值连乘。"
+        },
+        {
+          "syntax": "Product(<Expression>, <Variable>, <Start Value>, <End Value>) (CAS)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "start_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "end_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS 中对 variable 从 start 到 end 的所有整数代入 expression 后做连乘，可得到符号化或数值结果。"
+        }
+      ]
+    },
+    "Quartile1": {
+      "name": "Quartile1",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Quartile1/",
+      "overloads": [
+        {
+          "syntax": "Quartile1(<List of Raw Data>)",
+          "params": [
+            {
+              "name": "data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回列表数据的下四分位数（第一四分位数 Q1）。"
+        },
+        {
+          "syntax": "Quartile1(<List of Numbers>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequencies",
+              "role": "frequencies",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "在考虑频数的情况下计算数据的下四分位数 Q1。"
+        }
+      ]
+    },
+    "Quartile3": {
+      "name": "Quartile3",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Quartile3/",
+      "overloads": [
+        {
+          "syntax": "Quartile3(<List of Raw Data>)",
+          "params": [
+            {
+              "name": "data",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回列表数据的上四分位数（第三四分位数 Q3）。"
+        },
+        {
+          "syntax": "Quartile3(<List of Numbers>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequencies",
+              "role": "frequencies",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "在考虑频数的情况下计算数据的上四分位数 Q3。"
+        }
+      ]
+    },
+    "RSquare": {
+      "name": "RSquare",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RSquare/",
+      "overloads": [
+        {
+          "syntax": "RSquare(<List of Points>, <Function>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "function",
+              "role": "model_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "计算给定点列表与函数之间的决定系数 R^2 = 1 - SSE / Syy，其中 SSE 为残差平方和，Syy 为 y 变异。例：RSquare({(-3, 2), ..., (6, 4)}, 0.5x + 2.5) ≈ 0.28。"
+        }
+      ]
+    },
+    "RootMeanSquare": {
+      "name": "RootMeanSquare",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RootMeanSquare/",
+      "overloads": [
+        {
+          "syntax": "RootMeanSquare(<List of Numbers>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回给定数值列表的均方根（RMS）。"
+        }
+      ]
+    },
+    "SD": {
+      "name": "SD",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SD/",
+      "overloads": [
+        {
+          "syntax": "SD(<List of Raw Data>)",
+          "params": [
+            {
+              "name": "data",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算列表中数值的标准差（总体标准差，等价语法：stdevp(<List of Raw Data>)）。"
+        },
+        {
+          "syntax": "SD(<List of Numbers>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequencies",
+              "role": "frequencies",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按给定频数计算加权总体标准差，等价语法：stdevp(<List of Numbers>, <List of Frequencies>)。"
+        }
+      ]
+    },
+    "SDX": {
+      "name": "SDX",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SDX/",
+      "overloads": [
+        {
+          "syntax": "SDX(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回点列表中 x 坐标的标准差。"
+        }
+      ]
+    },
+    "SDY": {
+      "name": "SDY",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SDY/",
+      "overloads": [
+        {
+          "syntax": "SDY(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回点列表中 y 坐标的标准差。"
+        }
+      ]
+    },
+    "Sample": {
+      "name": "Sample",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Sample/",
+      "overloads": [
+        {
+          "syntax": "Sample(<List>, <Size>)",
+          "params": [
+            {
+              "name": "list",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "size",
+              "role": "sample_size",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "从列表中随机抽取 n 个元素，允许重复抽取。"
+        },
+        {
+          "syntax": "Sample(<List>, <Size>, <With Replacement>)",
+          "params": [
+            {
+              "name": "list",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "size",
+              "role": "sample_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "withReplacement",
+              "role": "with_replacement",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "从列表中随机抽取 n 个元素；当 With Replacement = true 时为有放回抽样，否则为不放回抽样。"
+        }
+      ]
+    },
+    "SampleSD": {
+      "name": "SampleSD",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SampleSD/",
+      "overloads": [
+        {
+          "syntax": "SampleSD(<List of Raw Data>)",
+          "params": [
+            {
+              "name": "data",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回给定数列的样本标准差，等价语法：stdev(<List of Raw Data>)。"
+        },
+        {
+          "syntax": "SampleSD(<List of Numbers>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequencies",
+              "role": "frequencies",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按给定频数返回样本标准差，等价语法：stdev(<List of Numbers>, <List of Frequencies>)。"
+        }
+      ]
+    },
+    "SampleSDX": {
+      "name": "SampleSDX",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SampleSDX/",
+      "overloads": [
+        {
+          "syntax": "SampleSDX(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回点列表中 x 坐标的样本标准差。"
+        }
+      ]
+    },
+    "SampleSDY": {
+      "name": "SampleSDY",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SampleSDY/",
+      "overloads": [
+        {
+          "syntax": "SampleSDY(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回点列表中 y 坐标的样本标准差。"
+        }
+      ]
+    },
+    "SampleVariance": {
+      "name": "SampleVariance",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SampleVariance/",
+      "overloads": [
+        {
+          "syntax": "SampleVariance(<List of Raw Data>)",
+          "params": [
+            {
+              "name": "data",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回给定数列的样本方差；在 CAS 视图中若包含未定符号，会给出样本方差公式。"
+        },
+        {
+          "syntax": "SampleVariance(<List of Numbers>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequencies",
+              "role": "frequencies",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按指定频数返回样本方差。"
+        }
+      ]
+    },
+    "Shuffle": {
+      "name": "Shuffle",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Shuffle/",
+      "overloads": [
+        {
+          "syntax": "Shuffle(<List>)",
+          "params": [
+            {
+              "name": "list",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回一个包含相同元素但顺序随机打乱的新列表（CAS 视图适用语法也相同）。"
+        }
+      ]
+    },
+    "SigmaXX": {
+      "name": "SigmaXX",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SigmaXX/",
+      "overloads": [
+        {
+          "syntax": "SigmaXX(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算给定点的 x 坐标平方和。"
+        },
+        {
+          "syntax": "SigmaXX(<List of Raw Data>)",
+          "params": [
+            {
+              "name": "data",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算数值列表的平方和。可用公式 SigmaXX(list) / Length(list) - Mean(list)^2 来手动计算方差。"
+        },
+        {
+          "syntax": "SigmaXX(<List of Numbers>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequencies",
+              "role": "frequencies",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算带频数的数值平方和（加权平方和）。"
+        }
+      ]
+    },
+    "SigmaXY": {
+      "name": "SigmaXY",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SigmaXY/",
+      "overloads": [
+        {
+          "syntax": "SigmaXY(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算点列表中 x 与 y 坐标乘积的总和 ∑(x·y)。可用 SigmaXY(list)/Length(list) - MeanX(list)*MeanY(list) 求协方差。"
+        },
+        {
+          "syntax": "SigmaXY(<List of x-coordinates>, <List of y-coordinates>)",
+          "params": [
+            {
+              "name": "xList",
+              "role": "x_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "yList",
+              "role": "y_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对两数列分别视作 x、y 值，计算 ∑(x·y)。"
+        }
+      ]
+    },
+    "SigmaYY": {
+      "name": "SigmaYY",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SigmaYY/",
+      "overloads": [
+        {
+          "syntax": "SigmaYY(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算点列表中 y 坐标的平方和。"
+        }
+      ]
+    },
+    "Spearman": {
+      "name": "Spearman",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Spearman/",
+      "overloads": [
+        {
+          "syntax": "Spearman(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回点列表中 x、y 坐标的 Spearman 秩相关系数。"
+        },
+        {
+          "syntax": "Spearman(<List of Numbers>, <List of Numbers>)",
+          "params": [
+            {
+              "name": "list1",
+              "role": "x_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "list2",
+              "role": "y_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对两数列计算 Spearman 秩相关系数。"
+        }
+      ]
+    },
+    "Sum": {
+      "name": "Sum",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Sum/",
+      "overloads": [
+        {
+          "syntax": "Sum(<List>)",
+          "params": [
+            {
+              "name": "list",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回列表中所有元素的和。列表可包含数值、点、向量、文本或函数，元素类型需一致。"
+        },
+        {
+          "syntax": "Sum(<List>, <Number of Elements>)",
+          "params": [
+            {
+              "name": "list",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "numberOfElements",
+              "role": "number_of_elements",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回列表前 n 个元素的和。"
+        },
+        {
+          "syntax": "Sum(<List>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "list",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequencies",
+              "role": "frequencies",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对列表按频数加权求和（例如 {value_i} 与 {freq_i} 得到 ∑ value_i · freq_i）。"
+        },
+        {
+          "syntax": "Sum(<Expression>, <Variable>, <Start Value>, <End Value>)",
+          "params": [
+            {
+              "name": "expression",
+              "role": "expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "start",
+              "role": "start_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "end",
+              "role": "end_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS 视图：对给定表达式按变量从起始值到终止值（可为无穷）符号或数值求和。"
+        }
+      ]
+    },
+    "SumSquaredErrors": {
+      "name": "SumSquaredErrors",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SumSquaredErrors/",
+      "overloads": [
+        {
+          "syntax": "SumSquaredErrors(<List of Points>, <Function>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "function",
+              "role": "model_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "计算点列表与给定函数之间的残差平方和 SSE：∑(y_i − f(x_i))^2。"
+        }
+      ]
+    },
+    "Sxx": {
+      "name": "Sxx",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Sxx/",
+      "overloads": [
+        {
+          "syntax": "Sxx(<List of Numbers>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "data_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对数列计算统计量 Sxx = ∑x^2 − (∑x)^2 / n。"
+        },
+        {
+          "syntax": "Sxx(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对点列表的 x 坐标计算 Sxx = ∑x^2 − (∑x)^2 / n。"
+        }
+      ]
+    },
+    "Sxy": {
+      "name": "Sxy",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Sxy/",
+      "overloads": [
+        {
+          "syntax": "Sxy(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对点列表计算 Sxy = ∑(x·y) − (∑x)(∑y) / n。"
+        },
+        {
+          "syntax": "Sxy(<List of Numbers>, <List of Numbers>)",
+          "params": [
+            {
+              "name": "xList",
+              "role": "x_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "yList",
+              "role": "y_values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对两数列分别视作 x、y，计算 Sxy = ∑(x·y) − (∑x)(∑y) / n。"
+        }
+      ]
+    },
+    "Syy": {
+      "name": "Syy",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Syy/",
+      "overloads": [
+        {
+          "syntax": "Syy(<List of Points>)",
+          "params": [
+            {
+              "name": "points",
+              "role": "data_points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对点列表的 y 坐标计算 Syy = ∑y^2 − (∑y)^2 / n。"
+        }
+      ]
+    },
+    "TMean2Estimate": {
+      "name": "TMean2Estimate",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TMean2Estimate/",
+      "overloads": [
+        {
+          "syntax": "TMean2Estimate(<List of Sample Data 1>, <List of Sample Data 2>, <Confidence Level>, <Boolean Pooled>)",
+          "params": [
+            {
+              "name": "sampleData1",
+              "role": "sample_data_list_1",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "sampleData2",
+              "role": "sample_data_list_2",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "confidenceLevel",
+              "role": "confidence_level",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "pooled",
+              "role": "pooled",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "用两组样本数据和给定置信水平，计算两个总体均值差的 t 置信区间。Pooled = true 时假设方差相等并合并标准差；Pooled = false 时不合并。返回 {下限, 上限}。"
+        },
+        {
+          "syntax": "TMean2Estimate(<Sample Mean 1>, <Sample Standard Deviation 1>, <Sample Size 1>, <Sample Mean 2>, <Sample Standard Deviation 2>, <Sample Size 2>, <Confidence Level>, <Boolean Pooled>)",
+          "params": [
+            {
+              "name": "sampleMean1",
+              "role": "sample_mean_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleStdDev1",
+              "role": "sample_std_dev_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize1",
+              "role": "sample_size_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleMean2",
+              "role": "sample_mean_2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleStdDev2",
+              "role": "sample_std_dev_2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize2",
+              "role": "sample_size_2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "confidenceLevel",
+              "role": "confidence_level",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "pooled",
+              "role": "pooled",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "用两组样本统计量（均值、标准差、样本量）和置信水平，计算两个总体均值差的 t 置信区间。返回 {下限, 上限}。"
+        }
+      ]
+    },
+    "TMeanEstimate": {
+      "name": "TMeanEstimate",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TMeanEstimate/",
+      "overloads": [
+        {
+          "syntax": "TMeanEstimate(<List of Sample Data>, <Confidence level>)",
+          "params": [
+            {
+              "name": "sampleData",
+              "role": "sample_data_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "confidenceLevel",
+              "role": "confidence_level",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "用原始样本数据和置信水平，计算单个总体均值的 t 置信区间，返回 {下限, 上限}。"
+        },
+        {
+          "syntax": "TMeanEstimate(<Sample Mean>, <Sample Standard Deviation>, <Sample Size>, <Confidence level>)",
+          "params": [
+            {
+              "name": "sampleMean",
+              "role": "sample_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleStdDev",
+              "role": "sample_std_dev",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize",
+              "role": "sample_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "confidenceLevel",
+              "role": "confidence_level",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "用样本均值、样本标准差、样本量和置信水平，计算单个总体均值的 t 置信区间，返回 {下限, 上限}。"
+        }
+      ]
+    },
+    "TTest": {
+      "name": "TTest",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TTest/",
+      "overloads": [
+        {
+          "syntax": "TTest(<List of Sample Data>, <Hypothesized Mean>, <Tail>)",
+          "params": [
+            {
+              "name": "sampleData",
+              "role": "sample_data_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "hypothesizedMean",
+              "role": "hypothesized_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "tail",
+              "role": "tail",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "基于样本数据对总体均值做单样本 t 检验。Tail 为 \"<\", \">\", \"≠\"，表示备择假设分别为 μ < μ0, μ > μ0, μ ≠ μ0。返回 {P 值, t 统计量}。"
+        },
+        {
+          "syntax": "TTest(<Sample Mean>, <Sample Standard Deviation>, <Sample Size>, <Hypothesized Mean>, <Tail>)",
+          "params": [
+            {
+              "name": "sampleMean",
+              "role": "sample_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleStdDev",
+              "role": "sample_std_dev",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize",
+              "role": "sample_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "hypothesizedMean",
+              "role": "hypothesized_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "tail",
+              "role": "tail",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "基于样本统计量（均值、标准差、样本量）对总体均值做单样本 t 检验。Tail 定义同上，返回 {P 值, t 统计量}。"
+        }
+      ]
+    },
+    "TTest2": {
+      "name": "TTest2",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TTest2/",
+      "overloads": [
+        {
+          "syntax": "TTest2(<List of Sample Data 1>, <List of Sample Data 2>, <Tail>, <Boolean Pooled>)",
+          "params": [
+            {
+              "name": "sampleData1",
+              "role": "sample_data_list_1",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "sampleData2",
+              "role": "sample_data_list_2",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "tail",
+              "role": "tail",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "pooled",
+              "role": "pooled",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "使用两组样本数据对两个总体均值差做 t 检验。Tail 为 \"<\", \">\", \"≠\"，表示均值差 <0、>0、≠0；Pooled 控制是否假设方差相等。返回 {P 值, t 统计量}。"
+        },
+        {
+          "syntax": "TTest2(<Sample Mean 1>, <Sample Standard Deviation 1>, <Sample Size 1>, <Sample Mean 2>, <Sample Standard Deviation 2>, <Sample Size 2>, <Tail>, <Boolean Pooled>)",
+          "params": [
+            {
+              "name": "sampleMean1",
+              "role": "sample_mean_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleStdDev1",
+              "role": "sample_std_dev_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize1",
+              "role": "sample_size_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleMean2",
+              "role": "sample_mean_2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleStdDev2",
+              "role": "sample_std_dev_2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize2",
+              "role": "sample_size_2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "tail",
+              "role": "tail",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "pooled",
+              "role": "pooled",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "使用两组样本统计量对两个总体均值差做 t 检验。Tail 与 Pooled 定义同上。返回 {P 值, t 统计量}。"
+        }
+      ]
+    },
+    "TTestPaired": {
+      "name": "TTestPaired",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TTestPaired/",
+      "overloads": [
+        {
+          "syntax": "TTestPaired(<List of Sample Data 1>, <List of Sample Data 2>, <Tail>)",
+          "params": [
+            {
+              "name": "sampleData1",
+              "role": "sample_data_list_1",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "sampleData2",
+              "role": "sample_data_list_2",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "tail",
+              "role": "tail",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "对配对样本（如前后测数据）执行配对 t 检验。Tail 为 \"<\", \">\", \"≠\"，表示配对差的总体均值 μ_d 分别满足 μ_d<0, μ_d>0, μ_d≠0。返回 {P 值, t 统计量}。"
+        }
+      ]
+    },
+    "Variance": {
+      "name": "Variance",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Variance/",
+      "overloads": [
+        {
+          "syntax": "Variance(<List of Raw Data>)",
+          "params": [
+            {
+              "name": "rawData",
+              "role": "raw_data",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "计算原始数据列表的方差。"
+        },
+        {
+          "syntax": "Variance(<List of Numbers>, <List of Frequencies>)",
+          "params": [
+            {
+              "name": "numbers",
+              "role": "numbers",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "frequencies",
+              "role": "frequencies",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "在给定频数的条件下计算方差。"
+        }
+      ]
+    },
+    "ZMean2Estimate": {
+      "name": "ZMean2Estimate",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ZMean2Estimate/",
+      "overloads": [
+        {
+          "syntax": "ZMean2Estimate(<List of Sample Data 1>, <List of Sample Data 2>, <σ1>, <σ2>, <Confidence Level>)",
+          "params": [
+            {
+              "name": "sampleData1",
+              "role": "sample_data_list_1",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "sampleData2",
+              "role": "sample_data_list_2",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "sigma1",
+              "role": "sigma1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sigma2",
+              "role": "sigma2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "confidenceLevel",
+              "role": "confidence_level",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在已知两个总体标准差 σ1、σ2 情况下，利用两组样本数据和置信水平，计算两个总体均值差的 Z 置信区间，返回 {下限, 上限}。"
+        },
+        {
+          "syntax": "ZMean2Estimate(<Sample Mean 1>, <σ1>, <Sample Size 1>, <Sample Mean 2>, <σ2>, <Sample Size 2>, <Confidence Level>)",
+          "params": [
+            {
+              "name": "sampleMean1",
+              "role": "sample_mean_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sigma1",
+              "role": "sigma1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize1",
+              "role": "sample_size_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleMean2",
+              "role": "sample_mean_2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sigma2",
+              "role": "sigma2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize2",
+              "role": "sample_size_2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "confidenceLevel",
+              "role": "confidence_level",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在已知 σ1、σ2 情况下，利用两组样本统计量和置信水平计算两个总体均值差的 Z 置信区间，返回 {下限, 上限}。"
+        }
+      ]
+    },
+    "ZMean2Test": {
+      "name": "ZMean2Test",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ZMean2Test/",
+      "overloads": [
+        {
+          "syntax": "ZMean2Test(<List of Sample Data 1>, <σ1>, <List of Sample Data 2>, <σ2>, <Tail>)",
+          "params": [
+            {
+              "name": "sampleData1",
+              "role": "sample_data_list_1",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "sigma1",
+              "role": "sigma1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleData2",
+              "role": "sample_data_list_2",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "sigma2",
+              "role": "sigma2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "tail",
+              "role": "tail",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "在已知总体标准差 σ1、σ2 情况下，使用两组样本数据对两个总体均值差做 Z 检验。Tail 为 \"<\", \">\", \"≠\"，表示均值差 <0、>0、≠0。返回 {P 值, Z 统计量}。"
+        },
+        {
+          "syntax": "ZMean2Test(<Sample Mean 1>, <σ1>, <Sample Size 1>, <Sample Mean 2>, <σ2>, <Sample Size 2>, <Tail>)",
+          "params": [
+            {
+              "name": "sampleMean1",
+              "role": "sample_mean_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sigma1",
+              "role": "sigma1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize1",
+              "role": "sample_size_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleMean2",
+              "role": "sample_mean_2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sigma2",
+              "role": "sigma2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize2",
+              "role": "sample_size_2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "tail",
+              "role": "tail",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "在已知 σ1、σ2 情况下，使用两组样本统计量对两个总体均值差做 Z 检验。Tail 为 \"<\", \">\", \"≠\"。返回 {P 值, Z 统计量}。"
+        }
+      ]
+    },
+    "ZMeanEstimate": {
+      "name": "ZMeanEstimate",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ZMeanEstimate/",
+      "overloads": [
+        {
+          "syntax": "ZMeanEstimate(<List of Sample Data>, <σ>, <Confidence Level>)",
+          "params": [
+            {
+              "name": "sampleData",
+              "role": "sample_data_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "sigma",
+              "role": "sigma",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "confidenceLevel",
+              "role": "confidence_level",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在已知总体标准差 σ 情况下，用原始样本数据和置信水平计算总体均值的 Z 置信区间，返回 {下限, 上限}。"
+        },
+        {
+          "syntax": "ZMeanEstimate(<Sample Mean>, <σ>, <Sample Size>, <Confidence Level>)",
+          "params": [
+            {
+              "name": "sampleMean",
+              "role": "sample_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sigma",
+              "role": "sigma",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize",
+              "role": "sample_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "confidenceLevel",
+              "role": "confidence_level",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在已知总体标准差 σ 情况下，用样本均值、样本量和置信水平计算总体均值的 Z 置信区间，返回 {下限, 上限}。"
+        }
+      ]
+    },
+    "ZMeanTest": {
+      "name": "ZMeanTest",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ZMeanTest/",
+      "overloads": [
+        {
+          "syntax": "ZMeanTest(<List of Sample Data>, <σ>, <Hypothesized Mean>, <Tail>)",
+          "params": [
+            {
+              "name": "sampleData",
+              "role": "sample_data_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "sigma",
+              "role": "sigma",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "hypothesizedMean",
+              "role": "hypothesized_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "tail",
+              "role": "tail",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "在已知总体标准差 σ 情况下，用原始样本数据对总体均值做单样本 Z 检验。Tail 为 \"<\", \">\", \"≠\"。返回 {P 值, Z 统计量}。"
+        },
+        {
+          "syntax": "ZMeanTest(<Sample Mean>, <σ>, <Sample Size>, <Hypothesized Mean>, <Tail>)",
+          "params": [
+            {
+              "name": "sampleMean",
+              "role": "sample_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sigma",
+              "role": "sigma",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize",
+              "role": "sample_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "hypothesizedMean",
+              "role": "hypothesized_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "tail",
+              "role": "tail",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "在已知 σ 情况下，用样本均值与样本量对总体均值做单样本 Z 检验。Tail 为 \"<\", \">\", \"≠\"。返回 {P 值, Z 统计量}。"
+        }
+      ]
+    },
+    "ZProportion2Estimate": {
+      "name": "ZProportion2Estimate",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ZProportion2Estimate/",
+      "overloads": [
+        {
+          "syntax": "ZProportion2Estimate(<Sample Proportion 1>, <Sample Size 1>, <Sample Proportion 2>, <Sample Size 2>, <Confidence Level>)",
+          "params": [
+            {
+              "name": "sampleProportion1",
+              "role": "sample_proportion_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize1",
+              "role": "sample_size_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleProportion2",
+              "role": "sample_proportion_2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize2",
+              "role": "sample_size_2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "confidenceLevel",
+              "role": "confidence_level",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "利用两组样本比例与样本量，在给定置信水平下计算两个总体比例差的 Z 置信区间，返回 {下限, 上限}。"
+        }
+      ]
+    },
+    "ZProportion2Test": {
+      "name": "ZProportion2Test",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ZProportion2Test/",
+      "overloads": [
+        {
+          "syntax": "ZProportion2Test(<Sample Proportion 1>, <Sample Size 1>, <Sample Proportion 2>, <Sample Size 2>, <Tail>)",
+          "params": [
+            {
+              "name": "sampleProportion1",
+              "role": "sample_proportion_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize1",
+              "role": "sample_size_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleProportion2",
+              "role": "sample_proportion_2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize2",
+              "role": "sample_size_2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "tail",
+              "role": "tail",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "使用两组样本比例与样本量，对两个总体比例差做 Z 检验。Tail 为 \"<\", \">\", \"≠\"，对应比例差 <0、>0、≠0。返回 {P 值, Z 统计量}。"
+        }
+      ]
+    },
+    "ZProportionEstimate": {
+      "name": "ZProportionEstimate",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ZProportionEstimate/",
+      "overloads": [
+        {
+          "syntax": "ZProportionEstimate(<Sample Proportion>, <Sample Size>, <Confidence Level>)",
+          "params": [
+            {
+              "name": "sampleProportion",
+              "role": "sample_proportion",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize",
+              "role": "sample_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "confidenceLevel",
+              "role": "confidence_level",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "利用样本比例与样本量，在给定置信水平下计算单个总体比例的 Z 置信区间，返回 {下限, 上限}。"
+        }
+      ]
+    },
+    "ZProportionTest": {
+      "name": "ZProportionTest",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ZProportionTest/",
+      "overloads": [
+        {
+          "syntax": "ZProportionTest(<Sample Proportion>, <Sample Size>, <Hypothesized Proportion>, <Tail>)",
+          "params": [
+            {
+              "name": "sampleProportion",
+              "role": "sample_proportion",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize",
+              "role": "sample_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "hypothesizedProportion",
+              "role": "hypothesized_proportion",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "tail",
+              "role": "tail",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "基于样本比例与样本量，对单个总体比例做 Z 检验。Hypothesized Proportion 为原假设中的总体比例；Tail 为 \"<\", \">\", \"≠\"，分别对应 p < p0, p > p0, p ≠ p0。返回 {P 值, Z 统计量}。"
+        }
+      ]
+    }
+  }
+}

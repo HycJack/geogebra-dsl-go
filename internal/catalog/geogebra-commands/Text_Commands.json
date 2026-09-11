@@ -1,0 +1,1668 @@
+{
+  "command_category": "Text_Commands",
+  "total_commands": 27,
+  "commands": {
+    "ContingencyTable": {
+      "name": "ContingencyTable",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ContingencyTable/",
+      "overloads": [
+        {
+          "syntax": "ContingencyTable( <List of Text>, <List of Text> )",
+          "params": [
+            {
+              "name": "rowValues",
+              "role": "rowValues",
+              "type": "ListOfText",
+              "optional": false
+            },
+            {
+              "name": "columnValues",
+              "role": "columnValues",
+              "type": "ListOfText",
+              "optional": false
+            }
+          ],
+          "description": "Draws a contingency table created from two lists of text values; unique values of the first list are row labels, of the second list are column labels。"
+        },
+        {
+          "syntax": "ContingencyTable( <List of Text>, <List of Text>, <Options> )",
+          "params": [
+            {
+              "name": "rowValues",
+              "role": "rowValues",
+              "type": "ListOfText",
+              "optional": false
+            },
+            {
+              "name": "columnValues",
+              "role": "columnValues",
+              "type": "ListOfText",
+              "optional": false
+            },
+            {
+              "name": "options",
+              "role": "options",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "在由两列文本创建的列联表中，使用 Options 控制是否显示列百分比、行百分比、总百分比、期望频数、卡方贡献或检验结果（\"|\", \"_\", \"+\", \"e\", \"k\", \"=\"）。"
+        },
+        {
+          "syntax": "ContingencyTable( <List of Row Values>, <List of Column Values>, <Frequency Table> )",
+          "params": [
+            {
+              "name": "rowValues",
+              "role": "rowValues",
+              "type": "ListOfText",
+              "optional": false
+            },
+            {
+              "name": "columnValues",
+              "role": "columnValues",
+              "type": "ListOfText",
+              "optional": false
+            },
+            {
+              "name": "frequencyTable",
+              "role": "frequencyTable",
+              "type": "ListOfListOfNumber",
+              "optional": false
+            }
+          ],
+          "description": "根据给定的行标签列表、列标签列表和二维频数表绘制列联表。"
+        },
+        {
+          "syntax": "ContingencyTable( <List of Row Values>, <List of Column Values><Frequency Table>, <Options> )",
+          "params": [
+            {
+              "name": "rowValues",
+              "role": "rowValues",
+              "type": "ListOfText",
+              "optional": false
+            },
+            {
+              "name": "columnValuesAndFrequencyTable",
+              "role": "columnValuesAndFrequencyTable",
+              "type": "Composite(ListOfText+FrequencyTable)",
+              "optional": false
+            },
+            {
+              "name": "options",
+              "role": "options",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "与上一重载类似，但第二个参数组合了列标签和频数表（语法中二者之间无逗号），并通过 Options 控制是否显示额外统计量。"
+        }
+      ]
+    },
+    "ContinuedFraction": {
+      "name": "ContinuedFraction",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ContinuedFraction/",
+      "overloads": [
+        {
+          "syntax": "ContinuedFraction( <Number> )",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "用连分数对给定实数进行逼近，返回对应的文本/表达形式。"
+        },
+        {
+          "syntax": "ContinuedFraction( <Number>, <Level> )",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "<Level>",
+              "role": "maxQuotients",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "用最多 Level 个部分商的连分数逼近给定实数；实际部分商个数≤Level，且不会超过达到 10^-8 精度所需的个数。"
+        },
+        {
+          "syntax": "ContinuedFraction( <Number>, <Level> (optional), <Boolean Shorthand> )",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "<Level> (optional)",
+              "role": "maxQuotients",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "<Boolean Shorthand>",
+              "role": "shorthand",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "与前一重载类似，可选 Level 限制部分商数量；当 Boolean Shorthand 为 true 时，返回更简洁的 LaTeX 文本，仅列出连分数整数部分列表。"
+        }
+      ]
+    },
+    "First": {
+      "name": "First",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/First/",
+      "overloads": [
+        {
+          "syntax": "First( <List> )",
+          "params": [
+            {
+              "name": "list",
+              "role": "list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回列表的第一个元素。"
+        },
+        {
+          "syntax": "First( <List>, <Number n of elements> )",
+          "params": [
+            {
+              "name": "list",
+              "role": "list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "n of elements",
+              "role": "count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回列表开头的前 n 个元素构成的新列表。"
+        },
+        {
+          "syntax": "First( <Text> )",
+          "params": [
+            {
+              "name": "text",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "返回文本的第一个字符。"
+        },
+        {
+          "syntax": "First( <Text> , <Number n of elements> )",
+          "params": [
+            {
+              "name": "text",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "n of elements",
+              "role": "count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回文本开头的前 n 个字符。"
+        },
+        {
+          "syntax": "First( <Locus>, <Number n of elements> )",
+          "params": [
+            {
+              "name": "locus",
+              "role": "locus",
+              "type": "Locus",
+              "optional": false
+            },
+            {
+              "name": "n of elements",
+              "role": "count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回轨迹对象中前 n 个点（元素）。"
+        }
+      ]
+    },
+    "FormulaText": {
+      "name": "FormulaText",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FormulaText/",
+      "overloads": [
+        {
+          "syntax": "FormulaText( <Object> )",
+          "params": [
+            {
+              "name": "Object",
+              "role": "object",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "返回给定对象的 LaTeX 公式文本；默认用数值替换变量。"
+        },
+        {
+          "syntax": "FormulaText( <Object>, <Boolean for Substitution of Variables> )",
+          "params": [
+            {
+              "name": "Object",
+              "role": "object",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Boolean for Substitution of Variables",
+              "role": "substitute",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "控制是否用数值替换变量：true 用数值，false 显示变量名。"
+        },
+        {
+          "syntax": "FormulaText( <Object>, <Boolean for Substitution of Variables>, <Boolean Show Name> )",
+          "params": [
+            {
+              "name": "Object",
+              "role": "object",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Boolean for Substitution of Variables",
+              "role": "substitute",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Boolean Show Name",
+              "role": "showName",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "在上一重载基础上，控制是否在文本中显示对象名称。"
+        }
+      ]
+    },
+    "FractionText": {
+      "name": "FractionText",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FractionText/",
+      "overloads": [
+        {
+          "syntax": "FractionText( <Number> )",
+          "params": [
+            {
+              "name": "number",
+              "role": "number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "将给定数值转为 LaTeX 分数形式文本。"
+        },
+        {
+          "syntax": "FractionText( <Point> )",
+          "params": [
+            {
+              "name": "point",
+              "role": "point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "将点的坐标转换为分数形式文本。"
+        },
+        {
+          "syntax": "FractionText( <Number>, <Boolean Single fraction> )",
+          "params": [
+            {
+              "name": "number",
+              "role": "number",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Single fraction",
+              "role": "singleFraction",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "将数值转为分数文本；布尔值控制负号位置：true 时负号放在分子中，false 时负号在整个分数前。"
+        }
+      ]
+    },
+    "FrequencyTable": {
+      "name": "FrequencyTable",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FrequencyTable/",
+      "overloads": [
+        {
+          "syntax": "FrequencyTable( <List of Raw Data> )",
+          "params": [
+            {
+              "name": "RawData",
+              "role": "rawData",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "根据原始数据列表生成频数表（按唯一值统计频数）。"
+        },
+        {
+          "syntax": "FrequencyTable( <Boolean Cumulative>, <List of Raw Data> )",
+          "params": [
+            {
+              "name": "Cumulative",
+              "role": "cumulative",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "RawData",
+              "role": "rawData",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "若 Cumulative 为 true，返回累计频数表；否则与 FrequencyTable( <List of Raw Data> ) 相同。"
+        },
+        {
+          "syntax": "FrequencyTable( <List of Class Boundaries>, <List of Raw Data> )",
+          "params": [
+            {
+              "name": "ClassBoundaries",
+              "role": "classBoundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "RawData",
+              "role": "rawData",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "使用给定组界对原始数值数据进行分组，返回各区间频数。"
+        },
+        {
+          "syntax": "FrequencyTable( <Boolean Cumulative>, <List of Class Boundaries>, <List of Raw Data> )",
+          "params": [
+            {
+              "name": "Cumulative",
+              "role": "cumulative",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "ClassBoundaries",
+              "role": "classBoundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "RawData",
+              "role": "rawData",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "基于组界和数据生成频数或累计频数表。"
+        },
+        {
+          "syntax": "FrequencyTable( <List of Class Boundaries>, <List of Raw Data>, <Use Density>, <Density Scale Factor (optional)> )",
+          "params": [
+            {
+              "name": "ClassBoundaries",
+              "role": "classBoundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "RawData",
+              "role": "rawData",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "UseDensity",
+              "role": "useDensity",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "DensityScaleFactor",
+              "role": "densityScaleFactor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "对按组界分组的数据计算密度（频数/组距），可选择性乘以 Density Scale Factor。"
+        },
+        {
+          "syntax": "FrequencyTable( <Boolean Cumulative>, <List of Class Boundaries>, <List of Raw Data>, <Use Density>, <Density Scale Factor (optional)> )",
+          "params": [
+            {
+              "name": "Cumulative",
+              "role": "cumulative",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "ClassBoundaries",
+              "role": "classBoundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "RawData",
+              "role": "rawData",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "UseDensity",
+              "role": "useDensity",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "DensityScaleFactor",
+              "role": "densityScaleFactor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "结合累计选项与密度选项，对分组数据生成（累计）频数或（累计）密度表。"
+        },
+        {
+          "syntax": "FrequencyTable( <List of Raw Data>, <Scale Factor (optional)> )",
+          "params": [
+            {
+              "name": "RawData",
+              "role": "rawData",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "ScaleFactor",
+              "role": "scaleFactor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "根据原始数据生成频数表，并可将所有频数乘以给定的缩放因子。"
+        }
+      ]
+    },
+    "IndexOf": {
+      "name": "IndexOf",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/IndexOf/",
+      "overloads": [
+        {
+          "syntax": "IndexOf( <Object>, <List> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "searchObject",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "<List>",
+              "role": "collection",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "在列表中查找给定对象，返回其首次出现的位置索引。"
+        },
+        {
+          "syntax": "IndexOf( <Object>, <List>, <Start Index> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "searchObject",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "<List>",
+              "role": "collection",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "<Start Index>",
+              "role": "startIndex",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "从给定的起始索引开始在列表中查找对象的位置。"
+        },
+        {
+          "syntax": "IndexOf( <Text>, <Text> )",
+          "params": [
+            {
+              "name": "<Text>",
+              "role": "searchText",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "<Text>",
+              "role": "targetText",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "在第二个文本中查找第一个文本作为子串的位置索引。"
+        },
+        {
+          "syntax": "IndexOf( <Text>, <Text>, <Start Index> )",
+          "params": [
+            {
+              "name": "<Text>",
+              "role": "searchText",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "<Text>",
+              "role": "targetText",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "<Start Index>",
+              "role": "startIndex",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "从给定起始索引开始，在目标文本中查找子串的位置索引。"
+        }
+      ]
+    },
+    "Last": {
+      "name": "Last",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Last/",
+      "overloads": [
+        {
+          "syntax": "Last( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回列表最后一个元素。"
+        },
+        {
+          "syntax": "Last( <List>, <Number of elements> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Number of elements",
+              "role": "count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回列表末尾的 n 个元素构成的新列表。"
+        },
+        {
+          "syntax": "Last( <Text> )",
+          "params": [
+            {
+              "name": "Text",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "返回文本的最后一个字符。"
+        },
+        {
+          "syntax": "Last( <Text> , <Number of elements> )",
+          "params": [
+            {
+              "name": "Text",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "Number of elements",
+              "role": "count",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回文本末尾的 n 个字符。"
+        }
+      ]
+    },
+    "Length": {
+      "name": "Length",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Length/",
+      "overloads": [
+        {
+          "syntax": "Length( <Object> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object",
+              "type": "Any",
+              "optional": false
+            }
+          ],
+          "description": "给出对象的“长度”，具体含义依对象类型而定。"
+        },
+        {
+          "syntax": "Length( <Vector> )",
+          "params": [
+            {
+              "name": "<Vector>",
+              "role": "vector",
+              "type": "Vector",
+              "optional": false
+            }
+          ],
+          "description": "返回向量的长度。"
+        },
+        {
+          "syntax": "Length( <Point> )",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "返回点的位矢长度。"
+        },
+        {
+          "syntax": "Length( <List> )",
+          "params": [
+            {
+              "name": "<List>",
+              "role": "list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回列表长度（元素个数）。"
+        },
+        {
+          "syntax": "Length( <Text> )",
+          "params": [
+            {
+              "name": "<Text>",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "返回文本的字符数。"
+        },
+        {
+          "syntax": "Length( <Locus> )",
+          "params": [
+            {
+              "name": "<Locus>",
+              "role": "locus",
+              "type": "Locus",
+              "optional": false
+            }
+          ],
+          "description": "返回轨迹由多少个点构成（不是几何长度）；若要轨迹长度请用 Perimeter(Locus)。"
+        },
+        {
+          "syntax": "Length( <Arc> )",
+          "params": [
+            {
+              "name": "<Arc>",
+              "role": "arc",
+              "type": "Arc",
+              "optional": false
+            }
+          ],
+          "description": "返回弧或扇形的弧长（仅弯曲部分）。"
+        },
+        {
+          "syntax": "Length( <Function>, <Start x-Value>, <End x-Value> )",
+          "params": [
+            {
+              "name": "<Function>",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "<Start x-Value>",
+              "role": "startX",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "<End x-Value>",
+              "role": "endX",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算函数图像在给定 x 区间上的弧长。"
+        },
+        {
+          "syntax": "Length( <Function>, <Start Point>, <End Point> )",
+          "params": [
+            {
+              "name": "<Function>",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "<Start Point>",
+              "role": "startPoint",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "<End Point>",
+              "role": "endPoint",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "用起点和终点在函数图像上限定区间，计算对应弧长。"
+        },
+        {
+          "syntax": "Length( <Curve>, <Start t-Value>, <End t-Value> )",
+          "params": [
+            {
+              "name": "<Curve>",
+              "role": "curve",
+              "type": "Curve",
+              "optional": false
+            },
+            {
+              "name": "<Start t-Value>",
+              "role": "startT",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "<End t-Value>",
+              "role": "endT",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算参数曲线在参数 t 区间 [startT, endT] 上的弧长。"
+        },
+        {
+          "syntax": "Length( <Curve>, <Start Point>, <End Point> )",
+          "params": [
+            {
+              "name": "<Curve>",
+              "role": "curve",
+              "type": "Curve",
+              "optional": false
+            },
+            {
+              "name": "<Start Point>",
+              "role": "startPoint",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "<End Point>",
+              "role": "endPoint",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "使用曲线上的起点和终点来确定区间并计算弧长。"
+        },
+        {
+          "syntax": "Length( <Function>, <Variable>, <Start x-Value>, <End x-Value> )",
+          "params": [
+            {
+              "name": "<Function>",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "<Variable>",
+              "role": "variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "<Start x-Value>",
+              "role": "startX",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "<End x-Value>",
+              "role": "endX",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在 CAS 语法中，指定函数及变量名和 x 区间，计算函数图像弧长。"
+        }
+      ]
+    },
+    "LetterToUnicode": {
+      "name": "LetterToUnicode",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/LetterToUnicode/",
+      "overloads": [
+        {
+          "syntax": "LetterToUnicode( \"<Letter>\" )",
+          "params": [
+            {
+              "name": "Letter",
+              "role": "letter",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "将单个字母（用引号括起的字符串）转换为对应的 Unicode 码点（整数）。"
+        }
+      ]
+    },
+    "Ordinal": {
+      "name": "Ordinal",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Ordinal/",
+      "overloads": [
+        {
+          "syntax": "Ordinal( <Integer> )",
+          "params": [
+            {
+              "name": "Integer",
+              "role": "integer",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "将整数转换为其序数形式（如 1 → \"1st\"）。"
+        }
+      ]
+    },
+    "ParseToFunction": {
+      "name": "ParseToFunction",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ParseToFunction/",
+      "overloads": [
+        {
+          "syntax": "ParseToFunction( <Text> )",
+          "params": [
+            {
+              "name": "text",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "将文本中的函数表达式解析成函数对象。"
+        },
+        {
+          "syntax": "ParseToFunction( <Function>, <Text> )",
+          "params": [
+            {
+              "name": "f",
+              "role": "destination",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "text",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "解析文本中的函数表达式并赋值给已存在、自由的函数 f。"
+        },
+        {
+          "syntax": "ParseToFunction( <Text>, <List of variables> )",
+          "params": [
+            {
+              "name": "text",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "variables",
+              "role": "variables",
+              "type": "ListOfText",
+              "optional": false
+            }
+          ],
+          "description": "解析多元函数定义文本，并用给定变量名列表指定函数自变量，如 {\"u\",\"v\"} 定义 a(u, v)。"
+        }
+      ]
+    },
+    "ParseToNumber": {
+      "name": "ParseToNumber",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ParseToNumber/",
+      "overloads": [
+        {
+          "syntax": "ParseToNumber( <Number>, <Text> )",
+          "params": [
+            {
+              "name": "a",
+              "role": "destination",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "text1",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "将文本解析为数值并存入已定义且自由的数 a。"
+        },
+        {
+          "syntax": "ParseToNumber( <Text> )",
+          "params": [
+            {
+              "name": "text1",
+              "role": "text",
+              "type": "Text",
+              "optional":	false
+            }
+          ],
+          "description": "将文本解析为数值，并存入名为 a 的数（如不存在则创建）。"
+        }
+      ]
+    },
+    "ReadText": {
+      "name": "ReadText",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ReadText/",
+      "overloads": [
+        {
+          "syntax": "ReadText( <Text> )",
+          "params": [
+            {
+              "name": "Text",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "立即将给定文本交给屏幕阅读器朗读（无几何对象输出）。"
+        }
+      ]
+    },
+    "ReplaceAll": {
+      "name": "ReplaceAll",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ReplaceAll/",
+      "overloads": [
+        {
+          "syntax": "ReplaceAll( <Text>, <Text to Match>, <Text to Replace> )",
+          "params": [
+            {
+              "name": "<Text>",
+              "role": "inputText",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "<Text to Match>",
+              "role": "pattern",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "<Text to Replace>",
+              "role": "replacement",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "Creates a new text containing the given text whose text to match has been replaced with the given text to replace."
+        }
+      ]
+    },
+    "RotateText": {
+      "name": "RotateText",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RotateText/",
+      "overloads": [
+        {
+          "syntax": "RotateText( <Text>, <Angle> )",
+          "params": [
+            {
+              "name": "<Text>",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "<Angle>",
+              "role": "angle",
+              "type": "Angle",
+              "optional": false
+            }
+          ],
+          "description": "Creates a new LaTeX text, rotated by the given angle."
+        }
+      ]
+    },
+    "ScientificText": {
+      "name": "ScientificText",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ScientificText/",
+      "overloads": [
+        {
+          "syntax": "ScientificText( <Number> )",
+          "params": [
+            {
+              "name": "Number",
+              "role": "input",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "创建一个文本，用科学计数法显示给定的数值；文本左上角（Corner 4）在坐标原点。"
+        },
+        {
+          "syntax": "ScientificText( <Number>, <Precision> )",
+          "params": [
+            {
+              "name": "Number",
+              "role": "input",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Precision",
+              "role": "significantDigits",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "用科学计数法显示给定数值，并按 Precision 指定的有效数字位数进行四舍五入。"
+        }
+      ]
+    },
+    "Simplify": {
+      "name": "Simplify",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Simplify/",
+      "overloads": [
+        {
+          "syntax": "Simplify( <Function> )",
+          "params": [
+            {
+              "name": "<Function>",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "若可能，化简给定函数的各项；允许包含未定义变量。"
+        },
+        {
+          "syntax": "Simplify( <Text> )",
+          "params": [
+            {
+              "name": "<Text>",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "尝试整理文本中的表达式，如去掉多重负号等。"
+        }
+      ]
+    },
+    "Split": {
+      "name": "Split",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Split/",
+      "overloads": [
+        {
+          "syntax": "Split( <Text>, <List of Texts to split on> )",
+          "params": [
+            {
+              "name": "<Text>",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "<List of Texts to split on>",
+              "role": "separators",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按给定分隔符列表切分文本，返回子文本列表（分隔符本身不包含在结果中）。"
+        }
+      ]
+    },
+    "SurdText": {
+      "name": "SurdText",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SurdText/",
+      "overloads": [
+        {
+          "syntax": "SurdText( <Point> )",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "以 a + b c√d 的根式/有理形式生成点坐标的文本表示。"
+        },
+        {
+          "syntax": "SurdText( <Number> )",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "以 a + b c√d 的根式/有理形式生成数值的文本表示。"
+        },
+        {
+          "syntax": "SurdText( <Number>, <List> )",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "number",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "<List>",
+              "role": "constants",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "将数值写成给定常数列表的线性组合形式输出为文本；若列表为空，则使用一组常用常数。"
+        }
+      ]
+    },
+    "TableText": {
+      "name": "TableText",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TableText/",
+      "overloads": [
+        {
+          "syntax": "TableText( <List>, <List>, … )",
+          "params": [
+            {
+              "name": "list1",
+              "role": "dataList1",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "list2",
+              "role": "dataList2",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "创建一个包含给定列表数据的表格文本。默认每个列表为一行，左对齐。"
+        },
+        {
+          "syntax": "TableText( <List>, <List>, …, <Alignment of Text> )",
+          "params": [
+            {
+              "name": "list1",
+              "role": "dataList1",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "list2",
+              "role": "dataList2",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Alignment of Text",
+              "role": "alignment",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "同上，但通过对齐参数控制表格方向与对齐方式（如 \"v\"/\"h\"/\"l\"/\"r\"/\"c\"/\".\"/\"%\" 等），同时可以按小数点或百分号对齐。"
+        },
+        {
+          "syntax": "TableText( <List>, <List>, …, <Alignment of Text>, <Minimum Cell Width> )",
+          "params": [
+            {
+              "name": "list1",
+              "role": "dataList1",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "list2",
+              "role": "dataList2",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Alignment of Text",
+              "role": "alignment",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "Minimum Cell Width",
+              "role": "minCellWidth",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在对齐的基础上，指定单元格最小宽度（像素）。"
+        },
+        {
+          "syntax": "TableText( <List>, <List>, …, <Alignment of Text>, <Minimum Cell Width>, <Minimum Cell Height> )",
+          "params": [
+            {
+              "name": "list1",
+              "role": "dataList1",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "list2",
+              "role": "dataList2",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Alignment of Text",
+              "role": "alignment",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "Minimum Cell Width",
+              "role": "minCellWidth",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Minimum Cell Height",
+              "role": "minCellHeight",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在对齐及单元格宽度基础上，再指定单元格最小高度（像素）。"
+        }
+      ]
+    },
+    "Take": {
+      "name": "Take",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Take/",
+      "overloads": [
+        {
+          "syntax": "Take( <List>, <Start Position> )",
+          "params": [
+            {
+              "name": "<List>",
+              "role": "list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "<Start Position>",
+              "role": "startIndex",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "返回从起始位置到列表末尾的子列表。"
+        },
+        {
+          "syntax": "Take( <Text>, <Start Position> )",
+          "params": [
+            {
+              "name": "<Text>",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "<Start Position>",
+              "role": "startIndex",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "返回从起始位置到文本末尾的子文本。"
+        },
+        {
+          "syntax": "Take( <List>, <Start Position>, <End Position> )",
+          "params": [
+            {
+              "name": "<List>",
+              "role": "list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "<Start Position>",
+              "role": "startIndex",
+              "type": "Integer",
+              "optional": false
+            },
+            {
+              "name": "<End Position>",
+              "role": "endIndex",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "返回给定列表从起始位置到结束位置的子列表。"
+        },
+        {
+          "syntax": "Take( <Text>, <Start Position>, <End Position> )",
+          "params": [
+            {
+              "name": "<Text>",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "<Start Position>",
+              "role": "startIndex",
+              "type": "Integer",
+              "optional": false
+            },
+            {
+              "name": "<End Position>",
+              "role": "endIndex",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "返回给定文本从起始位置到结束位置的子串。"
+        }
+      ]
+    },
+    "Text": {
+      "name": "Text",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Text/",
+      "overloads": [
+        {
+          "syntax": "Text( <Object> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object",
+              "type": "Any",
+              "optional": false
+            }
+          ],
+          "description": "创建一个文本对象，内容为给定对象的公式；默认将数值代入变量。如 a = 2, c = a^2，则 Text(c) 显示 \"4\"。"
+        },
+        {
+          "syntax": "Text( <Object>, <Boolean for Substitution of Variables> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object",
+              "type": "Any",
+              "optional": false
+            },
+            {
+              "name": "<Boolean for Substitution of Variables>",
+              "role": "substitute",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "与上一重载相同，但布尔值控制是否用数值替代变量名：true 用数值，false 显示变量名。"
+        },
+        {
+          "syntax": "Text( <Object>, <Point> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object",
+              "type": "Any",
+              "optional": false
+            },
+            {
+              "name": "<Point>",
+              "role": "position",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "在给定点处创建包含对象公式的文本。"
+        },
+        {
+          "syntax": "Text( <Object>, <Point>, <Boolean for Substitution of Variables> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object",
+              "type": "Any",
+              "optional": false
+            },
+            {
+              "name": "<Point>",
+              "role": "position",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "<Boolean for Substitution of Variables>",
+              "role": "substitute",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "在给定点处创建文本，并通过布尔值控制是否对变量进行数值替代。"
+        },
+        {
+          "syntax": "Text( <Object>, <Point>, <Boolean for Substitution of Variables>, <Boolean for LaTeX formula> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object",
+              "type": "Any",
+              "optional": false
+            },
+            {
+              "name": "<Point>",
+              "role": "position",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "<Boolean for Substitution of Variables>",
+              "role": "substitute",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "<Boolean for LaTeX formula>",
+              "role": "latex",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "在给定点处创建文本，布尔参数分别控制是否替代变量以及是否以 LaTeX 公式显示。"
+        },
+        {
+          "syntax": "Text( <Object>, <Point>, <Boolean for Substitution of Variables>, <Boolean for LaTeX formula>, <Horizontal alignment [-1|0|1]>, <Vertical alignment [-1|0|1]> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object",
+              "type": "Any",
+              "optional": false
+            },
+            {
+              "name": "<Point>",
+              "role": "position",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "<Boolean for Substitution of Variables>",
+              "role": "substitute",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "<Boolean for LaTeX formula>",
+              "role": "latex",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "<Horizontal alignment [-1|0|1]>",
+              "role": "hAlign",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "<Vertical alignment [-1|0|1]>",
+              "role": "vAlign",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在给定点处创建（可选 LaTeX）文本，并使用 -1/0/1 控制水平与垂直方向的对齐偏移。"
+        }
+      ]
+    },
+    "TextToUnicode": {
+      "name": "TextToUnicode",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TextToUnicode/",
+      "overloads": [
+        {
+          "syntax": "TextToUnicode( \"<Text>\" )",
+          "params": [
+            {
+              "name": "<Text>",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "将文本转换为 Unicode 码点列表（每个字符一个整数）。"
+        }
+      ]
+    },
+    "UnicodeToLetter": {
+      "name": "UnicodeToLetter",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/UnicodeToLetter/",
+      "overloads": [
+        {
+          "syntax": "UnicodeToLetter( <Integer> )",
+          "params": [
+            {
+              "name": "<Integer>",
+              "role": "codePoint",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "将整数形式的 Unicode 码点转换回单个字母，并作为文本对象显示。"
+        }
+      ]
+    },
+    "UnicodeToText": {
+      "name": "UnicodeToText",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/UnicodeToText/",
+      "overloads": [
+        {
+          "syntax": "UnicodeToText( <List of Integers> )",
+          "params": [
+            {
+              "name": "<List of Integers>",
+              "role": "codePoints",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "将一列 Unicode 整数码点转换回文本。"
+        }
+      ]
+    },
+    "VerticalText": {
+      "name": "VerticalText",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/VerticalText/",
+      "overloads": [
+        {
+          "syntax": "VerticalText( <Text> )",
+          "params": [
+            {
+              "name": "<Text>",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "创建一个 LaTeX 文本，将给定文本逆时针旋转 90°，其文本框左上角位于坐标原点。"
+        },
+        {
+          "syntax": "VerticalText( <Text>, <Point> )",
+          "params": [
+            {
+              "name": "<Text>",
+              "role": "text",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "<Point>",
+              "role": "position",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "在给定点处创建一个 LaTeX 文本，将给定文本逆时针旋转 90°。"
+        }
+      ]
+    }
+  }
+}

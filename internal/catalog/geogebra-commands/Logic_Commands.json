@@ -1,0 +1,360 @@
+{
+  "command_category": "Logic_Commands",
+  "total_commands": 11,
+  "commands": {
+    "CountIf": {
+      "name": "CountIf",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CountIf/",
+      "overloads": [
+        {
+          "syntax": "CountIf( <Condition>, <List> )",
+          "params": [
+            {
+              "name": "Condition",
+              "role": "logical condition",
+              "type": "Boolean expression",
+              "optional": false
+            },
+            {
+              "name": "List",
+              "role": "list of objects or numbers",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Counts the number of elements in the list satisfying the condition."
+        },
+        {
+          "syntax": "CountIf( <Condition>, <Variable>, <List> )",
+          "params": [
+            {
+              "name": "Condition",
+              "role": "logical condition",
+              "type": "Boolean expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "variable to use in condition",
+              "type": "Object/Point",
+              "optional": false
+            },
+            {
+              "name": "List",
+              "role": "list of objects or points",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "As above, using a more flexible syntax with a variable."
+        }
+      ]
+    },
+    "If": {
+      "name": "If",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/If/",
+      "overloads": [
+        {
+          "syntax": "If( <Condition>, <Then> )",
+          "params": [
+            {
+              "name": "Condition",
+              "role": "logical condition",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Then",
+              "role": "object if condition true",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "Yields a copy of the object <Then> if the condition is true, and an undefined object if it is false."
+        },
+        {
+          "syntax": "If( <Condition>, <Then>, <Else> )",
+          "params": [
+            {
+              "name": "Condition",
+              "role": "logical condition",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Then",
+              "role": "object if condition true",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Else",
+              "role": "object if condition false",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "Yields a copy of <Then> if the condition is true, or a copy of <Else> if it is false. <Then> and <Else> must be of the same type."
+        },
+        {
+          "syntax": "If( <Condition 1>, <Then 1>, <Condition 2>, <Then 2>, …, <Else> )",
+          "params": [
+            {
+              "name": "Condition 1",
+              "role": "first logical condition",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Then 1",
+              "role": "object if first condition true",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Condition 2",
+              "role": "second logical condition",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Then 2",
+              "role": "object if second condition true",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Else",
+              "role": "object if none of the conditions are met",
+              "type": "Object",
+              "optional": true
+            }
+          ],
+          "description": "Multiple conditional branches. Returns the corresponding <Then k> for the first true condition, <Else> if provided and no condition is true, or undefined otherwise."
+        }
+      ]
+    },
+    "IsDefined": {
+      "name": "IsDefined",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/IsDefined/",
+      "overloads": [
+        {
+          "syntax": "IsDefined( <Object> )",
+          "params": [
+            {
+              "name": "Object",
+              "role": "object to check",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "Returns true or false depending on whether the object is defined or not."
+        }
+      ]
+    },
+    "IsFactored": {
+      "name": "IsFactored",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/IsFactored/",
+      "overloads": [
+        {
+          "syntax": "IsFactored( <Polynomial> )",
+          "params": [
+            {
+              "name": "Polynomial",
+              "role": "polynomial to test",
+              "type": "Polynomial",
+              "optional": false
+            }
+          ],
+          "description": "Returns true if the polynomial is factored over Q, and false otherwise."
+        }
+      ]
+    },
+    "IsInRegion": {
+      "name": "IsInRegion",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/IsInRegion/",
+      "overloads": [
+        {
+          "syntax": "IsInRegion( <Point>, <Region> )",
+          "params": [
+            {
+              "name": "Point",
+              "role": "point to check",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "Region",
+              "role": "region to check against",
+              "type": "Region",
+              "optional": false
+            }
+          ],
+          "description": "Returns true if the point lies in the given region, and false otherwise."
+        }
+      ]
+    },
+    "IsInteger": {
+      "name": "IsInteger",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/IsInteger/",
+      "overloads": [
+        {
+          "syntax": "IsInteger( <Number> )",
+          "params": [
+            {
+              "name": "Number",
+              "role": "number to test",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns true or false depending on whether the number is an integer."
+        }
+      ]
+    },
+    "IsPrime": {
+      "name": "IsPrime",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/IsPrime/",
+      "overloads": [
+        {
+          "syntax": "IsPrime( <Number> )",
+          "params": [
+            {
+              "name": "Number",
+              "role": "number to test",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns true or false depending on whether the number is prime."
+        }
+      ]
+    },
+    "IsTangent": {
+      "name": "IsTangent",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/IsTangent/",
+      "overloads": [
+        {
+          "syntax": "IsTangent( <Line>, <Conic> )",
+          "params": [
+            {
+              "name": "Line",
+              "role": "line to check",
+              "type": "Line",
+              "optional": false
+            },
+            {
+              "name": "Conic",
+              "role": "conic to check against",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "Decides if the line is tangent to the conic (normally numerically)."
+        }
+      ]
+    },
+    "IsVertexForm": {
+      "name": "IsVertexForm",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/IsVertexForm/",
+      "overloads": [
+        {
+          "syntax": "IsVertexForm( <Function> )",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function to test",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "Checks if a function is written in vertex form and returns true or false."
+        }
+      ]
+    },
+    "KeepIf": {
+      "name": "KeepIf",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/KeepIf/",
+      "overloads": [
+        {
+          "syntax": "KeepIf( <Condition>, <List> )",
+          "params": [
+            {
+              "name": "Condition",
+              "role": "logical condition",
+              "type": "Boolean expression",
+              "optional": false
+            },
+            {
+              "name": "List",
+              "role": "list to be filtered",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Creates a new list that only contains those elements of the initial list that fulfil the condition."
+        },
+        {
+          "syntax": "KeepIf( <Condition>, <Variable>, <List> )",
+          "params": [
+            {
+              "name": "Condition",
+              "role": "logical condition",
+              "type": "Boolean expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "iteration variable used in condition",
+              "type": "Object/Point",
+              "optional": false
+            },
+            {
+              "name": "List",
+              "role": "list to be filtered",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Same as above, but uses an explicit variable that is substituted by each element of the list when evaluating the condition."
+        }
+      ]
+    },
+    "Relation": {
+      "name": "Relation",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Relation/",
+      "overloads": [
+        {
+          "syntax": "Relation( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "list of objects to analyse",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Shows a message box that gives information about the relation between two or more (up to 4) objects in the list."
+        },
+        {
+          "syntax": "Relation( <Object>, <Object> )",
+          "params": [
+            {
+              "name": "Object 1",
+              "role": "first object",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Object 2",
+              "role": "second object",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "Shows a message box that gives information about the relation between two objects (e.g. parallel, perpendicular, equal, incident, etc.)."
+        }
+      ]
+    }
+  }
+}

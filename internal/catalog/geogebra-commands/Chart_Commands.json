@@ -1,0 +1,1266 @@
+{
+  "command_category": "Chart_Commands",
+  "total_commands": 15,
+  "commands": [
+    {
+      "name": "BarChart",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/BarChart/",
+      "overloads": [
+        {
+          "syntax": "BarChart( <List of Data>, <List of Frequencies> )",
+          "params": [
+            {
+              "name": "List of Data",
+              "role": "data_list",
+              "type": "List(Number)",
+              "optional": false
+            },
+            {
+              "name": "List of Frequencies",
+              "role": "frequency_list",
+              "type": "List(Number)",
+              "optional": false
+            }
+          ],
+          "description": "Creates a bar chart using the list of data with corresponding frequencies."
+        },
+        {
+          "syntax": "BarChart( <List of Raw Data>, <Width of Bars>, <Vertical Scale Factor (optional)> )",
+          "params": [
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List(Number)",
+              "optional": false
+            },
+            {
+              "name": "Width of Bars",
+              "role": "bar_width",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Vertical Scale Factor",
+              "role": "vertical_scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "Creates a bar chart using the given raw data; the bars have the given width and the height of the bars depends on the vertical scale factor."
+        },
+        {
+          "syntax": "BarChart( <List of Data>, <List of Frequencies>, <Width of Bars> )",
+          "params": [
+            {
+              "name": "List of Data",
+              "role": "data_list",
+              "type": "List(Number)",
+              "optional": false
+            },
+            {
+              "name": "List of Frequencies",
+              "role": "frequency_list",
+              "type": "List(Number)",
+              "optional": false
+            },
+            {
+              "name": "Width of Bars",
+              "role": "bar_width",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Creates a bar chart using the list of data and corresponding frequencies. Bars' width is given."
+        },
+        {
+          "syntax": "BarChart( <Start Value>, <End Value>, <List of Heights> )",
+          "params": [
+            {
+              "name": "Start Value",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End Value",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "List of Heights",
+              "role": "height_list",
+              "type": "List(Number)",
+              "optional": false
+            }
+          ],
+          "description": "Creates a bar chart over the given interval: the number of bars is determined by the length of the list, whose elements are the heights of the bars."
+        },
+        {
+          "syntax": "BarChart( <Start Value>, <End Value>, <Expression>, <Variable>, <From Number>, <To Number> )",
+          "params": [
+            {
+              "name": "Start Value",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End Value",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Expression",
+              "role": "height_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "loop_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "From Number",
+              "role": "var_from",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "To Number",
+              "role": "var_to",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Creates a bar chart over the interval [Start Value, End Value], that calculates the bars’ heights using the expression of the given Variable in the interval [From number, To number]."
+        },
+        {
+          "syntax": "BarChart( <Start Value>, <End Value>, <Expression>, <Variable>, <From Number>, <To Number>, <Step Width> )",
+          "params": [
+            {
+              "name": "Start Value",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End Value",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Expression",
+              "role": "height_expression",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "loop_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "From Number",
+              "role": "var_from",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "To Number",
+              "role": "var_to",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Step Width",
+              "role": "step_width",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "Creates a bar chart over the interval [Start Value, End Value], that calculates the bars’ heights using the expression of the given Variable in the interval [From number, To number] with given Step width."
+        }
+      ]
+    },
+    {
+      "name": "BoxPlot",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/BoxPlot/",
+      "overloads": [
+        {
+          "syntax": "BoxPlot( <yOffset>, <yScale>, <List of Raw Data> )",
+          "params": [
+            {
+              "name": "yOffset",
+              "role": "y_offset",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "yScale",
+              "role": "y_scale",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List(Number)",
+              "optional": false
+            }
+          ],
+          "description": "Creates a box plot using the given raw data and whose vertical position in the coordinate system is controlled by variable yOffset and whose height is influenced by factor yScale."
+        },
+        {
+          "syntax": "BoxPlot( <yOffset>, <yScale>, <Start Value>, <Q1>, <Median>, <Q3>, <End Value> )",
+          "params": [
+            {
+              "name": "yOffset",
+              "role": "y_offset",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "yScale",
+              "role": "y_scale",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Start Value",
+              "role": "interval_start",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Q1",
+              "role": "quartile_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Median",
+              "role": "median",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Q3",
+              "role": "quartile_3",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End Value",
+              "role": "interval_end",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Creates a box plot for the given statistical data in interval (Start Value, End Value)."
+        },
+        {
+          "syntax": "BoxPlot( <yOffset>, <yScale>, <List of Raw Data>, <Boolean Outliers> )",
+          "params": [
+            {
+              "name": "yOffset",
+              "role": "y_offset",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "yScale",
+              "role": "y_scale",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List(Number)",
+              "optional": false
+            },
+            {
+              "name": "Outliers",
+              "role": "show_outliers",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "This allows outliers to be plotted as \"X\"s rather than included in the boxplot. For this command, outliers are data lying below Q1 - 1.5 * (Q3 - Q1) or above Q3 + 1.5 * (Q3 - Q1)."
+        },
+        {
+          "syntax": "BoxPlot( <yOffset>, <yScale>, <List of Data>, <List of Frequencies>, <Boolean Outliers> )",
+          "params": [
+            {
+              "name": "yOffset",
+              "role": "y_offset",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "yScale",
+              "role": "y_scale",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "List of Data",
+              "role": "data_list",
+              "type": "List(Number)",
+              "optional": false
+            },
+            {
+              "name": "List of Frequencies",
+              "role": "frequency_list",
+              "type": "List(Number)",
+              "optional": false
+            },
+            {
+              "name": "Outliers",
+              "role": "show_outliers",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Allows data from a frequency table to be easily plotted as a boxplot, with optional outlier display."
+        }
+      ]
+    },
+    {
+      "name": "ContingencyTable",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ContingencyTable/",
+      "overloads": [
+        {
+          "syntax": "ContingencyTable( <List of Text>, <List of Text> )",
+          "params": [
+            {
+              "name": "List of Text",
+              "role": "row_values",
+              "type": "List(Text)",
+              "optional": false
+            },
+            {
+              "name": "List of Text",
+              "role": "column_values",
+              "type": "List(Text)",
+              "optional": false
+            }
+          ],
+          "description": "Draws a contingency table created from the two given lists. Unique values from the first list are used as row values, and unique values from the second list as column values."
+        },
+        {
+          "syntax": "ContingencyTable( <List of Text>, <List of Text>, <Options> )",
+          "params": [
+            {
+              "name": "List of Text",
+              "role": "row_values",
+              "type": "List(Text)",
+              "optional": false
+            },
+            {
+              "name": "List of Text",
+              "role": "column_values",
+              "type": "List(Text)",
+              "optional": false
+            },
+            {
+              "name": "Options",
+              "role": "display_options",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "Draws a contingency table from the two lists. The text Options controls display of column percentages (\"|\"), row percentages (\"_\"), total percentages (\"+\"), expected counts (\"e\"), Chi-squared contributions (\"k\"), and Chi-squared test results (\"=\")."
+        },
+        {
+          "syntax": "ContingencyTable( <List of Row Values>, <List of Column Values>, <Frequency Table> )",
+          "params": [
+            {
+              "name": "List of Row Values",
+              "role": "row_values",
+              "type": "List(Text)",
+              "optional": false
+            },
+            {
+              "name": "List of Column Values",
+              "role": "column_values",
+              "type": "List(Text)",
+              "optional": false
+            },
+            {
+              "name": "Frequency Table",
+              "role": "frequency_table",
+              "type": "List(List(Number))",
+              "optional": false
+            }
+          ],
+          "description": "Draws a contingency table using the given list of row values, column values and corresponding frequency table."
+        },
+        {
+          "syntax": "ContingencyTable( <List of Row Values>, <List of Column Values>, <Frequency Table>, <Options> )",
+          "params": [
+            {
+              "name": "List of Row Values",
+              "role": "row_values",
+              "type": "List(Text)",
+              "optional": false
+            },
+            {
+              "name": "List of Column Values",
+              "role": "column_values",
+              "type": "List(Text)",
+              "optional": false
+            },
+            {
+              "name": "Frequency Table",
+              "role": "frequency_table",
+              "type": "List(List(Number))",
+              "optional": false
+            },
+            {
+              "name": "Options",
+              "role": "display_options",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "Draws a contingency table using the given row values, column values and frequency table. Options control additional statistics as above."
+        }
+      ]
+    },
+    {
+      "name": "DotPlot",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/DotPlot/",
+      "overloads": [
+        {
+          "syntax": "DotPlot( <List of Raw Data> )",
+          "params": [
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns a dot plot for the given list of data and also the list of dot plot points. Repeated values produce stacked points (n,1)...(n,k). Works for numeric or text lists."
+        },
+        {
+          "syntax": "DotPlot( <List of Raw Data>, <Stack Adjacent Dots (optional)>, <Scale Factor (optional)> )",
+          "params": [
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Stack Adjacent Dots",
+              "role": "stack_adjacent",
+              "type": "Boolean",
+              "optional": true
+            },
+            {
+              "name": "Scale Factor",
+              "role": "y_scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "Returns a dot plot for the given list with possible vertical scaling. If Scale Factor = s, points are (n, 1s)...(n, ks). If Stack Adjacent Dots is true, nearby points are visually stacked; if false, result is as in the basic form."
+        }
+      ]
+    },
+    {
+      "name": "FrequencyPolygon",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FrequencyPolygon/",
+      "overloads": [
+        {
+          "syntax": "FrequencyPolygon( <List of Class Boundaries>, <List of Heights> )",
+          "params": [
+            {
+              "name": "List of Class Boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Heights",
+              "role": "height_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Creates a frequency polygon with vertices at the given heights. Class boundaries determine x-coordinates of vertices."
+        },
+        {
+          "syntax": "FrequencyPolygon( <List of Class Boundaries>, <List of Raw Data>, <Boolean Use Density>, <Density Scale Factor (optional)> )",
+          "params": [
+            {
+              "name": "List of Class Boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Use Density",
+              "role": "use_density",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Density Scale Factor",
+              "role": "density_scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "Creates a frequency polygon from raw data. Class boundaries define classes and x-coordinates. If Use Density = true, vertex height = DensityScaleFactor * class_frequency / class_width; otherwise height = class_frequency. Default: Use Density = true, Density Scale Factor = 1."
+        },
+        {
+          "syntax": "FrequencyPolygon( <Boolean Cumulative>, <List of Class Boundaries>, <List of Raw Data>, <Boolean Use Density>, <Density Scale Factor (optional)> )",
+          "params": [
+            {
+              "name": "Cumulative",
+              "role": "cumulative",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "List of Class Boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Use Density",
+              "role": "use_density",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Density Scale Factor",
+              "role": "density_scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "If Cumulative is true, creates a frequency polygon where each vertex y-coordinate equals the frequency of the class plus the sum of all previous frequencies (possibly using density)."
+        }
+      ]
+    },
+    {
+      "name": "FrequencyTable",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FrequencyTable/",
+      "overloads": [
+        {
+          "syntax": "FrequencyTable( <List of Raw Data> )",
+          "params": [
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns a text table whose first column contains sorted unique values of the list and second column the count of each value. List elements may be numbers or text."
+        },
+        {
+          "syntax": "FrequencyTable( <Boolean Cumulative>, <List of Raw Data> )",
+          "params": [
+            {
+              "name": "Cumulative",
+              "role": "cumulative",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "If Cumulative = false, returns the same table as Frequency( <List of Raw Data> ). If true, second column contains cumulative frequencies."
+        },
+        {
+          "syntax": "FrequencyTable( <List of Class Boundaries>, <List of Raw Data> )",
+          "params": [
+            {
+              "name": "List of Class Boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns a text table whose first column contains class intervals and second column the number of data values in each interval. All but the last interval are [a,b), the last is [a,b]."
+        },
+        {
+          "syntax": "FrequencyTable( <Boolean Cumulative>, <List of Class Boundaries>, <List of Raw Data> )",
+          "params": [
+            {
+              "name": "Cumulative",
+              "role": "cumulative",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "List of Class Boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "If Cumulative = false, returns the same table as FrequencyTable( <List of Class Boundaries>, <List of Raw Data> ). If true, second column contains cumulative frequencies."
+        },
+        {
+          "syntax": "FrequencyTable( <List of Class Boundaries>, <List of Raw Data>, <Use Density>, <Density Scale Factor (optional)> )",
+          "params": [
+            {
+              "name": "List of Class Boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Use Density",
+              "role": "use_density",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Density Scale Factor",
+              "role": "density_scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "Returns a text table whose first column contains intervals and second column contains frequencies suitable for the corresponding Histogram command."
+        },
+        {
+          "syntax": "FrequencyTable( <Boolean Cumulative>, <List of Class Boundaries>, <List of Raw Data>, <Use Density>, <Density Scale Factor (optional)> )",
+          "params": [
+            {
+              "name": "Cumulative",
+              "role": "cumulative",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "List of Class Boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Use Density",
+              "role": "use_density",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Density Scale Factor",
+              "role": "density_scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "Returns a text table whose first column contains intervals and second column contains (optionally cumulative) frequencies for the corresponding Histogram command."
+        },
+        {
+          "syntax": "FrequencyTable( <List of Raw Data>, <Scale Factor (optional)> )",
+          "params": [
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Scale Factor",
+              "role": "scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "Returns a text table whose first column Value contains sorted unique values of the raw data and second column Frequency contains counts multiplied by the Scale Factor."
+        }
+      ]
+    },
+    {
+      "name": "Histogram",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Histogram/",
+      "overloads": [
+        {
+          "syntax": "Histogram( <List of Class Boundaries>, <List of Heights> )",
+          "params": [
+            {
+              "name": "List of Class Boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Heights",
+              "role": "height_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Creates a histogram with bars of the given heights. Class boundaries determine width and position of each bar."
+        },
+        {
+          "syntax": "Histogram( <List of Class Boundaries>, <List of Raw Data>, <Boolean Use Density>, <Density Scale Factor (optional)> )",
+          "params": [
+            {
+              "name": "List of Class Boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Use Density",
+              "role": "use_density",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Density Scale Factor",
+              "role": "density_scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "Creates a histogram using raw data. If Use Density = true, bar height = DensityScaleFactor * class_frequency / class_width; else bar height = class_frequency. Default Use Density = true, Density Scale Factor = 1. All data must lie within class boundaries."
+        },
+        {
+          "syntax": "Histogram( <Boolean Cumulative>, <List of Class Boundaries>, <List of Raw Data>, <Boolean Use Density>, <Density Scale Factor (optional)> )",
+          "params": [
+            {
+              "name": "Cumulative",
+              "role": "cumulative",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "List of Class Boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Use Density",
+              "role": "use_density",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Density Scale Factor",
+              "role": "density_scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "If Cumulative is true this creates a histogram where each bar height equals the frequency of the class plus the sum of all previous frequencies (optionally using density)."
+        }
+      ]
+    },
+    {
+      "name": "HistogramRight",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/HistogramRight/",
+      "overloads": [
+        {
+          "syntax": "HistogramRight( <List of Class Boundaries>, <List of Heights> )",
+          "params": [
+            {
+              "name": "List of Class Boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Heights",
+              "role": "height_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Same as Histogram( <List of Class Boundaries>, <List of Heights> ), but for right-inclusive class membership behavior."
+        },
+        {
+          "syntax": "HistogramRight( <List of Class Boundaries>, <List of Raw Data>, <Boolean Use Density>, <Density Scale Factor (optional)> )",
+          "params": [
+            {
+              "name": "List of Class Boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Use Density",
+              "role": "use_density",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Density Scale Factor",
+              "role": "density_scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "Same as Histogram( <List of Class Boundaries>, <List of Raw Data>, <Boolean Use Density>, <Density Scale Factor> ), except data equal to the right border of a class are counted in this class, not the next one."
+        },
+        {
+          "syntax": "HistogramRight( <Boolean Cumulative>, <List of Class Boundaries>, <List of Raw Data>, <Boolean Use Density>, <Density Scale Factor (optional)> )",
+          "params": [
+            {
+              "name": "Cumulative",
+              "role": "cumulative",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "List of Class Boundaries",
+              "role": "class_boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Use Density",
+              "role": "use_density",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Density Scale Factor",
+              "role": "density_scale_factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "Same as Histogram( <Boolean Cumulative>, <List of Class Boundaries>, <List of Raw Data>, <Boolean Use Density>, <Density Scale Factor> ), with right-border points counted in the current class."
+        }
+      ]
+    },
+    {
+      "name": "LineGraph",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/LineGraph/",
+      "overloads": [
+        {
+          "syntax": "LineGraph( <List of x-coordinates>, <List of y-coordinates> )",
+          "params": [
+            {
+              "name": "List of x-coordinates",
+              "role": "x_list",
+              "type": "List(Number)",
+              "optional": false
+            },
+            {
+              "name": "List of y-coordinates",
+              "role": "y_list",
+              "type": "List(Number)",
+              "optional": false
+            }
+          ],
+          "description": "Creates a chart connecting by line segments the points with coordinates defined in the lists. x-coordinates list is numeric and in increasing order; y-coordinates list provides corresponding y values."
+        }
+      ]
+    },
+    {
+      "name": "NormalQuantilePlot",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/NormalQuantilePlot/",
+      "overloads": [
+        {
+          "syntax": "NormalQuantilePlot( <List of Raw Data> )",
+          "params": [
+            {
+              "name": "List of Raw Data",
+              "role": "raw_data_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Creates a normal quantile plot from the given data and draws a reference line showing the ideal plot for exactly normal data. Each data value is plotted on the x-axis against its expected normal score (Z-score) on the y-axis, computed using Filliben's estimate."
+        }
+      ]
+    },
+    {
+      "name": "PieChart",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/PieChart/",
+      "overloads": [
+        {
+          "syntax": "PieChart( <List of Frequencies> )",
+          "params": [
+            {
+              "name": "List of Frequencies",
+              "role": "frequency_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Creates a pie chart using a list of frequencies. The full circle represents 100%, and each value forms a proportional slice. Default center is (0,0) and default radius is 3."
+        },
+        {
+          "syntax": "PieChart( <List of Frequencies>, <Center>, <Radius> )",
+          "params": [
+            {
+              "name": "List of Frequencies",
+              "role": "frequency_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Center",
+              "role": "center_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "Radius",
+              "role": "radius",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Creates a pie chart with specified center and radius using a list of frequencies. The whole pie is 100%, values form slices proportionally."
+        }
+      ]
+    },
+    {
+      "name": "ResidualPlot",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ResidualPlot/",
+      "overloads": [
+        {
+          "syntax": "ResidualPlot( <List of Points>, <Function> )",
+          "params": [
+            {
+              "name": "List of Points",
+              "role": "point_list",
+              "type": "List(Point)",
+              "optional": false
+            },
+            {
+              "name": "Function",
+              "role": "model_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "Returns a list of points whose x-coordinates are those of the input points and y-coordinates are residuals relative to the given function. For input point (a,b), output is (a, b - f(a))."
+        }
+      ]
+    },
+    {
+      "name": "StemPlot",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/StemPlot/",
+      "overloads": [
+        {
+          "syntax": "StemPlot( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "raw_data_list",
+              "type": "List(Number)",
+              "optional": false
+            }
+          ],
+          "description": "Returns a stem plot of the given numeric list. Outliers are removed from the main plot and listed separately. Outliers are values outside [Q1 - 1.5(Q3 - Q1), Q3 + 1.5(Q3 - Q1)]."
+        },
+        {
+          "syntax": "StemPlot( <List>, <Adjustment -1|0|1> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "raw_data_list",
+              "type": "List(Number)",
+              "optional": false
+            },
+            {
+              "name": "Adjustment",
+              "role": "stem_unit_adjustment",
+              "type": "Enum(-1|0|1)",
+              "optional": false
+            }
+          ],
+          "description": "Returns a stem plot of the given list. If Adjustment = -1, the default stem unit is divided by 10; if 0, unchanged; if 1, multiplied by 10."
+        }
+      ]
+    },
+    {
+      "name": "StepGraph",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/StepGraph/",
+      "overloads": [
+        {
+          "syntax": "StepGraph( <List of Points> )",
+          "params": [
+            {
+              "name": "List of Points",
+              "role": "point_list",
+              "type": "List(Point)",
+              "optional": false
+            }
+          ],
+          "description": "Draws a step graph for the given list of points. Each point is connected to the next by a horizontal line segment."
+        },
+        {
+          "syntax": "StepGraph( <List of Points>, <Boolean Join> )",
+          "params": [
+            {
+              "name": "List of Points",
+              "role": "point_list",
+              "type": "List(Point)",
+              "optional": false
+            },
+            {
+              "name": "Join",
+              "role": "join_vertical",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Draws a step graph of the given points. If Join = false, only horizontal segments reach the x-coordinate of the next point. If Join = true, each pair of points is connected by a horizontal and a vertical segment."
+        },
+        {
+          "syntax": "StepGraph( <List of x-coordinates>, <List of y-coordinates> )",
+          "params": [
+            {
+              "name": "List of x-coordinates",
+              "role": "x_list",
+              "type": "List(Number)",
+              "optional": false
+            },
+            {
+              "name": "List of y-coordinates",
+              "role": "y_list",
+              "type": "List(Number)",
+              "optional": false
+            }
+          ],
+          "description": "Draws a step graph for points built from the coordinate lists. Each point is connected to the next by a horizontal line segment."
+        },
+        {
+          "syntax": "StepGraph( <List of x-coordinates>, <List of y-coordinates>, <Boolean Join> )",
+          "params": [
+            {
+              "name": "List of x-coordinates",
+              "role": "x_list",
+              "type": "List(Number)",
+              "optional": false
+            },
+            {
+              "name": "List of y-coordinates",
+              "role": "y_list",
+              "type": "List(Number)",
+              "optional": false
+            },
+            {
+              "name": "Join",
+              "role": "join_vertical",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Draws a step graph of points from coordinate lists. If Join = false, only horizontal segments; if true, horizontal plus vertical segments between successive points."
+        },
+        {
+          "syntax": "StepGraph( <List of x-coordinates>, <List of y-coordinates>, <Boolean Join>, <Point Style> )",
+          "params": [
+            {
+              "name": "List of x-coordinates",
+              "role": "x_list",
+              "type": "List(Number)",
+              "optional": false
+            },
+            {
+              "name": "List of y-coordinates",
+              "role": "y_list",
+              "type": "List(Number)",
+              "optional": false
+            },
+            {
+              "name": "Join",
+              "role": "join_vertical",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Point Style",
+              "role": "point_style",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "Draws a step graph as above and controls point drawing style. Point style meanings: 0=no points; 1=solid on right; 2=solid right, open left; -1=solid left; -2=solid left, open right."
+        },
+        {
+          "syntax": "StepGraph( <List of Points>, <Boolean Join>, <Point Style> )",
+          "params": [
+            {
+              "name": "List of Points",
+              "role": "point_list",
+              "type": "List(Point)",
+              "optional": false
+            },
+            {
+              "name": "Join",
+              "role": "join_vertical",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Point Style",
+              "role": "point_style",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "Draws a step graph from a list of points with control over vertical joining and point style, as described above."
+        }
+      ]
+    },
+    {
+      "name": "StickGraph",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/StickGraph/",
+      "overloads": [
+        {
+          "syntax": "StickGraph( <List of Points> )",
+          "params": [
+            {
+              "name": "List of Points",
+              "role": "point_list",
+              "type": "List(Point)",
+              "optional": false
+            }
+          ],
+          "description": "Draws a stick graph of the given points. For each point, a vertical segment is drawn from the x-axis to the point."
+        },
+        {
+          "syntax": "StickGraph( <List of Points>, <Boolean Horizontal> )",
+          "params": [
+            {
+              "name": "List of Points",
+              "role": "point_list",
+              "type": "List(Point)",
+              "optional": false
+            },
+            {
+              "name": "Horizontal",
+              "role": "horizontal",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Draws a stick graph of the given points. If Horizontal = true, segments are drawn horizontally from the y-axis to each point; if false, vertically from the x-axis."
+        },
+        {
+          "syntax": "StickGraph( <List of x-coordinates>, <List of y-coordinates> )",
+          "params": [
+            {
+              "name": "List of x-coordinates",
+              "role": "x_list",
+              "type": "List(Number)",
+              "optional": false
+            },
+            {
+              "name": "List of y-coordinates",
+              "role": "y_list",
+              "type": "List(Number)",
+              "optional": false
+            }
+          ],
+          "description": "Draws a stick graph for points created from coordinate lists. For each point, a vertical segment is drawn from the x-axis to the point."
+        },
+        {
+          "syntax": "StickGraph( <List of x-coordinates>, <List of y-coordinates>, <Boolean Horizontal> )",
+          "params": [
+            {
+              "name": "List of x-coordinates",
+              "role": "x_list",
+              "type": "List(Number)",
+              "optional": false
+            },
+            {
+              "name": "List of y-coordinates",
+              "role": "y_list",
+              "type": "List(Number)",
+              "optional": false
+            },
+            {
+              "name": "Horizontal",
+              "role": "horizontal",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Draws a stick graph of points from coordinate lists. If Horizontal = true, segments extend horizontally from the y-axis; if false, vertically from the x-axis."
+        }
+      ]
+    }
+  ]
+}

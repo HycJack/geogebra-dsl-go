@@ -1,0 +1,222 @@
+{
+  "command_category": "Financial_Commands",
+  "total_commands": 5,
+  "commands": {
+    "FutureValue": {
+      "name": "FutureValue",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FutureValue/",
+      "overloads": [
+        {
+          "syntax": "FutureValue( <Rate>, <Number of Periods>, <Payment>, <Present Value (optional)>, <Type (optional)> )",
+          "params": [
+            {
+              "name": "Rate",
+              "role": "interest_rate_per_period",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Number of Periods",
+              "role": "total_number_of_periods",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Payment",
+              "role": "payment_each_period",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Present Value",
+              "role": "present_value",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "Type",
+              "role": "payment_timing_type",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "Returns the future value of an investment based on periodic, constant payments and a constant interest rate."
+        }
+      ]
+    },
+    "Payment": {
+      "name": "Payment",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Payment/",
+      "overloads": [
+        {
+          "syntax": "Payment( <Rate>, <Number of Periods>, <Present Value>, <Future Value (optional)>, <Type (optional)> )",
+          "params": [
+            {
+              "name": "Rate",
+              "role": "interest_rate_per_period",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Number of Periods",
+              "role": "total_number_of_periods",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Present Value",
+              "role": "present_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Future Value",
+              "role": "target_future_value",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "Type",
+              "role": "payment_timing_type",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "Calculates the payment for a loan based on constant payments and a constant interest rate."
+        }
+      ]
+    },
+    "Periods": {
+      "name": "Periods",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Periods/",
+      "overloads": [
+        {
+          "syntax": "Periods( <Rate>, <Payment>, <Present Value>, <Future Value (optional)>, <Type (optional)> )",
+          "params": [
+            {
+              "name": "Rate",
+              "role": "interest_rate_per_period",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Payment",
+              "role": "payment_each_period",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Present Value",
+              "role": "present_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Future Value",
+              "role": "target_future_value",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "Type",
+              "role": "payment_timing_type",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "Returns the number of periods for an annuity based on periodic, fixed payments and a fixed interest rate."
+        }
+      ]
+    },
+    "PresentValue": {
+      "name": "PresentValue",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/PresentValue/",
+      "overloads": [
+        {
+          "syntax": "PresentValue( <Rate>, <Number of Periods>, <Payment>, <Future Value (optional)>, <Type (optional)> )",
+          "params": [
+            {
+              "name": "Rate",
+              "role": "interest_rate_per_period",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Number of Periods",
+              "role": "total_number_of_periods",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Payment",
+              "role": "payment_each_period",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Future Value",
+              "role": "target_future_value",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "Type",
+              "role": "payment_timing_type",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "Returns the total amount of payments of an investment."
+        }
+      ]
+    },
+    "Rate": {
+      "name": "Rate",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Rate/",
+      "overloads": [
+        {
+          "syntax": "Rate( <Number of Periods>, <Payment>, <Present Value>, <Future Value (optional)>, <Type (optional)>, <Guess (optional)> )",
+          "params": [
+            {
+              "name": "Number of Periods",
+              "role": "total_number_of_periods",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Payment",
+              "role": "payment_each_period",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Present Value",
+              "role": "present_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Future Value",
+              "role": "target_future_value",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "Type",
+              "role": "payment_timing_type",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "Guess",
+              "role": "initial_rate_guess",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "Returns the interest rate per period of an annuity."
+        }
+      ]
+    }
+  }
+}

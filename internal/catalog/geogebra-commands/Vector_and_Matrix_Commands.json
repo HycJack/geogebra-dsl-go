@@ -1,0 +1,1026 @@
+{
+  "command_category": "Vector_and_Matrix_Commands",
+  "total_commands": 28,
+  "commands": [
+    {
+      "name": "ApplyMatrix",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ApplyMatrix/",
+      "overloads": [
+        {
+          "syntax": "ApplyMatrix( <Matrix>, <Object> )",
+          "params": [
+            {
+              "name": "M",
+              "role": "transformation_matrix",
+              "type": "Matrix",
+              "optional": false
+            },
+            {
+              "name": "O",
+              "role": "object_to_transform",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "Transforms object O so that point P of O is mapped to M*P, when P is a 2D point and M is a 2×2 matrix."
+        },
+        {
+          "syntax": "ApplyMatrix( <Matrix>, <Object> )",
+          "params": [
+            {
+              "name": "M",
+              "role": "transformation_matrix",
+              "type": "Matrix",
+              "optional": false
+            },
+            {
+              "name": "O",
+              "role": "object_to_transform",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "Transforms object O so that point P of O is mapped to project(M*(x(P), y(P), 1)), when P is a 2D point and M is a 3×3 matrix. project maps (x, y, z) to (x/z, y/z)."
+        },
+        {
+          "syntax": "ApplyMatrix( <Matrix>, <Object> )",
+          "params": [
+            {
+              "name": "M",
+              "role": "transformation_matrix",
+              "type": "Matrix",
+              "optional": false
+            },
+            {
+              "name": "O",
+              "role": "object_to_transform",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "Transforms object O so that point P of O is mapped to M*P, when P is a 3D point and M is a 3×3 matrix."
+        },
+        {
+          "syntax": "ApplyMatrix( <Matrix>, <Object> )",
+          "params": [
+            {
+              "name": "M",
+              "role": "transformation_matrix",
+              "type": "Matrix",
+              "optional": false
+            },
+            {
+              "name": "O",
+              "role": "object_to_transform",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "Transforms object O in 3D when P is a 3D point and M is a 2×2 matrix: the matrix N is the 3×3 completion of M so that P is mapped by N*P."
+        }
+      ]
+    },
+    {
+      "name": "CharacteristicPolynomial",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CharacteristicPolynomial/",
+      "overloads": [
+        {
+          "syntax": "CharacteristicPolynomial( <Matrix> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "input_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Returns the characteristic polynomial of the given matrix."
+        }
+      ]
+    },
+    {
+      "name": "Cross",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Cross/",
+      "overloads": [
+        {
+          "syntax": "Cross( <Vector u>, <Vector v> )",
+          "params": [
+            {
+              "name": "u",
+              "role": "first_vector",
+              "type": "VectorOrList",
+              "optional": false
+            },
+            {
+              "name": "v",
+              "role": "second_vector",
+              "type": "VectorOrList",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the cross product of u and v. u, v can be 3D vectors or lists. For 2D vectors/points, the result is the z-coordinate of the cross product. In CAS, if vectors contain undefined variables, a symbolic cross product formula is returned. The operator u ⊗ v can also be used."
+        }
+      ]
+    },
+    {
+      "name": "CurvatureVector",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CurvatureVector/",
+      "overloads": [
+        {
+          "syntax": "CurvatureVector( <Point>, <Object> )",
+          "params": [
+            {
+              "name": "Point",
+              "role": "evaluation_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "Object",
+              "role": "target_object",
+              "type": "FunctionOrCurveOrConic",
+              "optional": false
+            }
+          ],
+          "description": "Yields the curvature vector of the given object (function, curve, or conic) at the specified point."
+        }
+      ]
+    },
+    {
+      "name": "Determinant",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Determinant/",
+      "overloads": [
+        {
+          "syntax": "Determinant( <Matrix> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "input_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Returns the determinant of the matrix. If the matrix contains undefined variables, a symbolic determinant is returned."
+        }
+      ]
+    },
+    {
+      "name": "Dimension",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Dimension/",
+      "overloads": [
+        {
+          "syntax": "Dimension( <Object> )",
+          "params": [
+            {
+              "name": "Object",
+              "role": "vector_or_matrix",
+              "type": "VectorOrMatrix",
+              "optional": false
+            }
+          ],
+          "description": "Returns the dimension of a vector or a matrix（图形视图中使用）."
+        },
+        {
+          "syntax": "Dimension( <Object> )",
+          "params": [
+            {
+              "name": "Object",
+              "role": "vector_or_matrix",
+              "type": "VectorOrMatrix",
+              "optional": false
+            }
+          ],
+          "description": "CAS 视图下，返回向量或矩阵的维度，支持含未定变量的对象。"
+        }
+      ]
+    },
+    {
+      "name": "Direction",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Direction/",
+      "overloads": [
+        {
+          "syntax": "Direction( <Line> )",
+          "params": [
+            {
+              "name": "Line",
+              "role": "input_line",
+              "type": "Line",
+              "optional": false
+            }
+          ],
+          "description": "Returns the direction vector of the line. For a line ax + by = c, the direction vector is (b, −a)."
+        }
+      ]
+    },
+    {
+      "name": "Dot",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Dot/",
+      "overloads": [
+        {
+          "syntax": "Dot( <Vector>, <Vector> )",
+          "params": [
+            {
+              "name": "u",
+              "role": "first_vector",
+              "type": "Vector",
+              "optional": false
+            },
+            {
+              "name": "v",
+              "role": "second_vector",
+              "type": "Vector",
+              "optional": false
+            }
+          ],
+          "description": "Returns the dot (scalar) product of the two vectors."
+        }
+      ]
+    },
+    {
+      "name": "Eigenvalues",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Eigenvalues/",
+      "overloads": [
+        {
+          "syntax": "Eigenvalues( <Matrix> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "input_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Finds the eigenvalues of the given matrix."
+        }
+      ]
+    },
+    {
+      "name": "Eigenvectors",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Eigenvectors/",
+      "overloads": [
+        {
+          "syntax": "Eigenvectors( <Matrix> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "input_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Finds the eigenvectors of the given matrix."
+        }
+      ]
+    },
+    {
+      "name": "Element",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Element/",
+      "overloads": [
+        {
+          "syntax": "Element( <List>, <Position> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "input_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "n",
+              "role": "index",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns the n-th element of the list."
+        },
+        {
+          "syntax": "Element( <Matrix>, <Row>, <Column> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "input_matrix",
+              "type": "Matrix",
+              "optional": false
+            },
+            {
+              "name": "row",
+              "role": "row_index",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "column",
+              "role": "column_index",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns the element of the matrix at the given row and column."
+        },
+        {
+          "syntax": "Element( <List>, <Index1>, <Index2>, … )",
+          "params": [
+            {
+              "name": "List",
+              "role": "input_nd_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Index1",
+              "role": "first_index",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Index2_plus",
+              "role": "additional_indices",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "For an n 维列表，可指定最多 n 个索引，得到给定坐标处的元素或子列表。要求列表（或矩阵）中元素类型一致（全部为数或全部为点等）。"
+        }
+      ]
+    },
+    {
+      "name": "Identity",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Identity/",
+      "overloads": [
+        {
+          "syntax": "Identity( <Number> )",
+          "params": [
+            {
+              "name": "n",
+              "role": "matrix_order",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns the n×n identity matrix. If A is a square matrix of order n, then A^0 gives the same as Identity(n)."
+        }
+      ]
+    },
+    {
+      "name": "Invert",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Invert/",
+      "overloads": [
+        {
+          "syntax": "Invert( <Matrix> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "matrix_to_invert",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Returns the inverse of the given matrix."
+        },
+        {
+          "syntax": "Invert( <Function> )",
+          "params": [
+            {
+              "name": "Function",
+              "role": "function_to_invert",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "Returns the inverse of the given function（不考虑函数的定义域/值域，如 x^2 或 sin(x) 等）。对只含一个自变量 x 的函数效率更高。"
+        }
+      ]
+    },
+    {
+      "name": "JordanDiagonalization",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/JordanDiagonalization/",
+      "overloads": [
+        {
+          "syntax": "JordanDiagonalization( <Matrix> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "input_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Decomposes the matrix into S J S⁻¹ where J is in Jordan canonical form."
+        }
+      ]
+    },
+    {
+      "name": "Length",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Length/",
+      "overloads": [
+        {
+          "syntax": "Length( <Object> )",
+          "params": [
+            {
+              "name": "Object",
+              "role": "geometric_or_other_object",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "通用形式：返回对象的“长度”，含义依对象类型而定。"
+        },
+        {
+          "syntax": "Length( <Vector> )",
+          "params": [
+            {
+              "name": "Vector",
+              "role": "input_vector",
+              "type": "Vector",
+              "optional": false
+            }
+          ],
+          "description": "Returns the length (norm) of the vector."
+        },
+        {
+          "syntax": "Length( <Point> )",
+          "params": [
+            {
+              "name": "Point",
+              "role": "input_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "Returns the length of the position vector of the point."
+        },
+        {
+          "syntax": "Length( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "input_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns the number of elements in the list."
+        },
+        {
+          "syntax": "Length( <Text> )",
+          "params": [
+            {
+              "name": "Text",
+              "role": "input_text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "Returns the number of characters in the text."
+        },
+        {
+          "syntax": "Length( <Locus> )",
+          "params": [
+            {
+              "name": "Locus",
+              "role": "input_locus",
+              "type": "Locus",
+              "optional": false
+            }
+          ],
+          "description": "Returns the number of points that make up the locus. 要得到轨迹曲线的周长本身请使用 Perimeter(Locus)。"
+        },
+        {
+          "syntax": "Length( <Arc> )",
+          "params": [
+            {
+              "name": "Arc",
+              "role": "input_arc_or_sector",
+              "type": "ArcOrSector",
+              "optional": false
+            }
+          ],
+          "description": "Returns the arc length (curved part only) of an arc or sector."
+        },
+        {
+          "syntax": "Length( <Function>, <Start x-Value>, <End x-Value> )",
+          "params": [
+            {
+              "name": "Function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "x_start",
+              "role": "start_x_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x_end",
+              "role": "end_x_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns the length of the graph of the function on the given x-interval."
+        },
+        {
+          "syntax": "Length( <Function>, <Start Point>, <End Point> )",
+          "params": [
+            {
+              "name": "Function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "P_start",
+              "role": "start_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "P_end",
+              "role": "end_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "Returns the length of the function graph between two points. If the points are not on the graph, their x-coordinates are used to define the interval."
+        },
+        {
+          "syntax": "Length( <Curve>, <Start t-Value>, <End t-Value> )",
+          "params": [
+            {
+              "name": "Curve",
+              "role": "input_parametric_curve",
+              "type": "Curve",
+              "optional": false
+            },
+            {
+              "name": "t_start",
+              "role": "start_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "t_end",
+              "role": "end_parameter",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns the length of the parametric curve between the two parameter values."
+        },
+        {
+          "syntax": "Length( <Curve>, <Start Point>, <End Point> )",
+          "params": [
+            {
+              "name": "Curve",
+              "role": "input_parametric_curve",
+              "type": "Curve",
+              "optional": false
+            },
+            {
+              "name": "P_start",
+              "role": "start_point_on_curve",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "P_end",
+              "role": "end_point_on_curve",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "Returns the length of the curve between two points lying on the curve."
+        },
+        {
+          "syntax": "Length( <Function>, <Start x-Value>, <End x-Value> )  // CAS",
+          "params": [
+            {
+              "name": "Function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "x_start",
+              "role": "start_x_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x_end",
+              "role": "end_x_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS 视图中，计算函数图像在给定区间上的长度，可返回精确表达式。"
+        },
+        {
+          "syntax": "Length( <Function>, <Variable>, <Start x-Value>, <End x-Value> )  // CAS",
+          "params": [
+            {
+              "name": "Function",
+              "role": "input_function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "integration_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "x_start",
+              "role": "start_x_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x_end",
+              "role": "end_x_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "CAS 视图中，指定自变量符号，计算函数从 Start x 到 End x 的图像长度。"
+        }
+      ]
+    },
+    {
+      "name": "LUDecomposition",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/LUDecomposition/",
+      "overloads": [
+        {
+          "syntax": "LUDecomposition( <Matrix> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "input_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the LU decomposition of the given matrix, returning the permutation, lower, and upper matrices."
+        }
+      ]
+    },
+    {
+      "name": "MatrixRank",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/MatrixRank/",
+      "overloads": [
+        {
+          "syntax": "MatrixRank( <Matrix> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "input_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Returns the rank of the given matrix. In CAS, also works with matrices containing undefined variables."
+        }
+      ]
+    },
+    {
+      "name": "MinimalPolynomial",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/MinimalPolynomial/",
+      "overloads": [
+        {
+          "syntax": "MinimalPolynomial( <Matrix> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "input_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Returns the minimal polynomial of the given matrix."
+        }
+      ]
+    },
+    {
+      "name": "PerpendicularVector",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/PerpendicularVector/",
+      "overloads": [
+        {
+          "syntax": "PerpendicularVector( <Line> )",
+          "params": [
+            {
+              "name": "Line",
+              "role": "input_line",
+              "type": "Line",
+              "optional": false
+            }
+          ],
+          "description": "Returns one of the perpendicular vectors to the line. For a line with equation a x + b y = c, the components of the perpendicular vector are (a, b). If a point is specified in the line definition, the perpendicular vector originates at that point; otherwise the origin is at (0, 0)."
+        },
+        {
+          "syntax": "PerpendicularVector( <Segment> )",
+          "params": [
+            {
+              "name": "Segment",
+              "role": "input_segment",
+              "type": "Segment",
+              "optional": false
+            }
+          ],
+          "description": "Returns one of the perpendicular vectors to the segment, having the same length as the segment. If a point is specified in the definition, the vector originates from that point; otherwise origin is at (0, 0)."
+        },
+        {
+          "syntax": "PerpendicularVector( <Vector> )",
+          "params": [
+            {
+              "name": "Vector",
+              "role": "input_vector",
+              "type": "Vector",
+              "optional": false
+            }
+          ],
+          "description": "Returns one of the perpendicular vectors to the given vector. Example: Let Vector((-12, 8)) be the vector u. PerpendicularVector(u) yields v = (-8, -12). If a point is specified in the definition, the vector originates from that point; otherwise origin is at (0, 0)."
+        },
+        {
+          "syntax": "PerpendicularVector((a, b))",
+          "params": [
+            {
+              "name": "(a, b)",
+              "role": "input_point_pair",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "Yields the perpendicular vector (-b, a)."
+        },
+        {
+          "syntax": "PerpendicularVector( <Plane> )",
+          "params": [
+            {
+              "name": "Plane",
+              "role": "input_plane",
+              "type": "Plane",
+              "optional": false
+            }
+          ],
+          "description": "Creates a vector orthogonal to the plane, with starting point at (0, 0, 0)."
+        }
+      ]
+    },
+    {
+      "name": "QRDecomposition",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/QRDecomposition/",
+      "overloads": [
+        {
+          "syntax": "QRDecomposition( <Matrix> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "matrix_to_decompose",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the QR decomposition of the given matrix. Returns the Q and R matrices of the QR decomposition."
+        }
+      ]
+    },
+    {
+      "name": "ReducedRowEchelonForm",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ReducedRowEchelonForm/",
+      "overloads": [
+        {
+          "syntax": "ReducedRowEchelonForm( <Matrix> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "input_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Returns the reduced echelon form of the matrix."
+        }
+      ]
+    },
+    {
+      "name": "SVD",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SVD/",
+      "overloads": [
+        {
+          "syntax": "SVD( <Matrix> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "matrix_to_decompose",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Returns the Singular Value Decomposition of the matrix (as a list of 3 matrices)."
+        }
+      ]
+    },
+    {
+      "name": "ToComplex",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ToComplex/",
+      "overloads": [
+        {
+          "syntax": "ToComplex( <Vector> )",
+          "params": [
+            {
+              "name": "Vector",
+              "role": "vector_to_convert",
+              "type": "Vector",
+              "optional": false
+            }
+          ],
+          "description": "Transforms a vector or point to a complex number in algebraic form. Example: ToComplex((3, 2)) yields 3 + 2ι. The complex ι is obtained by pressing ALT + i."
+        }
+      ]
+    },
+    {
+      "name": "ToPolar",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ToPolar/",
+      "overloads": [
+        {
+          "syntax": "ToPolar( <Vector> )",
+          "params": [
+            {
+              "name": "Vector",
+              "role": "input_vector",
+              "type": "Vector",
+              "optional": false
+            }
+          ],
+          "description": "Transforms a vector into its polar coordinates."
+        },
+        {
+          "syntax": "ToPolar( <Complex Number> )",
+          "params": [
+            {
+              "name": "Complex Number",
+              "role": "complex_number",
+              "type": "Complex",
+              "optional": false
+            }
+          ],
+          "description": "Transforms a complex number into its polar coordinates."
+        }
+      ]
+    },
+    {
+      "name": "Transpose",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Transpose/",
+      "overloads": [
+        {
+          "syntax": "Transpose( <Matrix> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "matrix_to_transpose",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "Transposes the matrix. Example: Transpose({{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}) yields the matrix …"
+        }
+      ]
+    },
+    {
+      "name": "UnitPerpendicularVector",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/UnitPerpendicularVector/",
+      "overloads": [
+        {
+          "syntax": "UnitPerpendicularVector( <Line> )",
+          "params": [
+            {
+              "name": "Line",
+              "role": "input_line",
+              "type": "Line",
+              "optional": false
+            }
+          ],
+          "description": "Returns the perpendicular vector with length 1 of the given line."
+        },
+        {
+          "syntax": "UnitPerpendicularVector( <Segment> )",
+          "params": [
+            {
+              "name": "Segment",
+              "role": "input_segment",
+              "type": "Segment",
+              "optional": false
+            }
+          ],
+          "description": "Returns the perpendicular vector with length 1 of the given segment. Example: Let s = Segment((1,1), (4,5)). UnitPerpendicularVector(s) yields (−0.8 0.6)."
+        },
+        {
+          "syntax": "UnitPerpendicularVector( <Vector> )",
+          "params": [
+            {
+              "name": "Vector",
+              "role": "input_vector",
+              "type": "Vector",
+              "optional": false
+            }
+          ],
+          "description": "Returns the perpendicular vector with length 1 of the given vector. Example: Let v = (3 4). UnitPerpendicularVector(v) yields (−0.8 0.6)."
+        },
+        {
+          "syntax": "UnitPerpendicularVector( <Plane> )",
+          "params": [
+            {
+              "name": "Plane",
+              "role": "input_plane",
+              "type": "Plane",
+              "optional": false
+            }
+          ],
+          "description": "Creates a unit vector orthogonal to the plane."
+        }
+      ]
+    },
+    {
+      "name": "UnitVector",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/UnitVector/",
+      "overloads": [
+        {
+          "syntax": "UnitVector( <Vector> )",
+          "params": [
+            {
+              "name": "Vector",
+              "role": "input_vector",
+              "type": "Vector",
+              "optional": false
+            }
+          ],
+          "description": "Yields a vector with length 1, which has the same direction and orientation as the given vector. The vector must be defined first. Example: Let v = (3 4). UnitVector(v) yields (0.6 0.8)."
+        },
+        {
+          "syntax": "UnitVector( <Line> )",
+          "params": [
+            {
+              "name": "Line",
+              "role": "input_line",
+              "type": "Line",
+              "optional": false
+            }
+          ],
+          "description": "Yields the direction vector of the given line with length 1. Example: UnitVector(3x + 4y = 5) yields (0.8 −0.6)."
+        },
+        {
+          "syntax": "UnitVector( <Segment> )",
+          "params": [
+            {
+              "name": "Segment",
+              "role": "input_segment",
+              "type": "Segment",
+              "optional": false
+            }
+          ],
+          "description": "Yields the direction vector of the given segment with length 1. Example: Let s = Segment((1,1), (4,5)). UnitVector(s) yields (0.6 0.8)."
+        }
+      ]
+    },
+    {
+      "name": "Vector",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Vector/",
+      "overloads": [
+        {
+          "syntax": "Vector( <Point> )",
+          "params": [
+            {
+              "name": "Point",
+              "role": "input_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "Returns the position vector of the given point. Example: Vector((3, 2)) yields u = (3 2)."
+        },
+        {
+          "syntax": "Vector( <Start Point>, <End Point> )",
+          "params": [
+            {
+              "name": "Start Point",
+              "role": "start_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "End Point",
+              "role": "end_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "Creates a vector from Start Point to End Point. Example: Vector((1, 1), (3, 4)) yields u = (2 3)."
+        }
+      ]
+    }
+  ]
+}

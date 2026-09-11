@@ -1,0 +1,2393 @@
+{
+  "command_category": "Scripting_Commands",
+  "total_commands": 67,
+  "commands": {
+    "AttachCopyToView": {
+      "name": "AttachCopyToView",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/AttachCopyToView/",
+      "overloads": [
+        {
+          "syntax": "AttachCopyToView(<Object>, <ViewIndex>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "source_object_to_copy",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "ViewIndex",
+              "role": "target_view_index_0_1_2",
+              "type": "ViewIndex",
+              "optional": false
+            }
+          ],
+          "description": "在给定视图中创建对象的复制。如果 ViewIndex = 0，则创建独立拷贝；如果为 1 或 2，则在对应 Graphics View 中创建大小保持不变的依赖拷贝。"
+        },
+        {
+          "syntax": "AttachCopyToView(<Object>, <ViewIndex>, <Point1>, <Point2>, <ScreenPoint1>, <ScreenPoint2>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "source_object_to_copy",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "ViewIndex",
+              "role": "target_view_index_0_1_2",
+              "type": "ViewIndex",
+              "optional": false
+            },
+            {
+              "name": "Point1",
+              "role": "object_ref_point_1",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "Point2",
+              "role": "object_ref_point_2",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "ScreenPoint1",
+              "role": "screen_ref_point_1",
+              "type": "ScreenPoint",
+              "optional": false
+            },
+            {
+              "name": "ScreenPoint2",
+              "role": "screen_ref_point_2",
+              "type": "ScreenPoint",
+              "optional": false
+            }
+          ],
+          "description": "在指定视图中创建对象的依赖拷贝，并通过仿射变换使 Point1→ScreenPoint1、Point2→ScreenPoint2，从而控制复制对象在视图中的大小和位置，所有点都会被复制，即使超出视图范围。"
+        }
+      ]
+    },
+    "Button": {
+      "name": "Button",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Button/",
+      "overloads": [
+        {
+          "syntax": "Button()",
+          "params": [],
+          "description": "创建一个新的按钮，位于图形视图左上角，使用默认标题。"
+        },
+        {
+          "syntax": "Button(<Caption>)",
+          "params": [
+            {
+              "name": "Caption",
+              "role": "button_caption_text",
+              "type": "String",
+              "optional": false
+            }
+          ],
+          "description": "创建一个具有给定标题的按钮。例如：Button(\"Ok\") 会在图形视图左上角创建标题为 Ok 的按钮。"
+        }
+      ]
+    },
+    "CenterView": {
+      "name": "CenterView",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CenterView/",
+      "overloads": [
+        {
+          "syntax": "CenterView(<CenterPoint>)",
+          "params": [
+            {
+              "name": "CenterPoint",
+              "role": "target_point_to_center_view",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "平移当前激活的图形视图，使给定点位于视图中心。例如：CenterView((0, 0)) 会将原点移动到图形视图中心。"
+        }
+      ]
+    },
+    "Checkbox": {
+      "name": "Checkbox",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Checkbox/",
+      "overloads": [
+        {
+          "syntax": "Checkbox()",
+          "params": [],
+          "description": "创建一个新的复选框，使用默认标题。"
+        },
+        {
+          "syntax": "Checkbox(<Caption>)",
+          "params": [
+            {
+              "name": "Caption",
+              "role": "checkbox_caption_text",
+              "type": "String",
+              "optional": false
+            }
+          ],
+          "description": "创建一个带给定标题的复选框。"
+        },
+        {
+          "syntax": "Checkbox(<ObjectList>)",
+          "params": [
+            {
+              "name": "ObjectList",
+              "role": "objects_to_hide_when_unchecked",
+              "type": "List<Object>",
+              "optional": false
+            }
+          ],
+          "description": "创建一个复选框，当该复选框未勾选时，列表中的对象被隐藏；勾选时对象显示。"
+        },
+        {
+          "syntax": "Checkbox(<Caption>, <ObjectList>)",
+          "params": [
+            {
+              "name": "Caption",
+              "role": "checkbox_caption_text",
+              "type": "String",
+              "optional": false
+            },
+            {
+              "name": "ObjectList",
+              "role": "objects_to_hide_when_unchecked",
+              "type": "List<Object>",
+              "optional": false
+            }
+          ],
+          "description": "创建一个带给定标题的复选框，当复选框未勾选时隐藏列表中的对象。"
+        }
+      ]
+    },
+    "CopyFreeObject": {
+      "name": "CopyFreeObject",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CopyFreeObject/",
+      "overloads": [
+        {
+          "syntax": "CopyFreeObject(<Object>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "input_object_to_copy",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "创建给定对象的自由拷贝，保留基本对象属性；若源对象为辅助对象，则拷贝仍为辅助对象。"
+        }
+      ]
+    },
+    "Delete": {
+      "name": "Delete",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Delete/",
+      "overloads": [
+        {
+          "syntax": "Delete(<Object>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "object_to_delete",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "删除给定对象及其所有依赖对象。"
+        },
+        {
+          "syntax": "Delete(<Object>)  // CAS 视图",
+          "params": [
+            {
+              "name": "Object",
+              "role": "object_to_delete_in_cas",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "在 GeoGebra 中删除对象及其依赖对象，并在 CAS 视图中清除对该对象的任何赋值。"
+        }
+      ]
+    },
+    "Execute": {
+      "name": "Execute",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Execute/",
+      "overloads": [
+        {
+          "syntax": "Execute(<TextList>)",
+          "params": [
+            {
+              "name": "TextList",
+              "role": "command_text_list_to_execute",
+              "type": "List<Text>",
+              "optional": false
+            }
+          ],
+          "description": "执行一个由字符串构成的命令列表。命令必须用英文（US）书写。"
+        },
+        {
+          "syntax": "Execute(<TextList>, <Param1>, ..., <ParamN>)",
+          "params": [
+            {
+              "name": "TextList",
+              "role": "command_text_list_with_placeholders",
+              "type": "List<Text>",
+              "optional": false
+            },
+            {
+              "name": "Param1_to_ParamN",
+              "role": "placeholder_arguments_%1_to_%9",
+              "type": "Any",
+              "optional": false
+            }
+          ],
+          "description": "执行带占位符的命令列表，使用 %1、%2 … %9 作为占位符，后续参数按顺序替换这些占位符再执行命令，最多支持 9 个参数。"
+        }
+      ]
+    },
+    "ExportImage": {
+      "name": "ExportImage",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ExportImage/",
+      "overloads": [
+        {
+          "syntax": "ExportImage(<Property1>, <Value1>, <Property2>, <Value2>, ...)",
+          "params": [
+            {
+              "name": "filename",
+              "role": "output_file_name",
+              "type": "String",
+              "optional": true
+            },
+            {
+              "name": "view",
+              "role": "view_selector_1_2_minus1",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "scale",
+              "role": "scale_factor",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "dpi",
+              "role": "output_resolution_dpi",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "scalecm",
+              "role": "scale_in_cm_per_unit",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "width",
+              "role": "output_width_pixels",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "height",
+              "role": "output_height_pixels",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "transparent",
+              "role": "transparent_background_flag",
+              "type": "Boolean",
+              "optional": true
+            },
+            {
+              "name": "type",
+              "role": "output_format",
+              "type": "String",
+              "optional": true
+            },
+            {
+              "name": "slider",
+              "role": "animation_slider",
+              "type": "StringOrNumber",
+              "optional": true
+            },
+            {
+              "name": "loop",
+              "role": "animation_loop_flag",
+              "type": "Boolean",
+              "optional": true
+            },
+            {
+              "name": "time",
+              "role": "frame_interval_ms",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "corner",
+              "role": "crop_corner_1",
+              "type": "Point",
+              "optional": true
+            },
+            {
+              "name": "corner2",
+              "role": "crop_corner_2",
+              "type": "Point",
+              "optional": true
+            },
+            {
+              "name": "clipboard",
+              "role": "copy_to_clipboard_flag",
+              "type": "Boolean",
+              "optional": true
+            },
+            {
+              "name": "grayscale",
+              "role": "export_grayscale_flag",
+              "type": "Boolean",
+              "optional": true
+            }
+          ],
+          "description": "以图像形式导出当前活动视图（或由 view 属性指定的视图）。通过“属性-值”对设定文件名、视图、缩放、DPI、宽高、透明背景、导出格式（如 svg/gif/pdf/webm）、动画相关参数（slider、loop、time）以及裁剪区域等。"
+        }
+      ]
+    },
+    "GetTime": {
+      "name": "GetTime",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/GetTime/",
+      "overloads": [
+        {
+          "syntax": "GetTime()",
+          "params": [],
+          "description": "返回当前时间与日期信息组成的列表：{毫秒, 秒, 分, 时(0–23), 日, 月(1–12), 年, 月文本, 星期文本, 星期索引(1=Sunday,...)}。"
+        },
+        {
+          "syntax": "GetTime(<Format>)",
+          "params": [
+            {
+              "name": "Format",
+              "role": "datetime_format_template",
+              "type": "String",
+              "optional": false
+            }
+          ],
+          "description": "使用格式模板生成日期时间文本。格式字符串中，以反斜杠 \\ 加 d/D/j/l/N/S/w/z/W/F/m/M/n/t/L/Y/y/a/A/g/G/h/H/i/s/U 等占位符，返回相应的日期或时间字段。例如：GetTime(\"The date is \\l the \\j\\S of \\F \\Y\")."
+        }
+      ]
+    },
+    "HideLayer": {
+      "name": "HideLayer",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/HideLayer/",
+      "overloads": [
+        {
+          "syntax": "HideLayer(<LayerIndex>)",
+          "params": [
+            {
+              "name": "LayerIndex",
+              "role": "layer_index_to_hide",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "将指定图层中的所有对象设为不可见（不覆盖对象自身的条件可见性设置）。"
+        }
+      ]
+    },
+    "InputBox": {
+      "name": "InputBox",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InputBox/",
+      "overloads": [
+        {
+          "syntax": "InputBox(<LinkedObject>)",
+          "params": [
+            {
+              "name": "LinkedObject",
+              "role": "object_to_link_with_input_box",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "创建一个新的输入框，并将其与给定对象关联，以便通过输入框修改该对象的值或表达式。"
+        }
+      ]
+    },
+    "Pan": {
+      "name": "Pan",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Pan/",
+      "overloads": [
+        {
+          "syntax": "Pan(<x>, <y>)",
+          "params": [
+            {
+              "name": "x",
+              "role": "horizontal_shift_pixels",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "y",
+              "role": "vertical_shift_pixels",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "将当前活动视图向右平移 x 像素、向上平移 y 像素。"
+        },
+        {
+          "syntax": "Pan(<x>, <y>, <z>)",
+          "params": [
+            {
+              "name": "x",
+              "role": "horizontal_shift_pixels",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "y",
+              "role": "vertical_shift_pixels",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "z",
+              "role": "depth_shift_pixels",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "若当前为 3D 视图，则将其按 (x, y, z) 像素平移；若为 2D 视图，则仅按 (x, y) 像素平移。若多个图形视图可见，则作用于当前激活的视图。"
+        }
+      ]
+    },
+    "ParseToFunction": {
+      "name": "ParseToFunction",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ParseToFunction/",
+      "overloads": [
+        {
+          "syntax": "ParseToFunction(<Text>)",
+          "params": [
+            {
+              "name": "Text",
+              "role": "function_definition_text",
+              "type": "String",
+              "optional": false
+            }
+          ],
+          "description": "解析包含函数定义的文本并创建相应的函数。例如：ParseToFunction(\"x^2\") 创建 f(x) = x^2。"
+        },
+        {
+          "syntax": "ParseToFunction(<Function>, <Text>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "target_function_to_overwrite",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "Text",
+              "role": "function_definition_text",
+              "type": "String",
+              "optional": false
+            }
+          ],
+          "description": "将文本解析为函数表达式并存入已有的自由函数对象中。目标函数需事先定义且为自由对象。"
+        },
+        {
+          "syntax": "ParseToFunction(<Text>, <VariableNameList>)",
+          "params": [
+            {
+              "name": "Text",
+              "role": "multivariable_function_definition_text",
+              "type": "String",
+              "optional": false
+            },
+            {
+              "name": "VariableNameList",
+              "role": "function_variable_names",
+              "type": "List<String>",
+              "optional": false
+            }
+          ],
+          "description": "解析文本为多元函数，变量名由给定字符串列表指定。例如：ParseToFunction(\"2u+3v\", {\"u\", \"v\"}) 创建 a(u,v) = 2u + 3v。"
+        }
+      ]
+    },
+    "ParseToNumber": {
+      "name": "ParseToNumber",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ParseToNumber/",
+      "overloads": [
+        {
+          "syntax": "ParseToNumber(<Number>, <Text>)",
+          "params": [
+            {
+              "name": "Number",
+              "role": "target_number_to_store_result",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Text",
+              "role": "numeric_expression_text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "解析文本并将结果存入已有的自由数值对象中（脚本只执行一次）。例如：先定义 a = 3, text1 = \"6\"，执行 ParseToNumber(a, text1) 后得到 a = 6。若需随文本动态更新数值，应使用 FromBase(text1, 10) 等。"
+        },
+        {
+          "syntax": "ParseToNumber(<Text>)",
+          "params": [
+            {
+              "name": "Text",
+              "role": "numeric_expression_text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "解析文本并创建一个新的数值对象保存结果。例如：ParseToNumber(\"1+2+5-pi\") 创建数值 a ≈ 4.86。"
+        }
+      ]
+    },
+    "PlaySound": {
+      "name": "PlaySound",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/PlaySound/",
+      "overloads": [
+        {
+          "syntax": "PlaySound(<URL>)",
+          "params": [
+            {
+              "name": "URL",
+              "role": "mp3_url_to_play",
+              "type": "String",
+              "optional": false
+            }
+          ],
+          "description": "播放给定 URL 指向的 MP3 文件。"
+        },
+        {
+          "syntax": "PlaySound(<PlayFlag>)",
+          "params": [
+            {
+              "name": "PlayFlag",
+              "role": "play_or_pause_toggle",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "控制非 MP3 声音的播放或暂停。PlaySound(true) 开始播放，PlaySound(false) 暂停。"
+        },
+        {
+          "syntax": "PlaySound(<Function>, <MinValue>, <MaxValue>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "waveform_function_range_minus1_to_1",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "MinValue",
+              "role": "start_time_seconds",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "MaxValue",
+              "role": "end_time_seconds",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "基于给定函数生成声音，时间以秒为单位，从 MinValue 到 MaxValue，默认采样率为 8000Hz、8 位采样。"
+        },
+        {
+          "syntax": "PlaySound(<Function>, <MinValue>, <MaxValue>, <SampleRate>, <SampleDepth>)",
+          "params": [
+            {
+              "name": "Function",
+              "role": "waveform_function_range_minus1_to_1",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "MinValue",
+              "role": "start_time_seconds",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "MaxValue",
+              "role": "end_time_seconds",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "SampleRate",
+              "role": "audio_sample_rate",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "SampleDepth",
+              "role": "bits_per_sample",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "基于函数生成声音并使用指定采样率与采样位数。SampleRate 允许值为 8000、11025、16000、22050、44100；SampleDepth 允许值为 8 或 16。"
+        },
+        {
+          "syntax": "PlaySound(<Note>, <Duration>, <Instrument>)  // Classic 5",
+          "params": [
+            {
+              "name": "Note",
+              "role": "midi_note_number_0_to_127",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Duration",
+              "role": "note_duration_seconds",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Instrument",
+              "role": "midi_instrument_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在 GeoGebra Classic 5 中播放一个 MIDI 音符。音符编号 0–127，其中 60 为中央 C。"
+        }
+      ]
+    },
+    "ReadText": {
+      "name": "ReadText",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ReadText/",
+      "overloads": [
+        {
+          "syntax": "ReadText(<Text>)",
+          "params": [
+            {
+              "name": "Text",
+              "role": "text_to_read_aloud",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "让屏幕阅读器立即朗读给定文本，可用于为视障用户提供无障碍提示信息。"
+        }
+      ]
+    },
+    "Rename": {
+      "name": "Rename",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Rename/",
+      "overloads": [
+        {
+          "syntax": "Rename( <Object>, <Name> )",
+          "params": [
+            {
+              "name": "Object",
+              "role": "object_to_rename",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Name",
+              "role": "new_label_name",
+              "type": "String",
+              "optional": false
+            }
+          ],
+          "description": "将给定对象的标签改为指定名称。例：若 c: x^2 + 2y^2 = 2，则 Rename(c, \"ell\") 会把 c 的标签改成 ell。"
+        }
+      ]
+    },
+    "Repeat": {
+      "name": "Repeat",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Repeat/",
+      "overloads": [
+        {
+          "syntax": "Repeat( <Number>, <Scripting Command>, <Scripting Command>, … )",
+          "params": [
+            {
+              "name": "Number",
+              "role": "repetition_count",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Command",
+              "role": "scripting_command_to_repeat",
+              "type": "ScriptingCommand",
+              "optional": false
+            }
+          ],
+          "description": "将给定的一条或多条脚本命令重复执行 n 次，其中 n 为 Number。可在第 2 个参数之后继续追加任意个脚本命令。\n例如：Repeat(8, TurtleForward(turtle1, 1), TurtleRight(turtle1, 45°)) 会让乌龟画出一个正八边形。"
+        }
+      ]
+    },
+    "RunClickScript": {
+      "name": "RunClickScript",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RunClickScript/",
+      "overloads": [
+        {
+          "syntax": "RunClickScript( <Object> )",
+          "params": [
+            {
+              "name": "Object",
+              "role": "object_whose_click_script_will_run",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "执行指定对象所绑定的 OnClick（单击）脚本（如果存在）。\n例如：点 B 的 OnClick 脚本为 SetValue(B,(1,1))，若把点 A 的 OnClick 脚本设为 RunClickScript(B)，则点击 A 会触发 B 的单击脚本，从而把 B 移动到 (1,1)。"
+        }
+      ]
+    },
+    "RunUpdateScript": {
+      "name": "RunUpdateScript",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RunUpdateScript/",
+      "overloads": [
+        {
+          "syntax": "RunUpdateScript( <Object> )",
+          "params": [
+            {
+              "name": "Object",
+              "role": "object_whose_update_script_will_run",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "执行指定对象所绑定的 Update（更新）脚本（如果存在）。常用于在脚本中主动触发某对象的“更新时”逻辑。"
+        }
+      ]
+    },
+    "SelectObjects": {
+      "name": "SelectObjects",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SelectObjects/",
+      "overloads": [
+        {
+          "syntax": "SelectObjects()",
+          "params": [],
+          "description": "取消选中当前所有已选对象（清空选择）。同时也会取消正在进行的拖动操作（对脚本很有用）。"
+        },
+        {
+          "syntax": "SelectObjects( <Object>, <Object>, … )",
+          "params": [
+            {
+              "name": "Object",
+              "role": "objects_to_select_must_be_labeled",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "先取消所有选择，然后选中作为参数给出的所有对象。所有参数必须是带标签的对象。\n例如：SelectObjects(A, B, C) 会选中点 A、B、C；SelectObjects(Midpoint(A, B)) 只会清空当前选择，因为 Midpoint(A, B) 是未命名的中点对象。"
+        }
+      ]
+    },
+    "SetActiveView": {
+      "name": "SetActiveView",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetActiveView/",
+      "overloads": [
+        {
+          "syntax": "SetActiveView( <View> )",
+          "params": [
+            {
+              "name": "View",
+              "role": "view_identifier_to_activate",
+              "type": "StringOrNumber",
+              "optional": false
+            }
+          ],
+          "description": "将指定视图设为当前激活视图。\n可用取值：\n- 1 或 \"G\"：图形视图 1（Graphics View）\n- 2 或 \"D\"：图形视图 2（Graphics View 2）\n- -1 或 \"T\"：3D 图形视图（3D Graphics View）\n- \"A\"：代数视图（Algebra View）\n- \"S\"：表格视图（Spreadsheet View）\n- \"C\"：CAS 视图"
+        }
+      ]
+    },
+    "SetAxesRatio": {
+      "name": "SetAxesRatio",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetAxesRatio/",
+      "overloads": [
+        {
+          "syntax": "SetAxesRatio( <Number>, <Number> )",
+          "params": [
+            {
+              "name": "xRatio",
+              "role": "x_axis_units_ratio",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "yRatio",
+              "role": "y_axis_units_ratio",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "修改当前活动图形视图的坐标轴比例，使得 x 轴上的 xRatio 个单位与 y 轴上的 yRatio 个单位在屏幕上占用相同像素长度，并保持点 (0,0) 的位置不变。\n若使用单位比例（如 1:2），则与单位对应的那条轴被固定，另一条轴按给定比例调整。\n例如：SetAxesRatio(1,2) 固定 x 轴，压缩 y 轴；SetAxesRatio(2,1) 固定 y 轴，压缩 x 轴。"
+        },
+        {
+          "syntax": "SetAxesRatio( <Number>, <Number>, <Number> )",
+          "params": [
+            {
+              "name": "xRatio",
+              "role": "x_axis_units_ratio_3d",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "yRatio",
+              "role": "y_axis_units_ratio_3d",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "zRatio",
+              "role": "z_axis_units_ratio_3d",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "与二维版本类似，但作用于 3D 图形视图，用于同时设定 x、y、z 三个坐标轴的单位比例。"
+        }
+      ]
+    },
+    "SetBackgroundColor": {
+      "name": "SetBackgroundColor",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetBackgroundColor/",
+      "overloads": [
+        {
+          "syntax": "SetBackgroundColor(<Object>, <Red>, <Green>, <Blue>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_object_for_background_color",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Red",
+              "role": "red_color_component_0_to_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Green",
+              "role": "green_color_component_0_to_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Blue",
+              "role": "blue_color_component_0_to_1",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "修改给定对象的背景颜色（用于文本与电子表格单元格等）。RGB 分量取值 0–1，超出区间的值会按周期函数映射回 [0,1] 区间。"
+        },
+        {
+          "syntax": "SetBackgroundColor(<Object>, <\"Color\">)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_object_for_background_color",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Color",
+              "role": "background_color_name_or_hex",
+              "type": "String",
+              "optional": false
+            }
+          ],
+          "description": "以文本指定颜色，修改给定对象背景。颜色可以是英文颜色名（如 \"red\"）或十六进制字符串 #AARRGGBB / #RRGGBB，其中 AA 为透明度，RR/GG/BB 为颜色分量。用于 GeoGebraScript 时必须使用英文颜色名。"
+        },
+        {
+          "syntax": "SetBackgroundColor(<Red>, <Green>, <Blue>)",
+          "params": [
+            {
+              "name": "Red",
+              "role": "red_color_component_0_to_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Green",
+              "role": "green_color_component_0_to_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Blue",
+              "role": "blue_color_component_0_to_1",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "设置当前活动图形视图的背景颜色，使用 RGB 数值 0–1。"
+        },
+        {
+          "syntax": "SetBackgroundColor(<\"Color\">)",
+          "params": [
+            {
+              "name": "Color",
+              "role": "view_background_color_name_or_hex",
+              "type": "String",
+              "optional": false
+            }
+          ],
+          "description": "设置当前活动图形视图的背景颜色，Color 为英文颜色名或十六进制颜色字符串。"
+        }
+      ]
+    },
+
+    "SetCaption": {
+      "name": "SetCaption",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetCaption/",
+      "overloads": [
+        {
+          "syntax": "SetCaption(<Object>, <Text>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_object_to_set_caption",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Text",
+              "role": "new_caption_text",
+              "type": "String",
+              "optional": false
+            }
+          ],
+          "description": "修改给定对象的标题（Caption）。Text 必须用双引号括起，例如：SetCaption(A, \"点 A 的长度=\")。"
+        }
+      ]
+    },
+
+    "SetColor": {
+      "name": "SetColor",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetColor/",
+      "overloads": [
+        {
+          "syntax": "SetColor(<Object>, <Red>, <Green>, <Blue>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_object_to_set_color",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Red",
+              "role": "red_color_component_0_to_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Green",
+              "role": "green_color_component_0_to_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Blue",
+              "role": "blue_color_component_0_to_1",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "设置对象的前景颜色（线条 / 填充颜色），RGB 各分量范围为 0–1。"
+        },
+        {
+          "syntax": "SetColor(<Object>, <\"Color\">)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_object_to_set_color",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Color",
+              "role": "foreground_color_name_or_hex",
+              "type": "String",
+              "optional": false
+            }
+          ],
+          "description": "使用英文颜色名或十六进制字符串设置对象颜色，例如 SetColor(l1, \"red\") 或 SetColor(A, \"#00FF00\")。"
+        }
+      ]
+    },
+
+    "SetConditionToShowObject": {
+      "name": "SetConditionToShowObject",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetConditionToShowObject/",
+      "overloads": [
+        {
+          "syntax": "SetConditionToShowObject(<Object>, <Condition>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_object_for_visibility_condition",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Condition",
+              "role": "boolean_visibility_condition",
+              "type": "BooleanOrExpression",
+              "optional": false
+            }
+          ],
+          "description": "为对象设置“显示条件”，即只有当布尔表达式 Condition 为真时该对象才可见。等价于在属性对话框的“高级”页中设置显示条件。"
+        }
+      ]
+    },
+
+    "SetConstructionStep": {
+      "name": "SetConstructionStep",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetConstructionStep/",
+      "overloads": [
+        {
+          "syntax": "SetConstructionStep(<Number>)",
+          "params": [
+            {
+              "name": "Number",
+              "role": "target_construction_step_index",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "将当前构造步骤跳转到给定步号。常用于做“上一页/下一页”之类的按钮，替代或扩展导航栏的功能。"
+        }
+      ]
+    },
+
+    "SetCoords": {
+      "name": "SetCoords",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetCoords/",
+      "overloads": [
+        {
+          "syntax": "SetCoords(<Object>, <x>, <y>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "object_to_move_2d",
+              "type": "PointOrObjectWithPosition",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "target_x_coordinate_or_screen_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "y",
+              "role": "target_y_coordinate_or_screen_y",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在 2D 视图中，将自由对象（点、滑条、按钮、复选框、输入框、图像等）的笛卡尔坐标设为 (x, y)。该命令直接写入坐标值，而不会改变对象原有的定义，从而保持对象为自由对象。若启用“绝对屏幕坐标”，则 x、y 以像素为单位。"
+        },
+        {
+          "syntax": "SetCoords(<Object>, <x>, <y>, <z>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "object_to_move_3d",
+              "type": "PointOrObjectWithPosition",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "target_x_coordinate_or_screen_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "y",
+              "role": "target_y_coordinate_or_screen_y",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "z",
+              "role": "target_z_coordinate_or_screen_z",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在 3D 视图中，将自由对象的笛卡尔坐标设为 (x, y, z)。同样使用数值而非定义，使对象保持自由；也适用于路径上的点或区域内的点，会移动到最近的可行位置。"
+        }
+      ]
+    },
+
+    "SetDecoration": {
+      "name": "SetDecoration",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetDecoration/",
+      "overloads": [
+        {
+          "syntax": "SetDecoration(<Object>, <Number>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_segment_angle_or_fillable_object",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Number",
+              "role": "decoration_or_fill_style_code",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "设置对象的“装饰/填充样式”，对应属性对话框“样式”选项卡中的设置。若对象是线段或角，则 Number 控制刻度线/弧线/箭头；若是可填充对象（多边形、区域等），则控制填充样式（实心、阴影、棋盘格等）。数值 0–7 代表不同样式。"
+        },
+        {
+          "syntax": "SetDecoration(<Segment>, <StartCode>, <EndCode>)",
+          "params": [
+            {
+              "name": "Segment",
+              "role": "segment_to_decorate_ends",
+              "type": "Segment",
+              "optional": false
+            },
+            {
+              "name": "StartCode",
+              "role": "start_point_decoration_code",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "EndCode",
+              "role": "end_point_decoration_code",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "独立设置线段起点和终点的端点装饰（如小竖线、空心方块、实心方块、箭头、点等）。通常需要隐藏端点以更好地显示装饰效果。"
+        }
+      ]
+    },
+
+    "SetFixed": {
+      "name": "SetFixed",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetFixed/",
+      "overloads": [
+        {
+          "syntax": "SetFixed(<Object>, <true_or_false>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_object_to_lock_or_unlock",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "true_or_false",
+              "role": "fixed_flag",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "设置对象是否为“固定”状态。true 表示固定，用户不能拖动该对象；false 表示可拖动。"
+        },
+        {
+          "syntax": "SetFixed(<Object>, <fixedFlag>, <selectionAllowedFlag>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_object_to_lock_or_unlock",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "fixedFlag",
+              "role": "fixed_flag",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "selectionAllowedFlag",
+              "role": "allow_selection_when_fixed",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "在控制固定与否的同时，还可指定“是否允许选择”该对象。第二个布尔值为 true 时，即使对象固定仍可被选中；为 false 时则连选择都无法进行。"
+        }
+      ]
+    },
+
+    "SetImage": {
+      "name": "SetImage",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetImage/",
+      "overloads": [
+        {
+          "syntax": "SetImage(<Object>, <Image>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_fillable_object_or_button",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Image",
+              "role": "image_object_to_use_as_fill",
+              "type": "Image",
+              "optional": false
+            }
+          ],
+          "description": "使用指定图像填充一个对象。例如给多边形或按钮设置背景图。"
+        },
+        {
+          "syntax": "SetImage(<Object>, <Text>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_button_for_action_icon",
+              "type": "Button",
+              "optional": false
+            },
+            {
+              "name": "Text",
+              "role": "predefined_action_icon_name",
+              "type": "String",
+              "optional": false
+            }
+          ],
+          "description": "为按钮设置 GeoGebra 预置的“动作图标”，Text 为图标名称字符串（如 \"play\"、\"pause\"、\"zoom_in\" 等）。例如：SetImage(button1, \"pause\")。当前版本仅支持按钮对象。"
+        }
+      ]
+    },
+
+    "SetLabelMode": {
+      "name": "SetLabelMode",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetLabelMode/",
+      "overloads": [
+        {
+          "syntax": "SetLabelMode(<Object>, <Number>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_object_to_set_label_mode",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Number",
+              "role": "label_mode_code",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "根据数值代码修改对象的标签显示模式：0=只显示名称(Name)，1=名称+数值(Name+Value)，2=只显示数值(Value)，3=标题(Caption)，9=标题+数值(Caption+Value)。未列出的整数按 0 处理。若模式为 3 或 9 且标题为空，则自动使用对象名称。"
+        }
+      ]
+    },
+
+    "SetLevelOfDetail": {
+      "name": "SetLevelOfDetail",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetLevelOfDetail/",
+      "overloads": [
+        {
+          "syntax": "SetLevelOfDetail(<Surface>, <LevelOfDetail>)",
+          "params": [
+            {
+              "name": "Surface",
+              "role": "surface_object_to_control_detail",
+              "type": "SurfaceOr3DObject",
+              "optional": false
+            },
+            {
+              "name": "LevelOfDetail",
+              "role": "detail_level_flag_0_or_1",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "设置 3D 曲面绘制的细节等级：0 代表以较低精度快速绘制，1 代表以更高精度但更慢地绘制。"
+        }
+      ]
+    },
+
+    "SetLineStyle": {
+      "name": "SetLineStyle",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetLineStyle/",
+      "overloads": [
+        {
+          "syntax": "SetLineStyle(<Line>, <Number>)",
+          "params": [
+            {
+              "name": "Line",
+              "role": "target_line_or_curve_object",
+              "type": "LineOrSegmentOrPolyline",
+              "optional": false
+            },
+            {
+              "name": "Number",
+              "role": "line_style_code",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "修改对象的线型。Number 的取值与线型对应：0=实线，1=长虚线，2=短虚线，3=点线，4=点划线；超出 [0,4] 范围的值按 0 处理。"
+        }
+      ]
+    },
+    "SetDynamicColor": {
+      "name": "SetDynamicColor",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetDynamicColor/",
+      "overloads": [
+        {
+          "syntax": "SetDynamicColor(<Object>, <Red>, <Green>, <Blue>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_object_for_dynamic_color",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Red",
+              "role": "dynamic_red_component_0_to_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Green",
+              "role": "dynamic_green_component_0_to_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Blue",
+              "role": "dynamic_blue_component_0_to_1",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "为对象设置动态颜色（R/G/B 分量可依赖其它对象），等价于属性对话框中“动态颜色”页的前三个框。各分量取值在 [0,1]。"
+        },
+        {
+          "syntax": "SetDynamicColor(<Object>, <Red>, <Green>, <Blue>, <Alpha>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_object_for_dynamic_color_with_alpha",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Red",
+              "role": "dynamic_red_component_0_to_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Green",
+              "role": "dynamic_green_component_0_to_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Blue",
+              "role": "dynamic_blue_component_0_to_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Alpha",
+              "role": "dynamic_opacity_component_0_to_1",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在 R/G/B 动态颜色基础上增加动态不透明度 Alpha，对应属性对话框中“动态颜色”的第 4 个输入框。Alpha=0 完全透明，1 完全不透明。"
+        }
+      ]
+    },
+
+    "SetFilling": {
+      "name": "SetFilling",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetFilling/",
+      "overloads": [
+        {
+          "syntax": "SetFilling(<Object>, <Number>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_fillable_object_for_opacity",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Number",
+              "role": "opacity_value_0_to_1",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "改变给定对象的填充/整体不透明度。Number 必须在 [0,1]，0 表示完全透明，1 表示完全不透明，其他数值会被忽略。"
+        }
+      ]
+    },
+
+    "SetLayer": {
+      "name": "SetLayer",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetLayer/",
+      "overloads": [
+        {
+          "syntax": "SetLayer(<Object>, <Layer>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_object_to_set_layer",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Layer",
+              "role": "layer_index_0_to_9",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "将对象放入指定图层，图层编号为 0–9。数值超出范围会被截断或忽略。高层对象会显示在低层对象之上。"
+        }
+      ]
+    },
+
+    "SetLineOpacity": {
+      "name": "SetLineOpacity",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetLineOpacity/",
+      "overloads": [
+        {
+          "syntax": "SetLineOpacity(<Object>, <Number>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_line_or_border_object_for_opacity",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Number",
+              "role": "line_opacity_0_to_1",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "设置对象轮廓线（线条）的不透明度。Number 取值 [0,1]，0 为完全透明，1 为完全不透明。该命令在 6.0.904 版本中加入，专门控制线条透明度。"
+        }
+      ]
+    },
+
+    "SetLineThickness": {
+      "name": "SetLineThickness",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetLineThickness/",
+      "overloads": [
+        {
+          "syntax": "SetLineThickness(<Object>, <Number>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_line_like_object",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Number",
+              "role": "line_thickness_code",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "设置对象的线条粗细。粗细大致以像素计，Number 为非负数；其含义与属性对话框中“线条粗细”一致。"
+        }
+      ]
+    },
+
+    "SetPointSize": {
+      "name": "SetPointSize",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetPointSize/",
+      "overloads": [
+        {
+          "syntax": "SetPointSize(<Point>, <Number>)",
+          "params": [
+            {
+              "name": "Point",
+              "role": "single_point_to_resize",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "Number",
+              "role": "point_size_code",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "将给定点的大小设置为指定数值，等价于属性对话框中“大小”的设置。"
+        },
+        {
+          "syntax": "SetPointSize(<Object>, <Number>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "object_whose_vertices_will_resize",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Number",
+              "role": "vertex_point_size_code",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "改变一个对象所有顶点（如多边形顶点、3D 多面体顶点、展开网格顶点等）的点大小。也可作用于点列表（即使列表中的点未带标签）。"
+        }
+      ]
+    },
+
+    "SetPointStyle": {
+      "name": "SetPointStyle",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetPointStyle/",
+      "overloads": [
+        {
+          "syntax": "SetPointStyle(<Point>, <Number>)",
+          "params": [
+            {
+              "name": "Point",
+              "role": "point_to_change_style",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "Number",
+              "role": "point_style_code_0_to_10",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "根据编码改变点的样式。0=实心点，1=叉号，2=空心点，3=加号，4=实心菱形，5=空心菱形，6=上三角，7=下三角，8=右三角，9=左三角，10=无边框实心点；范围外的数按 0 处理。"
+        }
+      ]
+    },
+
+    "SetSeed": {
+      "name": "SetSeed",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetSeed/",
+      "overloads": [
+        {
+          "syntax": "SetSeed(<Integer>)",
+          "params": [
+            {
+              "name": "Integer",
+              "role": "random_seed_value",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "为随机数生成器设定种子，使之后产生的随机数（RandomBetween、RandomElement、RandomNormal 等）由该种子唯一决定，从而保证可重现性。"
+        }
+      ]
+    },
+
+    "SetSpinSpeed": {
+      "name": "SetSpinSpeed",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetSpinSpeed/",
+      "overloads": [
+        {
+          "syntax": "SetSpinSpeed(<Number>)",
+          "params": [
+            {
+              "name": "Number",
+              "role": "spin_speed_for_3d_view",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "设置 3D 图形视图绕当前竖直显示轴的旋转速度。正值通常对应一个方向的自动旋转，0 则停止自动旋转。"
+        }
+      ]
+    },
+
+    "SetTooltipMode": {
+      "name": "SetTooltipMode",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetTooltipMode/",
+      "overloads": [
+        {
+          "syntax": "SetTooltipMode(<Object>, <Number>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_object_for_tooltip_mode",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Number",
+              "role": "tooltip_mode_code",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "设置对象的“提示模式”（鼠标悬停时的气泡提示），与属性对话框中“高级→提示”一致。常用编码：0=自动，1=开，2=关，3=仅值，4=仅描述（具体取值以版本为准，未知编码按自动处理）。"
+        }
+      ]
+    },
+
+    "SetTrace": {
+      "name": "SetTrace",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetTrace/",
+      "overloads": [
+        {
+          "syntax": "SetTrace(<Object>, <Boolean>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_object_for_tracing",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Boolean",
+              "role": "trace_flag_on_off",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "打开或关闭对象的“描迹”属性。true 表示启用描迹，false 表示关闭描迹；等价于属性对话框中勾选/取消“描迹”。"
+        }
+      ]
+    },
+    "SetPerspective": {
+      "name": "SetPerspective",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetPerspective/",
+      "overloads": [
+        {
+          "syntax": "SetPerspective(<Text>)",
+          "params": [
+            {
+              "name": "Text",
+              "role": "layout_or_view_descriptor_or_perspective_id",
+              "type": "String",
+              "optional": false
+            }
+          ],
+          "description": "根据给定文本更改界面视图布局和可见性。Text 可以是：\n- 完整布局表达式：用字母表示视图并用并列 / “/” 描述水平/垂直排列，如 \"AGS\"、\"S/G\"、\"S/(GA)\" 等（A=Algebra, G=Graphics, D=Graphics2, S=Spreadsheet, C=CAS, T=3D Graphics, B=Probability 等），字母并列表示水平排列，\"/\" 表示上下分割；\n- 单个视图开关：使用前缀 \"+\" 或 \"-\" 打开或关闭单个视图，如 \"+D\"（添加 Graphics2）、\"-D\"（移除 Graphics2）、\"+Tools\"、\"+Table\" 等；\n- 标准预设视图编号：\"1\"~\"6\"，分别对应代数+图形、几何、表格、CAS、3D、概率等预设透视布局（同时可能影响输入栏和工具栏内容）。"
+        }
+      ]
+    },
+
+    "SetValue": {
+      "name": "SetValue",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetValue/",
+      "overloads": [
+        {
+          "syntax": "SetValue(<Boolean>, <0|1>)",
+          "params": [
+            {
+              "name": "Boolean",
+              "role": "target_boolean_or_checkbox",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "value01",
+              "role": "boolean_state_0_false_1_true",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "设置布尔量或复选框的状态：0 表示 false，1 表示 true。例如：SetValue(b, 1) 将布尔量 b 设为 true。"
+        },
+        {
+          "syntax": "SetValue(<ObjectA>, <ObjectB>)",
+          "params": [
+            {
+              "name": "ObjectA",
+              "role": "target_object_to_receive_value",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "ObjectB",
+              "role": "source_object_value",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "若 A 是自由对象或路径/区域上的点，则将 A 的值设为 B 当前的值（之后更改 B 不再影响 A）。典型用法：SetValue(f, RandomElement({cos(x), 3x+2, ln(x)})) 随机把函数 f 定义为列表中的一个函数。"
+        },
+        {
+          "syntax": "SetValue(<List>, <Number>, <Object>)",
+          "params": [
+            {
+              "name": "List",
+              "role": "target_free_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Index",
+              "role": "target_element_index_1_to_length_plus_1",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Object",
+              "role": "new_element_value",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "令 n 为 Index，将自由列表的第 n 个元素替换为给定对象当前值。n 最大可为 1 + 列表长度（可在末尾追加新元素）。"
+        },
+        {
+          "syntax": "SetValue(<DependentObject>, ?)",
+          "params": [
+            {
+              "name": "DependentObject",
+              "role": "dependent_object_to_set_undefined",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "unused",
+              "role": "placeholder_argument",
+              "type": "Any",
+              "optional": true
+            }
+          ],
+          "description": "特殊语法：将一个依赖对象设置为未定义，而无需用等号重新完全定义它。"
+        },
+        {
+          "syntax": "SetValue(<DropdownList>, <Number>)",
+          "params": [
+            {
+              "name": "DropdownList",
+              "role": "target_action_object_dropdown",
+              "type": "ActionObject",
+              "optional": false
+            },
+            {
+              "name": "Index",
+              "role": "selected_item_index",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "设置下拉列表中被选中的元素索引，等价于修改 SelectedIndex() 的值。"
+        }
+      ]
+    },
+
+    "SetViewDirection": {
+      "name": "SetViewDirection",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetViewDirection/",
+      "overloads": [
+        {
+          "syntax": "SetViewDirection()",
+          "params": [],
+          "description": "将 3D 图形视图的观察方向重置为默认位置。"
+        },
+        {
+          "syntax": "SetViewDirection(<Direction>)",
+          "params": [
+            {
+              "name": "Direction",
+              "role": "target_view_direction_object",
+              "type": "VectorOrPointOrPlaneOrLine",
+              "optional": false
+            }
+          ],
+          "description": "根据给定方向对象设置 3D 视图方向。参数可以是方向向量、点（视作视线方向）、平面、直线等。例如：SetViewDirection((0,0,1)) 或 SetViewDirection(Vector((0,0,1))) 将视图转为俯视。"
+        },
+        {
+          "syntax": "SetViewDirection(<Direction>, <Animated>)",
+          "params": [
+            {
+              "name": "Direction",
+              "role": "target_view_direction_object",
+              "type": "VectorOrPointOrPlaneOrLine",
+              "optional": false
+            },
+            {
+              "name": "Animated",
+              "role": "whether_to_animate_rotation",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "与上一重载类似，但可指定是否动画旋转到新方向。Animated=false 则立即切换，true 则以动画形式旋转。例如：在滑条 α 的 OnUpdate 脚本中使用 SetViewDirection(Vector((1; α; -30°)), false) 可让视图随滑条旋转。"
+        }
+      ]
+    },
+
+    "SetVisibleInView": {
+      "name": "SetVisibleInView",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetVisibleInView/",
+      "overloads": [
+        {
+          "syntax": "SetVisibleInView(<Object>, <ViewNumber>, <VisibleFlag>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_object_to_toggle_visibility",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "ViewNumber",
+              "role": "view_index_1_2_or_minus1_for_3d",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "VisibleFlag",
+              "role": "visible_in_view_true_or_false",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "控制对象在指定图形视图中的可见性（不影响其他视图）。视图号 1/2 对应 Graphics / Graphics 2，-1 对应 3D 视图。特殊对象名 xAxis, yAxis, zAxis, xOyPlane 也可用于单独控制坐标轴或 xOy 平面在各视图中的显示。"
+        }
+      ]
+    },
+
+    "ShowAxes": {
+      "name": "ShowAxes",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ShowAxes/",
+      "overloads": [
+        {
+          "syntax": "ShowAxes()",
+          "params": [],
+          "description": "在当前激活视图中显示坐标轴。"
+        },
+        {
+          "syntax": "ShowAxes(<Boolean>)",
+          "params": [
+            {
+              "name": "Flag",
+              "role": "show_or_hide_axes_in_active_view",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "在当前激活视图中显示或隐藏坐标轴。ShowAxes(true) 显示坐标轴，ShowAxes(false) 隐藏坐标轴。"
+        },
+        {
+          "syntax": "ShowAxes(<View>, <Boolean>)",
+          "params": [
+            {
+              "name": "View",
+              "role": "target_view_index_1_2_or_3",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Flag",
+              "role": "show_or_hide_axes_in_given_view",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "在指定的图形视图中显示或隐藏坐标轴。1/2 对应 Graphics / Graphics 2，3 对应 3D 视图。"
+        }
+      ]
+    },
+
+    "ShowGrid": {
+      "name": "ShowGrid",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ShowGrid/",
+      "overloads": [
+        {
+          "syntax": "ShowGrid()",
+          "params": [],
+          "description": "在当前激活视图中显示网格。"
+        },
+        {
+          "syntax": "ShowGrid(<Boolean>)",
+          "params": [
+            {
+              "name": "Flag",
+              "role": "show_or_hide_grid_in_active_view",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "在当前激活视图中显示或隐藏网格。ShowGrid(true) 显示网格，ShowGrid(false) 隐藏网格。"
+        },
+        {
+          "syntax": "ShowGrid(<View>, <Boolean>)",
+          "params": [
+            {
+              "name": "View",
+              "role": "target_view_index_1_2_or_3",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Flag",
+              "role": "show_or_hide_grid_in_given_view",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "在给定图形视图中显示或隐藏网格。1/2 对应 Graphics / Graphics 2，3 对应 3D 视图。"
+        }
+      ]
+    },
+
+    "ShowLabel": {
+      "name": "ShowLabel",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ShowLabel/",
+      "overloads": [
+        {
+          "syntax": "ShowLabel(<Object>, <Boolean>)",
+          "params": [
+            {
+              "name": "Object",
+              "role": "target_object_label_visibility",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "Flag",
+              "role": "show_or_hide_label_in_graphics_view",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "在图形视图中显示或隐藏给定对象的标签。例如：定义 f(x)=x^2，ShowLabel(f, true) 将显示函数 f 的标签。"
+        }
+      ]
+    },
+
+    "ShowLayer": {
+      "name": "ShowLayer",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ShowLayer/",
+      "overloads": [
+        {
+          "syntax": "ShowLayer(<Number>)",
+          "params": [
+            {
+              "name": "Layer",
+              "role": "layer_index_to_show",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "将给定图层中的所有对象设为可见，但不会覆盖对象自身设置的“条件可见性”。"
+        }
+      ]
+    },
+
+    "Slider": {
+      "name": "Slider",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Slider/",
+      "overloads": [
+        {
+          "syntax": "Slider(<Min>, <Max>, <Increment>, <Speed>, <Width>, <IsAngle>, <Horizontal>, <Animating>, <Random>)",
+          "params": [
+            {
+              "name": "Min",
+              "role": "slider_min_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Max",
+              "role": "slider_max_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Increment",
+              "role": "slider_step",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "Speed",
+              "role": "animation_speed",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "Width",
+              "role": "slider_width_pixels",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "IsAngle",
+              "role": "is_angle_slider",
+              "type": "Boolean",
+              "optional": true
+            },
+            {
+              "name": "Horizontal",
+              "role": "is_horizontal_slider",
+              "type": "Boolean",
+              "optional": true
+            },
+            {
+              "name": "Animating",
+              "role": "start_automatic_animation",
+              "type": "Boolean",
+              "optional": true
+            },
+            {
+              "name": "Random",
+              "role": "random_discrete_or_continuous_mode",
+              "type": "Boolean",
+              "optional": true
+            }
+          ],
+          "description": "创建一个滑条。Min/Max 是必填，确定取值范围；其他参数可省略并使用默认值：Increment（默认 0.1）、Speed（默认 1）、Width 像素宽度（默认 100）、IsAngle 是否角度滑条（默认 false）、Horizontal 是否水平（默认 true）、Animating 是否自动动画（默认 false）、Random 为 true 时在 [Min,Max] 间取随机值，否则按 Increment 线性变化。"
+        }
+      ]
+    },
+
+    "StartAnimation": {
+      "name": "StartAnimation",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/StartAnimation/",
+      "overloads": [
+        {
+          "syntax": "StartAnimation()",
+          "params": [],
+          "description": "恢复所有已暂停的动画。"
+        },
+        {
+          "syntax": "StartAnimation(<Boolean>)",
+          "params": [
+            {
+              "name": "Flag",
+              "role": "global_animation_on_off",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "当 Flag 为 false 时暂停所有动画，为 true 时恢复所有动画。"
+        },
+        {
+          "syntax": "StartAnimation(<PointOrSlider1>, <PointOrSlider2>, ...)",
+          "params": [
+            {
+              "name": "PointOrSliderList",
+              "role": "points_on_paths_and_sliders_to_start_animation",
+              "type": "List<PointOrSlider>",
+              "optional": false
+            }
+          ],
+          "description": "开始给定点和滑条的动画（点必须在路径上）。对未列出的对象不产生影响。"
+        },
+        {
+          "syntax": "StartAnimation(<PointOrSlider1>, <PointOrSlider2>, ..., <Boolean>)",
+          "params": [
+            {
+              "name": "PointOrSliderList",
+              "role": "points_on_paths_and_sliders_to_control_animation",
+              "type": "List<PointOrSlider>",
+              "optional": false
+            },
+            {
+              "name": "Flag",
+              "role": "start_or_permanently_stop_for_list",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "若 Flag=true，则开始给定点和滑条的动画；若 Flag=false，则永久停止这些对象的动画。点必须在路径上。"
+        }
+      ]
+    },
+
+    "StartRecord": {
+      "name": "StartRecord",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/StartRecord/",
+      "overloads": [
+        {
+          "syntax": "StartRecord()",
+          "params": [],
+          "description": "若先前暂停了“记录到电子表格”，该命令会恢复记录并为每个被记录对象写入一行新值。"
+        },
+        {
+          "syntax": "StartRecord(<Boolean>)",
+          "params": [
+            {
+              "name": "Flag",
+              "role": "recording_on_off",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Flag=false 时暂停所有到电子表格的记录；Flag=true 时恢复记录并为每个对象存储一次当前值。"
+        }
+      ]
+    },
+
+    "Turtle": {
+      "name": "Turtle",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Turtle/",
+      "overloads": [
+        {
+          "syntax": "Turtle()",
+          "params": [],
+          "description": "在坐标原点创建一只“乌龟”（海龟绘图对象），可配合 TurtleForward/TurtleBack/TurtleLeft/TurtleRight/TurtleUp/TurtleDown 指令进行路径绘制和动画。"
+        }
+      ]
+    },
+
+    "TurtleBack": {
+      "name": "TurtleBack",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TurtleBack/",
+      "overloads": [
+        {
+          "syntax": "TurtleBack(<Turtle>, <Distance>)",
+          "params": [
+            {
+              "name": "Turtle",
+              "role": "target_turtle_object",
+              "type": "Turtle",
+              "optional": false
+            },
+            {
+              "name": "Distance",
+              "role": "move_distance_backward",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "让给定乌龟沿当前朝向的反方向后退指定距离。如果乌龟在原点且界面显示的是“暂停”按钮，则 TurtleBack(turtle, 2) 会将其移动到 (-2, 0)；否则需要点击“播放”按钮以实际执行移动。"
+        }
+      ]
+    },
+
+    "TurtleDown": {
+      "name": "TurtleDown",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TurtleDown/",
+      "overloads": [
+        {
+          "syntax": "TurtleDown(<Turtle>)",
+          "params": [
+            {
+              "name": "Turtle",
+              "role": "target_turtle_to_enable_drawing",
+              "type": "Turtle",
+              "optional": false
+            }
+          ],
+          "description": "令指定乌龟“落笔”，从现在起乌龟移动时会在路径上画出轨迹。"
+        }
+      ]
+    },
+
+    "TurtleForward": {
+      "name": "TurtleForward",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TurtleForward/",
+      "overloads": [
+        {
+          "syntax": "TurtleForward(<Turtle>, <Distance>)",
+          "params": [
+            {
+              "name": "Turtle",
+              "role": "target_turtle_object",
+              "type": "Turtle",
+              "optional": false
+            },
+            {
+              "name": "Distance",
+              "role": "move_distance_forward",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "让给定乌龟沿当前朝向前进指定距离。如果乌龟在原点且显示“暂停”按钮，则 TurtleForward(turtle, 2) 会把乌龟移到 (2, 0)；否则需点击“播放”按钮才会执行位移。"
+        }
+      ]
+    },
+
+    "TurtleLeft": {
+      "name": "TurtleLeft",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TurtleLeft/",
+      "overloads": [
+        {
+          "syntax": "TurtleLeft(<Turtle>, <Angle>)",
+          "params": [
+            {
+              "name": "Turtle",
+              "role": "target_turtle_to_turn_left",
+              "type": "Turtle",
+              "optional": false
+            },
+            {
+              "name": "Angle",
+              "role": "turn_angle_left",
+              "type": "AngleOrNumber",
+              "optional": false
+            }
+          ],
+          "description": "令乌龟左转给定角度（逆时针），改变其朝向但不移动位置。常与 TurtleForward/Back 配合画多边形或图案。"
+        }
+      ]
+    },
+
+    "TurtleRight": {
+      "name": "TurtleRight",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TurtleRight/",
+      "overloads": [
+        {
+          "syntax": "TurtleRight(<Turtle>, <Angle>)",
+          "params": [
+            {
+              "name": "Turtle",
+              "role": "target_turtle_to_turn_right",
+              "type": "Turtle",
+              "optional": false
+            },
+            {
+              "name": "Angle",
+              "role": "turn_angle_right",
+              "type": "AngleOrNumber",
+              "optional": false
+            }
+          ],
+          "description": "令乌龟右转给定角度（顺时针），只改变方向不移动位置。"
+        }
+      ]
+    },
+
+    "TurtleUp": {
+      "name": "TurtleUp",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TurtleUp/",
+      "overloads": [
+        {
+          "syntax": "TurtleUp(<Turtle>)",
+          "params": [
+            {
+              "name": "Turtle",
+              "role": "target_turtle_to_disable_drawing",
+              "type": "Turtle",
+              "optional": false
+            }
+          ],
+          "description": "令指定乌龟“抬笔”，之后移动将不再绘制轨迹。常与 TurtleDown 配合控制何处留痕。"
+        }
+      ]
+    },
+
+    "UpdateConstruction": {
+      "name": "UpdateConstruction",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/UpdateConstruction/",
+      "overloads": [
+        {
+          "syntax": "UpdateConstruction()",
+          "params": [],
+          "description": "强制重新计算并更新整个构造，相当于让所有对象按当前定义和依赖关系重新生成。常用于脚本中在一系列 SetValue/SetCoords 之后刷新所有结果。"
+        }
+      ]
+    },
+
+    "ZoomIn": {
+      "name": "ZoomIn",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ZoomIn/",
+      "overloads": [
+        {
+          "syntax": "ZoomIn()",
+          "params": [],
+          "description": "在当前激活视图中放大视图（默认以视图中心为缩放中心），相当于工具栏中的“放大”操作。"
+        },
+        {
+          "syntax": "ZoomIn(<Factor>)",
+          "params": [
+            {
+              "name": "Factor",
+              "role": "zoom_in_factor",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "按给定缩放因子放大当前视图。Factor>1 表示放大。"
+        },
+        {
+          "syntax": "ZoomIn(<Factor>, <CenterPoint>)",
+          "params": [
+            {
+              "name": "Factor",
+              "role": "zoom_in_factor",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "CenterPoint",
+              "role": "zoom_center_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "以给定点为中心按因子 Factor 放大视图。"
+        }
+      ]
+    },
+
+    "ZoomOut": {
+      "name": "ZoomOut",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ZoomOut/",
+      "overloads": [
+        {
+          "syntax": "ZoomOut()",
+          "params": [],
+          "description": "在当前激活视图中缩小视图，相当于工具栏中的“缩小”操作。"
+        },
+        {
+          "syntax": "ZoomOut(<Factor>)",
+          "params": [
+            {
+              "name": "Factor",
+              "role": "zoom_out_factor",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "按给定因子缩小当前视图。通常 Factor>1 表示缩小。"
+        },
+        {
+          "syntax": "ZoomOut(<Factor>, <CenterPoint>)",
+          "params": [
+            {
+              "name": "Factor",
+              "role": "zoom_out_factor",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "CenterPoint",
+              "role": "zoom_center_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "以给定点为中心按 Factor 缩小视图。"
+        }
+      ]
+    }
+
+  }
+}

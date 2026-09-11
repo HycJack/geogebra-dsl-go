@@ -1,0 +1,1392 @@
+{
+  "command_category": "Conic_Commands",
+  "total_commands": 32,
+  "commands": {
+    "Axes": {
+      "name": "Axes",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Axes/",
+      "overloads": [
+        {
+          "syntax": "Axes(<Conic>)",
+          "params": [
+            {
+              "name": "conic",
+              "role": "target_conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "返回给定二次曲线（圆锥曲线）的长轴和短轴两条轴线的方程。"
+        },
+        {
+          "syntax": "Axes(<Quadric>)",
+          "params": [
+            {
+              "name": "quadric",
+              "role": "target_quadric",
+              "type": "Quadric",
+              "optional": false
+            }
+          ],
+          "description": "为给定二次曲面创建 3 条轴线。若是圆柱，则返回底面圆的两条轴和旋转轴；若是球，则返回与坐标轴平行的三条轴。"
+        }
+      ]
+    },
+    "Center": {
+      "name": "Center",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Center/",
+      "overloads": [
+        {
+          "syntax": "Center(<Conic>)",
+          "params": [
+            {
+              "name": "conic",
+              "role": "target_conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "返回圆、椭圆或双曲线的中心点。"
+        },
+        {
+          "syntax": "Center(<Quadric>)",
+          "params": [
+            {
+              "name": "quadric",
+              "role": "target_quadric",
+              "type": "Quadric",
+              "optional": false
+            }
+          ],
+          "description": "创建给定二次曲面（如球、圆锥等）的中心点。"
+        }
+      ]
+    },
+    "Circle": {
+      "name": "Circle",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Circle/",
+      "overloads": [
+        {
+          "syntax": "Circle(<Point>, <Number>)",
+          "params": [
+            {
+              "name": "center",
+              "role": "center_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "radius",
+              "role": "radius_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "以给定点为圆心、给定数值为半径构造圆。"
+        },
+        {
+          "syntax": "Circle(<Point>, <Segment>)",
+          "params": [
+            {
+              "name": "center",
+              "role": "center_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "segment",
+              "role": "radius_segment",
+              "type": "Segment",
+              "optional": false
+            }
+          ],
+          "description": "以给定点为圆心，半径等于给定线段长度构造圆。"
+        },
+        {
+          "syntax": "Circle(<Point>, <Point>)",
+          "params": [
+            {
+              "name": "center",
+              "role": "center_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "through",
+              "role": "point_on_circle",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "以第一个点为圆心、过第二个点构造圆。"
+        },
+        {
+          "syntax": "Circle(<Point>, <Point>, <Point>)",
+          "params": [
+            {
+              "name": "point1",
+              "role": "point_on_circle_1",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "point2",
+              "role": "point_on_circle_2",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "point3",
+              "role": "point_on_circle_3",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "通过给定三点构造圆（要求三点不共线）。"
+        },
+        {
+          "syntax": "Circle(<Line>, <Point>)",
+          "params": [
+            {
+              "name": "axis",
+              "role": "axis_line",
+              "type": "Line",
+              "optional": false
+            },
+            {
+              "name": "through",
+              "role": "point_on_circle",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "以给定直线为轴、通过给定点构造圆（3D 场景下的旋转轴语义）。"
+        },
+        {
+          "syntax": "Circle(<Point>, <Number>, <Direction>)",
+          "params": [
+            {
+              "name": "center",
+              "role": "center_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "radius",
+              "role": "radius_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "direction",
+              "role": "axis_direction",
+              "type": "Line/Vector/Plane",
+              "optional": false
+            }
+          ],
+          "description": "以给定中心和半径构造圆，其轴线平行于给定方向（方向可以是直线、向量或平面）。"
+        },
+        {
+          "syntax": "Circle(<Point>, <Point>, <Direction>)",
+          "params": [
+            {
+              "name": "center",
+              "role": "center_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "through",
+              "role": "point_on_circle",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "direction",
+              "role": "axis_direction",
+              "type": "Line/Vector/Plane",
+              "optional": false
+            }
+          ],
+          "description": "以给定中心并过给定点构造圆，其轴线平行于给定方向。"
+        }
+      ]
+    },
+    "Circumference": {
+      "name": "Circumference",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Circumference/",
+      "overloads": [
+        {
+          "syntax": "Circumference(<Conic>)",
+          "params": [
+            {
+              "name": "conic",
+              "role": "target_conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "当给定二次曲线是圆或椭圆时，返回其周长，否则结果为未定义。"
+        }
+      ]
+    },
+    "Coefficients": {
+      "name": "Coefficients",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Coefficients/",
+      "overloads": [
+        {
+          "syntax": "Coefficients(<Polynomial>)",
+          "params": [
+            {
+              "name": "polynomial",
+              "role": "source_polynomial",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "返回多项式在主变量下所有系数构成的列表 a_k, …, a_0。对由拟合命令得到的非多项式曲线，会返回拟合参数列表。"
+        },
+        {
+          "syntax": "Coefficients(<Conic>)",
+          "params": [
+            {
+              "name": "conic",
+              "role": "target_conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "返回二次曲线标准形式 a·x² + b·y² + c + d·x·y + e·x + f·y = 0 的系数列表 {a, b, c, d, e, f}。"
+        },
+        {
+          "syntax": "Coefficients(<Polynomial>, <Variable>)",
+          "params": [
+            {
+              "name": "polynomial",
+              "role": "source_polynomial",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "variable",
+              "role": "target_variable",
+              "type": "Variable",
+              "optional": false
+            }
+          ],
+          "description": "在 CAS 中：返回多项式关于给定变量的系数列表。"
+        }
+      ]
+    },
+    "Conic": {
+      "name": "Conic",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Conic/",
+      "overloads": [
+        {
+          "syntax": "Conic(<Point>, <Point>, <Point>, <Point>, <Point>)",
+          "params": [
+            {
+              "name": "point1",
+              "role": "point_on_conic_1",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "point2",
+              "role": "point_on_conic_2",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "point3",
+              "role": "point_on_conic_3",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "point4",
+              "role": "point_on_conic_4",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "point5",
+              "role": "point_on_conic_5",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "通过五个给定点构造一条二次曲线；若其中四点共线则二次曲线未定义。"
+        },
+        {
+          "syntax": "Conic(<Number a>, <Number b>, <Number c>, <Number d>, <Number e>, <Number f>)",
+          "params": [
+            {
+              "name": "a",
+              "role": "coef_x2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "b",
+              "role": "coef_y2",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "c",
+              "role": "coef_const_side",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "d",
+              "role": "coef_xy",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "e",
+              "role": "coef_x",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "f",
+              "role": "coef_y",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回满足 a·x² + d·x·y + b·y² + e·x + f·y = −c 的二次曲线。"
+        },
+        {
+          "syntax": "Conic(<List>)",
+          "params": [
+            {
+              "name": "coeff_list",
+              "role": "coefficients_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "由列表 {a, b, c, d, e, f} 构造二次曲线 a·x² + d·x·y + b·y² + e·x + f·y = −c。"
+        }
+      ]
+    },
+    "ConjugateDiameter": {
+      "name": "ConjugateDiameter",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ConjugateDiameter/",
+      "overloads": [
+        {
+          "syntax": "ConjugateDiameter(<Line>, <Conic>)",
+          "params": [
+            {
+              "name": "line",
+              "role": "direction_line",
+              "type": "Line",
+              "optional": false
+            },
+            {
+              "name": "conic",
+              "role": "target_conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "返回与给定直线平行的直径的共轭直径（相对于给定二次曲线）。"
+        },
+        {
+          "syntax": "ConjugateDiameter(<Vector>, <Conic>)",
+          "params": [
+            {
+              "name": "vector",
+              "role": "direction_vector",
+              "type": "Vector",
+              "optional": false
+            },
+            {
+              "name": "conic",
+              "role": "target_conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "返回与给定向量平行的直径的共轭直径（相对于给定二次曲线）。"
+        }
+      ]
+    },
+    "Curvature": {
+      "name": "Curvature",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Curvature/",
+      "overloads": [
+        {
+          "syntax": "Curvature(<Point>, <Object>)",
+          "params": [
+            {
+              "name": "point",
+              "role": "eval_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "object",
+              "role": "target_object",
+              "type": "Function/Curve/Conic",
+              "optional": false
+            }
+          ],
+          "description": "在给定点处计算对象（函数、参数曲线或二次曲线）的曲率。"
+        }
+      ]
+    },
+    "Directrix": {
+      "name": "Directrix",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Directrix/",
+      "overloads": [
+        {
+          "syntax": "Directrix(<Conic>)",
+          "params": [
+            {
+              "name": "conic",
+              "role": "target_conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "返回给定二次曲线的准线。"
+        }
+      ]
+    },
+    "Eccentricity": {
+      "name": "Eccentricity",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Eccentricity/",
+      "overloads": [
+        {
+          "syntax": "Eccentricity(<Conic>)",
+          "params": [
+            {
+              "name": "conic",
+              "role": "target_conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "计算二次曲线的离心率。"
+        }
+      ]
+    },
+    "Ellipse": {
+      "name": "Ellipse",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Ellipse/",
+      "overloads": [
+        {
+          "syntax": "Ellipse(<Focus>, <Focus>, <Number>)",
+          "params": [
+            {
+              "name": "focus1",
+              "role": "first_focus",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "focus2",
+              "role": "second_focus",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "a",
+              "role": "semi_major_axis_length",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "以两焦点及半长轴长度构造椭圆；若 2a 大于焦点间距，将得到双曲线。"
+        },
+        {
+          "syntax": "Ellipse(<Focus>, <Focus>, <Segment>)",
+          "params": [
+            {
+              "name": "focus1",
+              "role": "first_focus",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "focus2",
+              "role": "second_focus",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "segment",
+              "role": "semi_major_axis_segment",
+              "type": "Segment",
+              "optional": false
+            }
+          ],
+          "description": "以两焦点与给定线段长度（作为半长轴）构造椭圆。"
+        },
+        {
+          "syntax": "Ellipse(<Focus>, <Focus>, <Point>)",
+          "params": [
+            {
+              "name": "focus1",
+              "role": "first_focus",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "focus2",
+              "role": "second_focus",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "point",
+              "role": "point_on_ellipse",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "以两焦点并过给定点构造椭圆。"
+        }
+      ]
+    },
+    "Focus": {
+      "name": "Focus",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Focus/",
+      "overloads": [
+        {
+          "syntax": "Focus(<Conic>)",
+          "params": [
+            {
+              "name": "conic",
+              "role": "target_conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "返回给定二次曲线的所有焦点。"
+        }
+      ]
+    },
+    "Hyperbola": {
+      "name": "Hyperbola",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Hyperbola/",
+      "overloads": [
+        {
+          "syntax": "Hyperbola(<Focus>, <Focus>, <Number>)",
+          "params": [
+            {
+              "name": "focus1",
+              "role": "first_focus",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "focus2",
+              "role": "second_focus",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "a",
+              "role": "semi_major_axis_length",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "以两焦点和半长轴长度构造双曲线；若 2a 不满足 0 < 2a < 焦点间距，则会得到椭圆。"
+        },
+        {
+          "syntax": "Hyperbola(<Focus>, <Focus>, <Segment>)",
+          "params": [
+            {
+              "name": "focus1",
+              "role": "first_focus",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "focus2",
+              "role": "second_focus",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "segment",
+              "role": "semi_major_axis_segment",
+              "type": "Segment",
+              "optional": false
+            }
+          ],
+          "description": "以两焦点和给定线段长度（作为半长轴）构造双曲线。"
+        },
+        {
+          "syntax": "Hyperbola(<Focus>, <Focus>, <Point>)",
+          "params": [
+            {
+              "name": "focus1",
+              "role": "first_focus",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "focus2",
+              "role": "second_focus",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "point",
+              "role": "point_on_hyperbola",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "以两焦点并过给定点构造双曲线。"
+        }
+      ]
+    },
+    "Incircle": {
+      "name": "Incircle",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Incircle/",
+      "overloads": [
+        {
+          "syntax": "Incircle(<Point>, <Point>, <Point>)",
+          "params": [
+            {
+              "name": "a",
+              "role": "triangle_vertex_1",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "b",
+              "role": "triangle_vertex_2",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "c",
+              "role": "triangle_vertex_3",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "返回由三个点构成的三角形的内切圆。"
+        }
+      ]
+    },
+    "LinearEccentricity": {
+      "name": "LinearEccentricity",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/LinearEccentricity/",
+      "overloads": [
+        {
+          "syntax": "LinearEccentricity(<Conic>)",
+          "params": [
+            {
+              "name": "conic",
+              "role": "target_conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "计算二次曲线的线性离心率：对椭圆或双曲线，是中心到一焦点的距离；对圆为 0；对抛物线为焦点到顶点的距离。"
+        }
+      ]
+    },
+    "MajorAxis": {
+      "name": "MajorAxis",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/MajorAxis/",
+      "overloads": [
+        {
+          "syntax": "MajorAxis(<Conic>)",
+          "params": [
+            {
+              "name": "conic",
+              "role": "target_conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "返回给定二次曲线的长轴方程。"
+        }
+      ]
+    },
+    "Midpoint": {
+      "name": "Midpoint",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Midpoint/",
+      "overloads": [
+        {
+          "syntax": "Midpoint(<Segment>)",
+          "params": [
+            {
+              "name": "segment",
+              "role": "target_segment",
+              "type": "Segment",
+              "optional": false
+            }
+          ],
+          "description": "返回线段的中点。"
+        },
+        {
+          "syntax": "Midpoint(<Conic>)",
+          "params": [
+            {
+              "name": "conic",
+              "role": "target_conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "返回二次曲线的中心。"
+        },
+        {
+          "syntax": "Midpoint(<Interval>)",
+          "params": [
+            {
+              "name": "interval",
+              "role": "target_interval",
+              "type": "Interval",
+              "optional": false
+            }
+          ],
+          "description": "返回数轴上区间的中点（以数表示）。"
+        },
+        {
+          "syntax": "Midpoint(<Point>, <Point>)",
+          "params": [
+            {
+              "name": "point1",
+              "role": "endpoint_1",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "point2",
+              "role": "endpoint_2",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "返回两个点的中点。"
+        },
+        {
+          "syntax": "Midpoint(<Quadric>)",
+          "params": [
+            {
+              "name": "quadric",
+              "role": "target_quadric",
+              "type": "Quadric",
+              "optional": false
+            }
+          ],
+          "description": "返回给定二次曲面（如球、圆锥等）的中心点。"
+        }
+      ]
+    },
+    "MinorAxis": {
+      "name": "MinorAxis",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/MinorAxis/",
+      "overloads": [
+        {
+          "syntax": "MinorAxis(<Conic>)",
+          "params": [
+            {
+              "name": "conic",
+              "role": "target_conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "返回给定二次曲线的短轴方程。"
+        }
+      ]
+    },
+    "OsculatingCircle": {
+      "name": "OsculatingCircle",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/OsculatingCircle/",
+      "overloads": [
+        {
+          "syntax": "OsculatingCircle(<Point>, <Function>)",
+          "params": [
+            {
+              "name": "point",
+              "role": "eval_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "function",
+              "role": "target_function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "在给定点处构造函数的密切圆（与曲线一阶和二阶相切）。"
+        },
+        {
+          "syntax": "OsculatingCircle(<Point>, <Curve>)",
+          "params": [
+            {
+              "name": "point",
+              "role": "eval_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "curve",
+              "role": "target_curve",
+              "type": "Curve",
+              "optional": false
+            }
+          ],
+          "description": "在给定点处构造参数曲线的密切圆。"
+        },
+        {
+          "syntax": "OsculatingCircle(<Point>, <Object>)",
+          "params": [
+            {
+              "name": "point",
+              "role": "eval_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "object",
+              "role": "target_object",
+              "type": "Function/Curve/Conic",
+              "optional": false
+            }
+          ],
+          "description": "在给定点处构造对象（函数、曲线或二次曲线）的密切圆（仅 2D 对象）。"
+        }
+      ]
+    },
+    "Parabola": {
+      "name": "Parabola",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Parabola/",
+      "overloads": [
+        {
+          "syntax": "Parabola( <Point>, <Line> )",
+          "params": [
+            {
+              "name": "focus",
+              "role": "focus",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "directrix",
+              "role": "directrix",
+              "type": "Line",
+              "optional": false
+            }
+          ],
+          "description": "以给定点为焦点、给定直线为准线构造抛物线。"
+        }
+      ]
+    },
+    "Parameter": {
+      "name": "Parameter",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Parameter/",
+      "overloads": [
+        {
+          "syntax": "Parameter( <Parabola> )",
+          "params": [
+            {
+              "name": "parabola",
+              "role": "target_parabola",
+              "type": "Parabola",
+              "optional": false
+            }
+          ],
+          "description": "返回给定抛物线的参数，即该抛物线焦点到准线的距离。"
+        }
+      ]
+    },
+    "PathParameter": {
+      "name": "PathParameter",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/PathParameter/",
+      "overloads": [
+        {
+          "syntax": "PathParameter( <Point On Path> )",
+          "params": [
+            {
+              "name": "point",
+              "role": "point_on_path",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "对一条路径上的点，返回其路径参数（0 到 1 之间的数值），用于描述点在该路径上的位置。"
+        }
+      ]
+    },
+    "Perimeter": {
+      "name": "Perimeter",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Perimeter/",
+      "overloads": [
+        {
+          "syntax": "Perimeter( <Polygon> )",
+          "params": [
+            {
+              "name": "polygon",
+              "role": "polygon",
+              "type": "Polygon",
+              "optional": false
+            }
+          ],
+          "description": "返回多边形的周长。"
+        },
+        {
+          "syntax": "Perimeter( <Conic> )",
+          "params": [
+            {
+              "name": "conic",
+              "role": "conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "当给定二次曲线是圆或椭圆时，返回其周长，否则结果为未定义。"
+        },
+        {
+          "syntax": "Perimeter( <Locus> )",
+          "params": [
+            {
+              "name": "locus",
+              "role": "locus",
+              "type": "Locus",
+              "optional": false
+            }
+          ],
+          "description": "若给定轨迹是有限的，返回其近似周长，否则结果为未定义。"
+        }
+      ]
+    },
+    "Polar": {
+      "name": "Polar",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Polar/",
+      "overloads": [
+        {
+          "syntax": "Polar( <Point>, <Conic> )",
+          "params": [
+            {
+              "name": "point",
+              "role": "point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "conic",
+              "role": "conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "构造相对于给定二次曲线、以给定点为极点的极线（点的极线）。"
+        },
+        {
+          "syntax": "Polar( <Line>, <Conic> )",
+          "params": [
+            {
+              "name": "line",
+              "role": "polar_line",
+              "type": "Line",
+              "optional": false
+            },
+            {
+              "name": "conic",
+              "role": "conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "已知极线与二次曲线，构造对应的极点。"
+        }
+      ]
+    },
+    "Radius": {
+      "name": "Radius",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Radius/",
+      "overloads": [
+        {
+          "syntax": "Radius( <Conic> )",
+          "params": [
+            {
+              "name": "conic",
+              "role": "conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "返回给定圆（二次曲线）的半径。"
+        }
+      ]
+    },
+    "Sector": {
+      "name": "Sector",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Sector/",
+      "overloads": [
+        {
+          "syntax": "Sector( <Conic>, <Point>, <Point> )",
+          "params": [
+            {
+              "name": "conic",
+              "role": "conic",
+              "type": "Conic",
+              "optional": false
+            },
+            {
+              "name": "point1",
+              "role": "start_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "point2",
+              "role": "end_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "在给定二次曲线（圆或椭圆）上，以两个点为边界构造扇形，并给出其面积。"
+        },
+        {
+          "syntax": "Sector( <Conic>, <Parameter Value>, <Parameter Value> )",
+          "params": [
+            {
+              "name": "conic",
+              "role": "conic",
+              "type": "Conic",
+              "optional": false
+            },
+            {
+              "name": "param1",
+              "role": "start_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "param2",
+              "role": "end_parameter",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在给定二次曲线（圆或椭圆）上，以两个参数值（0 到 2π）确定的弧为边界构造扇形，并给出其面积。"
+        }
+      ]
+    },
+    "SemiMajorAxisLength": {
+      "name": "SemiMajorAxisLength",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SemiMajorAxisLength/",
+      "overloads": [
+        {
+          "syntax": "SemiMajorAxisLength( <Conic> )",
+          "params": [
+            {
+              "name": "conic",
+              "role": "conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "返回给定二次曲线的半长轴长度（长轴的一半）。"
+        }
+      ]
+    },
+    "SemiMinorAxisLength": {
+      "name": "SemiMinorAxisLength",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SemiMinorAxisLength/",
+      "overloads": [
+        {
+          "syntax": "SemiMinorAxisLength( <Conic> )",
+          "params": [
+            {
+              "name": "conic",
+              "role": "conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "返回给定二次曲线的半短轴长度（短轴的一半）。"
+        }
+      ]
+    },
+    "Semicircle": {
+      "name": "Semicircle",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Semicircle/",
+      "overloads": [
+        {
+          "syntax": "Semicircle( <Point>, <Point> )",
+          "params": [
+            {
+              "name": "point1",
+              "role": "endpoint_1",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "point2",
+              "role": "endpoint_2",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "以两点为直径端点构造位于该线段“上方”的半圆，并在代数视图中显示其长度。"
+        }
+      ]
+    },
+    "Tangent": {
+      "name": "Tangent",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Tangent/",
+      "overloads": [
+        {
+          "syntax": "Tangent( <Point>, <Conic> )",
+          "params": [
+            {
+              "name": "point",
+              "role": "point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "conic",
+              "role": "conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "构造过给定点的、与指定二次曲线相切的所有切线。"
+        },
+        {
+          "syntax": "Tangent( <Point>, <Function> )",
+          "params": [
+            {
+              "name": "point",
+              "role": "point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "function",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "在 x = x(A) 处构造函数的切线，其中 A 为给定点，x(A) 为其 x 坐标。"
+        },
+        {
+          "syntax": "Tangent( <Point on Curve>, <Curve> )",
+          "params": [
+            {
+              "name": "point",
+              "role": "point_on_curve",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "curve",
+              "role": "curve",
+              "type": "Curve",
+              "optional": false
+            }
+          ],
+          "description": "在给定曲线上的给定点处构造切线。"
+        },
+        {
+          "syntax": "Tangent( <x-Value>, <Function> )",
+          "params": [
+            {
+              "name": "x_value",
+              "role": "x_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "function",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "在给定 x 值处构造函数的切线。"
+        },
+        {
+          "syntax": "Tangent( <Line>, <Conic> )",
+          "params": [
+            {
+              "name": "line",
+              "role": "reference_line",
+              "type": "Line",
+              "optional": false
+            },
+            {
+              "name": "conic",
+              "role": "conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "构造与给定直线平行、且与给定二次曲线相切的所有切线。"
+        },
+        {
+          "syntax": "Tangent( <Circle>, <Circle> )",
+          "params": [
+            {
+              "name": "circle1",
+              "role": "circle_1",
+              "type": "Circle",
+              "optional": false
+            },
+            {
+              "name": "circle2",
+              "role": "circle_2",
+              "type": "Circle",
+              "optional": false
+            }
+          ],
+          "description": "为两圆构造所有公共切线（最多 4 条）。"
+        },
+        {
+          "syntax": "Tangent( <Point>, <Spline> )",
+          "params": [
+            {
+              "name": "point",
+              "role": "point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "spline",
+              "role": "spline",
+              "type": "Spline",
+              "optional": false
+            }
+          ],
+          "description": "在给定点处构造样条曲线的切线。"
+        },
+        {
+          "syntax": "Tangent( <Point>, <Implicit Curve> )",
+          "params": [
+            {
+              "name": "point",
+              "role": "point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "implicit_curve",
+              "role": "implicit_curve",
+              "type": "Implicit Curve",
+              "optional": false
+            }
+          ],
+          "description": "在给定点处构造隐式曲线的切线（可能得到多条切线）。"
+        }
+      ]
+    },
+    "Type": {
+      "name": "Type",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Type/",
+      "overloads": [
+        {
+          "syntax": "Type( <Object> )",
+          "params": [
+            {
+              "name": "object",
+              "role": "object",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "对二次曲线和二次曲面返回一个整数，用以表示其类型（如圆、椭圆、双曲线、抛物线、球、椭球、圆锥、圆柱等）。"
+        }
+      ]
+    },
+    "Vertex": {
+      "name": "Vertex",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Vertex/",
+      "overloads": [
+        {
+          "syntax": "Vertex( <Conic> )",
+          "params": [
+            {
+              "name": "conic",
+              "role": "conic",
+              "type": "Conic",
+              "optional": false
+            }
+          ],
+          "description": "返回给定二次曲线的所有顶点。"
+        },
+        {
+          "syntax": "Vertex( <Inequality> )",
+          "params": [
+            {
+              "name": "inequality",
+              "role": "inequality",
+              "type": "Inequality",
+              "optional": false
+            }
+          ],
+          "description": "返回由不等式边界线围成区域的交点（顶点）。"
+        },
+        {
+          "syntax": "Vertex( <Polygon> )",
+          "params": [
+            {
+              "name": "polygon",
+              "role": "polygon",
+              "type": "Polygon",
+              "optional": false
+            }
+          ],
+          "description": "返回多边形的所有顶点。"
+        },
+        {
+          "syntax": "Vertex( <Polygon>, <Index n> )",
+          "params": [
+            {
+              "name": "polygon",
+              "role": "polygon",
+              "type": "Polygon",
+              "optional": false
+            },
+            {
+              "name": "index",
+              "role": "index",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回多边形的第 n 个顶点。"
+        },
+        {
+          "syntax": "Vertex( <Segment>, <Index> )",
+          "params": [
+            {
+              "name": "segment",
+              "role": "segment",
+              "type": "Segment",
+              "optional": false
+            },
+            {
+              "name": "index",
+              "role": "index",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "当 Index = 1 时返回线段起点，当 Index = 2 时返回线段终点。"
+        }
+      ]
+    }
+  }
+}

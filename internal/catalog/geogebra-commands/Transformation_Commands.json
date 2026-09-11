@@ -1,0 +1,354 @@
+{
+  "command_category": "Transformation_Commands",
+  "total_commands": 6,
+  "commands": {
+    "Dilate": {
+      "name": "Dilate",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Dilate/",
+      "overloads": [
+        {
+          "syntax": "Dilate( <Object>, <Dilation Factor> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object_to_dilate",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "<Dilation Factor>",
+              "role": "dilation_factor",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Dilates the object from a point of origin using the given factor."
+        },
+        {
+          "syntax": "Dilate( <Object>, <Dilation Factor>, <Dilation Center Point> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object_to_dilate",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "<Dilation Factor>",
+              "role": "dilation_factor",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "<Dilation Center Point>",
+              "role": "dilation_center_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "Dilates the object from a point, which is the dilation center point, using the given factor."
+        }
+      ]
+    },
+    "Reflect": {
+      "name": "Reflect",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Reflect/",
+      "overloads": [
+        {
+          "syntax": "Reflect( <Object>, <Point> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object_to_reflect",
+              "type": "Geometric Object",
+              "optional": false
+            },
+            {
+              "name": "<Point>",
+              "role": "reflection_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "Reflects the geometric object through a given point."
+        },
+        {
+          "syntax": "Reflect( <Object>, <Line> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object_to_reflect",
+              "type": "Geometric Object",
+              "optional": false
+            },
+            {
+              "name": "<Line>",
+              "role": "reflection_line",
+              "type": "Line",
+              "optional": false
+            }
+          ],
+          "description": "Reflects an object across a given line."
+        },
+        {
+          "syntax": "Reflect( <Object>, <Circle> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object_to_reflect",
+              "type": "Geometric Object",
+              "optional": false
+            },
+            {
+              "name": "<Circle>",
+              "role": "reflection_circle",
+              "type": "Circle",
+              "optional": false
+            }
+          ],
+          "description": "Inverts the geometric object with respect to a circle."
+        },
+        {
+          "syntax": "Reflect( <Object>, <Plane> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object_to_reflect",
+              "type": "Geometric Object",
+              "optional": false
+            },
+            {
+              "name": "<Plane>",
+              "role": "reflection_plane",
+              "type": "Plane",
+              "optional": false
+            }
+          ],
+          "description": "Reflects an object about a plane."
+        }
+      ]
+    },
+    "Rotate": {
+      "name": "Rotate",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Rotate/",
+      "overloads": [
+        {
+          "syntax": "Rotate( <Object>, <Angle> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object_to_rotate",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "<Angle>",
+              "role": "angle",
+              "type": "Angle",
+              "optional": false
+            }
+          ],
+          "description": "Rotates the geometric object by the angle around the axis origin."
+        },
+        {
+          "syntax": "Rotate( <Object>, <Angle>, <Point> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object_to_rotate",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "<Angle>",
+              "role": "angle",
+              "type": "Angle",
+              "optional": false
+            },
+            {
+              "name": "<Point>",
+              "role": "rotation_center_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "Rotates the geometric object by the angle around the given point."
+        },
+        {
+          "syntax": "Rotate( <Object>, <Angle>, <Axis of Rotation> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object_to_rotate",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "<Angle>",
+              "role": "angle",
+              "type": "Angle",
+              "optional": false
+            },
+            {
+              "name": "<Axis of Rotation>",
+              "role": "rotation_axis",
+              "type": "Axis of Rotation",
+              "optional": false
+            }
+          ],
+          "description": "Rotates the geometric object by the angle around the given axis of rotation."
+        },
+        {
+          "syntax": "Rotate( <Object>, <Angle>, <Point on Axis>, <Axis Direction or Plane> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object_to_rotate",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "<Angle>",
+              "role": "angle",
+              "type": "Angle",
+              "optional": false
+            },
+            {
+              "name": "<Point on Axis>",
+              "role": "axis_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "<Axis Direction or Plane>",
+              "role": "axis_direction_or_plane",
+              "type": "Axis Direction or Plane",
+              "optional": false
+            }
+          ],
+          "description": "Rotates the geometric object by the angle around the axis defined by the given point and the axis direction or plane."
+        }
+      ]
+    },
+    "Shear": {
+      "name": "Shear",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Shear/",
+      "overloads": [
+        {
+          "syntax": "Shear( <Object>, <Line>, <Ratio> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object_to_shear",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "<Line>",
+              "role": "shear_axis_line",
+              "type": "Line",
+              "optional": false
+            },
+            {
+              "name": "<Ratio>",
+              "role": "shear_ratio",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Shears the object so that points on the line stay fixed and points at distance d from the line are shifted by d ⋅ ratio in direction of the line."
+        }
+      ]
+    },
+    "Stretch": {
+      "name": "Stretch",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Stretch/",
+      "overloads": [
+        {
+          "syntax": "Stretch( <Object>, <Vector> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object_to_stretch",
+              "type": "Geometric Object",
+              "optional": false
+            },
+            {
+              "name": "<Vector>",
+              "role": "stretch_vector",
+              "type": "Vector",
+              "optional": false
+            }
+          ],
+          "description": "Stretches the object parallel to the given vector by the ratio given by the magnitude of the vector."
+        },
+        {
+          "syntax": "Stretch( <Object>, <Line>, <Ratio> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object_to_stretch",
+              "type": "Geometric Object",
+              "optional": false
+            },
+            {
+              "name": "<Line>",
+              "role": "reference_line",
+              "type": "Line",
+              "optional": false
+            },
+            {
+              "name": "<Ratio>",
+              "role": "stretch_ratio",
+              "type": "Ratio",
+              "optional": false
+            }
+          ],
+          "description": "Stretches the object perpendicular to the given line by the specified ratio."
+        }
+      ]
+    },
+    "Translate": {
+      "name": "Translate",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Translate/",
+      "overloads": [
+        {
+          "syntax": "Translate( <Object>, <Vector> )",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object_to_translate",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "<Vector>",
+              "role": "translation_vector",
+              "type": "Vector",
+              "optional": false
+            }
+          ],
+          "description": "Translates the geometric object by the vector."
+        },
+        {
+          "syntax": "Translate( <Vector>, <Start Point> )",
+          "params": [
+            {
+              "name": "<Vector>",
+              "role": "translation_vector",
+              "type": "Vector",
+              "optional": false
+            },
+            {
+              "name": "<Start Point>",
+              "role": "start_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "Translates the vector to the start point."
+        }
+      ]
+    }
+  }
+}

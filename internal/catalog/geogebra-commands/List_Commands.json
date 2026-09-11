@@ -1,0 +1,1998 @@
+{
+  "command_category": "List_Commands",
+  "total_commands": 39,
+  "commands": [
+    {
+      "name": "Append",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Append/",
+      "overloads": [
+        {
+          "syntax": "Append( <List>, <Object> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "first argument",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Object",
+              "role": "second argument",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "Appends the object to the list and yields the results in a new list."
+        },
+        {
+          "syntax": "Append( <Object>, <List> )",
+          "params": [
+            {
+              "name": "Object",
+              "role": "first argument",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "List",
+              "role": "second argument",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Appends the list to the object and yields the results in a new list."
+        }
+      ]
+    },
+    {
+      "name": "Classes",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Classes/",
+      "overloads": [
+        {
+          "syntax": "Classes( <List of Data>, <Start>, <Width of Classes> )",
+          "params": [
+            {
+              "name": "List of Data",
+              "role": "input data list",
+              "type": "List of Numbers",
+              "optional": false
+            },
+            {
+              "name": "Start",
+              "role": "minimum boundary (first class lower bound)",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Width of Classes",
+              "role": "width of each class",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Gives a list of class boundaries. The first boundary (min) is equal to Start, the last boundary (max) will be at least the maximum of the List and the boundaries will be equally spaced between min and max."
+        },
+        {
+          "syntax": "Classes( <List of Data>, <Number of Classes> )",
+          "params": [
+            {
+              "name": "List of Data",
+              "role": "input data list",
+              "type": "List of Numbers",
+              "optional": false
+            },
+            {
+              "name": "Number of Classes",
+              "role": "number of classes to create",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Gives a list of class boundaries. The first boundary (min) is equal to the minimum of the List, the last boundary (max) will be the maximum of the List and the boundaries will be equally spaced between min and max. By convention this uses the a ≤ x < b rule for each class except for the last class which is a ≤ x ≤ b."
+        }
+      ]
+    },
+    {
+      "name": "CountIf",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CountIf/",
+      "overloads": [
+        {
+          "syntax": "CountIf( <Condition>, <List> )",
+          "params": [
+            {
+              "name": "Condition",
+              "role": "Condition",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "List",
+              "role": "List",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Counts the number of elements in the list satisfying the condition."
+        },
+        {
+          "syntax": "CountIf( <Condition>, <Variable>, <List> )",
+          "params": [
+            {
+              "name": "Condition",
+              "role": "Condition",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "Variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "List",
+              "role": "List",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Counts elements satisfying the condition, using a variable that is substituted by each list element in turn."
+        }
+      ]
+    },
+    {
+      "name": "DataFunction",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/DataFunction/",
+      "overloads": [
+        {
+          "syntax": "DataFunction( <List of Numbers>, <List of Numbers> )",
+          "params": [
+            {
+              "name": "x-values",
+              "role": "First coordinate list for points",
+              "type": "List of Numbers",
+              "optional": false
+            },
+            {
+              "name": "y-values",
+              "role": "Second coordinate list for points",
+              "type": "List of Numbers",
+              "optional": false
+            }
+          ],
+          "description": "Yields a function that connects points (x1, y1), …, (xn, yn) using linear interpolation between given x- and y-value lists."
+        }
+      ]
+    },
+    {
+      "name": "Element",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Element/",
+      "overloads": [
+        {
+          "syntax": "Element( <List>, <Position of Element n> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "the list to index",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Position of Element n",
+              "role": "index of the element to return",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Yields the nth element of the list."
+        },
+        {
+          "syntax": "Element( <Matrix>, <Row>, <Column> )",
+          "params": [
+            {
+              "name": "Matrix",
+              "role": "the matrix to index",
+              "type": "Matrix",
+              "optional": false
+            },
+            {
+              "name": "Row",
+              "role": "row index",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Column",
+              "role": "column index",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Yields the element of the matrix in the given row and column."
+        },
+        {
+          "syntax": "Element( <List>, <Index1>, <Index2>, … )",
+          "params": [
+            {
+              "name": "List",
+              "role": "the n-dimensional list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Index1",
+              "role": "first index",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Index2",
+              "role": "second index",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "Index3",
+              "role": "third index",
+              "type": "Number",
+              "optional": true
+            },
+            {
+              "name": "…",
+              "role": "subsequent indices",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "For an n-dimensional list, yields the element (or sublist) at the given coordinates."
+        }
+      ]
+    },
+    {
+      "name": "First",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/First/",
+      "overloads": [
+        {
+          "syntax": "First( <List> )",
+          "params": [
+            {
+              "name": "list",
+              "role": "input list to extract from",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns a new list that contains only the first element of the given list."
+        },
+        {
+          "syntax": "First( <List>, <Number n of elements> )",
+          "params": [
+            {
+              "name": "list",
+              "role": "input list to extract from",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "n",
+              "role": "number of elements to take",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns a new list that contains the first n elements of the given list."
+        },
+        {
+          "syntax": "First( <Text> )",
+          "params": [
+            {
+              "name": "text",
+              "role": "input text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "Returns the first character of the text."
+        },
+        {
+          "syntax": "First( <Text>, <Number n of elements> )",
+          "params": [
+            {
+              "name": "text",
+              "role": "input text",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "n",
+              "role": "number of characters to take",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns the first n characters of the text."
+        },
+        {
+          "syntax": "First( <Locus>, <Number n of elements> )",
+          "params": [
+            {
+              "name": "locus",
+              "role": "input locus",
+              "type": "Locus",
+              "optional": false
+            },
+            {
+              "name": "n",
+              "role": "number of elements to take",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "For loci produced by certain commands, returns the first n points/vertices of the locus/graph."
+        }
+      ]
+    },
+    {
+      "name": "Flatten",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Flatten/",
+      "overloads": [
+        {
+          "syntax": "Flatten( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "input",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Flattens (nested) lists into a single list."
+        }
+      ]
+    },
+    {
+      "name": "Frequency",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Frequency/",
+      "overloads": [
+        {
+          "syntax": "Frequency( <List of Raw Data> )",
+          "params": [
+            {
+              "name": "List of Raw Data",
+              "role": "input data list to count occurrences",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns a list with counts of each unique value in the data list (sorted by value)."
+        },
+        {
+          "syntax": "Frequency( <Boolean Cumulative>, <List of Raw Data> )",
+          "params": [
+            {
+              "name": "Boolean Cumulative",
+              "role": "whether to use cumulative frequencies",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "input data list to count occurrences",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "If cumulative=false, same as Frequency(list). If true, returns cumulative frequencies."
+        },
+        {
+          "syntax": "Frequency( <List of Class Boundaries>, <List of Raw Data> )",
+          "params": [
+            {
+              "name": "List of Class Boundaries",
+              "role": "class boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "data values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns counts of values falling in each interval defined by consecutive boundaries [a, b), with the last interval [a, b]."
+        },
+        {
+          "syntax": "Frequency( <List of Text>, <List of Text> )",
+          "params": [
+            {
+              "name": "List of Text",
+              "role": "row categories",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Text",
+              "role": "column categories",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns a contingency matrix of counts for paired text values from the two lists."
+        },
+        {
+          "syntax": "Frequency( <Boolean Cumulative>, <List of Class Boundaries>, <List of Raw Data> )",
+          "params": [
+            {
+              "name": "Boolean Cumulative",
+              "role": "whether to use cumulative frequencies",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "List of Class Boundaries",
+              "role": "class boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "data values",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "If cumulative=false, same as Frequency(boundaries, data). If true, returns cumulative frequencies for that histogram."
+        },
+        {
+          "syntax": "Frequency( <List of Class Boundaries>, <List of Raw Data>, <Use Density>, <Density Scale Factor> )",
+          "params": [
+            {
+              "name": "List of Class Boundaries",
+              "role": "class boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "data values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Use Density",
+              "role": "whether to use density instead of counts",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Density Scale Factor",
+              "role": "density scale factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "Returns the frequency list used for Histogram; with Use Density=true, returns density-based frequencies."
+        },
+        {
+          "syntax": "Frequency( <Boolean Cumulative>, <List of Class Boundaries>, <List of Raw Data>, <Use Density>, <Density Scale Factor> )",
+          "params": [
+            {
+              "name": "Boolean Cumulative",
+              "role": "whether to use cumulative frequencies",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "List of Class Boundaries",
+              "role": "class boundaries",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Raw Data",
+              "role": "data values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Use Density",
+              "role": "whether to use density instead of counts",
+              "type": "Boolean",
+              "optional": false
+            },
+            {
+              "name": "Density Scale Factor",
+              "role": "density scale factor",
+              "type": "Number",
+              "optional": true
+            }
+          ],
+          "description": "Returns a list of (possibly cumulative and/or density-based) frequencies compatible with Histogram."
+        }
+      ]
+    },
+    {
+      "name": "IndexOf",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/IndexOf/",
+      "overloads": [
+        {
+          "syntax": "IndexOf( <Object>, <List> )",
+          "params": [
+            {
+              "name": "Object",
+              "role": "object to search for",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "List",
+              "role": "list to search in",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns the position of the first occurrence of the object in the list; undefined if not found."
+        },
+        {
+          "syntax": "IndexOf( <Object>, <List>, <Start Index> )",
+          "params": [
+            {
+              "name": "Object",
+              "role": "object to search for",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "List",
+              "role": "list to search in",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Start Index",
+              "role": "start position index for the search",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Like IndexOf(Object, List) but the search begins at the given start index."
+        },
+        {
+          "syntax": "IndexOf( <Text>, <Text> )",
+          "params": [
+            {
+              "name": "Text",
+              "role": "text to search within",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "Text",
+              "role": "text to search for",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "Returns the position at which the shorter text first appears in the longer text."
+        },
+        {
+          "syntax": "IndexOf( <Text>, <Text>, <Start Index> )",
+          "params": [
+            {
+              "name": "Text",
+              "role": "text to search within",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "Text",
+              "role": "text to search for",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "Start Index",
+              "role": "start position index for the search",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Like IndexOf(text, pattern) but the search begins at the specified index."
+        }
+      ]
+    },
+    {
+      "name": "Insert",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Insert/",
+      "overloads": [
+        {
+          "syntax": "Insert( <Object>, <List>, <Position> )",
+          "params": [
+            {
+              "name": "Object",
+              "role": "object to insert",
+              "type": "Object",
+              "optional": false
+            },
+            {
+              "name": "List",
+              "role": "destination list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Position",
+              "role": "insertion position in the list",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Inserts the object into the list at the given position. Negative positions count from the right."
+        },
+        {
+          "syntax": "Insert( <List>, <List>, <Position> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "list to insert",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List",
+              "role": "destination list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Position",
+              "role": "insertion position in the destination list",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Inserts all elements of the first list into the second list at the given position. Negative positions count from the right."
+        }
+      ]
+    },
+    {
+      "name": "Intersection",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Intersection/",
+      "overloads": [
+        {
+          "syntax": "Intersection( <List>, <List> )",
+          "params": [
+            {
+              "name": "list1",
+              "role": "first input list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "list2",
+              "role": "second input list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns a new list containing all elements that are present in both lists."
+        }
+      ]
+    },
+    {
+      "name": "Join",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Join/",
+      "overloads": [
+        {
+          "syntax": "Join( <List>, <List>, … )",
+          "params": [
+            {
+              "name": "list1",
+              "role": "first list to join",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "list2",
+              "role": "second list to join",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "listN",
+              "role": "additional lists",
+              "type": "List",
+              "optional": true
+            }
+          ],
+          "description": "Concatenates two or more lists in order without removing duplicates or reordering."
+        },
+        {
+          "syntax": "Join( <List of Lists> )",
+          "params": [
+            {
+              "name": "lists",
+              "role": "input list of lists",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Joins a list of sublists into one longer list, preserving all elements and order."
+        }
+      ]
+    },
+    {
+      "name": "KeepIf",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/KeepIf/",
+      "overloads": [
+        {
+          "syntax": "KeepIf( <Condition>, <List> )",
+          "params": [
+            {
+              "name": "Condition",
+              "role": "filter condition",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "List",
+              "role": "input list to filter",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns a new list containing only those elements of the original list that satisfy the condition."
+        },
+        {
+          "syntax": "KeepIf( <Condition>, <Variable>, <List> )",
+          "params": [
+            {
+              "name": "Condition",
+              "role": "filter condition using the variable",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "loop variable bound to each element",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "List",
+              "role": "input list to filter",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Like KeepIf(condition, list) but with an explicit variable that is substituted by each list element when evaluating the condition."
+        }
+      ]
+    },
+    {
+      "name": "Last",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Last/",
+      "overloads": [
+        {
+          "syntax": "Last( <List> )",
+          "params": [
+            {
+              "name": "<List>",
+              "role": "input list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns a new list containing only the last element of the given list."
+        },
+        {
+          "syntax": "Last( <List>, <Number of elements> )",
+          "params": [
+            {
+              "name": "<List>",
+              "role": "input list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "<Number of elements>",
+              "role": "number of elements to take",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns a new list with the last n elements of the original list."
+        },
+        {
+          "syntax": "Last( <Text> )",
+          "params": [
+            {
+              "name": "<Text>",
+              "role": "input text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "Returns the last character of the text."
+        },
+        {
+          "syntax": "Last( <Text>, <Number of elements> )",
+          "params": [
+            {
+              "name": "<Text>",
+              "role": "input text",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "<Number of elements>",
+              "role": "number of characters to take",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns the last n characters of the text."
+        }
+      ]
+    },
+    {
+      "name": "Max",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Max/",
+      "overloads": [
+        {
+          "syntax": "Max( <List> )",
+          "params": [
+            {
+              "name": "dataList",
+              "role": "data list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns the maximum of the numbers (or associated numeric values) in the list."
+        },
+        {
+          "syntax": "Max( <Interval> )",
+          "params": [
+            {
+              "name": "interval",
+              "role": "interval",
+              "type": "Interval",
+              "optional": false
+            }
+          ],
+          "description": "Returns the upper bound of the interval."
+        },
+        {
+          "syntax": "Max( <Number>, <Number> )",
+          "params": [
+            {
+              "name": "a",
+              "role": "first number",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "b",
+              "role": "second number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns the maximum of the two given numbers."
+        },
+        {
+          "syntax": "Max( <Function>, <Start x-Value>, <End x-Value> )",
+          "params": [
+            {
+              "name": "func",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "xStart",
+              "role": "start x-value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "xEnd",
+              "role": "end x-value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Numerically computes a local maximum point of the function on the given interval (assuming a single local maximum and no local minima there)."
+        },
+        {
+          "syntax": "Max( <List of Data>, <List of Frequencies> )",
+          "params": [
+            {
+              "name": "dataList",
+              "role": "data list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "freqList",
+              "role": "frequencies list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns the maximum value among data whose corresponding frequency is greater than zero."
+        }
+      ]
+    },
+    {
+      "name": "Mean",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Mean/",
+      "overloads": [
+        {
+          "syntax": "Mean( <List of Raw Data> )",
+          "params": [
+            {
+              "name": "List of Raw Data",
+              "role": "raw data list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Computes the arithmetic mean of the list elements."
+        },
+        {
+          "syntax": "Mean( <List of Numbers>, <List of Frequencies> )",
+          "params": [
+            {
+              "name": "List of Numbers",
+              "role": "data list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List of Frequencies",
+              "role": "frequencies list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Computes the weighted mean of the list elements using the given frequencies."
+        }
+      ]
+    },
+    {
+      "name": "Min",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Min/",
+      "overloads": [
+        {
+          "syntax": "Min( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "input list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns the minimum of the numbers (or associated numeric values) in the list."
+        },
+        {
+          "syntax": "Min( <Interval> )",
+          "params": [
+            {
+              "name": "Interval",
+              "role": "input interval",
+              "type": "Interval",
+              "optional": false
+            }
+          ],
+          "description": "Returns the lower bound of the interval."
+        },
+        {
+          "syntax": "Min( <Number>, <Number> )",
+          "params": [
+            {
+              "name": "<Number>1",
+              "role": "first number",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "<Number>2",
+              "role": "second number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Returns the minimum of the two given numbers."
+        },
+        {
+          "syntax": "Min( <Function>, <Start x-Value>, <End x-Value> )",
+          "params": [
+            {
+              "name": "<Function>",
+              "role": "function",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "<Start x-Value>",
+              "role": "start x-value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "<End x-Value>",
+              "role": "end x-value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Numerically computes a local minimum point of the function on the given interval (assuming a single local minimum and no local maxima there)."
+        },
+        {
+          "syntax": "Min( <List of Data>, <List of Frequencies> )",
+          "params": [
+            {
+              "name": "<List of Data> (DataList)",
+              "role": "data list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "<List of Frequencies> (FrequencyList)",
+              "role": "frequencies list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns the minimum value among data whose corresponding frequency is greater than zero."
+        }
+      ]
+    },
+    {
+      "name": "Normalize",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Normalize/",
+      "overloads": [
+        {
+          "syntax": "Normalize( <List of Numbers> )",
+          "params": [
+            {
+              "name": "list_of_numbers",
+              "role": "input number list",
+              "type": "List of Numbers",
+              "optional": false
+            }
+          ],
+          "description": "Maps numbers linearly to [0,1] via (x − Min(list)) / (Max(list) − Min(list)), returning the normalized list."
+        },
+        {
+          "syntax": "Normalize( <List of Points> )",
+          "params": [
+            {
+              "name": "list_of_points",
+              "role": "input point list",
+              "type": "List of Points",
+              "optional": false
+            }
+          ],
+          "description": "Normalizes a 2D point list so that x- and y-coordinates are mapped to [0,1]; returns a list of normalized points."
+        }
+      ]
+    },
+    {
+      "name": "OrdinalRank",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/OrdinalRank/",
+      "overloads": [
+        {
+          "syntax": "OrdinalRank( <List> )",
+          "params": [
+            {
+              "name": "L",
+              "role": "input list to rank",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Returns a list whose i-th element is the rank of the i-th element of L with respect to Sort(L); ties occupy consecutive ranks."
+        }
+      ]
+    },
+    {
+      "name": "PointList",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/PointList/",
+      "overloads": [
+        {
+          "syntax": "PointList( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "input list of 2-element lists",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "Creates a list of points from a list of 2-element lists, interpreting each sublist as (x, y)."
+        }
+      ]
+    },
+    {
+      "name": "Product",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Product/",
+      "overloads": [
+        {
+          "syntax": "Product( <List of Raw Data> )",
+          "params": [
+            {
+              "name": "List of Raw Data",
+              "role": "要连乘的原始数据列表",
+              "type": "List of Numbers",
+              "optional": false
+            }
+          ],
+          "description": "计算列表中所有数字的乘积。"
+        },
+        {
+          "syntax": "Product( <List of Numbers>, <Number of Elements> )",
+          "params": [
+            {
+              "name": "List of Numbers",
+              "role": "数据列表",
+              "type": "List of Numbers",
+              "optional": false
+            },
+            {
+              "name": "Number of Elements",
+              "role": "从列表开头起参与乘积的元素个数 n",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算列表前 n 个元素的乘积。"
+        },
+        {
+          "syntax": "Product( <List of Numbers>, <List of Frequencies> )",
+          "params": [
+            {
+              "name": "List of Numbers",
+              "role": "底数列表",
+              "type": "List of Numbers",
+              "optional": false
+            },
+            {
+              "name": "List of Frequencies",
+              "role": "指数/频数列表（与底数列表等长）",
+              "type": "List of Numbers",
+              "optional": false
+            }
+          ],
+          "description": "计算 ∏ (a_i ^ f_i)，即将每个数按对应频数做指数幂再相乘。"
+        },
+        {
+          "syntax": "Product( <Expression>, <Variable>, <Start Value>, <End Value> )",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "含变量的表达式",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "被替换、参与连乘的索引变量",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Start Value",
+              "role": "变量起始整数值",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End Value",
+              "role": "变量结束整数值",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "将变量依次替换为起始到结束之间的每个整数，对得到的表达式做连乘。"
+        },
+        {
+          "syntax": "Product( <List of Expressions> )  // CAS",
+          "params": [
+            {
+              "name": "List of Expressions",
+              "role": "符号表达式列表",
+              "type": "List of Expressions",
+              "optional": false
+            }
+          ],
+          "description": "在 CAS 中，对表达式列表做符号乘积。"
+        },
+        {
+          "syntax": "Product( <Expression>, <Variable>, <Start Value>, <End Value> )  // CAS",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "连乘表达式",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "连乘索引变量",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Start Value",
+              "role": "起始值",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End Value",
+              "role": "结束值",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在 CAS 中按给定范围对表达式做符号连乘。"
+        }
+      ]
+    },
+    {
+      "name": "RandomElement",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RandomElement/",
+      "overloads": [
+        {
+          "syntax": "RandomElement( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "候选元素列表（元素类型必须一致）",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "从列表中均匀随机选取一个元素返回，列表中所有元素类型必须相同。"
+        }
+      ]
+    },
+    {
+      "name": "RandomPointIn",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RandomPointIn/",
+      "overloads": [
+        {
+          "syntax": "RandomPointIn( <Region> )",
+          "params": [
+            {
+              "name": "Region",
+              "role": "多边形或封闭二次曲线区域",
+              "type": "Region",
+              "optional": false
+            }
+          ],
+          "description": "在给定多边形或封闭圆锥曲线内部生成一个随机点。"
+        },
+        {
+          "syntax": "RandomPointIn( <List of Points> )",
+          "params": [
+            {
+              "name": "List of Points",
+              "role": "多边形顶点列表",
+              "type": "List of Points",
+              "optional": false
+            }
+          ],
+          "description": "根据顶点列表定义多边形，在该多边形内部生成随机点。"
+        },
+        {
+          "syntax": "RandomPointIn( Polygon(A, B, C) )",
+          "params": [
+            {
+              "name": "Polygon(A,B,C)",
+              "role": "由 A,B,C 定义的三角形",
+              "type": "Polygon",
+              "optional": false
+            }
+          ],
+          "description": "在三角形 ABC 内部生成随机点。"
+        },
+        {
+          "syntax": "RandomPointIn( A, B, C )",
+          "params": [
+            {
+              "name": "A",
+              "role": "三角形顶点",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "B",
+              "role": "三角形顶点",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "C",
+              "role": "三角形顶点",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "用三个点定义三角形 ABC，并在其内部生成随机点。"
+        },
+        {
+          "syntax": "RandomPointIn( <xMin>, <xMax>, <yMin>, <yMax> )",
+          "params": [
+            {
+              "name": "xMin",
+              "role": "x 坐标下界",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "xMax",
+              "role": "x 坐标上界",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "yMin",
+              "role": "y 坐标下界",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "yMax",
+              "role": "y 坐标上界",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在矩形 [xMin,xMax]×[yMin,yMax] 中均匀随机生成一个点。"
+        }
+      ]
+    },
+    {
+      "name": "Remove",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Remove/",
+      "overloads": [
+        {
+          "syntax": "Remove( <List>, <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "被删除元素所在的原始列表",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "ListToRemove",
+              "role": "要从第一个列表中删除的元素列表",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "从第一个列表中删除所有出现在第二个列表中的元素（出现几次就删几次），返回新列表。"
+        }
+      ]
+    },
+    {
+      "name": "RemoveUndefined",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RemoveUndefined/",
+      "overloads": [
+        {
+          "syntax": "RemoveUndefined( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "包含已定义和未定义元素的列表",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "移除列表中所有未定义对象，返回只含已定义元素的新列表。"
+        }
+      ]
+    },
+    {
+      "name": "Reverse",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Reverse/",
+      "overloads": [
+        {
+          "syntax": "Reverse( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "要反转顺序的列表",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回一个新列表，其元素顺序为原列表的反向。"
+        }
+      ]
+    },
+    {
+      "name": "RootList",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RootList/",
+      "overloads": [
+        {
+          "syntax": "RootList( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "数字列表 {a1, a2, …, an}",
+              "type": "List of Numbers",
+              "optional": false
+            }
+          ],
+          "description": "把数字列表 {a1,…,an} 转为点列表 {(a1,0),…,(an,0)}，并在图形视图中显示。"
+        }
+      ]
+    },
+    {
+      "name": "Sample",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Sample/",
+      "overloads": [
+        {
+          "syntax": "Sample( <List>, <Size> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "抽样母体列表",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Size",
+              "role": "样本容量 n",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "从列表中随机抽取 n 个元素组成新列表，允许重复（有放回抽样）。"
+        },
+        {
+          "syntax": "Sample( <List>, <Size>, <With Replacement> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "抽样母体列表",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Size",
+              "role": "样本容量 n",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "With Replacement",
+              "role": "是否有放回抽样",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "从列表中抽取 n 个元素。如果 With Replacement 为 true，则允许同一元素被多次选中；否则为不放回抽样。"
+        }
+      ]
+    },
+    {
+      "name": "SelectedElement",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SelectedElement/",
+      "overloads": [
+        {
+          "syntax": "SelectedElement( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "下拉列表对象",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回下拉列表当前被选中的元素。"
+        }
+      ]
+    },
+    {
+      "name": "SelectedIndex",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SelectedIndex/",
+      "overloads": [
+        {
+          "syntax": "SelectedIndex( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "下拉列表对象",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回下拉列表当前被选中元素的索引（位置）。"
+        }
+      ]
+    },
+    {
+      "name": "Sequence",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Sequence/",
+      "overloads": [
+        {
+          "syntax": "Sequence( <End Value> )",
+          "params": [
+            {
+              "name": "End Value",
+              "role": "终止整数",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "生成从 1 到 End Value 的整数列表。"
+        },
+        {
+          "syntax": "Sequence( <Start value k>, <End value n> )",
+          "params": [
+            {
+              "name": "Start value k",
+              "role": "起始整数 k",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End value n",
+              "role": "结束整数 n（可大于或小于 k）",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "生成从 k 到 n 的整数序列（可升序也可降序）。"
+        },
+        {
+          "syntax": "Sequence( <Start value k>, <End value n>, <Increment> )",
+          "params": [
+            {
+              "name": "Start value k",
+              "role": "起始值",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End value n",
+              "role": "结束值",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Increment",
+              "role": "步长",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "按给定步长，从 k 到 n 生成等差序列。"
+        },
+        {
+          "syntax": "Sequence( <Expression>, <Variable k>, <Start Value a>, <End Value b> )",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "生成项的表达式",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable k",
+              "role": "序列索引变量",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Start Value a",
+              "role": "索引起始值",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End Value b",
+              "role": "索引结束值",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "让索引变量从 a 变到 b，将其代入表达式生成对象列表。"
+        },
+        {
+          "syntax": "Sequence( <Expression>, <Variable k>, <Start Value a>, <End Value b>, <Increment> )",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "生成项的表达式",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable k",
+              "role": "序列索引变量",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Start Value a",
+              "role": "索引起始值",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End Value b",
+              "role": "索引结束值",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Increment",
+              "role": "索引步长",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "索引变量以给定步长从 a 到 b 变化，将其代入表达式生成对象列表。"
+        }
+      ]
+    },
+    {
+      "name": "Shuffle",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Shuffle/",
+      "overloads": [
+        {
+          "syntax": "Shuffle( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "要打乱顺序的列表",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回与原列表含有相同元素但顺序随机打乱的新列表。"
+        }
+      ]
+    },
+    {
+      "name": "Sort",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Sort/",
+      "overloads": [
+        {
+          "syntax": "Sort( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "待排序的列表（数字/文本/点）",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "将列表按升序排序：数字按数值，文本按字典序，点按 x 坐标排序。"
+        },
+        {
+          "syntax": "Sort( <Values>, <Keys> )",
+          "params": [
+            {
+              "name": "Values",
+              "role": "要被重排的值列表",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Keys",
+              "role": "排序所依据的键列表（与 Values 等长）",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "按 Keys 的升序对 Values 做对应排序。"
+        }
+      ]
+    },
+    {
+      "name": "Sum",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Sum/",
+      "overloads": [
+        {
+          "syntax": "Sum( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "要求和的列表（同一类型：数/点/向量/文本/函数）",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对列表中所有元素求和。支持数值、点、向量、文本、函数等类型。"
+        },
+        {
+          "syntax": "Sum( <List>, <Number of Elements> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "数据列表",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Number of Elements",
+              "role": "从头开始参与求和的元素个数 n",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对列表前 n 个元素求和。"
+        },
+        {
+          "syntax": "Sum( <List>, <List of Frequencies> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "数值列表",
+              "type": "List of Numbers",
+              "optional": false
+            },
+            {
+              "name": "List of Frequencies",
+              "role": "对应频数列表",
+              "type": "List of Numbers",
+              "optional": false
+            }
+          ],
+          "description": "按频数对数值列表做加权求和。"
+        },
+        {
+          "syntax": "Sum( <Expression>, <Variable>, <Start Value>, <End Value> )  // CAS",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "被求和的表达式 f(t)",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Variable",
+              "role": "求和变量 t",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "Start Value",
+              "role": "起始值",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End Value",
+              "role": "结束值（可为无穷大）",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在 CAS 中计算从 Start 到 End 的求和 Σ f(t)，End 也可以为无穷大。"
+        }
+      ]
+    },
+    {
+      "name": "Take",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Take/",
+      "overloads": [
+        {
+          "syntax": "Take( <List>, <Start Position> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "原始列表",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Start Position",
+              "role": "起始位置索引",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回从指定起始位置到列表末尾的子列表。"
+        },
+        {
+          "syntax": "Take( <Text>, <Start Position> )",
+          "params": [
+            {
+              "name": "Text",
+              "role": "原始文本",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "Start Position",
+              "role": "起始字符位置",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回从指定起始位置到文本末尾的子串。"
+        },
+        {
+          "syntax": "Take( <List>, <Start Position>, <End Position> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "原始列表",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Start Position",
+              "role": "子列表起始索引",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End Position",
+              "role": "子列表结束索引",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回从 Start Position 到 End Position 的列表切片。"
+        },
+        {
+          "syntax": "Take( <Text>, <Start Position>, <End Position> )",
+          "params": [
+            {
+              "name": "Text",
+              "role": "原始文本",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "Start Position",
+              "role": "子串起始位置",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "End Position",
+              "role": "子串结束位置",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回从 Start Position 到 End Position 的文本子串。"
+        }
+      ]
+    },
+    {
+      "name": "TiedRank",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TiedRank/",
+      "overloads": [
+        {
+          "syntax": "TiedRank( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "待计算秩的原始列表 L",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回一个列表，其第 i 个元素是 L 中第 i 个元素在排序后中的“平均秩”；相同元素占据一段连续位置时使用这段位置秩的平均值。"
+        }
+      ]
+    },
+    {
+      "name": "Union",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Union/",
+      "overloads": [
+        {
+          "syntax": "Union( <List>, <List> )",
+          "params": [
+            {
+              "name": "List1",
+              "role": "第一个列表",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "List2",
+              "role": "第二个列表",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "合并两个列表并去重，返回只包含各元素一次的并集列表。"
+        },
+        {
+          "syntax": "Union( <Polygon>, <Polygon> )",
+          "params": [
+            {
+              "name": "Polygon1",
+              "role": "第一个多边形",
+              "type": "Polygon",
+              "optional": false
+            },
+            {
+              "name": "Polygon2",
+              "role": "第二个多边形",
+              "type": "Polygon",
+              "optional": false
+            }
+          ],
+          "description": "计算两个非自交多边形的并集区域，结果必须是单一多边形。"
+        }
+      ]
+    },
+    {
+      "name": "Unique",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Unique/",
+      "overloads": [
+        {
+          "syntax": "Unique( <List> )",
+          "params": [
+            {
+              "name": "List",
+              "role": "原始列表（数字或文本）",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "返回升序排列且去重后的元素列表；在 CAS 中也可简单理解为“每元素只出现一次”的列表。"
+        }
+      ]
+    },
+    {
+      "name": "Zip",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Zip/",
+      "overloads": [
+        {
+          "syntax": "Zip( <Expression>, <Var1>, <List1>, <Var2>, <List2>, … )",
+          "params": [
+            {
+              "name": "Expression",
+              "role": "生成元素所用的表达式，变量将被各列表元素替换",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "Var1",
+              "role": "第一个占位变量",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "List1",
+              "role": "与 Var1 对应的列表",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "Var2",
+              "role": "第二个占位变量",
+              "type": "Variable",
+              "optional": true
+            },
+            {
+              "name": "List2",
+              "role": "与 Var2 对应的列表",
+              "type": "List",
+              "optional": true
+            }
+          ],
+          "description": "将多个列表“并行遍历”，把各位置元素依次代入 Expression 中生成新列表。结果长度等于所有输入列表长度的最小值；若变量个数比列表个数多 1，则最后一个变量取值为 1…k（k 为最短列表长度）。各列表中的元素类型须各自保持一致。"
+        }
+      ]
+    }
+  ]
+}

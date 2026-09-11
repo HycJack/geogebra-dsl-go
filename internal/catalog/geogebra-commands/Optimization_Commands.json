@@ -1,0 +1,90 @@
+{
+  "command_category": "Optimization_Commands",
+  "total_commands": 2,
+  "commands": {
+    "Maximize": {
+      "name": "Maximize",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Maximize/",
+      "overloads": [
+        {
+          "syntax": "Maximize( <Dependent number>, <Free number> )",
+          "params": [
+            {
+              "name": "Dependent number",
+              "role": "dependent",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Free number",
+              "role": "free_parameter",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the input (free number / slider) that yields the maximum value of a dependent quantity. The slider interval is used as the search interval, and the relation should be continuous with only one local maximum in that interval."
+        },
+        {
+          "syntax": "Maximize( <Dependent Number>, <Point on Path> )",
+          "params": [
+            {
+              "name": "Dependent Number",
+              "role": "dependent",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Point on Path",
+              "role": "point_on_path",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "Calculates the position of a point on a given path that yields the maximum value of a dependent quantity. The path is used as the search interval, and the relation should be continuous with only one local maximum along the path."
+        }
+      ]
+    },
+    "Minimize": {
+      "name": "Minimize",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Minimize/",
+      "overloads": [
+        {
+          "syntax": "Minimize( <Dependent number>, <Free number> )",
+          "params": [
+            {
+              "name": "Dependent number",
+              "role": "dependent",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Free number",
+              "role": "free_parameter",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Computes the minimum of a dependent quantity by adjusting a free number (slider). The slider interval is used as the search interval, and the relation should be continuous with only one local minimum in that interval."
+        },
+        {
+          "syntax": "Minimize( <Dependent Number>, <Point on Path> )",
+          "params": [
+            {
+              "name": "Dependent Number",
+              "role": "dependent",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Point on Path",
+              "role": "point_on_path",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "Computes the minimum of a dependent quantity by moving a point on a path. The path is used as the search interval, and the relation should be continuous with only one local minimum point along the path."
+        }
+      ]
+    }
+  }
+}

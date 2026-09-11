@@ -1,0 +1,362 @@
+{
+  "command_category": "GeoGebra_Commands",
+  "total_commands": 11,
+  "commands": [
+    {
+      "name": "AxisStepX",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/AxisStepX/",
+      "overloads": [
+        {
+          "syntax": "AxisStepX()",
+          "params": [],
+          "description": "Returns the current step width for the x-axis."
+        }
+      ]
+    },
+    {
+      "name": "AxisStepY",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/AxisStepY/",
+      "overloads": [
+        {
+          "syntax": "AxisStepY()",
+          "params": [],
+          "description": "Returns the current step width for the y-axis."
+        }
+      ]
+    },
+    {
+      "name": "CASLoaded",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/CASLoaded/",
+      "overloads": [
+        {
+          "syntax": "CASLoaded()",
+          "params": [],
+          "description": "Returns a boolean value: true if CAS commands were already loaded, false otherwise. The value is dynamic (changes to true when CAS commands are loaded)."
+        }
+      ]
+    },
+    {
+      "name": "ConstructionStep",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ConstructionStep/",
+      "overloads": [
+        {
+          "syntax": "ConstructionStep()",
+          "params": [],
+          "description": "Returns the current Construction Protocol step as a number."
+        },
+        {
+          "syntax": "ConstructionStep( <Object> )",
+          "params": [
+            {
+              "name": "object",
+              "role": "target_object",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "Returns the Construction Protocol step for the given object as a number."
+        }
+      ]
+    },
+    {
+      "name": "Corner",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Corner/",
+      "overloads": [
+        {
+          "syntax": "Corner( <Number of Corner> )",
+          "params": [
+            {
+              "name": "corner_index",
+              "role": "corner_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "For number n = 1, 2, 3, 4 creates a point at the corner of the Graphics View; for n = 5 returns point (w, h), where w and h are width and height of the Graphics View in pixels."
+        },
+        {
+          "syntax": "Corner( <Graphics View>, <Number of Corner> )",
+          "params": [
+            {
+              "name": "graphics_view",
+              "role": "graphics_view_id",
+              "type": "GraphicsView",
+              "optional": false
+            },
+            {
+              "name": "corner_index",
+              "role": "corner_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Creates a point at the corner of the specified Graphics View (Graphics View (1, 2)), which is never visible in that view."
+        },
+        {
+          "syntax": "Corner(-1, <Number>)",
+          "params": [
+            {
+              "name": "view_identifier",
+              "role": "view_id",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "number",
+              "role": "property_id",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "For 3D Graphics View: use -1 as view identifier; numbers 1–8 correspond to corners, 9–13 to additional properties such as view size, view direction and axis scales."
+        },
+        {
+          "syntax": "Corner( <Image>, <Number of Corner> )",
+          "params": [
+            {
+              "name": "image",
+              "role": "target_image",
+              "type": "Image",
+              "optional": false
+            },
+            {
+              "name": "corner_index",
+              "role": "corner_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Creates a point at the corner of the image (n = 1, 2, 3, 4)."
+        },
+        {
+          "syntax": "Corner( <Text>, <Number of Corner> )",
+          "params": [
+            {
+              "name": "text",
+              "role": "target_text",
+              "type": "Text",
+              "optional": false
+            },
+            {
+              "name": "corner_index",
+              "role": "corner_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Creates a point at the corner of the text (n = 1, 2, 3, 4)."
+        }
+      ]
+    },
+    {
+      "name": "DynamicCoordinates",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/DynamicCoordinates/",
+      "overloads": [
+        {
+          "syntax": "DynamicCoordinates( <Point>, <x-Coordinate>, <y-Coordinate> )",
+          "params": [
+            {
+              "name": "point",
+              "role": "base_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "x_coordinate",
+              "role": "x_expr",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "y_coordinate",
+              "role": "y_expr",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "Creates a new dependent point (2D). When you move the new point to coordinates (x, y), the given point is moved there and coordinates for the new point are recalculated."
+        },
+        {
+          "syntax": "DynamicCoordinates( <Point>, <x-Coordinate>, <y-Coordinate>, <z-Coordinate> )",
+          "params": [
+            {
+              "name": "point",
+              "role": "base_point",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "x_coordinate",
+              "role": "x_expr",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "y_coordinate",
+              "role": "y_expr",
+              "type": "Expression",
+              "optional": false
+            },
+            {
+              "name": "z_coordinate",
+              "role": "z_expr",
+              "type": "Expression",
+              "optional": false
+            }
+          ],
+          "description": "Creates a new dependent point (3D). When you move the new point to coordinates (x, y, z), the given point is moved there and coordinates for the new point are recalculated."
+        }
+      ]
+    },
+    {
+      "name": "Name",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Name/",
+      "overloads": [
+        {
+          "syntax": "Name( <Object> )",
+          "params": [
+            {
+              "name": "object",
+              "role": "target_object",
+              "type": "Object",
+              "optional": false
+            }
+          ],
+          "description": "Returns the name of an object as a text in the Graphics View."
+        }
+      ]
+    },
+    {
+      "name": "Object",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Object/",
+      "overloads": [
+        {
+          "syntax": "Object( <Name of Object as Text> )",
+          "params": [
+            {
+              "name": "object_name",
+              "role": "object_name_text",
+              "type": "Text",
+              "optional": false
+            }
+          ],
+          "description": "Returns the object for a given name. The result is always a dependent object."
+        }
+      ]
+    },
+    {
+      "name": "SetConstructionStep",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SetConstructionStep/",
+      "overloads": [
+        {
+          "syntax": "SetConstructionStep( <Number> )",
+          "params": [
+            {
+              "name": "step",
+              "role": "step_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Changes the construction step to the given value."
+        }
+      ]
+    },
+    {
+      "name": "SlowPlot",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/SlowPlot/",
+      "overloads": [
+        {
+          "syntax": "SlowPlot( <Function> )",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_plot",
+              "type": "Function",
+              "optional": false
+            }
+          ],
+          "description": "Creates an animated graph of the given function, plotted from left to right."
+        },
+        {
+          "syntax": "SlowPlot( <Function>, <Boolean Repeat> )",
+          "params": [
+            {
+              "name": "function",
+              "role": "function_to_plot",
+              "type": "Function",
+              "optional": false
+            },
+            {
+              "name": "repeat",
+              "role": "repeat_animation",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Creates an animated graph plotted from left to right. If Repeat is false, the graph is plotted only once; if Repeat is true or omitted, the graph is plotted continuously."
+        }
+      ]
+    },
+    {
+      "name": "ToolImage",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ToolImage/",
+      "overloads": [
+        {
+          "syntax": "ToolImage( <Number> )",
+          "params": [
+            {
+              "name": "icon_number",
+              "role": "icon_number",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "Creates in the Graphics View a 32x32 pixel image of the tool icon with given number."
+        },
+        {
+          "syntax": "ToolImage( <Number>, <Point> )",
+          "params": [
+            {
+              "name": "icon_number",
+              "role": "icon_number",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "anchor_point",
+              "role": "anchor_point",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "Creates in the Graphics View a 32x32 pixel image of the tool icon, anchored to the given point."
+        },
+        {
+          "syntax": "ToolImage( <Number>, <Point>, <Point> )",
+          "params": [
+            {
+              "name": "icon_number",
+              "role": "icon_number",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "first_vertex",
+              "role": "first_vertex",
+              "type": "Point",
+              "optional": false
+            },
+            {
+              "name": "second_vertex",
+              "role": "second_vertex",
+              "type": "Point",
+              "optional": false
+            }
+          ],
+          "description": "Creates in the Graphics View an image of the tool icon. The two given points define two adjacent vertices of the side of the oriented square containing the image."
+        }
+      ]
+    }
+  ]
+}

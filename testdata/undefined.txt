@@ -1,0 +1,2 @@
+A = Point(0, 2)
+l = Line(A, X)

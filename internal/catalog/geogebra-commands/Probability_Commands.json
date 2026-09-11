@@ -1,0 +1,2640 @@
+{
+  "command_category": "Probability_Commands",
+  "total_commands": 47,
+  "commands": {
+    "Bernoulli": {
+      "name": "Bernoulli",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Bernoulli/",
+      "overloads": [
+        {
+          "syntax": "Bernoulli( <Probability p>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "p",
+              "role": "success_probability",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = false 时返回成功概率为 p 的伯努利分布柱状图；Cumulative = true 时返回对应的累积分布柱状图。"
+        }
+      ]
+    },
+    "BetaDist": {
+      "name": "BetaDist",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/BetaDist/",
+      "overloads": [
+        {
+          "syntax": "BetaDist( <Number α>, <Number β>, <Variable value> )",
+          "params": [
+            {
+              "name": "alpha",
+              "role": "shape_alpha",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "beta",
+              "role": "shape_beta",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算参数为 α, β 的 Beta 分布在给定变量值 v 处的累积分布函数值 P(X ≤ v)。"
+        },
+        {
+          "syntax": "BetaDist( <Number α>, <Number β>, <Variable value>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "alpha",
+              "role": "shape_alpha",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "beta",
+              "role": "shape_beta",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时计算 Beta(α, β) 在 v 处的 CDF 值；Cumulative = false 时计算对应的概率密度函数 pdf 值。"
+        },
+        {
+          "syntax": "BetaDist( <Number α>, <Number β>, x, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "alpha",
+              "role": "shape_alpha",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "beta",
+              "role": "shape_beta",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "function_variable",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时生成 Beta(α, β) 的累积分布函数曲线；否则生成概率密度函数曲线。"
+        }
+      ]
+    },
+    "BinomialCoefficient": {
+      "name": "BinomialCoefficient",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/BinomialCoefficient/",
+      "overloads": [
+        {
+          "syntax": "nCr( <Number n>, <Number r> )",
+          "params": [
+            {
+              "name": "n",
+              "role": "population_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "r",
+              "role": "sample_size",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算二项系数 (n r)，即从 n 个对象中不放回选取 r 个的组合数。命令别名为 BinomialCoefficient(n, r)。"
+        }
+      ]
+    },
+    "BinomialDist": {
+      "name": "BinomialDist",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/BinomialDist/",
+      "overloads": [
+        {
+          "syntax": "BinomialDist( <Number of Trials>, <Probability of Success> )",
+          "params": [
+            {
+              "name": "trials",
+              "role": "number_of_trials",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "success_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回给定试验次数和成功概率的二项分布直方图。"
+        },
+        {
+          "syntax": "BinomialDist( <Number of Trials>, <Probability of Success>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "trials",
+              "role": "number_of_trials",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "success_probability",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = false 时返回二项分布直方图；Cumulative = true 时返回累积二项分布图像。"
+        },
+        {
+          "syntax": "BinomialDist( <Number of Trials>, <Probability of Success>, <Variable Value>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "trials",
+              "role": "number_of_trials",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "success_probability",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "设 X 为二项随机变量，v 为变量值。Cumulative = false 时返回 P(X = v)；Cumulative = true 时返回 P(X ≤ v)。"
+        },
+        {
+          "syntax": "BinomialDist( <Number of Trials>, <Probability of Success>, <List of values> )",
+          "params": [
+            {
+              "name": "trials",
+              "role": "number_of_trials",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "success_probability",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "values",
+              "role": "value_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对列表中每个值 v 应用 BinomialDist(trials, p, v, false) 并求和，得到 P(u ≤ X ≤ v) 等概率和。"
+        }
+      ]
+    },
+    "Cauchy": {
+      "name": "Cauchy",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Cauchy/",
+      "overloads": [
+        {
+          "syntax": "Cauchy( <Median>, <Scale>, <Variable value> )",
+          "params": [
+            {
+              "name": "median",
+              "role": "location_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "scale",
+              "role": "scale_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算参数为 median, scale 的 Cauchy 分布在 v 处的累积分布函数值 P(X ≤ v)。"
+        },
+        {
+          "syntax": "Cauchy( <Median>, <Scale>, <Variable value>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "median",
+              "role": "location_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "scale",
+              "role": "scale_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时计算 Cauchy 分布在该点的 CDF；否则计算对应的 PDF。"
+        },
+        {
+          "syntax": "Cauchy( <Median>, <Scale>, x, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "median",
+              "role": "location_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "scale",
+              "role": "scale_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "function_variable",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时生成 Cauchy 分布的累积分布函数曲线；否则生成概率密度函数曲线。"
+        }
+      ]
+    },
+    "ChiSquared": {
+      "name": "ChiSquared",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ChiSquared/",
+      "overloads": [
+        {
+          "syntax": "ChiSquared( <Degrees of Freedom>, <Variable Value> )",
+          "params": [
+            {
+              "name": "df",
+              "role": "degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算自由度为 df 的卡方分布在 v 处的累积分布函数值 P(X ≤ v)。"
+        },
+        {
+          "syntax": "ChiSquared( <Degrees of Freedom>, <Variable Value>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "df",
+              "role": "degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时计算卡方分布在 v 处的 CDF；Cumulative = false 时计算在 v 处的 PDF。"
+        },
+        {
+          "syntax": "ChiSquared( <Degrees of Freedom>, x, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "df",
+              "role": "degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "function_variable",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时生成给定自由度的卡方分布 CDF 曲线；否则生成对应的 PDF 曲线。"
+        }
+      ]
+    },
+    "ChiSquaredTest": {
+      "name": "ChiSquaredTest",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ChiSquaredTest/",
+      "overloads": [
+        {
+          "syntax": "ChiSquaredTest( <Matrix> )",
+          "params": [
+            {
+              "name": "observedMatrix",
+              "role": "observed_counts_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "对给定观测频数矩阵进行独立性卡方检验。期望频数矩阵由行列和按 independence 假设自动计算。返回 {p-value, chi-squared statistic}。"
+        },
+        {
+          "syntax": "ChiSquaredTest( <Observed List>, <Expected List> )",
+          "params": [
+            {
+              "name": "observed",
+              "role": "observed_counts_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "expected",
+              "role": "expected_counts_list",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "对观测值列表和期望值列表做拟合优度卡方检验，自由度为 n−1（n 为元素个数）。返回 {p-value, chi-squared statistic}。"
+        },
+        {
+          "syntax": "ChiSquaredTest( <Observed Matrix>, <Expected Matrix> )",
+          "params": [
+            {
+              "name": "observedMatrix",
+              "role": "observed_counts_matrix",
+              "type": "Matrix",
+              "optional": false
+            },
+            {
+              "name": "expectedMatrix",
+              "role": "expected_counts_matrix",
+              "type": "Matrix",
+              "optional": false
+            }
+          ],
+          "description": "对观测频数矩阵与给定期望频数矩阵进行卡方检验，自由度为 (r−1)(c−1)。返回 {p-value, chi-squared statistic}。"
+        },
+        {
+          "syntax": "ChiSquaredTest( <List>, <List>, <Degrees of Freedom> )",
+          "params": [
+            {
+              "name": "observed",
+              "role": "observed_counts_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "expected",
+              "role": "expected_counts_list",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "df",
+              "role": "degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "使用指定自由度，对观测与期望列表进行拟合优度卡方检验。返回 {p-value, chi-squared statistic}。"
+        }
+      ]
+    },
+    "Erlang": {
+      "name": "Erlang",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Erlang/",
+      "overloads": [
+        {
+          "syntax": "Erlang( <Shape>, <Rate>, <Variable Value> )",
+          "params": [
+            {
+              "name": "shape",
+              "role": "shape_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "rate",
+              "role": "rate_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算形状参数 shape、率参数 rate 的 Erlang 分布在 v 处的累积分布函数值 P(X ≤ v)。"
+        },
+        {
+          "syntax": "Erlang( <Shape>, <Rate>, <Variable Value>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "shape",
+              "role": "shape_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "rate",
+              "role": "rate_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时计算 Erlang 分布在该点的 CDF；否则计算该点的 PDF。"
+        },
+        {
+          "syntax": "Erlang( <Shape>, <Rate>, x, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "shape",
+              "role": "shape_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "rate",
+              "role": "rate_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "function_variable",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时生成 Erlang 分布的 CDF 曲线；否则生成 PDF 曲线。"
+        }
+      ]
+    },
+    "Exponential": {
+      "name": "Exponential",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Exponential/",
+      "overloads": [
+        {
+          "syntax": "Exponential( <Lambda>, <Variable Value> )",
+          "params": [
+            {
+              "name": "lambda",
+              "role": "rate_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算参数为 lambda 的指数分布在 v 处的累积分布函数值 P(X ≤ v)。"
+        },
+        {
+          "syntax": "Exponential( <Lambda>, <Variable Value>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "lambda",
+              "role": "rate_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时计算指数分布在该点的 CDF；否则计算该点的 PDF。"
+        },
+        {
+          "syntax": "Exponential( <Lambda>, x, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "lambda",
+              "role": "rate_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "function_variable",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时生成指数分布的 CDF 曲线；否则生成 PDF 曲线。"
+        }
+      ]
+    },
+    "FDistribution": {
+      "name": "FDistribution",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FDistribution/",
+      "overloads": [
+        {
+          "syntax": "FDistribution( <Numerator Degrees of Freedom>, <Denominator Degrees of Freedom>, <Variable Value> )",
+          "params": [
+            {
+              "name": "dfNumerator",
+              "role": "numerator_degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "dfDenominator",
+              "role": "denominator_degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算参数为给定分子与分母自由度的 F 分布在 v 处的累积分布函数值 P(X ≤ v)。"
+        },
+        {
+          "syntax": "FDistribution( <Numerator Degrees of Freedom>, <Denominator Degrees of Freedom>, <Variable Value>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "dfNumerator",
+              "role": "numerator_degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "dfDenominator",
+              "role": "denominator_degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时计算 F 分布在该点的 CDF；否则计算在该点的 PDF。"
+        },
+        {
+          "syntax": "FDistribution( <Numerator Degrees of Freedom>, <Denominator Degrees of Freedom>, x, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "dfNumerator",
+              "role": "numerator_degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "dfDenominator",
+              "role": "denominator_degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "function_variable",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时生成 F 分布的 CDF 曲线；否则生成 PDF 曲线。"
+        }
+      ]
+    },
+    "Gamma": {
+      "name": "Gamma",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Gamma/",
+      "overloads": [
+        {
+          "syntax": "Gamma( <Alpha>, <Beta>, <Variable Value> )",
+          "params": [
+            {
+              "name": "alpha",
+              "role": "shape_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "beta",
+              "role": "scale_or_rate_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算参数为 α, β 的 Gamma 分布在 v 处的累积分布函数值 P(X ≤ v)。"
+        },
+        {
+          "syntax": "Gamma( <Alpha>, <Beta>, <Variable Value>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "alpha",
+              "role": "shape_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "beta",
+              "role": "scale_or_rate_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时计算 Gamma 分布在该点的 CDF；否则计算在该点的 PDF。"
+        },
+        {
+          "syntax": "Gamma( <Alpha>, <Beta>, x, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "alpha",
+              "role": "shape_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "beta",
+              "role": "scale_or_rate_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "function_variable",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时生成 Gamma 分布的 CDF 曲线；否则生成 PDF 曲线。"
+        }
+      ]
+    },
+    "HyperGeometric": {
+      "name": "HyperGeometric",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/HyperGeometric/",
+      "overloads": [
+        {
+          "syntax": "HyperGeometric( <Population Size>, <Number of Successes>, <Sample Size> )",
+          "params": [
+            {
+              "name": "populationSize",
+              "role": "population_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "successes",
+              "role": "success_count_in_population",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize",
+              "role": "sample_size",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在不放回抽样情形下，生成对应超几何分布的概率柱状图。"
+        },
+        {
+          "syntax": "HyperGeometric( <Population Size>, <Number of Successes>, <Sample Size>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "populationSize",
+              "role": "population_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "successes",
+              "role": "success_count_in_population",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize",
+              "role": "sample_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = false 时返回超几何分布概率柱状图；Cumulative = true 时返回累积超几何分布函数图。"
+        },
+        {
+          "syntax": "HyperGeometric( <Population Size>, <Number of Successes>, <Sample Size>, <Variable Value>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "populationSize",
+              "role": "population_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "successes",
+              "role": "success_count_in_population",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize",
+              "role": "sample_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "设 X 为超几何随机变量，v 为变量值。Cumulative = false 时返回 P(X = v)；Cumulative = true 时返回 P(X ≤ v)。"
+        }
+      ]
+    },
+    "InverseBeta": {
+      "name": "InverseBeta",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InverseBeta/",
+      "overloads": [
+        {
+          "syntax": "InverseBeta( <Number α>, <Number β>, <Probability> )",
+          "params": [
+            {
+              "name": "alpha",
+              "role": "shape_alpha",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "beta",
+              "role": "shape_beta",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "cumulative_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算 Beta(α, β) 累积分布函数在给定概率 p ∈ [0,1] 下的反函数，即求 t 使得 P(X ≤ t) = p。"
+        }
+      ]
+    },
+    "InverseBinomial": {
+      "name": "InverseBinomial",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InverseBinomial/",
+      "overloads": [
+        {
+          "syntax": "InverseBinomial( <Number of Trials>, <Probability of Success>, <Cumulative Probability> )",
+          "params": [
+            {
+              "name": "trials",
+              "role": "number_of_trials",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "success_probability",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "cumProb",
+              "role": "cumulative_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回最小整数 n，使得 P(X ≤ n) ≥ cumProb，其中 X ~ Binomial(trials, p)。"
+        }
+      ]
+    },
+    "InverseBinomialMinimumTrials": {
+      "name": "InverseBinomialMinimumTrials",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InverseBinomialMinimumTrials/",
+      "overloads": [
+        {
+          "syntax": "InverseBinomialMinimumTrials( <Cumulative Probability>, <Probability of Success>, <Number of Successes> )",
+          "params": [
+            {
+              "name": "cumProb",
+              "role": "cumulative_probability",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "success_probability",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "successes",
+              "role": "target_successes",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回达到给定成功次数所需的最小试验次数 n，使得累计概率满足给定阈值。"
+        }
+      ]
+    },
+    "InverseCauchy": {
+      "name": "InverseCauchy",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InverseCauchy/",
+      "overloads": [
+        {
+          "syntax": "InverseCauchy( <Median>, <Scale>, <Probability> )",
+          "params": [
+            {
+              "name": "median",
+              "role": "location_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "scale",
+              "role": "scale_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "cumulative_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算 Cauchy(median, scale) 累积分布函数在概率 p ∈ [0,1] 下的反函数，即求 t 使 P(X ≤ t) = p。"
+        }
+      ]
+    },
+    "InverseChiSquared": {
+      "name": "InverseChiSquared",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InverseChiSquared/",
+      "overloads": [
+        {
+          "syntax": "InverseChiSquared( <Degrees of Freedom>, <Probability> )",
+          "params": [
+            {
+              "name": "df",
+              "role": "degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "cumulative_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算给定自由度的卡方分布 CDF 在概率 p ∈ [0,1] 下的反函数，即求 t 使 P(X ≤ t) = p。"
+        }
+      ]
+    },
+    "InverseExponential": {
+      "name": "InverseExponential",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InverseExponential/",
+      "overloads": [
+        {
+          "syntax": "InverseExponential( <Lambda>, <Probability> )",
+          "params": [
+            {
+              "name": "lambda",
+              "role": "rate_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "cumulative_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算参数为 λ 的指数分布在给定概率 p ∈ [0,1] 下的 CDF 反函数，即求 t 使得 P(X ≤ t) = p，X ~ Exponential(λ)。"
+        }
+      ]
+    },
+    "InverseFDistribution": {
+      "name": "InverseFDistribution",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InverseFDistribution/",
+      "overloads": [
+        {
+          "syntax": "InverseFDistribution( <Numerator Degrees of Freedom>, <Denominator Degrees of Freedom>, <Probability> )",
+          "params": [
+            {
+              "name": "dfNumerator",
+              "role": "numerator_degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "dfDenominator",
+              "role": "denominator_degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "cumulative_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算自由度为 (dfNumerator, dfDenominator) 的 F 分布在概率 p ∈ [0,1] 下的 CDF 反函数，即求 t 使 P(X ≤ t) = p。"
+        }
+      ]
+    },
+    "InverseGamma": {
+      "name": "InverseGamma",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InverseGamma/",
+      "overloads": [
+        {
+          "syntax": "InverseGamma( <Alpha>, <Beta>, <Probability> )",
+          "params": [
+            {
+              "name": "alpha",
+              "role": "shape_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "beta",
+              "role": "scale_or_rate_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "cumulative_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算 Gamma(α, β) 累积分布在概率 p ∈ [0,1] 下的反函数，即求 t 使得 P(X ≤ t) = p。"
+        }
+      ]
+    },
+    "InverseHyperGeometric": {
+      "name": "InverseHyperGeometric",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InverseHyperGeometric/",
+      "overloads": [
+        {
+          "syntax": "InverseHyperGeometric( <Population Size>, <Number of Successes>, <Sample Size>, <Probability> )",
+          "params": [
+            {
+              "name": "populationSize",
+              "role": "population_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "successes",
+              "role": "success_count_in_population",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sampleSize",
+              "role": "sample_size",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "cumulative_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回最小整数 n，使得 P(X ≤ n) ≥ p，其中 X 为由总体大小、总体成功数与样本容量决定的超几何随机变量。"
+        }
+      ]
+    },
+    "InverseLogNormal": {
+      "name": "InverseLogNormal",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InverseLogNormal/",
+      "overloads": [
+        {
+          "syntax": "InverseLogNormal( <Mean>, <Standard Deviation>, <Probability> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "lognormal_mean_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sd",
+              "role": "lognormal_sd_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "cumulative_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算给定均值与标准差的对数正态分布在概率 p ∈ [0,1] 下的 CDF 反函数，即求 t 使 P(X ≤ t) = p。"
+        }
+      ]
+    },
+    "InverseLogistic": {
+      "name": "InverseLogistic",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InverseLogistic/",
+      "overloads": [
+        {
+          "syntax": "InverseLogistic( <Mean>, <Scale>, <Probability> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "location_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "scale",
+              "role": "scale_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "cumulative_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算 Logistic(mean, scale) 在概率 p ∈ [0,1] 下的 CDF 反函数，即求 t 使 P(X ≤ t) = p。"
+        }
+      ]
+    },
+    "InverseNormal": {
+      "name": "InverseNormal",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InverseNormal/",
+      "overloads": [
+        {
+          "syntax": "InverseNormal( <Mean>, <Standard Deviation>, <Probability> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "normal_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sd",
+              "role": "normal_sd",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "left_tail_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回 N(mean, sd) 分布左侧面积为 p 时对应的分位点，即 Φ⁻¹(p)·sd + mean，对应正态曲线左侧面积为 p 的 x 坐标。"
+        }
+      ]
+    },
+    "InversePascal": {
+      "name": "InversePascal",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InversePascal/",
+      "overloads": [
+        {
+          "syntax": "InversePascal( <n>, <p>, <Probability> )",
+          "params": [
+            {
+              "name": "n",
+              "role": "pascal_target_successes",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "pSuccess",
+              "role": "success_probability",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "cumulative_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回最小整数 n0，使得 P(X ≤ n0) ≥ p，其中 X 为参数为 (n, pSuccess) 的 Pascal 随机变量。"
+        }
+      ]
+    },
+    "InversePoisson": {
+      "name": "InversePoisson",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InversePoisson/",
+      "overloads": [
+        {
+          "syntax": "InversePoisson( <Mean>, <Probability> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "poisson_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "cumulative_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回最小整数 n，使得 P(X ≤ n) ≥ p，其中 X 为均值为 mean 的 Poisson 随机变量。"
+        }
+      ]
+    },
+    "InverseTDistribution": {
+      "name": "InverseTDistribution",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InverseTDistribution/",
+      "overloads": [
+        {
+          "syntax": "InverseTDistribution( <Degrees of Freedom>, <Probability> )",
+          "params": [
+            {
+              "name": "df",
+              "role": "degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "cumulative_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对给定自由度的 t 分布，在概率 p ∈ [0,1] 处计算 CDF 的反函数，即求 r 使得 P(X ≤ r) = p。"
+        }
+      ]
+    },
+    "InverseWeibull": {
+      "name": "InverseWeibull",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InverseWeibull/",
+      "overloads": [
+        {
+          "syntax": "InverseWeibull( <Shape>, <Scale>, <Probability> )",
+          "params": [
+            {
+              "name": "shape",
+              "role": "shape_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "scale",
+              "role": "scale_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "cumulative_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算 Weibull(shape, scale) 在概率 p ∈ [0,1] 处的 CDF 反函数，即求 t 使 P(X ≤ t) = p。"
+        }
+      ]
+    },
+    "InverseZipf": {
+      "name": "InverseZipf",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/InverseZipf/",
+      "overloads": [
+        {
+          "syntax": "InverseZipf( <Number of Elements>, <Exponent>, <Probability> )",
+          "params": [
+            {
+              "name": "elements",
+              "role": "number_of_elements",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "exponent",
+              "role": "zipf_exponent",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "cumulative_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回最小整数 n，使得 P(X ≤ n) ≥ p，其中 X 为由给定元素数与指数定义的 Zipf 随机变量。"
+        }
+      ]
+    },
+    "LogNormal": {
+      "name": "LogNormal",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/LogNormal/",
+      "overloads": [
+        {
+          "syntax": "LogNormal( <Mean>, <Standard Deviation>, <Variable Value> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "lognormal_mean_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sd",
+              "role": "lognormal_sd_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算给定参数的对数正态分布在 v 处的 CDF 值 P(X ≤ v)。"
+        },
+        {
+          "syntax": "LogNormal( <Mean>, <Standard Deviation>, <Variable Value>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "lognormal_mean_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sd",
+              "role": "lognormal_sd_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时计算 CDF；Cumulative = false 时计算在该点的概率密度 PDF。"
+        },
+        {
+          "syntax": "LogNormal( <Mean>, <Standard Deviation>, x, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "lognormal_mean_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sd",
+              "role": "lognormal_sd_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "function_variable",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时生成对数正态分布的 CDF 曲线；否则生成其 PDF 曲线。"
+        }
+      ]
+    },
+    "Logistic": {
+      "name": "Logistic",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Logistic/",
+      "overloads": [
+        {
+          "syntax": "Logistic( <Mean>, <Scale>, <Variable Value> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "location_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "scale",
+              "role": "scale_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算 Logistic(mean, scale) 在 v 处的 CDF 值 P(X ≤ v)，即该点左侧曲线下的面积。"
+        },
+        {
+          "syntax": "Logistic( <Mean>, <Scale>, <Variable Value>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "location_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "scale",
+              "role": "scale_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时返回 Logistic 分布在该点的 CDF；否则返回该点的 PDF 值。"
+        },
+        {
+          "syntax": "Logistic( <Mean>, <Scale>, x, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "location_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "scale",
+              "role": "scale_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "function_variable",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时生成 Logistic 分布的 CDF 曲线；否则生成 PDF 曲线。"
+        }
+      ]
+    },
+    "Normal": {
+      "name": "Normal",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Normal/",
+      "overloads": [
+        {
+          "syntax": "Normal( <Mean>, <Standard Deviation>, <Variable Value> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "normal_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sd",
+              "role": "normal_sd",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算 N(mean, sd) 在 v 处的累积分布值，即标准正态 CDF Φ((v−mean)/sd)，对应曲线左侧面积。"
+        },
+        {
+          "syntax": "Normal( <Mean>, <Standard Deviation>, <Variable Value>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "normal_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sd",
+              "role": "normal_sd",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时计算 N(mean, sd) 在该点的 CDF；否则返回该点的 PDF。"
+        },
+        {
+          "syntax": "Normal( <Mean>, <Standard Deviation>, <Variable Value u>, <Variable Value v> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "normal_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sd",
+              "role": "normal_sd",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "u",
+              "role": "interval_lower_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "v",
+              "role": "interval_upper_bound",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算 N(mean, sd) 在区间 [u, v] 上的概率 P(u ≤ X ≤ v)，等价于 Normal(mean, sd, v, true) - Normal(mean, sd, u, true)。"
+        },
+        {
+          "syntax": "Normal( <Mean>, <Standard Deviation>, x, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "normal_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sd",
+              "role": "normal_sd",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "function_variable",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = true 时创建 N(mean, sd) 的 CDF 曲线；否则创建其 PDF 曲线。"
+        }
+      ]
+    },
+    "Pascal": {
+      "name": "Pascal",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Pascal/",
+      "overloads": [
+        {
+          "syntax": "Pascal( <n>, <p> )",
+          "params": [
+            {
+              "name": "n",
+              "role": "required_successes",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "success_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "生成参数为 (n, p) 的 Pascal 分布概率柱状图。"
+        },
+        {
+          "syntax": "Pascal( <n>, <p>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "n",
+              "role": "required_successes",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "success_probability",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "Cumulative = false 时返回 Pascal 分布柱状图；Cumulative = true 时返回累积 Pascal 分布的图像。"
+        },
+        {
+          "syntax": "Pascal( <n>, <p>, <Variable Value>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "n",
+              "role": "required_successes",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "success_probability",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "设 X 为 Pascal 随机变量，value = v。Cumulative = false 时返回 P(X = v)；Cumulative = true 时返回 P(X ≤ v)。"
+        }
+      ]
+    },
+    "Poisson": {
+      "name": "Poisson",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Poisson/",
+      "overloads": [
+        {
+          "syntax": "Poisson( <Mean> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "distribution_mean",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回均值为 mean 的 Poisson 分布的概率柱状图。"
+        },
+        {
+          "syntax": "Poisson( <Mean>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "distribution_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "当 Cumulative = false 时返回 Poisson 分布柱状图；当 Cumulative = true 时返回对应的累积 Poisson 分布图像。"
+        },
+        {
+          "syntax": "Poisson( <Mean>, <Variable Value v>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "distribution_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "v",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "设 X ~ Poisson(mean)。当 Cumulative = false 时返回 P(X = v)；当 Cumulative = true 时返回 P(X ≤ v)。"
+        },
+        {
+          "syntax": "Poisson( <Mean>, <Range> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "distribution_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "range",
+              "role": "value_range",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "简化语法，用于计算区间概率 P(u ≤ X ≤ v)，例如 Poisson(1, 1..5)。"
+        }
+      ]
+    },
+    "RandomBetween": {
+      "name": "RandomBetween",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RandomBetween/",
+      "overloads": [
+        {
+          "syntax": "RandomBetween( <Minimum Integer>, <Maximum Integer> )",
+          "params": [
+            {
+              "name": "min",
+              "role": "minimum_bound",
+              "type": "Integer",
+              "optional": false
+            },
+            {
+              "name": "max",
+              "role": "maximum_bound",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "生成一个 [min, max] 间（含端点）的随机整数。"
+        },
+        {
+          "syntax": "RandomBetween( <Minimum Integer>, <Maximum Integer>, <Boolean Fixed> )",
+          "params": [
+            {
+              "name": "min",
+              "role": "minimum_bound",
+              "type": "Integer",
+              "optional": false
+            },
+            {
+              "name": "max",
+              "role": "maximum_bound",
+              "type": "Integer",
+              "optional": false
+            },
+            {
+              "name": "Fixed",
+              "role": "fixed_flag",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "当 Fixed = true 时，仅在打开文件或执行撤销/重做时更新一次随机值；否则像普通随机数一样在 F9 等重算时更新。"
+        },
+        {
+          "syntax": "RandomBetween( <Minimum Integer>, <Maximum Integer>, <Number of Samples> )",
+          "params": [
+            {
+              "name": "min",
+              "role": "minimum_bound",
+              "type": "Integer",
+              "optional": false
+            },
+            {
+              "name": "max",
+              "role": "maximum_bound",
+              "type": "Integer",
+              "optional": false
+            },
+            {
+              "name": "samples",
+              "role": "number_of_samples",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "生成一个长度为 samples 的整数列表，每个元素都是 [min, max]（含端点）内的随机整数。"
+        }
+      ]
+    },
+    "RandomBinomial": {
+      "name": "RandomBinomial",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RandomBinomial/",
+      "overloads": [
+        {
+          "syntax": "RandomBinomial( <Number of Trials>, <Probability> )",
+          "params": [
+            {
+              "name": "trials",
+              "role": "number_of_trials",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "role": "success_probability",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "从参数为 (trials, p) 的二项分布中生成一个随机数 j ∈ {0, …, trials}。"
+        }
+      ]
+    },
+    "RandomDiscrete": {
+      "name": "RandomDiscrete",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RandomDiscrete/",
+      "overloads": [
+        {
+          "syntax": "RandomDiscrete( <List>, <List> )",
+          "params": [
+            {
+              "name": "values",
+              "role": "input_values",
+              "type": "List",
+              "optional": false
+            },
+            {
+              "name": "probabilities",
+              "role": "weight_distribution",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "从第一个列表 values 中按第二个列表 probabilities 给出的相对概率（权重）返回一个随机元素；两列表长度必须相同，第二列表会自动正规化为概率分布。"
+        }
+      ]
+    },
+    "RandomNormal": {
+      "name": "RandomNormal",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RandomNormal/",
+      "overloads": [
+        {
+          "syntax": "RandomNormal( <Mean>, <Standard Deviation> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "distribution_mean",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "sd",
+              "role": "standard_deviation",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "从均值为 mean、标准差为 sd 的正态分布中生成一个随机实数。"
+        }
+      ]
+    },
+    "RandomPointIn": {
+      "name": "RandomPointIn",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RandomPointIn/",
+      "overloads": [
+        {
+          "syntax": "RandomPointIn( <Region> )",
+          "params": [
+            {
+              "name": "region",
+              "role": "region_polygon_or_conic",
+              "type": "Region",
+              "optional": false
+            }
+          ],
+          "description": "在给定多边形或封闭二次曲线 region 内生成一个随机点。"
+        },
+        {
+          "syntax": "RandomPointIn( <List of Points> )",
+          "params": [
+            {
+              "name": "vertices",
+              "role": "polygon_vertices",
+              "type": "List",
+              "optional": false
+            }
+          ],
+          "description": "将顶点列表视为多边形顶点，在该多边形内部生成随机点。"
+        },
+        {
+          "syntax": "RandomPointIn( <xMin>, <xMax>, <yMin>, <yMax> )",
+          "params": [
+            {
+              "name": "xMin",
+              "role": "x_coordinate_min",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "xMax",
+              "role": "x_coordinate_max",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "yMin",
+              "role": "y_coordinate_min",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "yMax",
+              "role": "y_coordinate_max",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "在矩形 [xMin, xMax] × [yMin, yMax] 内生成一个随机点 (x, y)。"
+        }
+      ]
+    },
+    "RandomPoisson": {
+      "name": "RandomPoisson",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RandomPoisson/",
+      "overloads": [
+        {
+          "syntax": "RandomPoisson( <Mean> )",
+          "params": [
+            {
+              "name": "mean",
+              "role": "distribution_mean",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "从均值为 mean 的 Poisson 分布中生成一个随机整数。"
+        }
+      ]
+    },
+    "RandomPolynomial": {
+      "name": "RandomPolynomial",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RandomPolynomial/",
+      "overloads": [
+        {
+          "syntax": "RandomPolynomial( <Degree>, <Minimum for Coefficients>, <Maximum for Coefficients> )",
+          "params": [
+            {
+              "name": "degree",
+              "role": "polynomial_degree",
+              "type": "Integer",
+              "optional": false
+            },
+            {
+              "name": "minCoeff",
+              "role": "minimum_coefficient",
+              "type": "Integer",
+              "optional": false
+            },
+            {
+              "name": "maxCoeff",
+              "role": "maximum_coefficient",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "返回一个关于 x 的随机多项式，次数为 degree，所有整数系数均在 [minCoeff, maxCoeff] 区间内。"
+        },
+        {
+          "syntax": "RandomPolynomial( <Variable>, <Degree>, <Minimum for Coefficients>, <Maximum for Coefficients> )",
+          "params": [
+            {
+              "name": "var",
+              "role": "polynomial_variable",
+              "type": "Variable",
+              "optional": false
+            },
+            {
+              "name": "degree",
+              "role": "polynomial_degree",
+              "type": "Integer",
+              "optional": false
+            },
+            {
+              "name": "minCoeff",
+              "role": "minimum_coefficient",
+              "type": "Integer",
+              "optional": false
+            },
+            {
+              "name": "maxCoeff",
+              "role": "maximum_coefficient",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "返回一个关于自变量 var 的随机多项式，次数为 degree，所有整数系数在 [minCoeff, maxCoeff] 内；若给出的 min/max 不是整数，则内部使用 round(min/max)。"
+        }
+      ]
+    },
+    "RandomUniform": {
+      "name": "RandomUniform",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RandomUniform/",
+      "overloads": [
+        {
+          "syntax": "RandomUniform( <Min>, <Max> )",
+          "params": [
+            {
+              "name": "min",
+              "role": "minimum_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "max",
+              "role": "maximum_bound",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "从区间 [min, max] 上的连续均匀分布生成一个随机实数；RandomUniform(0, 1) 等价于 random()。"
+        },
+        {
+          "syntax": "RandomUniform( <Min>, <Max>, <Number of Samples n> )",
+          "params": [
+            {
+              "name": "min",
+              "role": "minimum_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "max",
+              "role": "maximum_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "n",
+              "role": "number_of_samples",
+              "type": "Integer",
+              "optional": false
+            }
+          ],
+          "description": "返回一个长度为 n 的列表，其元素是区间 [min, max] 上独立同分布的均匀随机数。"
+        }
+      ]
+    },
+    "TDistribution": {
+      "name": "TDistribution",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TDistribution/",
+      "overloads": [
+        {
+          "syntax": "TDistribution( <Degrees of Freedom>, <Variable Value> )",
+          "params": [
+            {
+              "name": "df",
+              "role": "degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "计算自由度为 df 的 t 分布在 value 处的累积分布值 P(X ≤ value)。"
+        },
+        {
+          "syntax": "TDistribution( <Degrees of Freedom>, <Variable Value>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "df",
+              "role": "degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "当 Cumulative = true 时返回 CDF 值 P(X ≤ value)；否则返回在该点的 PDF 值。"
+        },
+        {
+          "syntax": "TDistribution( <Degrees of Freedom>, x, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "df",
+              "role": "degrees_of_freedom",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "function_variable",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "当 Cumulative = true 时生成对应 t 分布的累积分布函数曲线；否则生成密度函数曲线。"
+        }
+      ]
+    },
+    "Triangular": {
+      "name": "Triangular",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Triangular/",
+      "overloads": [
+        {
+          "syntax": "Triangular( <Lower Bound>, <Upper Bound>, <Mode>, <Variable Value> )",
+          "params": [
+            {
+              "name": "lower",
+              "role": "lower_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "upper",
+              "role": "upper_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "mode",
+              "role": "distribution_mode",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对区间 [lower, upper]、峰值为 mode 的三角分布，在 value 处计算累积分布值 P(X ≤ value)。"
+        },
+        {
+          "syntax": "Triangular( <Lower Bound>, <Upper Bound>, <Mode>, <Variable Value>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "lower",
+              "role": "lower_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "upper",
+              "role": "upper_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "mode",
+              "role": "distribution_mode",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "当 Cumulative = true 时在 value 处计算三角分布 CDF；否则计算 PDF。"
+        },
+        {
+          "syntax": "Triangular( <Lower Bound>, <Upper Bound>, <Mode>, x, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "lower",
+              "role": "lower_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "upper",
+              "role": "upper_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "mode",
+              "role": "distribution_mode",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "function_variable",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "当 Cumulative = true 时生成对应三角分布的 CDF 曲线；否则生成 PDF 曲线。"
+        }
+      ]
+    },
+    "Uniform": {
+      "name": "Uniform",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Uniform/",
+      "overloads": [
+        {
+          "syntax": "Uniform( <Lower Bound>, <Upper Bound>, <Variable Value> )",
+          "params": [
+            {
+              "name": "lower",
+              "role": "lower_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "upper",
+              "role": "upper_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对区间 [lower, upper] 上的连续均匀分布，在 value 处计算累积分布值 P(X ≤ value)。"
+        },
+        {
+          "syntax": "Uniform( <Lower Bound>, <Upper Bound>, <Variable Value>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "lower",
+              "role": "lower_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "upper",
+              "role": "upper_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "当 Cumulative = true 时返回 CDF 值；否则返回在 value 处的 PDF 值。"
+        },
+        {
+          "syntax": "Uniform( <Lower Bound>, <Upper Bound>, x, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "lower",
+              "role": "lower_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "upper",
+              "role": "upper_bound",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "function_variable",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "当 Cumulative = true 时生成对应均匀分布的 CDF 曲线；否则生成 PDF 曲线。"
+        }
+      ]
+    },
+    "Weibull": {
+      "name": "Weibull",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Weibull/",
+      "overloads": [
+        {
+          "syntax": "Weibull( <Shape>, <Scale>, <Variable Value> )",
+          "params": [
+            {
+              "name": "shape",
+              "role": "shape_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "scale",
+              "role": "scale_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "对给定 shape、scale 的 Weibull 分布，在 value 处计算累积分布值 P(X ≤ value)。"
+        },
+        {
+          "syntax": "Weibull( <Shape>, <Scale>, <Variable Value>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "shape",
+              "role": "shape_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "scale",
+              "role": "scale_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "value",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "当 Cumulative = true 时返回给定点的 CDF；否则返回对应的 PDF 值。"
+        },
+        {
+          "syntax": "Weibull( <Shape>, <Scale>, x, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "shape",
+              "role": "shape_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "scale",
+              "role": "scale_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "x",
+              "role": "function_variable",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "当 Cumulative = true 时生成 Weibull 分布的 CDF 曲线；否则生成 PDF 曲线。"
+        }
+      ]
+    },
+    "Zipf": {
+      "name": "Zipf",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Zipf/",
+      "overloads": [
+        {
+          "syntax": "Zipf( <Number of Elements>, <Exponent> )",
+          "params": [
+            {
+              "name": "elements",
+              "role": "number_of_elements",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "exponent",
+              "role": "exponent_parameter",
+              "type": "Number",
+              "optional": false
+            }
+          ],
+          "description": "返回给定元素数量和指数参数的 Zipf 分布概率柱状图。"
+        },
+        {
+          "syntax": "Zipf( <Number of Elements>, <Exponent>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "elements",
+              "role": "number_of_elements",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "exponent",
+              "role": "exponent_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "当 Cumulative = false 时返回 Zipf 分布柱状图；当 Cumulative = true 时返回累积 Zipf 分布图。"
+        },
+        {
+          "syntax": "Zipf( <Number of Elements>, <Exponent>, <Variable Value v>, <Boolean Cumulative> )",
+          "params": [
+            {
+              "name": "elements",
+              "role": "number_of_elements",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "exponent",
+              "role": "exponent_parameter",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "v",
+              "role": "variable_value",
+              "type": "Number",
+              "optional": false
+            },
+            {
+              "name": "Cumulative",
+              "role": "use_cumulative_distribution",
+              "type": "Boolean",
+              "optional": false
+            }
+          ],
+          "description": "设 X 为 Zipf 随机变量。Cumulative = false 时返回 P(X = v)；Cumulative = true 时返回 P(X ≤ v)。"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,1291 @@
+{
+    "category": "Geometry Commands",
+    "count": 64,
+    "commands": {
+        "AngleBisector": {
+  "name": "AngleBisector",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/AngleBisector/",
+  "overloads": [
+    {
+      "syntax": "AngleBisector(<Line>, <Line>)",
+      "params": [
+        {
+          "name": "<Line>",
+          "role": "line1",
+          "type": "Line",
+          "optional": false
+        },
+        {
+          "name": "<Line>",
+          "role": "line2",
+          "type": "Line",
+          "optional": false
+        }
+      ],
+      "description": "Returns both angle bisectors of the two given lines（返回两条直线的两条角平分线）"
+    },
+    {
+      "syntax": "AngleBisector(<Point>, <Point>, <Point>)",
+      "params": [
+        {
+          "name": "<Point>",
+          "role": "point1",
+          "type": "Point",
+          "optional": false
+        },
+        {
+          "name": "<Point>",
+          "role": "apex",
+          "type": "Point",
+          "optional": false
+        },
+        {
+          "name": "<Point>",
+          "role": "point3",
+          "type": "Point",
+          "optional": false
+        }
+      ],
+      "description": "Returns the angle bisector of the angle defined by three points, where the second point is the vertex（返回由三个点定义的角的角平分线，第二个点为角顶点）"
+    }
+  ]
+},
+
+"Arc": {
+  "name": "Arc",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Arc/",
+  "overloads": [
+    {
+      "syntax": "Arc(<Circle>, <Point M>, <Point N>)",
+      "params": [
+        {
+          "name": "<Circle>",
+          "role": "circle",
+          "type": "Circle",
+          "optional": false
+        },
+        {
+          "name": "<Point M>",
+          "role": "start_point",
+          "type": "Point",
+          "optional": false
+        },
+        {
+          "name": "<Point N>",
+          "role": "end_point",
+          "type": "Point",
+          "optional": false
+        }
+      ],
+      "description": "Returns the directed (counterclockwise) arc of the given circle with endpoints M and N（返回给定圆上以 M 为起点、N 为终点的逆时针有向圆弧）"
+    },
+    {
+      "syntax": "Arc(<Ellipse>, <Point M>, <Point N>)",
+      "params": [
+        {
+          "name": "<Ellipse>",
+          "role": "ellipse",
+          "type": "Ellipse",
+          "optional": false
+        },
+        {
+          "name": "<Point M>",
+          "role": "start_point",
+          "type": "Point",
+          "optional": false
+        },
+        {
+          "name": "<Point N>",
+          "role": "end_point",
+          "type": "Point",
+          "optional": false
+        }
+      ],
+      "description": "Returns the directed (counterclockwise) arc of the given ellipse with endpoints M and N（返回给定椭圆上以 M 为起点、N 为终点的逆时针有向椭圆弧）"
+    },
+    {
+      "syntax": "Arc(<Circle>, <Parameter Value>, <Parameter Value>)",
+      "params": [
+        {
+          "name": "<Circle>",
+          "role": "circle",
+          "type": "Circle",
+          "optional": false
+        },
+        {
+          "name": "<Parameter Value>",
+          "role": "param1",
+          "type": "Number",
+          "optional": false
+        },
+        {
+          "name": "<Parameter Value>",
+          "role": "param2",
+          "type": "Number",
+          "optional": false
+        }
+      ],
+      "description": "Returns the circular arc of the given circle whose endpoints are identified by the given parameter values（通过参数值确定端点的圆弧，圆可参数化为 (r cos(t), r sin(t))）"
+    },
+    {
+      "syntax": "Arc(<Ellipse>, <Parameter Value>, <Parameter Value>)",
+      "params": [
+        {
+          "name": "<Ellipse>",
+          "role": "ellipse",
+          "type": "Ellipse",
+          "optional": false
+        },
+        {
+          "name": "<Parameter Value>",
+          "role": "param1",
+          "type": "Number",
+          "optional": false
+        },
+        {
+          "name": "<Parameter Value>",
+          "role": "param2",
+          "type": "Number",
+          "optional": false
+        }
+      ],
+      "description": "Returns the elliptic arc of the given ellipse whose endpoints are identified by the given parameter values（通过参数值确定端点的椭圆弧，椭圆可参数化为 (a cos(t), b sin(t))）"
+    }
+  ]
+},
+
+"Area": {
+  "name": "Area",
+  "url": "https://geogebra.github.io/docs/manual/en/commands/Area/",
+  "overloads": [
+    {
+      "syntax": "Area(<Point>, …, <Point>)",
+      "params": [
+        {
+          "name": "<Point>",
+          "role": "vertex",
+          "type": "Point",
+          "optional": false
+        }
+      ],
+      "description": "Returns the area of the polygon defined by the given vertices（由一串点定义的多边形面积）"
+    },
+    {
+      "syntax": "Area(<Conic>)",
+      "params": [
+        {
+          "name": "<Conic>",
+          "role": "conic",
+          "type": "Conic",
+          "optional": false
+        }
+      ],
+      "description": "Returns the area of a circle or ellipse（圆或椭圆的面积）"
+    },
+    {
+      "syntax": "Area(<Polygon>)",
+      "params": [
+        {
+          "name": "<Polygon>",
+          "role": "polygon",
+          "type": "Polygon",
+          "optional": false
+        }
+      ],
+      "description": "Returns the area of a polygon as the absolute value of its algebraic area（多边形的面积，取代数面积的绝对值；自相交多边形可能给出意外结果）"
+    }
+  ]
+},
+      "Circle": {
+        "name": "Circle",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Circle/",
+        "overloads": [
+          {
+            "syntax": "Circle(<Point>, <Radius Number>)",
+            "params": [
+              { "name": "<Point>", "role": "center", "type": "Point", "optional": false },
+              { "name": "<Radius Number>", "role": "radius", "type": "Number", "optional": false }
+            ],
+            "description": "以给定点为圆心、给定数值为半径的圆"
+          },
+          {
+            "syntax": "Circle(<Point>, <Segment>)",
+            "params": [
+              { "name": "<Point>", "role": "center", "type": "Point", "optional": false },
+              { "name": "<Segment>", "role": "radius", "type": "Segment", "optional": false }
+            ],
+            "description": "圆心为给定点，半径等于线段长度的圆"
+          },
+          {
+            "syntax": "Circle(<Point>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "center", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "onCircle", "type": "Point", "optional": false }
+            ],
+            "description": "以第一个点为圆心，经过第二个点的圆"
+          },
+          {
+            "syntax": "Circle(<Point>, <Point>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "B", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "C", "type": "Point", "optional": false }
+            ],
+            "description": "通过三个不共线点的圆"
+          },
+          {
+            "syntax": "Circle(<Line>, <Point>)",
+            "params": [
+              { "name": "<Line>", "role": "axis", "type": "Line", "optional": false },
+              { "name": "<Point>", "role": "onCircle", "type": "Point", "optional": false }
+            ],
+            "description": "以给定直线为轴、通过给定点的3D圆"
+          },
+          {
+            "syntax": "Circle(<Point>, <Radius>, <Direction>)",
+            "params": [
+              { "name": "<Point>", "role": "center", "type": "Point", "optional": false },
+              { "name": "<Radius>", "role": "radius", "type": "Number", "optional": false },
+              { "name": "<Direction>", "role": "axisDir", "type": "Line/Vector/Plane", "optional": false }
+            ],
+            "description": "指定圆心、半径和轴方向的3D圆"
+          },
+          {
+            "syntax": "Circle(<Point>, <Point>, <Direction>)",
+            "params": [
+              { "name": "<Point>", "role": "center", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "onCircle", "type": "Point", "optional": false },
+              { "name": "<Direction>", "role": "axisDir", "type": "Line/Vector/Plane", "optional": false }
+            ],
+            "description": "经过给定点、且轴方向平行于Direction的3D圆"
+          }
+        ]
+      },
+      "Angle": {
+        "name": "Angle",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Angle/",
+        "overloads": [
+          {
+            "syntax": "Angle(<Object>)",
+            "params": [
+              { "name": "<Object>", "role": "obj", "type": "Conic/Vector/Point/Polygon", "optional": false }
+            ],
+            "description": "根据对象类型返回不同角度：圆锥曲线轴角、向量夹角、点位置角或返回多边形所有内角"
+          },
+          {
+            "syntax": "Angle(<Vector>, <Vector>)",
+            "params": [
+              { "name": "<Vector>", "role": "vec1", "type": "Vector", "optional": false },
+              { "name": "<Vector>", "role": "vec2", "type": "Vector", "optional": false }
+            ],
+            "description": "返回两个向量之间的夹角"
+          },
+          {
+            "syntax": "Angle(<Line>, <Line>)",
+            "params": [
+              { "name": "<Line>", "role": "line1", "type": "Line", "optional": false },
+              { "name": "<Line>", "role": "line2", "type": "Line", "optional": false }
+            ],
+            "description": "返回两条直线方向向量之间的夹角"
+          },
+          {
+            "syntax": "Angle(<Line>, <Plane>)",
+            "params": [
+              { "name": "<Line>", "role": "line", "type": "Line", "optional": false },
+              { "name": "<Plane>", "role": "plane", "type": "Plane", "optional": false }
+            ],
+            "description": "返回直线与平面之间的夹角"
+          },
+          {
+            "syntax": "Angle(<Plane>, <Plane>)",
+            "params": [
+              { "name": "<Plane>", "role": "plane1", "type": "Plane", "optional": false },
+              { "name": "<Plane>", "role": "plane2", "type": "Plane", "optional": false }
+            ],
+            "description": "返回两个平面之间的夹角"
+          },
+          {
+            "syntax": "Angle(<Point>, <Apex>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "point1", "type": "Point", "optional": false },
+              { "name": "<Apex>", "role": "apex", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "point2", "type": "Point", "optional": false }
+            ],
+            "description": "返回由三个点定义的角"
+          },
+          {
+            "syntax": "Angle(<Point>, <Apex>, <Angle>)",
+            "params": [
+              { "name": "<Point>", "role": "point", "type": "Point", "optional": false },
+              { "name": "<Apex>", "role": "apex", "type": "Point", "optional": false },
+              { "name": "<Angle>", "role": "angle", "type": "Number", "optional": false }
+            ],
+            "description": "从点绕顶点创建指定大小的角"
+          },
+          {
+            "syntax": "Angle(<Point>, <Point>, <Point>, <Direction>)",
+            "params": [
+              { "name": "<Point>", "role": "point1", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "point2", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "point3", "type": "Point", "optional": false },
+              { "name": "<Direction>", "role": "dir", "type": "Line/Plane", "optional": false }
+            ],
+            "description": "返回由三点和方向定义的角"
+          }
+        ]
+      },
+      "Point": {
+        "name": "Point",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Point/",
+        "overloads": [
+          {
+            "syntax": "Point(<Object>)",
+            "params": [
+              { "name": "<Object>", "role": "obj", "type": "GeoObject", "optional": false }
+            ],
+            "description": "返回几何对象上的一个点，可在路径上移动"
+          },
+          {
+            "syntax": "Point(<Object>, <Parameter>)",
+            "params": [
+              { "name": "<Object>", "role": "obj", "type": "GeoObject", "optional": false },
+              { "name": "<Parameter>", "role": "param", "type": "Number", "optional": false }
+            ],
+            "description": "返回具有给定路径参数的点"
+          },
+          {
+            "syntax": "Point(<Point>, <Vector>)",
+            "params": [
+              { "name": "<Point>", "role": "start", "type": "Point", "optional": false },
+              { "name": "<Vector>", "role": "vec", "type": "Vector", "optional": false }
+            ],
+            "description": "通过向量从给定点创建新点"
+          },
+          {
+            "syntax": "Point(<List>)",
+            "params": [
+              { "name": "<List>", "role": "coords", "type": "List", "optional": false }
+            ],
+            "description": "将包含两个数字的列表转换为点"
+          }
+        ]
+      },
+      "Segment": {
+        "name": "Segment",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Segment/",
+        "overloads": [
+          {
+            "syntax": "Segment(<Point>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "start", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "end", "type": "Point", "optional": false }
+            ],
+            "description": "创建两点之间的线段"
+          },
+          {
+            "syntax": "Segment(<Point>, <Length>)",
+            "params": [
+              { "name": "<Point>", "role": "start", "type": "Point", "optional": false },
+              { "name": "<Length>", "role": "len", "type": "Number", "optional": false }
+            ],
+            "description": "创建从给定点开始、指定长度的线段"
+          }
+        ]
+      },
+      "Midpoint": {
+        "name": "Midpoint",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Midpoint/",
+        "overloads": [
+          {
+            "syntax": "Midpoint(<Segment>)",
+            "params": [
+              { "name": "<Segment>", "role": "seg", "type": "Segment", "optional": false }
+            ],
+            "description": "返回线段的中点"
+          },
+          {
+            "syntax": "Midpoint(<Conic>)",
+            "params": [
+              { "name": "<Conic>", "role": "conic", "type": "Conic", "optional": false }
+            ],
+            "description": "返回圆锥曲线的中心"
+          },
+          {
+            "syntax": "Midpoint(<Interval>)",
+            "params": [
+              { "name": "<Interval>", "role": "int", "type": "Interval", "optional": false }
+            ],
+            "description": "返回区间的中点（数值）"
+          },
+          {
+            "syntax": "Midpoint(<Point>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "B", "type": "Point", "optional": false }
+            ],
+            "description": "返回两点的中点"
+          },
+          {
+            "syntax": "Midpoint(<Quadric>)",
+            "params": [
+              { "name": "<Quadric>", "role": "quadric", "type": "Quadric", "optional": false }
+            ],
+            "description": "返回二次曲面的中点"
+          }
+        ]
+      },
+      "AffineRatio": {
+        "name": "AffineRatio",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/AffineRatio/",
+        "overloads": [
+          {
+            "syntax": "AffineRatio(<Point>, <Point>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "B", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "C", "type": "Point", "optional": false }
+            ],
+            "description": "计算三点间的仿射比"
+          }
+        ]
+      },
+      "AreCollinear": {
+        "name": "AreCollinear",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/AreCollinear/",
+        "overloads": [
+          {
+            "syntax": "AreCollinear(<Point>, <Point>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "B", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "C", "type": "Point", "optional": false }
+            ],
+            "description": "判断三点是否共线"
+          }
+        ]
+      },
+      "AreConcurrent": {
+        "name": "AreConcurrent",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/AreConcurrent/",
+        "overloads": [
+          {
+            "syntax": "AreConcurrent(<Line>, <Line>, <Line>)",
+            "params": [
+              { "name": "<Line>", "role": "line1", "type": "Line", "optional": false },
+              { "name": "<Line>", "role": "line2", "type": "Line", "optional": false },
+              { "name": "<Line>", "role": "line3", "type": "Line", "optional": false }
+            ],
+            "description": "判断三条直线是否共点"
+          }
+        ]
+      },
+      "AreConcyclic": {
+        "name": "AreConcyclic",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/AreConcyclic/",
+        "overloads": [
+          {
+            "syntax": "AreConcyclic(<Point>, <Point>, <Point>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "B", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "C", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "D", "type": "Point", "optional": false }
+            ],
+            "description": "判断四点是否共圆"
+          }
+        ]
+      },
+      "AreCongruent": {
+        "name": "AreCongruent",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/AreCongruent/",
+        "overloads": [
+          {
+            "syntax": "AreCongruent(<Object>, <Object>)",
+            "params": [
+              { "name": "<Object>", "role": "obj1", "type": "GeoObject", "optional": false },
+              { "name": "<Object>", "role": "obj2", "type": "GeoObject", "optional": false }
+            ],
+            "description": "判断两个对象是否全等"
+          }
+        ]
+      },
+      "AreEqual": {
+        "name": "AreEqual",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/AreEqual/",
+        "overloads": [
+          {
+            "syntax": "AreEqual(<Object>, <Object>)",
+            "params": [
+              { "name": "<Object>", "role": "obj1", "type": "GeoObject", "optional": false },
+              { "name": "<Object>", "role": "obj2", "type": "GeoObject", "optional": false }
+            ],
+            "description": "判断两个对象在数学上是否相等"
+          }
+        ]
+      },
+      "AreParallel": {
+        "name": "AreParallel",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/AreParallel/",
+        "overloads": [
+          {
+            "syntax": "AreParallel(<Line>, <Line>)",
+            "params": [
+              { "name": "<Line>", "role": "line1", "type": "Line", "optional": false },
+              { "name": "<Line>", "role": "line2", "type": "Line", "optional": false }
+            ],
+            "description": "判断两条直线是否平行"
+          }
+        ]
+      },
+      "ArePerpendicular": {
+        "name": "ArePerpendicular",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/ArePerpendicular/",
+        "overloads": [
+          {
+            "syntax": "ArePerpendicular(<Line>, <Line>)",
+            "params": [
+              { "name": "<Line>", "role": "line1", "type": "Line", "optional": false },
+              { "name": "<Line>", "role": "line2", "type": "Line", "optional": false }
+            ],
+            "description": "判断两条直线是否垂直"
+          }
+        ]
+      },
+      "Barycenter": {
+        "name": "Barycenter",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Barycenter/",
+        "overloads": [
+          {
+            "syntax": "Barycenter(<List>)",
+            "params": [
+              { "name": "<List>", "role": "points", "type": "List", "optional": false }
+            ],
+            "description": "计算点列的重心"
+          },
+          {
+            "syntax": "Barycenter(<Point>, <Number>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Number>", "role": "w", "type": "Number", "optional": false }
+            ],
+            "description": "计算加权重心"
+          }
+        ]
+      },
+      "Centroid": {
+        "name": "Centroid",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Centroid/",
+        "overloads": [
+          {
+            "syntax": "Centroid(<Polygon>)",
+            "params": [
+              { "name": "<Polygon>", "role": "poly", "type": "Polygon", "optional": false }
+            ],
+            "description": "计算多边形的重心"
+          }
+        ]
+      },
+      "CircularArc": {
+        "name": "CircularArc",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/CircularArc/",
+        "overloads": [
+          {
+            "syntax": "CircularArc(<Center>, <StartPoint>, <EndPoint>)",
+            "params": [
+              { "name": "<Center>", "role": "center", "type": "Point", "optional": false },
+              { "name": "<StartPoint>", "role": "start", "type": "Point", "optional": false },
+              { "name": "<EndPoint>", "role": "end", "type": "Point", "optional": false }
+            ],
+            "description": "创建中心为给定点、起点和终点定义的圆弧"
+          }
+        ]
+      },
+      "CircularSector": {
+        "name": "CircularSector",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/CircularSector/",
+        "overloads": [
+          {
+            "syntax": "CircularSector(<Center>, <StartPoint>, <EndPoint>)",
+            "params": [
+              { "name": "<Center>", "role": "center", "type": "Point", "optional": false },
+              { "name": "<StartPoint>", "role": "start", "type": "Point", "optional": false },
+              { "name": "<EndPoint>", "role": "end", "type": "Point", "optional": false }
+            ],
+            "description": "创建中心为给定点、起点和终点定义的扇形"
+          }
+        ]
+      },
+      "CircumcircularArc": {
+        "name": "CircumcircularArc",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/CircumcircularArc/",
+        "overloads": [
+          {
+            "syntax": "CircumcircularArc(<Point>, <Point>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "B", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "C", "type": "Point", "optional": false }
+            ],
+            "description": "创建通过三点的圆弧"
+          }
+        ]
+      },
+      "CircumcircularSector": {
+        "name": "CircumcircularSector",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/CircumcircularSector/",
+        "overloads": [
+          {
+            "syntax": "CircumcircularSector(<Point>, <Point>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "B", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "C", "type": "Point", "optional": false }
+            ],
+            "description": "创建通过三点的扇形"
+          }
+        ]
+      },
+      "Circumference": {
+        "name": "Circumference",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Circumference/",
+        "overloads": [
+          {
+            "syntax": "Circumference(<Object>)",
+            "params": [
+              { "name": "<Object>", "role": "obj", "type": "Circle/Ellipse", "optional": false }
+            ],
+            "description": "计算圆或椭圆的周长"
+          }
+        ]
+      },
+      "ClosestPoint": {
+        "name": "ClosestPoint",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/ClosestPoint/",
+        "overloads": [
+          {
+            "syntax": "ClosestPoint(<Object>, <Point>)",
+            "params": [
+              { "name": "<Object>", "role": "obj", "type": "GeoObject", "optional": false },
+              { "name": "<Point>", "role": "P", "type": "Point", "optional": false }
+            ],
+            "description": "找到对象上距离给定点最近的点"
+          }
+        ]
+      },
+      "ClosestPointRegion": {
+        "name": "ClosestPointRegion",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/ClosestPointRegion/",
+        "overloads": [
+          {
+            "syntax": "ClosestPointRegion(<Region>, <Point>)",
+            "params": [
+              { "name": "<Region>", "role": "region", "type": "Region", "optional": false },
+              { "name": "<Point>", "role": "P", "type": "Point", "optional": false }
+            ],
+            "description": "找到区域内距离给定点最近的点"
+          }
+        ]
+      },
+      "CrossRatio": {
+        "name": "CrossRatio",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/CrossRatio/",
+        "overloads": [
+          {
+            "syntax": "CrossRatio(<Point>, <Point>, <Point>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "B", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "C", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "D", "type": "Point", "optional": false }
+            ],
+            "description": "计算四点的交比"
+          }
+        ]
+      },
+      "Cubic": {
+        "name": "Cubic",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Cubic/",
+        "overloads": [
+          {
+            "syntax": "Cubic(<Point>, <Point>, <Point>, <Number>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "B", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "C", "type": "Point", "optional": false },
+              { "name": "<Number>", "role": "t", "type": "Number", "optional": false }
+            ],
+            "description": "创建立方曲线"
+          }
+        ]
+      },
+      "Difference": {
+        "name": "Difference",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Difference/",
+        "overloads": [
+          {
+            "syntax": "Difference(<Set>, <Set>)",
+            "params": [
+              { "name": "<Set>", "role": "A", "type": "Set", "optional": false },
+              { "name": "<Set>", "role": "B", "type": "Set", "optional": false }
+            ],
+            "description": "计算两个集合的差集"
+          }
+        ]
+      },
+      "Direction": {
+        "name": "Direction",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Direction/",
+        "overloads": [
+          {
+            "syntax": "Direction(<Vector>)",
+            "params": [
+              { "name": "<Vector>", "role": "vec", "type": "Vector", "optional": false }
+            ],
+            "description": "获取向量的方向角"
+          }
+        ]
+      },
+      "Distance": {
+        "name": "Distance",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Distance/",
+        "overloads": [
+          {
+            "syntax": "Distance(<Point>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "B", "type": "Point", "optional": false }
+            ],
+            "description": "计算两点间距离"
+          },
+          {
+            "syntax": "Distance(<Point>, <Line>)",
+            "params": [
+              { "name": "<Point>", "role": "P", "type": "Point", "optional": false },
+              { "name": "<Line>", "role": "line", "type": "Line", "optional": false }
+            ],
+            "description": "计算点到直线的距离"
+          },
+          {
+            "syntax": "Distance(<Point>, <Conic>)",
+            "params": [
+              { "name": "<Point>", "role": "P", "type": "Point", "optional": false },
+              { "name": "<Conic>", "role": "conic", "type": "Conic", "optional": false }
+            ],
+            "description": "计算点到圆锥曲线的距离"
+          }
+        ]
+      },
+      "Envelope": {
+        "name": "Envelope",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Envelope/",
+        "overloads": [
+          {
+            "syntax": "Envelope(<Function>, <Parameter>)",
+            "params": [
+              { "name": "<Function>", "role": "f", "type": "Function", "optional": false },
+              { "name": "<Parameter>", "role": "t", "type": "Number", "optional": false }
+            ],
+            "description": "计算函数的包络线"
+          }
+        ]
+      },
+      "Incircle": {
+        "name": "Incircle",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Incircle/",
+        "overloads": [
+          {
+            "syntax": "Incircle(<Triangle>)",
+            "params": [
+              { "name": "<Triangle>", "role": "tri", "type": "Triangle", "optional": false }
+            ],
+            "description": "计算三角形的内切圆"
+          }
+        ]
+      },
+      "InteriorAngles": {
+        "name": "InteriorAngles",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/InteriorAngles/",
+        "overloads": [
+          {
+            "syntax": "InteriorAngles(<Polygon>)",
+            "params": [
+              { "name": "<Polygon>", "role": "poly", "type": "Polygon", "optional": false }
+            ],
+            "description": "返回多边形的内角"
+          }
+        ]
+      },
+      "Intersect": {
+        "name": "Intersect",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Intersect/",
+        "overloads": [
+          {
+            "syntax": "Intersect(<Object>, <Object>)",
+            "params": [
+              { "name": "<Object>", "role": "A", "type": "GeoObject", "optional": false },
+              { "name": "<Object>", "role": "B", "type": "GeoObject", "optional": false }
+            ],
+            "description": "计算两个对象的交点"
+          },
+          {
+            "syntax": "Intersect(<Object>, <Object>, <Number>)",
+            "params": [
+              { "name": "<Object>", "role": "A", "type": "GeoObject", "optional": false },
+              { "name": "<Object>", "role": "B", "type": "GeoObject", "optional": false },
+              { "name": "<Number>", "role": "n", "type": "Number", "optional": false }
+            ],
+            "description": "返回第n个交点"
+          }
+        ]
+      },
+      "IntersectPath": {
+        "name": "IntersectPath",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/IntersectPath/",
+        "overloads": [
+          {
+            "syntax": "IntersectPath(<Object>, <Object>)",
+            "params": [
+              { "name": "<Object>", "role": "A", "type": "GeoObject", "optional": false },
+              { "name": "<Object>", "role": "B", "type": "GeoObject", "optional": false }
+            ],
+            "description": "计算两个对象的交线"
+          }
+        ]
+      },
+      "IsInRegion": {
+        "name": "IsInRegion",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/IsInRegion/",
+        "overloads": [
+          {
+            "syntax": "IsInRegion(<Point>, <Region>)",
+            "params": [
+              { "name": "<Point>", "role": "P", "type": "Point", "optional": false },
+              { "name": "<Region>", "role": "region", "type": "Region", "optional": false }
+            ],
+            "description": "判断点是否在区域内"
+          }
+        ]
+      },
+      "IsTangent": {
+        "name": "IsTangent",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/IsTangent/",
+        "overloads": [
+          {
+            "syntax": "IsTangent(<Line>, <Object>)",
+            "params": [
+              { "name": "<Line>", "role": "line", "type": "Line", "optional": false },
+              { "name": "<Object>", "role": "obj", "type": "Conic", "optional": false }
+            ],
+            "description": "判断直线是否与对象相切"
+          }
+        ]
+      },
+      "Length": {
+        "name": "Length",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Length/",
+        "overloads": [
+          {
+            "syntax": "Length(<Object>)",
+            "params": [
+              { "name": "<Object>", "role": "obj", "type": "GeoObject", "optional": false }
+            ],
+            "description": "返回对象的长度/周长"
+          }
+        ]
+      },
+      "Line": {
+        "name": "Line",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Line/",
+        "overloads": [
+          {
+            "syntax": "Line(<Point>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "B", "type": "Point", "optional": false }
+            ],
+            "description": "通过两点创建直线"
+          },
+          {
+            "syntax": "Line(<Point>, <Vector>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Vector>", "role": "v", "type": "Vector", "optional": false }
+            ],
+            "description": "通过点和方向向量创建直线"
+          },
+          {
+            "syntax": "Line(<Point>, <Line>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Line>", "role": "line", "type": "Line", "optional": false }
+            ],
+            "description": "通过点创建平行于给定直线的直线"
+          }
+        ]
+      },
+      "Locus": {
+        "name": "Locus",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Locus/",
+        "overloads": [
+          {
+            "syntax": "Locus(<Point>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "M", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "P", "type": "Point", "optional": false }
+            ],
+            "description": "创建点M的轨迹"
+          }
+        ]
+      },
+      "LocusEquation": {
+        "name": "LocusEquation",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/LocusEquation/",
+        "overloads": [
+          {
+            "syntax": "LocusEquation(<Point>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "M", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "P", "type": "Point", "optional": false }
+            ],
+            "description": "计算点M的轨迹方程"
+          }
+        ]
+      },
+      "PathParameter": {
+        "name": "PathParameter",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/PathParameter/",
+        "overloads": [
+          {
+            "syntax": "PathParameter(<Point>)",
+            "params": [
+              { "name": "<Point>", "role": "P", "type": "Point", "optional": false }
+            ],
+            "description": "获取点在路径上的参数"
+          }
+        ]
+      },
+      "Perimeter": {
+        "name": "Perimeter",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Perimeter/",
+        "overloads": [
+          {
+            "syntax": "Perimeter(<Polygon>)",
+            "params": [
+              { "name": "<Polygon>", "role": "poly", "type": "Polygon", "optional": false }
+            ],
+            "description": "计算多边形的周长"
+          }
+        ]
+      },
+      "PerpendicularBisector": {
+        "name": "PerpendicularBisector",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/PerpendicularBisector/",
+        "overloads": [
+          {
+            "syntax": "PerpendicularBisector(<Segment>)",
+            "params": [
+              { "name": "<Segment>", "role": "seg", "type": "Segment", "optional": false }
+            ],
+            "description": "创建线段的垂直平分线"
+          },
+          {
+            "syntax": "PerpendicularBisector(<Point>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "B", "type": "Point", "optional": false }
+            ],
+            "description": "通过两点创建垂直平分线"
+          }
+        ]
+      },
+      "PerpendicularLine": {
+        "name": "PerpendicularLine",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/PerpendicularLine/",
+        "overloads": [
+          {
+            "syntax": "PerpendicularLine(<Point>, <Line>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Line>", "role": "line", "type": "Line", "optional": false }
+            ],
+            "description": "创建过点且垂直于给定直线的直线"
+          },
+          {
+            "syntax": "PerpendicularLine(<Point>, <Segment>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Segment>", "role": "seg", "type": "Segment", "optional": false }
+            ],
+            "description": "创建过点且垂直于给定线段的直线"
+          }
+        ]
+      },
+      "PointIn": {
+        "name": "PointIn",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/PointIn/",
+        "overloads": [
+          {
+            "syntax": "PointIn(<Region>)",
+            "params": [
+              { "name": "<Region>", "role": "region", "type": "Region", "optional": false }
+            ],
+            "description": "在区域内创建随机点"
+          }
+        ]
+      },
+      "Polygon": {
+        "name": "Polygon",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Polygon/",
+        "overloads": [
+          {
+            "syntax": "Polygon(<Point>, ..., <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "vertices", "type": "Point", "optional": false }
+            ],
+            "description": "通过顶点创建多边形"
+          }
+        ]
+      },
+      "Polyline": {
+        "name": "Polyline",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Polyline/",
+        "overloads": [
+          {
+            "syntax": "Polyline(<Point>, ..., <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "vertices", "type": "Point", "optional": false }
+            ],
+            "description": "通过顶点创建折线"
+          }
+        ]
+      },
+      "Prove": {
+        "name": "Prove",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Prove/",
+        "overloads": [
+          {
+            "syntax": "Prove(<Statement>)",
+            "params": [
+              { "name": "<Statement>", "role": "stmt", "type": "Boolean", "optional": false }
+            ],
+            "description": "证明几何陈述"
+          }
+        ]
+      },
+      "ProveDetails": {
+        "name": "ProveDetails",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/ProveDetails/",
+        "overloads": [
+          {
+            "syntax": "ProveDetails(<Statement>)",
+            "params": [
+              { "name": "<Statement>", "role": "stmt", "type": "Boolean", "optional": false }
+            ],
+            "description": "详细证明几何陈述"
+          }
+        ]
+      },
+      "Radius": {
+        "name": "Radius",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Radius/",
+        "overloads": [
+          {
+            "syntax": "Radius(<Circle>)",
+            "params": [
+              { "name": "<Circle>", "role": "circle", "type": "Circle", "optional": false }
+            ],
+            "description": "返回圆的半径"
+          }
+        ]
+      },
+      "RandomPointIn": {
+        "name": "RandomPointIn",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/RandomPointIn/",
+        "overloads": [
+          {
+            "syntax": "RandomPointIn(<Region>)",
+            "params": [
+              { "name": "<Region>", "role": "region", "type": "Region", "optional": false }
+            ],
+            "description": "在区域内创建随机点"
+          }
+        ]
+      },
+      "Ray": {
+        "name": "Ray",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Ray/",
+        "overloads": [
+          {
+            "syntax": "Ray(<Point>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "start", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "through", "type": "Point", "optional": false }
+            ],
+            "description": "创建射线"
+          }
+        ]
+      },
+      "RigidPolygon": {
+        "name": "RigidPolygon",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/RigidPolygon/",
+        "overloads": [
+          {
+            "syntax": "RigidPolygon(<Polygon>)",
+            "params": [
+              { "name": "<Polygon>", "role": "poly", "type": "Polygon", "optional": false }
+            ],
+            "description": "创建刚性多边形"
+          }
+        ]
+      },
+      "Sector": {
+        "name": "Sector",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Sector/",
+        "overloads": [
+          {
+            "syntax": "Sector(<Point>, <StartPoint>, <EndPoint>)",
+            "params": [
+              { "name": "<Point>", "role": "center", "type": "Point", "optional": false },
+              { "name": "<StartPoint>", "role": "start", "type": "Point", "optional": false },
+              { "name": "<EndPoint>", "role": "end", "type": "Point", "optional": false }
+            ],
+            "description": "创建扇形"
+          }
+        ]
+      },
+      "Semicircle": {
+        "name": "Semicircle",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Semicircle/",
+        "overloads": [
+          {
+            "syntax": "Semicircle(<Point>, <Point>)",
+            "params": [
+              { "name": "<Point>", "role": "A", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "B", "type": "Point", "optional": false }
+            ],
+            "description": "创建半圆"
+          }
+        ]
+      },
+      "Slope": {
+        "name": "Slope",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Slope/",
+        "overloads": [
+          {
+            "syntax": "Slope(<Line>)",
+            "params": [
+              { "name": "<Line>", "role": "line", "type": "Line", "optional": false }
+            ],
+            "description": "计算直线的斜率"
+          }
+        ]
+      },
+      "Tangent": {
+        "name": "Tangent",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Tangent/",
+        "overloads": [
+          {
+            "syntax": "Tangent(<Point>, <Conic>)",
+            "params": [
+              { "name": "<Point>", "role": "P", "type": "Point", "optional": false },
+              { "name": "<Conic>", "role": "conic", "type": "Conic", "optional": false }
+            ],
+            "description": "创建过点的切线"
+          },
+          {
+            "syntax": "Tangent(<Line>, <Conic>)",
+            "params": [
+              { "name": "<Line>", "role": "line", "type": "Line", "optional": false },
+              { "name": "<Conic>", "role": "conic", "type": "Conic", "optional": false }
+            ],
+            "description": "创建切线"
+          }
+        ]
+      },
+      "TriangleCenter": {
+        "name": "TriangleCenter",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/TriangleCenter/",
+        "overloads": [
+          {
+            "syntax": "TriangleCenter(<Triangle>, <Number>)",
+            "params": [
+              { "name": "<Triangle>", "role": "tri", "type": "Triangle", "optional": false },
+              { "name": "<Number>", "role": "n", "type": "Number", "optional": false }
+            ],
+            "description": "计算三角形的特殊中心"
+          }
+        ]
+      },
+      "TriangleCurve": {
+        "name": "TriangleCurve",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/TriangleCurve/",
+        "overloads": [
+          {
+            "syntax": "TriangleCurve(<Triangle>, <Equation>)",
+            "params": [
+              { "name": "<Triangle>", "role": "tri", "type": "Triangle", "optional": false },
+              { "name": "<Equation>", "role": "eq", "type": "Expression", "optional": false }
+            ],
+            "description": "创建三角形曲线"
+          }
+        ]
+      },
+      "Trilinear": {
+        "name": "Trilinear",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Trilinear/",
+        "overloads": [
+          {
+            "syntax": "Trilinear(<Triangle>, <Number>, <Number>, <Number>)",
+            "params": [
+              { "name": "<Triangle>", "role": "tri", "type": "Triangle", "optional": false },
+              { "name": "<Number>", "role": "a", "type": "Number", "optional": false },
+              { "name": "<Number>", "role": "b", "type": "Number", "optional": false },
+              { "name": "<Number>", "role": "c", "type": "Number", "optional": false }
+            ],
+            "description": "创建三线性坐标点"
+          }
+        ]
+      },
+      "Union": {
+        "name": "Union",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Union/",
+        "overloads": [
+          {
+            "syntax": "Union(<Set>, <Set>)",
+            "params": [
+              { "name": "<Set>", "role": "A", "type": "Set", "optional": false },
+              { "name": "<Set>", "role": "B", "type": "Set", "optional": false }
+            ],
+            "description": "计算两个集合的并集"
+          }
+        ]
+      },
+      "Type": {
+        "name": "Type",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Type/",
+        "overloads": [
+          {
+            "syntax": "Type(<Object>)",
+            "params": [
+              { "name": "<Object>", "role": "obj", "type": "GeoObject", "optional": false }
+            ],
+            "description": "返回对象的类型"
+          }
+        ]
+      },
+      "Vertex": {
+        "name": "Vertex",
+        "url": "https://geogebra.github.io/docs/manual/en/commands/Vertex/",
+        "overloads": [
+          {
+            "syntax": "Vertex(<Polygon>, <Number>)",
+            "params": [
+              { "name": "<Polygon>", "role": "poly", "type": "Polygon", "optional": false },
+              { "name": "<Number>", "role": "n", "type": "Number", "optional": false }
+            ],
+            "description": "返回多边形的第n个顶点"
+          }
+        ]
+      }
+    }
+}
