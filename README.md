@@ -59,16 +59,39 @@ ggcm check --input text|ir <file>    # 强制输入形态（默认自动识别�
 ## 命令表
 
 命令表来自 GeoGebra 官方分类命令库 `geogebra-commands/`（取自
-`ggb-gen-api/geogebra-commands`），内嵌全部 20 个分类 JSON 并合并成一份
-**504 条命令**的统一目录，覆盖几何、代数、CAS、统计、概率、文本、脚本、
-变换、向量矩阵等全部分类。
+`ggb-gen-api/geogebra-commands`），内嵌全部 20 个分类 JSON 并合并成一份，
+再补充 `supplement.json`（从 GeoGebra 内核源码
+`org.geogebra.common.kernel.commands` 的手算参数签名），当前 **536 条命令**。
 
-常见教学命令命中：`Point`、`Line`、`Circle`、`Segment`、`Intersect`、
-`Midpoint`、`Polygon`、`Distance`、`Area`、`Perimeter`、`Angle`、
-`Reflect`、`Translate`、`Sequence`、`If`、`Text` 等。
+### 与内核源码对齐（覆盖核查）
 
-> 合并时把每个分类文件里 `commands`（map 与 array 两种 shape 都支持）逐一
-> 并入；同一条命令出现在多个分类时其 overloads 全部累积，任何分类的签名都能命中。
+拿 GeoGebra 内核源码里的权威命令枚举 `Commands.java`（548 个常量）逐一比对：
+
+- **每一条 JSON 命令都能对到内核命令**，无错误/虚构条目（JSON 侧仅多收一个
+  parser 函数名 `REAL`，无碍——它是保留字而非命令）。
+- **已覆盖 535 / 548**；剩余 13 个缺口集中在 3D 曲面体（`ConeInfinite`、
+  `Polyhedron`、`QuadricSide`…）、统计集成（`PMCC`、`FitLineY`、
+  `TableToChart`）、3D 求交（`IntersectRegion`、`IntersectionPaths`）与个别
+  3D 参数别名，均非平面教学构造所需，不影响常见教学通行。
+
+> 合并时每个分类文件的 `commands`（map 与 array 两种 shape 均支持）逐一并入；
+> 同一条命令出现在多个分类时 overloads 全部累积，任何分类的签名都能命中。
+
+### 保留值（reserved constants，源码核实）
+
+GeoGebra 内核里被保留、不能用作变量名的常数（来自
+`ParserFunctionsFactory.addReservedFunctions` + `Unicode.java`）：
+
+| 写法 | 含义 | Unicode |
+|---|---|---|
+| `π` / `pi` | 圆周率 | `\u03C0` |
+| `e` | 自然常数（欧拉数） | `\u212f` |
+| `γ`（`ℯ_γ` / `EULER_GAMMA`） | 欧拉-马歇罗尼常数 | `\u212F_\u03B3` |
+| `i` | 虚数单位 | `\u03af` |
+| `freehand` | 保留词 | — |
+| `deg` | 角度单位 | — |
+
+其中 π 与 e 在脚本里直接写 `pi` / `e`（或希腊字母 `π`）即可当作数值用。
 
 ## 目录结构
 
