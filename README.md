@@ -135,3 +135,21 @@ go vet ./...
 集成用例在 `testdata/`（distance-1 教学构造、undefined、degenerate、cycle、
 unknown-cmd、ai-bad、nested 命令嵌套、pi-script 保留字、mirror-arc 等），
 既有 CLI 手测也有单元测试。
+
+## AI 对话服务（题目 → GeoGebra 指令）
+
+`cmd/ai-server` 是一个可选的 HTTP 服务：接收题目图片或题目文本，经 OpenAI
+兼容接口生成 GeoGebra 教学指令，并用本校验器做质量门控 + 自动重试修复。
+完整设计见 [`DESIGN-AI.md`](DESIGN-AI.md)。
+
+```bash
+# 启动（缺省会用本地/可用的兼容端点，需按后端配置）
+GGCM_AI_ENDPOINT=https://api.openai.com/v1 \
+GGCM_AI_MODEL=gpt-4o \
+GGCM_AI_API_KEY=... \
+  go run ./cmd/ai-server -addr :8080
+# GET /api/health    liveness
+# POST /api/chat     { input_type:"text|image", text, image_b64?, image_mime? }
+```
+
+核心配置均可用 `GGCM_AI_*` 环境变量覆盖（见 `internal/ai/config.go`）。
