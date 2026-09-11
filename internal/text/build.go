@@ -158,10 +158,14 @@ func Build(stmts []statement) (*ir.Graph, []diag.Problem) {
 	var probs []diag.Problem
 	seen := map[string]bool{}
 	for _, s := range stmts {
+		// A redefinition is reported and the earlier definition is kept: the
+		// redefining statement must NOT overwrite the retained first occurrence
+		// (ids were registered once in the first pass above).
 		if seen[s.id] {
 			probs = append(probs, diag.Problem{
 				Code: diag.CodeDepRedefine, Msg: "对象重复定义：" + s.id, Obj: s.id, Line: s.lineNo,
 			})
+			continue
 		}
 		seen[s.id] = true
 		o, _ := g.Get(s.id)

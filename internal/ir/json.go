@@ -49,6 +49,14 @@ func ParseJSON(data []byte) (*Graph, []diag.Problem, error) {
 			})
 			continue
 		}
+		if _, exists := g.Get(jo.ID); exists {
+			probs = append(probs, diag.Problem{
+				Code: diag.CodeDepRedefine,
+				Msg:  "对象重复定义：" + jo.ID,
+				Obj:  jo.ID,
+			})
+			continue // keep the first definition; skip the redefinition
+		}
 		kind := KindFromString(jo.Kind)
 		g.Add(&Object{
 			ID:   jo.ID,

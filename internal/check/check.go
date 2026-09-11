@@ -60,9 +60,21 @@ func Check(input []byte, opt Options) *diag.Receipt {
 	}
 
 	// Structural parse/build failure: the input cannot be turned into a usable
-	// graph, so nothing downstream can run (fail-closed).
-	if len(fatal) > 0 {
-		for _, p := range fatal {
+	// graph, so nothing downstream can run (fail-closed). Only true structural
+	// damage (parse/*, usage) stops the run; a semantic problem surfaced during
+	// parsing (e.g. dep/redefine for a duplicate IR id) is collected below so
+	// every independent defect is still reported.
+	var structural []diag.Problem
+	for _, p := range fatal {
+		switch p.Code {
+		case diag.CodeParseSyntax, diag.CodeParseJSON, diag.CodeUsage:
+			structural = append(structural, p)
+		default:
+			buildProbs = append(buildProbs, p)
+		}
+	}
+	if len(structural) > 0 {
+		for _, p := range structural {
 			rc.Fail(p)
 		}
 		return rc
@@ -75,6 +87,12 @@ func Check(input []byte, opt Options) *diag.Receipt {
 	// first, so the receipt reports the full list of what's wrong with the AI
 	// output. OK is true only when nothing was reported.
 	rc.Errors = append(rc.Errors, buildProbs...)
+	if source == "ir" {
+		// IR input carries its `refs` verbatim; a ref to an id that isn't an
+		// object is an undefined reference. (The text path reports these during
+		// build, so we only re-check IR here to avoid double-reporting.)
+		rc.Errors = append(rc.Errors, checkIRRefs(g)...)
+	}
 	rc.Errors = append(rc.Errors, runSig(cat, g)...)
 
 	order, cycleProbs := deps.Order(g)
@@ -138,6 +156,25 @@ func runSig(c *catalog.Catalog, g *ir.Graph) []diag.Problem {
 			probs = append(probs, diag.Problem{
 				Code: diag.CodeCmdArg, Msg: m.Explain, Obj: id, Line: o.Line,
 			})
+		}
+	}
+	return probs
+}
+
+// checkIRRefs verifies that every `refs` entry on an object resolves to a real
+// object in the graph. IR JSON supplies refs directly, so a dangling ref is an
+// undefined reference (dep/undefined) rather than something the text builder
+// would have caught.
+func checkIRRefs(g *ir.Graph) []diag.Problem {
+	var probs []diag.Problem
+	for _, id := range g.Order {
+		o := g.Objects[id]
+		for _, r := range o.Refs {
+			if _, ok := g.Get(r); !ok {
+				probs = append(probs, diag.Problem{
+					Code: diag.CodeDepUndefined, Msg: "引用了未定义对象：" + r, Obj: id, Line: o.Line,
+				})
+			}
 		}
 	}
 	return probs

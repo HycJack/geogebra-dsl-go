@@ -115,6 +115,44 @@ func TestIRGoalMissing(t *testing.T) {
 	}
 }
 
+func TestIRUndefinedRef(t *testing.T) {
+	// IR supplies refs verbatim; a ref to a non-existent object must be
+	// reported as dep/undefined (the text path catches this during build).
+	ir := `{
+  "objects": [
+    {"id":"A","cmd":"Point","args":["0","2"],"kind":"Point"},
+    {"id":"l","cmd":"Line","args":["A","Missing"],"refs":["A","Missing"],"kind":"Line"}
+  ],
+  "goals": ["l"]
+}`
+	rc := Check([]byte(ir), Options{})
+	if rc.OK {
+		t.Fatal("expected failure")
+	}
+	if !hasCode(rc, diag.CodeDepUndefined) {
+		t.Fatalf("expected dep/undefined, got %v", rc.Errors)
+	}
+}
+
+func TestIRDuplicateIDRedefine(t *testing.T) {
+	// Duplicate object ids in IR should be reported as dep/redefine, not
+	// silently overwritten.
+	ir := `{
+  "objects": [
+    {"id":"A","cmd":"Point","args":["0","2"],"kind":"Point"},
+    {"id":"A","cmd":"Point","args":["4","2"],"kind":"Point"}
+  ],
+  "goals": ["A"]
+}`
+	rc := Check([]byte(ir), Options{})
+	if rc.OK {
+		t.Fatal("expected failure")
+	}
+	if !hasCode(rc, diag.CodeDepRedefine) {
+		t.Fatalf("expected dep/redefine, got %v", rc.Errors)
+	}
+}
+
 func TestSniff(t *testing.T) {
 	if s := sniff([]byte("{  \"objects\": []}"), ""); s != "ir" {
 		t.Fatalf("expected ir sniff, got %s", s)

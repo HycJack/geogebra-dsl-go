@@ -50,9 +50,12 @@ type Receipt struct {
 	SourceIn   string    `json:"source_in"`  // "text" or "ir"
 }
 
-// NewReceipt builds an empty receipt.
+// NewReceipt builds an empty receipt. Warnings is initialized to an empty
+// slice (rather than nil) so the documented `warnings[]` field always
+// serializes as `[]`, not `null`; it is reserved for non-blocking notes and
+// may remain empty when the validator has nothing to warn about.
 func NewReceipt(source string) *Receipt {
-	return &Receipt{SourceIn: source, Executable: []string{}}
+	return &Receipt{SourceIn: source, Warnings: []Problem{}, Executable: []string{}}
 }
 
 // Fail marks the receipt as failed (OK=false). Used by fail-closed stages.

@@ -70,9 +70,17 @@ func TestUndefinedRefReported(t *testing.T) {
 func TestRedefinitionReported(t *testing.T) {
 	src := "A = Point(0,0)\nA = Point(1,1)\n"
 	stmts, _ := Parse(src)
-	_, probs := Build(stmts)
+	g, probs := Build(stmts)
 	if len(probs) != 1 {
-		t.Fatalf("expected redefinition, got %v", probs)
+		t.Fatalf("expected 1 redefinition problem, got %v", probs)
+	}
+	if probs[0].Code != "dep/redefine" {
+		t.Errorf("expected dep/redefine, got %s", probs[0].Code)
+	}
+	// The first definition is kept; the redefining line must not overwrite it.
+	g.SetKindFromCmd()
+	if got := g.Objects["A"].Args; len(got) != 2 || got[0] != "0" || got[1] != "0" {
+		t.Errorf("redefinition overwrote first definition: args=%v (want [0 0])", got)
 	}
 }
 

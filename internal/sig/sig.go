@@ -7,6 +7,7 @@ import (
 
 	"github.com/you/geogebra-dsl-go/internal/catalog"
 	"github.com/you/geogebra-dsl-go/internal/ir"
+	"github.com/you/geogebra-dsl-go/internal/number"
 )
 
 // kindAliases maps catalog type tokens (as they appear in a TypeExpr, after
@@ -125,15 +126,20 @@ func kindsMatch(ov *catalog.Overload, g *ir.Graph, o *ir.Object) bool {
 }
 
 // argKind resolves an individual argument expression to an ir.Kind. Bare
-// identifiers resolve to the referenced object's kind; anything else (numbers,
-// coordinate lists, arithmetic) resolves to KUnknown which is lenient below.
+// identifiers resolve to the referenced object's kind; a pure numeric value
+// (a number literal or a constant arithmetic expression) resolves to KNumber so
+// it can fill a Number slot but never impersonate a named-type slot (Point,
+// Line, ...). Anything else resolves to KUnknown, which is lenient below.
 func argKind(g *ir.Graph, arg string) ir.Kind {
 	arg = strings.TrimSpace(arg)
 	if isIdent(arg) {
 		if obj, ok := g.Get(arg); ok {
 			return obj.Kind
 		}
-		return ir.KUnknown // undefined name; build stage reports it
+		return ir.KUnknown // undefined name; build/reach stage reports it
+	}
+	if _, ok := number.Eval(arg); ok {
+		return ir.KNumber
 	}
 	return ir.KUnknown
 }
@@ -153,13 +159,20 @@ func paramAccepts(t catalog.TypeExpr, actual ir.Kind) bool {
 	return false
 }
 
-// isIdent reports whether s is a plain identifier (object name).
+// isIdent reports whether s is a plain identifier (object name): letters,
+// digits, '_' or ':' — but not starting with a digit, so a bare number like
+// "0" or a malformed token like "2ab" is never mistaken for a reference. This
+// mirrors the identifier rule used by the text package for object names.
 func isIdent(s string) bool {
 	if s == "" {
 		return false
 	}
+	first := s[0]
+	if !(first == '_' || ('a' <= first && first <= 'z') || ('A' <= first && first <= 'Z')) {
+		return false
+	}
 	for _, r := range s {
-		ok := r == '_' || r == ':' || ('a' <= r && r <= 'z') || ('A' <= r && r <= 'Z') || ('0' <= r && r <= '9')
+		ok := r == '_' || r == ':' || (('a' <= r && r <= 'z') || ('A' <= r && r <= 'Z') || ('0' <= r && r <= '9'))
 		if !ok {
 			return false
 		}

@@ -74,6 +74,35 @@ func TestLookupUnknownCmd(t *testing.T) {
 	}
 }
 
+func TestLookupNumberLiteralNotPoint(t *testing.T) {
+	// A bare number literal must not fill a Point slot: Circle(0, 3) has no
+	// overload that accepts two Numbers, so it must not match.
+	g := graphWith(t, &ir.Object{ID: "c", Cmd: "Circle", Args: []string{"0", "3"}})
+	m := Lookup(testCatalog(), g, g.Objects["c"])
+	if m.OK {
+		t.Fatalf("expected no match for Circle(0,3), got OK; explain=%s", m.Explain)
+	}
+}
+
+func TestLookupConstantExprIsNumber(t *testing.T) {
+	// A constant arithmetic expression like "2*pi" is a numeric value and fills
+	// a Number slot (Circle(C, 2*pi)) but not a Point slot.
+	g := graphWith(t,
+		&ir.Object{ID: "C", Kind: ir.KPoint, Args: []string{"1", "1"}},
+		&ir.Object{ID: "c", Cmd: "Circle", Args: []string{"C", "2*pi"}},
+	)
+	m := Lookup(testCatalog(), g, g.Objects["c"])
+	if !m.OK {
+		t.Fatalf("expected Circle(C, 2*pi) to match Number slot, explain=%s", m.Explain)
+	}
+	// As a bare "coordinate-ish" arg it must not replace a Point on its own.
+	g2 := graphWith(t, &ir.Object{ID: "c2", Cmd: "Circle", Args: []string{"2*pi", "0"}})
+	m2 := Lookup(testCatalog(), g2, g2.Objects["c2"])
+	if m2.OK {
+		t.Fatalf("expected no match for Circle(2*pi,0), got OK")
+	}
+}
+
 func TestLookupCircleNumberOk(t *testing.T) {
 	g := graphWith(t,
 		&ir.Object{ID: "C", Kind: ir.KPoint, Args: []string{"1", "1"}},
