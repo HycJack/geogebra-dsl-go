@@ -66,7 +66,9 @@
 ## 3. 组件与模块划分（Go，纯 stdlib + HTTP；外部仅 LLM 后端）
 
 ```
-cmd/ai-server/main.go        # HTTP 入口：路由 /api/chat、/api/health
+cmd/ai-server/main.go        # HTTP 入口：路由 /api/chat、/api/health、/api/config、Web UI、-log
+cmd/ai-server/ui.html        # 嵌入式单文件 Web 界面（/go:embed，GeoGebra 渲染 + AI 对话 + 配置面板）
+cmd/ai-server/static/        # 本地 GeoGebra 加载器 deployggb.js（同源，避免依赖 CDN）
 internal/ai/
   session.go                 # 会话：消息历史持久化(内存/可选文件)
   client.go                  # OpenAI 兼容 client（chat/completions，支持 vision）
@@ -76,6 +78,7 @@ internal/ai/
   repair.go                  # 修正循环：gate 未过 → 组装修复提示 → 重生成
   respond.go                 # 收据 → 面向用户的响应(脚本/可执行序/诊断/streaming)
   config.go                  # 配置：endpoint/model/api-key/temperature/图片开关/重试上限
+  log.go                     # 结构化日志钩子(LogFunc)：LLM/脚本/HTTP 事件，安全脱敏
 internal/check/...           # 复用现有校验器(不改，只扩一个"可编程入口")
 ```
 
@@ -115,14 +118,24 @@ internal/check/...           # 复用现有校验器(不改，只扩一个"可�
 ### 4.3 配置 env
 
 ```
-GGCM_AI_ENDPOINT    # 默认 https://api.openai.com/v1
-GGCM_AI_MODEL       # 如 gpt-4o / deepseek-chat
+GGCM_AI_ENDPOINT    # 默认 http://lanz.hikvision.com/v3/openai/v1
+GGCM_AI_MODEL       # 如 Lanz-Medium / deepseek-chat
 GGCM_AI_API_KEY     # 缺省时：如果 endpoint 是本地兼容服务可留空
 GGCM_AI_TEMP        # 默认 0.2
 GGCM_AI_MAX_REPAIR  # 默认 3（修复重试上限）
 GGCM_AI_MAX_TOKENS  # 默认 2048
 GGCM_AI_DISABLE_VISION  # 默认 false
 ```
+
+### 4.4 结构化日志（调试/审计）
+
+`ai-server` 提供 `-log <file>` 参数把每次调用记录为 **JSON Lines**（缺省写 stdout）。事件类型（`event` 字段）：
+
+- `http.request` / `http.result`：HTTP 层，含 session_id、input_type、文本/图片长度、最终脚本预览与诊断。
+- `llm.request` / `llm.response` / `llm.error`：单次大模型调用，含 model、endpoint、temperature、max_tokens、消息摘要（role + 字符数 + 图片数，**不含图片 base64 与 API Key**）、返回文本预览（上限 500 字符）、延迟。
+- `generate.attempt.start` / `.error` / `.done`：脚本处理循环，每次尝试的脚本、gate 结果（`gate_ok`）、可执行对象序、诊断与教学说明。
+
+日志不会写入 API Key，也不会把图片明文 payload 落盘；图片仅记录张数与大小。
 
 ---
 
@@ -220,7 +233,15 @@ for attempt := 1; attempt <= cfg.MaxRepair; attempt++ {
 ### 7.1 会话
 
 - `POST /api/chat` 每次请求带 `session_id`（无则新建）。服务端按 session 保存消息历史（内存 map；可选落盘 `data/sessions/<id>.json`）。
-- 每次成功/失败的脚本都存入历史，下一轮作为上下文让 LLM 看到"上一版做了什么"。
+- **每轮必存「用户消息 + 助手最终脚本」成对**：成功时 assistant 存最终 ggb 脚本，失败时也存（空脚本则存空 `<gg></gg>` 占位），保证历史里每轮都是 `user → assistant` 完整配对，让下一轮 LLM 看到"上一版做了什么、成功还是失败"。
+- 属于同一轮、尚未完成的消息不会预追加到历史（当前 `userMsg` 通过 `GenerateRequest.UserMsg` 传给本次生成），避免在同一轮回车里重复。
+
+### 7.1b 嵌入式 Web UI 与配置面板
+
+- 服务根路径 `/` 返回 `ui.html`（`//go:embed`）：左侧题目输入 + 对话，右侧 GeoGebra 画布渲染，支持「追加修改」多轮。
+- `GET /api/config` 返回服务端运行期配置（endpoint/model/vision_enabled/max_image_bytes/`has_api_key` 布尔）供配置面板预填；**绝不返回 API Key 明文**。
+- 界面配置面板可逐请求覆盖 endpoint/model/API Key：Key 只存本机浏览器 `localStorage`，随 `POST /api/chat` 的 `api_key` 字段发送，服务端用后即弃、不落盘、不进日志。
+- 参考 `/api/chat` 请求体：`endpoint?`、`model?`、`api_key?` 为可选逐次覆盖；留空则用服务端默认/环境变量。
 
 ### 7.2 请求体
 
@@ -231,7 +252,10 @@ for attempt := 1; attempt <= cfg.MaxRepair; attempt++ {
   "text": "已知三角形 ABC 与点 O，求作过 O 且垂直于 AB 的直线",
   "image_b64": "....",                // 仅 image 时
   "image_mime": "image/png",
-  "append": "改成让它动起来：把点 A 做成滑块 0..10"   // 可选：对上一轮结果追加修正
+  "append": "改成让它动起来：把点 A 做成滑块 0..10",   // 可选：对上一轮结果追加修正
+  "endpoint": "opt",                  // 可选逐次覆盖 base_url（留空用服务端默认）
+  "model": "opt",                     // 可选逐次覆盖 model
+  "api_key": "opt"                    // 可选逐次覆盖 API Key（浏览器传，服务端用后即弃）
 }
 ```
 

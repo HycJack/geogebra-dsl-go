@@ -14,24 +14,25 @@ import (
 // Config holds the knobs for the AI conversation service. Every field is
 // overridable through GGCM_AI_* environment variables (see LoadConfig).
 type Config struct {
-	Endpoint      string // OpenAI-compatible base URL, e.g. https://api.openai.com/v1
-	Model         string // e.g. gpt-4o, deepseek-chat
+	Endpoint      string // OpenAI-compatible base URL, e.g. http://lanz.hikvision.com/v3/openai/v1
+	Model         string // e.g. Lanz-Medium, deepseek-chat
 	APIKey        string // may be empty for some local compatible backends
 	Temperature   float64
 	MaxTokens     int
-	MaxRepair     int  // retry rounds after the first failed generation
-	MaxImageBytes int  // cap on inline image payload (bytes)
-	DisableVision bool // refuse image input even if the backend might support it
-	MaxHistory    int  // session turns kept in context
-	HTTPTimeoutS  int  // per LLM call timeout in seconds
+	MaxRepair     int     // retry rounds after the first failed generation
+	MaxImageBytes int     // cap on inline image payload (bytes)
+	DisableVision bool    // refuse image input even if the backend might support it
+	MaxHistory    int     // session turns kept in context
+	HTTPTimeoutS  int     // per LLM call timeout in seconds
+	Log           LogFunc // optional structured-log hook; nil disables logging
 }
 
 // LoadConfig reads configuration from GGCM_AI_* environment variables, filling
 // in the documented defaults where absent.
 func LoadConfig() Config {
 	return Config{
-		Endpoint:      envOr("GGCM_AI_ENDPOINT", "https://api.openai.com/v1"),
-		Model:         envOr("GGCM_AI_MODEL", "gpt-4o"),
+		Endpoint:      envOr("GGCM_AI_ENDPOINT", "http://lanz.hikvision.com/v3/openai/v1"),
+		Model:         envOr("GGCM_AI_MODEL", "Lanz-Medium"),
 		APIKey:        os.Getenv("GGCM_AI_API_KEY"),
 		Temperature:   envFloat("GGCM_AI_TEMP", 0.2),
 		MaxTokens:     envInt("GGCM_AI_MAX_TOKENS", 2048),

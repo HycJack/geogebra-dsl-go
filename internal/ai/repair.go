@@ -38,12 +38,20 @@ func Generate(ctx context.Context, client ChatClient, cfg Config, req GenerateRe
 			msgs = append([]Message(nil), prompt...)
 			msgs = append(msgs, req.UserMsg)
 		}
+		cfg.logEvent("generate.attempt.start", map[string]any{
+			"attempt": attempt,
+			"retry":   attempt > 1,
+		})
 
 		as, err := generateOnce(ctx, client, cfg, msgs)
 		if err != nil {
 			// Transient/LLM errors are not script defects; treat as one failed
 			// attempt and continue (so a flaky backend still gets retried).
 			lastGate = &GateResult{OK: false}
+			cfg.logEvent("generate.attempt.error", map[string]any{
+				"attempt": attempt,
+				"error":   err.Error(),
+			})
 			if attempt == cfg.MaxRepair+1 {
 				break
 			}
@@ -53,6 +61,14 @@ func Generate(ctx context.Context, client ChatClient, cfg Config, req GenerateRe
 		lastNote = as.TeachingNote
 
 		lastGate = runGate(as.Script)
+		cfg.logEvent("generate.attempt.done", map[string]any{
+			"attempt":       attempt,
+			"gate_ok":       lastGate.OK,
+			"script":        as.Script,
+			"executables":   lastGate.Executable,
+			"diagnostics":   lastGate.Diagnostics,
+			"teaching_note": as.TeachingNote,
+		})
 		if lastGate.OK {
 			return NewResult(lastScript, lastNote, lastGate, attempts)
 		}

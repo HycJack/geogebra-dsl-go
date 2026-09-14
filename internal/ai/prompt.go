@@ -11,11 +11,12 @@ const systemPrompt = "你是 GeoGebra 教学构造助手。你会收到一道数
 	"1. 每条指令一行，形如  `对象名 = 命令(参数)`。命令名用英文（Point/Line/Circle/…），与 GeoGebra 一致。\n" +
 	"2. 先构造**显式命名**的对象作为已知量，再构造需要的未知对象；对象名尽量教学的（A、B、C、O、l、c、P 等）。\n" +
 	"3. 只用下面这些基本命令构造，除非题目必要：Point、Segment、Line、Ray、Circle、Midpoint、Polygon、Intersect、PerpendicularLine、ParallelLine、Angle、Distance、Length、Area、Sequence。\n" +
-	"4. 依赖关系必须无环：不要用还没定义的对象去定义另一个对象。\n" +
-	"5. 不要输出脚本之外的解释文字；脚本后可单独给一小段教学说明（用 `<!-- 说明： -->` 标注）。\n" +
-	"6. 避免退化（重合点直线、零半径圆）；若题目不同构，直接说明无法构造。\n\n" +
+	"4. 二维下需要画“直接给定坐标”的点时，不要用 `Point(x, y)` 指令，直接用坐标赋值：`对象名 = (横坐标, 纵坐标)`，例如 `A = (1, 2)`。`Point` 只用于“从另外两个对象交点/线上取点/中点”等由几何关系确定的点。\n" +
+	"5. 依赖关系必须无环：不要用还没定义的对象去定义另一个对象。\n" +
+	"6. 不要输出脚本之外的解释文字；脚本后可单独给一小段教学说明（用 `<!-- 说明： -->` 标注）。\n" +
+	"7. 避免退化（重合点直线、零半径圆）；若题目不同构，直接说明无法构造。\n\n" +
 	"输出格式：只输出脚本，用 <gg> 包裹，便于解析，例如：\n" +
-	"```\n<gg>\nA = Point(0, 2)\nB = Point(4, 2)\nc = Circle(C, T)\n</gg>\n```"
+	"```\n<gg>\nA = (0, 2)\nB = (4, 2)\nT = Midpoint(A, B)\nc = Circle(T, A)\n</gg>\n```"
 
 // AssistantScript is the parsed result of a single generation: the extracted
 // script plus any teaching note the model supplied.
@@ -47,6 +48,22 @@ func ImageUserMessage(imageB64, mime, guide string) Message {
 			{ImageB64: imageB64, ImageMIME: mime},
 		},
 	}
+}
+
+// TextAssistantMessage wraps the final script as an assistant turn, stored in
+// session history so a later "append"/modify turn can build on the previous
+// GeoGebra script rather than regenerate from scratch. When script is empty
+// (a failed turn produced no script) it still emits a well-formed, empty block
+// so the user→assistant pairing in history stays complete.
+func TextAssistantMessage(script string) Message {
+	var b strings.Builder
+	b.WriteString("<gg>\n")
+	if strings.TrimSpace(script) != "" {
+		b.WriteString(strings.TrimSpace(script))
+		b.WriteString("\n")
+	}
+	b.WriteString("</gg>")
+	return Message{Role: RoleAssistant, Content: []ContentPart{{Text: b.String()}}}
 }
 
 // RepairMessage builds the feedback turn for one failed validation round. It

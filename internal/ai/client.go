@@ -77,6 +77,9 @@ func (c *openAIClient) Complete(ctx context.Context, messages []Message, opts Co
 		req.Messages[i] = toAPIMessage(m)
 	}
 
+	n0 := time.Now()
+	c.logRequest(messages, opts)
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return "", fmt.Errorf("marshal chat request: %w", err)
@@ -85,6 +88,7 @@ func (c *openAIClient) Complete(ctx context.Context, messages []Message, opts Co
 	url := strings.TrimRight(c.cfg.Endpoint, "/") + "/chat/completions"
 	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewReader(body))
 	if err != nil {
+		c.logError("llm.error", "build_request", n0, err)
 		return "", fmt.Errorf("build request: %w", err)
 	}
 	httpReq.Header.Set("Content-Type", "application/json")
@@ -94,26 +98,71 @@ func (c *openAIClient) Complete(ctx context.Context, messages []Message, opts Co
 
 	resp, err := c.client.Do(httpReq)
 	if err != nil {
+		c.logError("llm.error", "http", n0, err)
 		return "", fmt.Errorf("chat request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		msg, _ := io.ReadAll(io.LimitReader(resp.Body, 4096))
+		c.logError("llm.error", "status", n0, fmt.Errorf("%s: %s", resp.Status, strings.TrimSpace(string(msg))))
 		return "", fmt.Errorf("chat backend %s: %s", resp.Status, strings.TrimSpace(string(msg)))
 	}
 
 	var parsed chatResponse
 	if err := json.NewDecoder(resp.Body).Decode(&parsed); err != nil {
+		c.logError("llm.error", "decode", n0, err)
 		return "", fmt.Errorf("decode chat response: %w", err)
 	}
 	if parsed.Error != nil {
+		c.logError("llm.error", "backend", n0, errors.New(parsed.Error.Message))
 		return "", errors.New(parsed.Error.Message)
 	}
 	if len(parsed.Choices) == 0 {
+		c.logError("llm.error", "no_choices", n0, errors.New("backend returned no choices"))
 		return "", errors.New("chat backend returned no choices")
 	}
-	return parsed.Choices[0].Message.Content, nil
+
+	reply := parsed.Choices[0].Message.Content
+	c.logResponse(reply, n0)
+	return reply, nil
+}
+
+// logRequest emits a llm.request event with the outgoing parameters. Secrets
+// (the API key) and large image payloads are never included.
+func (c *openAIClient) logRequest(messages []Message, opts CompleteOptions) {
+	c.logEntry("llm.request", map[string]any{
+		"model":         c.cfg.Model,
+		"endpoint":      strings.TrimRight(c.cfg.Endpoint, "/"),
+		"temperature":   opts.Temperature,
+		"max_tokens":    opts.MaxTokens,
+		"messages":      summarizeMessages(messages),
+		"message_count": len(messages),
+	})
+}
+
+// logResponse emits a llm.response event with the returned text (bounded preview).
+func (c *openAIClient) logResponse(reply string, n0 time.Time) {
+	took := time.Since(n0).Milliseconds()
+	c.logEntry("llm.response", map[string]any{
+		"latency_ms": took,
+		"chars":      len(reply),
+		"preview":    ellipsize(reply, 500),
+	})
+}
+
+// logError emits a llm.error event with the failure and latency.
+func (c *openAIClient) logError(Event, stage string, n0 time.Time, err error) {
+	c.logEntry(Event, map[string]any{
+		"stage":      stage,
+		"latency_ms": time.Since(n0).Milliseconds(),
+		"error":      err.Error(),
+	})
+}
+
+// logEntry is the single write point for this client's events.
+func (c *openAIClient) logEntry(Event string, fields map[string]any) {
+	c.cfg.logEvent(Event, fields)
 }
 
 // toAPIMessage converts a Message to its wire form. A single text-only message

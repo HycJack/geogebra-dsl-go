@@ -12,31 +12,64 @@
 //
 //	GET  /api/health            liveness probe
 //	POST /api/chat              generate instructions for a problem
+//	GET  /api/config            expose run-time endpoint/model/vision config
+//	GET  /                      embedded web UI (GeoGebra canvas + AI chat)
 package main
 
 import (
+	"embed"
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/hycjack/geogebra-dsl-go/internal/ai"
 )
 
+//go:embed ui.html
+var uiHTML []byte
+
+// staticFS serves the local GeoGebra loader (and any future web assets) so the
+// render engine can be loaded same-origin instead of depending on a CDN.
+//
+//go:embed static
+var staticFS embed.FS
+
 func main() {
 	addr := flag.String("addr", ":8080", "listen address")
+	logPath := flag.String("log", "", "path to write structured logs (JSON lines); empty writes to stdout")
 	flag.Parse()
 
 	cfg := ai.LoadConfig()
 	client := ai.NewClient(cfg)
+
+	// Wire the structured logger into the config so every LLM call and script
+	// processing event is captured. LogFunc is concurrency-safe here.
+	lj := &logJSON{mu: new(sync.Mutex), w: os.Stdout}
+	if *logPath != "" {
+		f, err := os.OpenFile(*logPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o644)
+		if err != nil {
+			log.Fatalf("open log file %s: %v", *logPath, err)
+		}
+		lj.w = f
+	}
+	cfg.Log = lj.emit
+
 	sessions := newSessionStore(cfg.MaxHistory)
 
 	mux := http.NewServeMux()
-	server := &server{cfg: cfg, client: client, sessions: sessions}
+	server := &server{cfg: cfg, client: client, sessions: sessions, logs: lj}
+	mux.HandleFunc("/", server.handleUI)
+	mux.Handle("/static/", http.FileServer(http.FS(staticFS)))
+	mux.HandleFunc("/deployggb.js", server.handleDeployGGB)
 	mux.HandleFunc("/api/health", server.handleHealth)
+	mux.HandleFunc("/api/config", server.handleConfig)
 	mux.HandleFunc("/api/chat", server.handleChat)
 
 	log.Printf("ai-server listening on %s (model=%s endpoint=%s)", *addr, cfg.Model, cfg.Endpoint)
@@ -45,10 +78,33 @@ func main() {
 	}
 }
 
+// logJSON is a small concurrency-safe JSON-lines writer. It decorates every ai
+// event with a timestamp and a process/session context supplied by the caller.
+type logJSON struct {
+	mu *sync.Mutex
+	w  io.Writer
+}
+
+// emit is an ai.LogFunc that serializes the event+fields to one JSON line.
+func (l *logJSON) emit(Event string, fields map[string]any) {
+	rec := map[string]any{"time": time.Now().UTC().Format(time.RFC3339Nano), "event": Event}
+	for k, v := range fields {
+		rec[k] = v
+	}
+	b, err := json.Marshal(rec)
+	if err != nil {
+		return
+	}
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	_, _ = io.WriteString(l.w, string(b)+"\n")
+}
+
 type server struct {
 	cfg      ai.Config
 	client   ai.ChatClient
 	sessions *sessionStore
+	logs     *logJSON
 }
 
 // chatResponse wraps the generation result with the resolved session id so the
@@ -67,11 +123,76 @@ type chatRequest struct {
 	ImageMIME string `json:"image_mime,omitempty"` // e.g. image/png
 	Stream    bool   `json:"stream,omitempty"`     // SSE response
 	Append    string `json:"append,omitempty"`     // optional follow-up instruction against prior result
+	// Endpoint, Model and APIKey are OPTIONAL per-request overrides chosen in
+	// the web UI. They replace the server defaults for this call only. When a
+	// browser supplies an api_key it is used for that request and never
+	// persisted server-side; if omitted the server's environment key is used.
+	Endpoint string `json:"endpoint,omitempty"`
+	Model    string `json:"model,omitempty"`
+	APIKey   string `json:"api_key,omitempty"`
+}
+
+// effectiveConfig returns the config used for one request: the server defaults
+// with any per-request endpoint/model/key overrides applied.
+func (s *server) effectiveConfig(req chatRequest) ai.Config {
+	cfg := s.cfg
+	if strings.TrimSpace(req.Endpoint) != "" {
+		cfg.Endpoint = strings.TrimSpace(req.Endpoint)
+	}
+	if strings.TrimSpace(req.Model) != "" {
+		cfg.Model = strings.TrimSpace(req.Model)
+	}
+	if strings.TrimSpace(req.APIKey) != "" {
+		cfg.APIKey = strings.TrimSpace(req.APIKey)
+	}
+	return cfg
 }
 
 func (s *server) handleHealth(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(w, `{"status":"ok"}`)
+}
+
+// handleConfig exposes the server's run-time model configuration to the UI so
+// the config panel can prefill. The API key's VALUE is deliberately omitted;
+// only a boolean indicates whether one is set server-side.
+func (s *server) handleConfig(w http.ResponseWriter, _ *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	_ = json.NewEncoder(w).Encode(map[string]any{
+		"endpoint":        s.cfg.Endpoint,
+		"model":           s.cfg.Model,
+		"vision_enabled":  !s.cfg.DisableVision,
+		"max_image_bytes": s.cfg.MaxImageBytes,
+		"has_api_key":     strings.TrimSpace(s.cfg.APIKey) != "",
+	})
+}
+
+// handleUI serves the embedded single-page web UI at "/". Anything that isn't
+// one of the /api/* endpoints (including "/", "/ui", favicon) is served as the
+// app shell, so a browser loading the server root lands on the GeoGebra + AI UI.
+func (s *server) handleUI(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" && r.URL.Path != "/ui" && r.URL.Path != "/favicon.ico" {
+		http.NotFound(w, r)
+		return
+	}
+	if r.URL.Path == "/favicon.ico" {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Write(uiHTML)
+}
+
+// handleDeployGGB serves the local GeoGebra loader at a stable path the UI
+// references first, so rendering does not depend on a CDN being reachable.
+func (s *server) handleDeployGGB(w http.ResponseWriter, r *http.Request) {
+	b, err := staticFS.ReadFile("static/deployggb.js")
+	if err != nil {
+		http.Error(w, "static asset missing", http.StatusNotFound)
+		return
+	}
+	w.Header().Set("Content-Type", "application/javascript; charset=utf-8")
+	w.Write(b)
 }
 
 func (s *server) handleChat(w http.ResponseWriter, r *http.Request) {
@@ -81,12 +202,35 @@ func (s *server) handleChat(w http.ResponseWriter, r *http.Request) {
 	}
 	var req chatRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		s.logJSON("http.request", map[string]any{"session_id": req.SessionID, "error": "invalid_json: " + err.Error()})
 		writeError(w, 400, "invalid JSON: "+err.Error())
 		return
 	}
 
 	sess := s.sessions.Get(req.SessionID)
 	sysMsg := ai.SystemMessage()
+
+	// Attach the shared logger (already set on s.cfg) to the effective config so
+	// every LLM/script event in this request carries the resolved params.
+	s.logJSON("http.request", map[string]any{
+		"session_id": sess.ID,
+		"input_type": req.InputType,
+		"stream":     req.Stream,
+		"text_chars": len(req.Text),
+		"image_b64":  len(req.ImageB64),
+		"append":     req.Append != "",
+		"endpoint":   strings.TrimSpace(req.Endpoint),
+		"model":      strings.TrimSpace(req.Model),
+	})
+
+	// Apply per-request endpoint/model/key overrides (from the UI panel). A
+	// fresh client carries the resolved config for this call only.
+	effCfg := s.effectiveConfig(req)
+	effCfg.Log = s.cfg.Log // the shared logger is not part of the request overrides
+	effClient := s.client
+	if strings.TrimSpace(req.Endpoint) != "" || strings.TrimSpace(req.Model) != "" || strings.TrimSpace(req.APIKey) != "" {
+		effClient = ai.NewClient(effCfg)
+	}
 
 	// A follow-up "append" instruction modifies the dialog's prior result; it can
 	// arrive without a fresh problem `text`, so it gets its own validation and
@@ -99,29 +243,63 @@ func (s *server) handleChat(w http.ResponseWriter, r *http.Request) {
 		}
 		userMsg = ai.TextUserMessage(combined)
 	} else {
-		usrMsg, err := buildUserMessage(s.cfg, req)
+		usrMsg, err := buildUserMessage(effCfg, req)
 		if err != nil {
 			writeError(w, 400, err.Error())
 			return
 		}
 		userMsg = *usrMsg
 	}
-	sess.Append(userMsg)
 
-	res := ai.Generate(r.Context(), s.client, s.cfg, ai.GenerateRequest{
+	res := ai.Generate(r.Context(), effClient, effCfg, ai.GenerateRequest{
 		Session:   sess,
 		SystemMsg: sysMsg,
 		UserMsg:   userMsg,
 	})
 
+	// Persist a completed turn into history so a subsequent "append"/follow-up
+	// can build on the PREVIOUS final script instead of regenerating. History
+	// only ever holds completed (user→assistant) rounds; the current userMsg is
+	// fed via GenerateRequest.UserMsg, not pre-appended, to avoid duplication.
+	// On failure we still store the last assistant result (possibly an empty
+	// script) so the user→assistant pairing stays intact across all turns.
+	sess.Append(userMsg)
+	sess.Append(ai.TextAssistantMessage(res.Script))
+
 	envelope := &chatResponse{SessionID: sess.ID}
 	envelope.Result = res
+	s.logJSON("http.result", map[string]any{
+		"session_id":     sess.ID,
+		"ok":             res.OK,
+		"attempts":       res.Attempts,
+		"executable":     res.Executable,
+		"diagnostics":    res.Diagnostics,
+		"script_chars":   len(res.Script),
+		"script_preview": aiEllipsize(res.Script, 300),
+		"teaching_note":  res.TeachingNote,
+	})
 	if req.Stream {
 		s.streamResult(w, envelope)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	_ = json.NewEncoder(w).Encode(envelope)
+}
+
+// logJSON decorates a log event with an optional session id for correlation.
+func (s *server) logJSON(Event string, fields map[string]any) {
+	if s.logs == nil {
+		return
+	}
+	s.logs.emit(Event, fields)
+}
+
+// aiEllipsize previews a long script for logs.
+func aiEllipsize(s string, n int) string {
+	if len(s) <= n {
+		return s
+	}
+	return s[:n] + fmt.Sprintf("…(+%d)", len(s)-n)
 }
 
 // buildUserMessage validates the request and builds the user turn, preferring

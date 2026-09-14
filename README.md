@@ -142,14 +142,32 @@ unknown-cmd、ai-bad、nested 命令嵌套、pi-script 保留字、mirror-arc �
 兼容接口生成 GeoGebra 教学指令，并用本校验器做质量门控 + 自动重试修复。
 完整设计见 [`DESIGN-AI.md`](DESIGN-AI.md)。
 
+服务内置一个**单文件 Web 界面**（`cmd/ai-server/ui.html`，`//go:embed` 打进二进制）：
+浏览器打开服务根路径即可用，支持题目文字/图片输入、右侧 GeoGebra 实时渲染、
+逐轮追加修改，以及界面上的服务配置面板（endpoint / model / API Key，Key 只存本机
+浏览器 localStorage 并在请求时随调用发送，服务端不保存、不写日志）。
+
 ```bash
-# 启动（缺省会用本地/可用的兼容端点，需按后端配置）
-GGCM_AI_ENDPOINT=https://api.openai.com/v1 \
-GGCM_AI_MODEL=gpt-4o \
+# 启动（缺省会用内置的澜智 / DeepSeek-V4 兼容端点；需配 GGCM_AI_API_KEY）
+GGCM_AI_ENDPOINT=http://lanz.hikvision.com/v3/openai/v1 \
+GGCM_AI_MODEL=Lanz-Medium \
 GGCM_AI_API_KEY=... \
   go run ./cmd/ai-server -addr :8080
-# GET /api/health    liveness
-# POST /api/chat     { input_type:"text|image", text, image_b64?, image_mime? }
+
+# 打开界面
+#   http://localhost:8080/          Web UI（输入→生成→GeoGebra 渲染→追加修改）
+#
+# REST 接口
+#   GET  /api/health               liveness
+#   GET  /api/config               运行期配置（endpoint/model/vision/max_image_bytes/has_api_key；不含 key 明文）
+#   POST /api/chat                 { input_type:"text|image", text, image_b64?, image_mime?,
+#                                    session_id?, append?, stream?, endpoint?, model?, api_key? }
+#   GET  /deployggb.js             GeoGebra 加载器（本地同源，避免依赖 CDN）
+#
+# 日志
+#   -log out.jsonl                 把每次大模型调用/脚本处理写成结构化 JSON Lines（缺省写 stdout）
 ```
 
 核心配置均可用 `GGCM_AI_*` 环境变量覆盖（见 `internal/ai/config.go`）。
+默认端点/模型为澜智 `http://lanz.hikvision.com/v3/openai/v1` + `Lanz-Medium`；
+API Key 必须由 `GGCM_AI_API_KEY` 环境变量或界面配置面板提供（不会写入代码/仓库）。
