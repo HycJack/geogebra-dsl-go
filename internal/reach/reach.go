@@ -5,8 +5,8 @@
 package reach
 
 import (
-	"github.com/you/geogebra-dsl-go/internal/diag"
-	"github.com/you/geogebra-dsl-go/internal/ir"
+	"github.com/hycjack/geogebra-dsl-go/internal/diag"
+	"github.com/hycjack/geogebra-dsl-go/internal/ir"
 )
 
 // Targets returns the goal ids to verify.

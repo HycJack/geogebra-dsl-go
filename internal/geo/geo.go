@@ -7,9 +7,9 @@ package geo
 import (
 	"math/big"
 
-	"github.com/you/geogebra-dsl-go/internal/diag"
-	"github.com/you/geogebra-dsl-go/internal/ir"
-	"github.com/you/geogebra-dsl-go/internal/number"
+	"github.com/hycjack/geogebra-dsl-go/internal/diag"
+	"github.com/hycjack/geogebra-dsl-go/internal/ir"
+	"github.com/hycjack/geogebra-dsl-go/internal/number"
 )
 
 // Check walks the topological order and flags degenerate objects. Fail-closed:

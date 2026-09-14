@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/you/geogebra-dsl-go/internal/check"
-	"github.com/you/geogebra-dsl-go/internal/diag"
+	"github.com/hycjack/geogebra-dsl-go/internal/check"
+	"github.com/hycjack/geogebra-dsl-go/internal/diag"
 )
 
 // GateResult is the outcome of running the ggcm validator on a script.

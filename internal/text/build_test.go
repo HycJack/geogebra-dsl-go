@@ -3,7 +3,7 @@ package text
 import (
 	"testing"
 
-	"github.com/you/geogebra-dsl-go/internal/ir"
+	"github.com/hycjack/geogebra-dsl-go/internal/ir"
 )
 
 func TestParseDispatch(t *testing.T) {

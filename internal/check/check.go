@@ -9,14 +9,14 @@ package check
 import (
 	"bytes"
 
-	"github.com/you/geogebra-dsl-go/internal/catalog"
-	"github.com/you/geogebra-dsl-go/internal/deps"
-	"github.com/you/geogebra-dsl-go/internal/diag"
-	"github.com/you/geogebra-dsl-go/internal/geo"
-	"github.com/you/geogebra-dsl-go/internal/ir"
-	"github.com/you/geogebra-dsl-go/internal/reach"
-	"github.com/you/geogebra-dsl-go/internal/sig"
-	"github.com/you/geogebra-dsl-go/internal/text"
+	"github.com/hycjack/geogebra-dsl-go/internal/catalog"
+	"github.com/hycjack/geogebra-dsl-go/internal/deps"
+	"github.com/hycjack/geogebra-dsl-go/internal/diag"
+	"github.com/hycjack/geogebra-dsl-go/internal/geo"
+	"github.com/hycjack/geogebra-dsl-go/internal/ir"
+	"github.com/hycjack/geogebra-dsl-go/internal/reach"
+	"github.com/hycjack/geogebra-dsl-go/internal/sig"
+	"github.com/hycjack/geogebra-dsl-go/internal/text"
 )
 
 // Options control a check run.

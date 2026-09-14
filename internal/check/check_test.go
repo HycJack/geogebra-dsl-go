@@ -3,7 +3,7 @@ package check
 import (
 	"testing"
 
-	"github.com/you/geogebra-dsl-go/internal/diag"
+	"github.com/hycjack/geogebra-dsl-go/internal/diag"
 )
 
 func hasCode(rc *diag.Receipt, code diag.Code) bool {

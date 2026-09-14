@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/you/geogebra-dsl-go/internal/diag"
+	"github.com/hycjack/geogebra-dsl-go/internal/diag"
 )
 
 func TestGateOKScript(t *testing.T) {

@@ -3,7 +3,7 @@ package geo
 import (
 	"testing"
 
-	"github.com/you/geogebra-dsl-go/internal/ir"
+	"github.com/hycjack/geogebra-dsl-go/internal/ir"
 )
 
 func TestLineIdenticalPoints(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/you/geogebra-dsl-go/internal/diag"
+	"github.com/hycjack/geogebra-dsl-go/internal/diag"
 )
 
 // jsonIR mirrors the input IR JSON shape (objects + goals). fields are kept

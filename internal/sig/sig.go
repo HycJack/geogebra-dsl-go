@@ -5,9 +5,9 @@ package sig
 import (
 	"strings"
 
-	"github.com/you/geogebra-dsl-go/internal/catalog"
-	"github.com/you/geogebra-dsl-go/internal/ir"
-	"github.com/you/geogebra-dsl-go/internal/number"
+	"github.com/hycjack/geogebra-dsl-go/internal/catalog"
+	"github.com/hycjack/geogebra-dsl-go/internal/ir"
+	"github.com/hycjack/geogebra-dsl-go/internal/number"
 )
 
 // kindAliases maps catalog type tokens (as they appear in a TypeExpr, after

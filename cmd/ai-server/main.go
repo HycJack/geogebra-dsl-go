@@ -23,7 +23,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/you/geogebra-dsl-go/internal/ai"
+	"github.com/hycjack/geogebra-dsl-go/internal/ai"
 )
 
 func main() {

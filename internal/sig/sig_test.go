@@ -3,8 +3,8 @@ package sig
 import (
 	"testing"
 
-	"github.com/you/geogebra-dsl-go/internal/catalog"
-	"github.com/you/geogebra-dsl-go/internal/ir"
+	"github.com/hycjack/geogebra-dsl-go/internal/catalog"
+	"github.com/hycjack/geogebra-dsl-go/internal/ir"
 )
 
 // testCatalog is a minimal catalog with a couple of commands, independent of

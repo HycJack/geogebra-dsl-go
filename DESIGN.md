@@ -120,7 +120,7 @@ ggcm check --input text|ir <file> # 强制输入形态（默认自动识别）
 
 ## 10. 待定（v1 未定，不挡当前功能）
 
-1. 模块路径 `github.com/you/geogebra-dsl-go` 为占位，发布前可换真实地址。
+1. 模块路径 `github.com/hycjack/geogebra-dsl-go` 为占位，发布前可换真实地址。
 2. 文本暂**一行一条指令**（不支持 `;` 分号多指令同行的拆分、语句分隔）。
 3. `--input` 与外部命令表覆盖（env/flag）已预留，但外部加载路径未接完整 UI。
 4. 命令嵌套合成对象的命名用 `owner.SubCmdN`——若涉及与 GeoGebra 实际自动命名(如 `A_1`)对齐，需后续确认。
