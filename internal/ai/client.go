@@ -77,19 +77,46 @@ func (c *openAIClient) Complete(ctx context.Context, messages []Message, opts Co
 		req.Messages[i] = toAPIMessage(m)
 	}
 
-	n0 := time.Now()
-	c.logRequest(messages, opts)
-
+	// Build the wire body ONCE and reuse the exact same bytes on every retry, so
+	// transient retries never alter or drop message content.
 	body, err := json.Marshal(req)
 	if err != nil {
 		return "", fmt.Errorf("marshal chat request: %w", err)
 	}
-
 	url := strings.TrimRight(c.cfg.Endpoint, "/") + "/chat/completions"
+
+	n0 := time.Now()
+	c.logRequest(messages, opts)
+
+	maxAttempts := c.cfg.HTTPRetries + 1 // 1 initial + HTTPRetries retries
+	for attempt := 1; ; attempt++ {
+		reply, retryable, err := c.doComplete(ctx, url, body)
+		if err == nil {
+			c.logResponse(reply, n0)
+			return reply, nil
+		}
+		// Non-transient failure (client error, malformed body, etc.) — stop now.
+		if !retryable || attempt >= maxAttempts {
+			return "", err
+		}
+		// Transient failure: exponential backoff (base, then doubles), still
+		// within the caller's context.
+		delay := time.Duration(c.cfg.HTTPRetryBase) * time.Millisecond * time.Duration(1<<uint(attempt-1))
+		c.logRetry(attempt, delay, err)
+		if err2 := sleepCtx(ctx, delay); err2 != nil {
+			return "", err2
+		}
+	}
+}
+
+// doComplete performs a single raw attempt with the given (already-frozen)
+// body. It returns the parsed reply, and retryable indicates whether the
+// failure is transient (429/408/5xx or network error) and worth retrying.
+// The body slice is intentionally re-serialized into a fresh reader each call.
+func (c *openAIClient) doComplete(ctx context.Context, url string, body []byte) (string, bool, error) {
 	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewReader(body))
 	if err != nil {
-		c.logError("llm.error", "build_request", n0, err)
-		return "", fmt.Errorf("build request: %w", err)
+		return "", false, err // local build error: never retry
 	}
 	httpReq.Header.Set("Content-Type", "application/json")
 	if c.cfg.APIKey != "" {
@@ -98,34 +125,56 @@ func (c *openAIClient) Complete(ctx context.Context, messages []Message, opts Co
 
 	resp, err := c.client.Do(httpReq)
 	if err != nil {
-		c.logError("llm.error", "http", n0, err)
-		return "", fmt.Errorf("chat request failed: %w", err)
+		// Network errors (timeout, conn refused, TLS) are transient.
+		return "", true, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		msg, _ := io.ReadAll(io.LimitReader(resp.Body, 4096))
-		c.logError("llm.error", "status", n0, fmt.Errorf("%s: %s", resp.Status, strings.TrimSpace(string(msg))))
-		return "", fmt.Errorf("chat backend %s: %s", resp.Status, strings.TrimSpace(string(msg)))
+		err := fmt.Errorf("chat backend %s: %s", resp.Status, strings.TrimSpace(string(msg)))
+		return "", isRetryableStatus(resp.StatusCode), err
 	}
 
 	var parsed chatResponse
 	if err := json.NewDecoder(resp.Body).Decode(&parsed); err != nil {
-		c.logError("llm.error", "decode", n0, err)
-		return "", fmt.Errorf("decode chat response: %w", err)
+		return "", false, fmt.Errorf("decode chat response: %w", err) // not transient
 	}
 	if parsed.Error != nil {
-		c.logError("llm.error", "backend", n0, errors.New(parsed.Error.Message))
-		return "", errors.New(parsed.Error.Message)
+		return "", false, errors.New(parsed.Error.Message) // backend business error
 	}
 	if len(parsed.Choices) == 0 {
-		c.logError("llm.error", "no_choices", n0, errors.New("backend returned no choices"))
-		return "", errors.New("chat backend returned no choices")
+		return "", false, errors.New("chat backend returned no choices")
 	}
+	return parsed.Choices[0].Message.Content, false, nil
+}
 
-	reply := parsed.Choices[0].Message.Content
-	c.logResponse(reply, n0)
-	return reply, nil
+// isRetryableStatus reports whether a non-200 status code is transient and
+// worth an exponential-backoff retry: 408 (timeout), 409 (conflict), 429 (rate
+// limit), and all 5xx (server failures). Other 4xx are permanent — retrying
+// would not help.
+func isRetryableStatus(code int) bool {
+	switch {
+	case code == http.StatusRequestTimeout, code == http.StatusTooManyRequests,
+		code == http.StatusConflict:
+		return true
+	case code >= 500 && code <= 599:
+		return true
+	default:
+		return false
+	}
+}
+
+// sleepCtx waits for delay, aborting early if ctx is done.
+func sleepCtx(ctx context.Context, delay time.Duration) error {
+	t := time.NewTimer(delay)
+	defer t.Stop()
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	case <-t.C:
+		return nil
+	}
 }
 
 // logRequest emits a llm.request event with the outgoing parameters. Secrets
@@ -141,6 +190,16 @@ func (c *openAIClient) logRequest(messages []Message, opts CompleteOptions) {
 	})
 }
 
+// logRetry emits a llm.retry event when a transient failure is about to be
+// retried after a backoff delay.
+func (c *openAIClient) logRetry(attempt int, delay time.Duration, err error) {
+	c.logEntry("llm.retry", map[string]any{
+		"attempt":  attempt, // 1-based number of the retry about to run
+		"delay_ms": int(delay.Milliseconds()),
+		"error":    err.Error(),
+	})
+}
+
 // logResponse emits a llm.response event with the returned text (bounded preview).
 func (c *openAIClient) logResponse(reply string, n0 time.Time) {
 	took := time.Since(n0).Milliseconds()
@@ -148,15 +207,6 @@ func (c *openAIClient) logResponse(reply string, n0 time.Time) {
 		"latency_ms": took,
 		"chars":      len(reply),
 		"preview":    ellipsize(reply, 500),
-	})
-}
-
-// logError emits a llm.error event with the failure and latency.
-func (c *openAIClient) logError(Event, stage string, n0 time.Time, err error) {
-	c.logEntry(Event, map[string]any{
-		"stage":      stage,
-		"latency_ms": time.Since(n0).Milliseconds(),
-		"error":      err.Error(),
 	})
 }
 

@@ -2,6 +2,7 @@ package ai
 
 import (
 	"context"
+	"errors"
 	"strings"
 	"testing"
 )
@@ -123,5 +124,64 @@ func TestGenerateNoScriptBlock(t *testing.T) {
 	})
 	if res == nil {
 		t.Fatal("Generate must always return a Result")
+	}
+}
+
+// TestGenerateTransientMidRepairKeepsContent reproduces the mid-repair network
+// failure case: a repair round's LLM call returns a transient error (simulating
+// Complete exhausting its exponential-backoff retries). The NEXT repair round's
+// prompt must still carry the previous real script AND its diagnostics — the
+// content must not be lost to the hiccup.
+func TestGenerateTransientMidRepairKeepsContent(t *testing.T) {
+	bad := "l = Line(A, Missing)" // gate fails: dep/undefined Missing
+	good := "A = Point(0, 0)\nB = Point(4, 0)\nl = Line(A, B)"
+
+	// Call #0 (attempt 1): returns the bad script → gate fails.
+	// Call #1 (attempt 2): transient error, like a backend that keeps failing.
+	// Call #2 (attempt 3): returns a repaired script → gate passes.
+	stub := &stubClient{
+		replies:  []string{goodReply(bad), "", goodReply(good)},
+		callErrs: []error{nil, errors.New("chat backend 503 transient"), nil},
+	}
+	cfg := Config{Temperature: 0.2, MaxTokens: 2048, MaxRepair: 3}
+	res := Generate(context.Background(), stub, cfg, GenerateRequest{
+		Session:   NewSession("s-tran", 20),
+		SystemMsg: SystemMessage(),
+		UserMsg:   TextUserMessage("作线段"),
+	})
+	if !res.OK {
+		t.Fatalf("expected final OK, got %+v", res)
+	}
+	if res.Attempts != 3 {
+		t.Fatalf("attempts=%d, want 3", res.Attempts)
+	}
+	// The repair round after the transient error (call #2) must have been built
+	// on the previous real bad script + its diagnostics — not wiped.
+	call := stub.calls[2]
+	if !strings.Contains(call, bad) {
+		t.Errorf("repair round after transient error lost previous script; call=%q", call)
+	}
+	if !strings.Contains(call, "dep/undefined") || !strings.Contains(call, "Missing") {
+		t.Errorf("repair round after transient error lost diagnostics; call=%q", call)
+	}
+}
+
+// TestGenerateFirstCallTransientStillSucceeds checks that if the very first LLM
+// call transiently fails (no content was ever produced), the loop does not panic
+// and still attempts a plain regeneration rather than an artificial repair.
+func TestGenerateFirstCallTransientStillSucceeds(t *testing.T) {
+	good := "A = Point(0, 0)\nB = Point(4, 0)\nl = Line(A, B)"
+	stub := &stubClient{
+		replies:  []string{"", goodReply(good)},
+		callErrs: []error{errors.New("connection refused"), nil},
+	}
+	cfg := Config{Temperature: 0.2, MaxTokens: 2048, MaxRepair: 3}
+	res := Generate(context.Background(), stub, cfg, GenerateRequest{
+		Session:   NewSession("s-first-tran", 20),
+		SystemMsg: SystemMessage(),
+		UserMsg:   TextUserMessage("作线段"),
+	})
+	if !res.OK {
+		t.Fatalf("expected OK after first-call transient, got %+v", res)
 	}
 }

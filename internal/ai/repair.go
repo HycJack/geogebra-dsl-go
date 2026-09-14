@@ -14,40 +14,54 @@ type GenerateRequest struct {
 // Generate runs the bounded generate→gate→repair loop and returns a Result.
 //
 //   - First attempt: system + history + UserMsg.
-//   - On failure, a RepairMessage carrying the last script + diagnostics is
-//     appended and the loop retries up to cfg.MaxRepair times.
+//   - On a validation failure, a RepairMessage carrying the last script +
+//     diagnostics is appended and the loop retries up to cfg.MaxRepair times.
 //   - On success the (last) valid script, executable order, and teaching note
 //     are returned. If the cap is exhausted the best (final) script and its
 //     unresolved diagnostics are returned with OK=false.
+//
+// A transient error from client.Complete (the HTTP layer already did its
+// exponential-backoff retries and still failed) must NOT clobber lastScript or
+// lastGate: a later repair round still builds on the previous real script and
+// its diagnostics, so no content is lost to a network hiccup mid-repair.
 func Generate(ctx context.Context, client ChatClient, cfg Config, req GenerateRequest) *Result {
 	prompt := append([]Message{req.SystemMsg}, req.Session.ContextMessages()...)
 
+	// lastScript/lastGate reflect the most recent script that was actually
+	// extracted and validated. They are updated only on a successful
+	// generateOnce, never on a transient error.
 	lastScript := ""
 	lastNote := ""
-	var lastGate *GateResult
+	var lastGate *GateResult // nil until the first script has been extracted
+	producedAny := false
 	attempts := 0
 
 	for attempt := 1; attempt <= cfg.MaxRepair+1; attempt++ {
 		attempts = attempt
-		msgs := prompt
-		if attempt > 1 {
-			// Append the repair feedback for the previous failed script.
-			msgs = append([]Message(nil), prompt...)
-			msgs = append(msgs, RepairMessage(lastScript, lastGate.Diagnostics))
-		} else {
+
+		var msgs []Message
+		if attempt == 1 || !producedAny {
+			// First attempt, or the prior attempt never produced usable content
+			// (e.g. a network failure with no script to repair): send the plain
+			// user turn again rather than a misleading "repair the empty script".
 			msgs = append([]Message(nil), prompt...)
 			msgs = append(msgs, req.UserMsg)
+		} else {
+			// Repair round: build on the previous real script + its diagnostics.
+			msgs = append([]Message(nil), prompt...)
+			msgs = append(msgs, RepairMessage(lastScript, lastGate.Diagnostics))
 		}
+
 		cfg.logEvent("generate.attempt.start", map[string]any{
 			"attempt": attempt,
-			"retry":   attempt > 1,
+			"retry":   producedAny,
 		})
 
 		as, err := generateOnce(ctx, client, cfg, msgs)
 		if err != nil {
-			// Transient/LLM errors are not script defects; treat as one failed
-			// attempt and continue (so a flaky backend still gets retried).
-			lastGate = &GateResult{OK: false}
+			// Transient: Complete already retried with backoff and still failed.
+			// Do not clobber lastScript/lastGate — keep the previous real content
+			// so a subsequent repair round builds on it.
 			cfg.logEvent("generate.attempt.error", map[string]any{
 				"attempt": attempt,
 				"error":   err.Error(),
@@ -57,6 +71,7 @@ func Generate(ctx context.Context, client ChatClient, cfg Config, req GenerateRe
 			}
 			continue
 		}
+		producedAny = true
 		lastScript = as.Script
 		lastNote = as.TeachingNote
 
@@ -74,5 +89,10 @@ func Generate(ctx context.Context, client ChatClient, cfg Config, req GenerateRe
 		}
 	}
 
+	// If nothing was ever produced (even the initial call failed), fall back to
+	// an empty gate so the Result is well-formed and diagnostics reflect it.
+	if lastGate == nil {
+		lastGate = &GateResult{OK: false}
+	}
 	return NewResult(lastScript, lastNote, lastGate, attempts)
 }

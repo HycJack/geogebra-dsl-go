@@ -24,6 +24,8 @@ type Config struct {
 	DisableVision bool    // refuse image input even if the backend might support it
 	MaxHistory    int     // session turns kept in context
 	HTTPTimeoutS  int     // per LLM call timeout in seconds
+	HTTPRetries   int     // max exponential-backoff retries on transient (non-200) statuses
+	HTTPRetryBase int     // initial backoff in ms; doubles each retry
 	Log           LogFunc // optional structured-log hook; nil disables logging
 }
 
@@ -41,6 +43,8 @@ func LoadConfig() Config {
 		DisableVision: envBool("GGCM_AI_DISABLE_VISION"),
 		MaxHistory:    envInt("GGCM_AI_MAX_HISTORY", 20),
 		HTTPTimeoutS:  envInt("GGCM_AI_HTTP_TIMEOUT_S", 60),
+		HTTPRetries:   envInt("GGCM_AI_HTTP_RETRIES", 5),
+		HTTPRetryBase: envInt("GGCM_AI_HTTP_RETRY_BASE_MS", 500),
 	}
 }
 

@@ -113,7 +113,9 @@ internal/check/...           # 复用现有校验器(不改，只扩一个"可�
 
 ### 4.2 响应解析
 
-标准 `choices[0].message.content`；当 stream 时解析 `choices[0].delta.content` 增量。超时、429、5xx 视为**可重试的瞬时错误**（指数退避，最多 2 次）；其余错误直接返回给用户。
+标准 `choices[0].message.content`；当 stream 时解析 `choices[0].delta.content` 增量。
+
+**瞬态错误自动指数退避重试**：遇到网络错误或可重试状态码（`408`/`409`/`429`/`5xx`）时，在 `client.go` 内部对**同一份消息/请求体**做指数退避重发（初始退避 `GGCM_AI_HTTP_RETRY_BASE_MS`=500ms，每轮翻倍，最多重试 `GGCM_AI_HTTP_RETRIES`=5 次）。重试全程复用构建好的请求体，消息内容不被丢失或改写；`4xx` 以外的永久错误（`400`/`401`/`403`/`404`）不重试，直接返回用户。
 
 ### 4.3 配置 env
 
@@ -125,6 +127,8 @@ GGCM_AI_TEMP        # 默认 0.2
 GGCM_AI_MAX_REPAIR  # 默认 3（修复重试上限）
 GGCM_AI_MAX_TOKENS  # 默认 2048
 GGCM_AI_DISABLE_VISION  # 默认 false
+GGCM_AI_HTTP_RETRIES     # 默认 5（瞬态错误最多重试次数；0 则不发重试）
+GGCM_AI_HTTP_RETRY_BASE_MS  # 默认 500（首次退避毫秒，每轮翻倍）
 ```
 
 ### 4.4 结构化日志（调试/审计）
@@ -132,7 +136,8 @@ GGCM_AI_DISABLE_VISION  # 默认 false
 `ai-server` 提供 `-log <file>` 参数把每次调用记录为 **JSON Lines**（缺省写 stdout）。事件类型（`event` 字段）：
 
 - `http.request` / `http.result`：HTTP 层，含 session_id、input_type、文本/图片长度、最终脚本预览与诊断。
-- `llm.request` / `llm.response` / `llm.error`：单次大模型调用，含 model、endpoint、temperature、max_tokens、消息摘要（role + 字符数 + 图片数，**不含图片 base64 与 API Key**）、返回文本预览（上限 500 字符）、延迟。
+- `llm.request` / `llm.response`：单次大模型调用，含 model、endpoint、temperature、max_tokens、消息摘要（role + 字符数 + 图片数，**不含图片 base64 与 API Key**）、返回文本预览（上限 500 字符）、延迟。
+- `llm.retry`：瞬态失败（429/5xx/断网）即将进行指数退避重发，含退避毫秒、重试序号、错误信息；重试用同一份请求体，消息不丢失。
 - `generate.attempt.start` / `.error` / `.done`：脚本处理循环，每次尝试的脚本、gate 结果（`gate_ok`）、可执行对象序、诊断与教学说明。
 
 日志不会写入 API Key，也不会把图片明文 payload 落盘；图片仅记录张数与大小。

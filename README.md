@@ -171,3 +171,7 @@ GGCM_AI_API_KEY=... \
 核心配置均可用 `GGCM_AI_*` 环境变量覆盖（见 `internal/ai/config.go`）。
 默认端点/模型为澜智 `http://lanz.hikvision.com/v3/openai/v1` + `Lanz-Medium`；
 API Key 必须由 `GGCM_AI_API_KEY` 环境变量或界面配置面板提供（不会写入代码/仓库）。
+
+生成中遇到瞬态错误（`429`/`5xx`/断网）会自动**指数退避重试**：默认首次
+`500ms`、每轮翻倍、最多重试 5 次，且每次重试复用同一批消息内容不丢失
+（可用 `GGCM_AI_HTTP_RETRIES` / `GGCM_AI_HTTP_RETRY_BASE_MS` 调整）。
