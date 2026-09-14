@@ -58,7 +58,8 @@ type imageURL struct {
 type chatResponse struct {
 	Choices []struct {
 		Message struct {
-			Content string `json:"content"`
+			Content   string `json:"content"`
+			Reasoning string `json:"reasoning"` // reasoning-capable models may emit all text here
 		} `json:"message"`
 	} `json:"choices"`
 	Error *struct {
@@ -93,16 +94,37 @@ func (c *openAIClient) Complete(ctx context.Context, messages []Message, opts Co
 		reply, retryable, err := c.doComplete(ctx, url, body)
 		if err == nil {
 			c.logResponse(reply, n0)
+			// Surface the successful LLM round-trip (latency + preview) to the
+			// UI trace when a trace is configured.
+			opts.Trace.add(Step{
+				Stage:     "llm",
+				Attempt:   opts.Attempt,
+				Reply:     ellipsize(reply, 400),
+				LatencyMS: int(time.Since(n0).Milliseconds()),
+			})
 			return reply, nil
 		}
 		// Non-transient failure (client error, malformed body, etc.) — stop now.
 		if !retryable || attempt >= maxAttempts {
+			opts.Trace.add(Step{
+				Stage:   "error",
+				Attempt: opts.Attempt,
+				Error:   err.Error(),
+			})
 			return "", err
 		}
 		// Transient failure: exponential backoff (base, then doubles), still
 		// within the caller's context.
 		delay := time.Duration(c.cfg.HTTPRetryBase) * time.Millisecond * time.Duration(1<<uint(attempt-1))
 		c.logRetry(attempt, delay, err)
+		// Record the retry for the UI trace (attempt counts backoff ordinals 1..).
+		opts.Trace.add(Step{
+			Stage:   "retry",
+			Attempt: opts.Attempt,
+			Retry:   attempt,
+			DelayMS: int(delay.Milliseconds()),
+			Error:   err.Error(),
+		})
 		if err2 := sleepCtx(ctx, delay); err2 != nil {
 			return "", err2
 		}
@@ -146,7 +168,15 @@ func (c *openAIClient) doComplete(ctx context.Context, url string, body []byte) 
 	if len(parsed.Choices) == 0 {
 		return "", false, errors.New("chat backend returned no choices")
 	}
-	return parsed.Choices[0].Message.Content, false, nil
+	msg := parsed.Choices[0].Message
+	// Reasoning-capable models (e.g. sensenova-6.8-flash-lite) may spend the
+	// whole token budget on the `reasoning` field and return empty `content`.
+	// Fall back to the reasoning text so the extraction/degradation pipeline has
+	// real content to work with instead of silently dropping the answer.
+	if strings.TrimSpace(msg.Content) == "" {
+		msg.Content = msg.Reasoning
+	}
+	return msg.Content, false, nil
 }
 
 // isRetryableStatus reports whether a non-200 status code is transient and
@@ -177,8 +207,9 @@ func sleepCtx(ctx context.Context, delay time.Duration) error {
 	}
 }
 
-// logRequest emits a llm.request event with the outgoing parameters. Secrets
-// (the API key) and large image payloads are never included.
+// logRequest emits a llm.request event with the concrete outgoing parameters:
+// model, endpoint, sampling knob and a per-message breakdown. Secrets (the API
+// key) and large image payloads are never included.
 func (c *openAIClient) logRequest(messages []Message, opts CompleteOptions) {
 	c.logEntry("llm.request", map[string]any{
 		"model":         c.cfg.Model,
@@ -200,13 +231,16 @@ func (c *openAIClient) logRetry(attempt int, delay time.Duration, err error) {
 	})
 }
 
-// logResponse emits a llm.response event with the returned text (bounded preview).
+// logResponse emits a llm.response event with the FULL returned text plus a
+// short preview. "content" carries the complete reply so the browser log panel
+// (and -log file) shows the concrete model output, not just a truncated peek.
 func (c *openAIClient) logResponse(reply string, n0 time.Time) {
 	took := time.Since(n0).Milliseconds()
 	c.logEntry("llm.response", map[string]any{
 		"latency_ms": took,
 		"chars":      len(reply),
-		"preview":    ellipsize(reply, 500),
+		"preview":    ellipsize(reply, 200),
+		"content":    reply,
 	})
 }
 

@@ -29,6 +29,14 @@ type Message struct {
 type CompleteOptions struct {
 	Temperature float64
 	MaxTokens   int
+	// Attempt is the 1-based index of the generation attempt this call belongs
+	// to. It is used only to annotate trace steps and is ignored when Trace is
+	// nil.
+	Attempt int
+	// Trace, if non-nil, receives a Step for the LLM call and for every
+	// exponential-backoff HTTP retry within it. It is optional and nil-safe, so
+	// a nil options.Trace leaves the client's behavior unchanged.
+	Trace *StepTrace
 }
 
 // ChatClient abstracts the OpenAI-compatible backend so the repair loop can run

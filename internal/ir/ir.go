@@ -158,6 +158,17 @@ func kindForCmd(cmd string) Kind {
 	case "Distance", "Length", "Perimeter", "Area", "Angle", "Slope",
 		"Radius", "Volume", "Circumference", "abs", "Abs":
 		return KNumber
+	// 3D: map coarse result kinds so signature/geo checks stay consistent. A
+	// surface/solid command yields a Quadric- or Solid-typed object, and a
+	// Plane command yields a Plane.
+	case "Sphere", "Cone", "Cylinder", "Quadric", "Ellipsoid", "Hyperboloid",
+		"Surface":
+		return KQuadric
+	case "Plane", "OrthogonalPlane", "PerpendicularPlane", "ParallelPlane":
+		return KPlane
+	case "Cube", "Prism", "Pyramid", "Polyhedron", "Tetrahedron", "Octahedron",
+		"Hexahedron", "Icosahedron", "Dodecahedron":
+		return KSolid
 	default:
 		return KUnknown
 	}

@@ -8,9 +8,10 @@
   :root {
     --bg: #0f172a; --panel: #1e293b; --panel2: #273449; --line: #334155;
     --txt: #e2e8f0; --mut: #94a3b8; --acc: #38bdf8; --ok: #4ade80; --err: #f87171;
-    --warn: #fbbf24; --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+    --warn: #fbbf24; --pm: #0f1522; --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
   }
   * { box-sizing: border-box; }
+  html, body { height: 100%; }
   body {
     margin: 0; background: var(--bg); color: var(--txt);
     font: 14px/1.55 system-ui, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -18,193 +19,250 @@
     display: flex; flex-direction: column;
   }
   header {
-    display: flex; align-items: center; gap: 12px; padding: 10px 20px;
+    display: flex; align-items: center; gap: 12px; padding: 10px 18px;
     background: linear-gradient(90deg,#1e293b,#0f172a); border-bottom: 1px solid var(--line);
-    flex: 0 0 auto; position: relative; z-index: 5;
-    min-height: 52px;
+    flex: 0 0 auto; z-index: 5; min-height: 52px;
   }
-  header .logo { font-size: 19px; font-weight: 700; letter-spacing: .3px; white-space: nowrap; }
+  header .logo { font-size: 17px; font-weight: 700; letter-spacing: .3px; white-space: nowrap; }
   header .logo b { color: var(--acc); }
-  header .tag { color: var(--mut); font-size: 12px; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 46vw; }
   header .right { margin-left: auto; display: flex; gap: 8px; align-items: center; flex: 0 0 auto; }
   .pill { font-size: 11px; padding: 3px 10px; border-radius: 20px; border: 1px solid var(--line); color: var(--mut); background: var(--panel); white-space: nowrap; }
   .pill.on { color: var(--ok); border-color: #166534; background:#052e16; }
-  .layout { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 420px 1fr; }
-  .left { border-right: 1px solid var(--line); overflow-y: auto; background: var(--panel); min-height: 0; }
+
+  .layout { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 440px 1fr; }
+  .left { border-right: 1px solid var(--line); background: var(--panel); min-height: 0; display: flex; flex-direction: column; }
   .right { position: relative; background: #fff; overflow: hidden; min-height: 0; }
-  .section { padding: 18px 20px; border-bottom: 1px solid var(--line); }
-  .section h3 { margin: 0 0 10px; font-size: 13px; color: var(--mut); font-weight: 600; text-transform: uppercase; letter-spacing: .6px; }
-  textarea {
-    width: 100%; resize: vertical; background: var(--panel2); color: var(--txt);
-    border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px;
-    font-family: inherit; font-size: 13px; outline: none;
+
+  /* ---------- 聊天 ---------- */
+  .chat { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+  .chat-list { flex: 1 1 auto; overflow-y: auto; padding: 18px 16px; display: flex; flex-direction: column; gap: 14px; scroll-behavior: smooth; }
+  .msg { max-width: 100%; display: flex; flex-direction: column; }
+  .msg.user { align-items: flex-end; }
+  .msg.bot { align-items: stretch; }
+  .bubble {
+    border-radius: 14px; padding: 10px 14px; font-size: 13.5px; line-height: 1.6;
+    max-width: 100%; white-space: pre-wrap; word-break: break-word; position: relative;
   }
-  textarea:focus { border-color: var(--acc); box-shadow: 0 0 0 2px rgba(56,189,248,.15); }
+  .msg.user .bubble {
+    background: #1d4ed8; color: #fff; border-bottom-right-radius: 4px;
+    max-width: 88%; box-shadow: 0 2px 8px rgba(0,0,0,.25);
+  }
+  .msg.bot .bubble {
+    background: var(--pm); border: 1px solid var(--line); border-bottom-left-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.2);
+  }
+  .msg.user .img-prev { max-width: 200px; max-height: 160px; border-radius: 8px; border: 1px solid #334; margin-top: 6px; display: block; }
+  .msg-role { font-size: 11px; color: var(--mut); margin: 0 6px 3px; }
+  .msg.user .msg-role { align-self: flex-end; }
+
+  .typing { display: inline-flex; gap: 4px; align-items: center; }
+  .typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--acc); animation: blink 1.2s infinite; }
+  .typing i:nth-child(2){ animation-delay:.2s; } .typing i:nth-child(3){ animation-delay:.4s; }
+  @keyframes blink { 0%,60%,100%{opacity:.2;transform:translateY(0);} 30%{opacity:1;transform:translateY(-3px);} }
+
+  /* ---------- 结果卡片 ---------- */
+  .result { margin-top: 8px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #0b1120; }
+  .result-head { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--panel2); font-size: 12px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .result-head .s { font-weight: 600; }
+  .result-head .s.ok { color: var(--ok); } .result-head .s.fail { color: var(--err); }
+  .result-head .meta-s { color: var(--mut); margin-left: auto; font-size: 11px; }
+  .script { font-family: var(--mono); font-size: 12px; padding: 12px; white-space: pre-wrap; word-break: break-word; max-height: 320px; overflow:auto; }
+  .script.fallback { font-family: var(--txt); font-size: 13.5px; color: var(--txt); line-height: 1.7; max-height: none; }
+  .note { padding: 8px 12px; font-size: 12.5px; color: var(--txt); border-top: 1px solid var(--line); white-space: pre-wrap; }
+  .diag { padding: 8px 12px; font-size: 12px; color: var(--warn); border-top: 1px solid var(--line); }
+  .diag ul { margin: 4px 0 0; padding-left: 18px; }
+  .computing { color: var(--mut); font-size: 12.5px; }
+
+  /* ---------- 执行过程（trace） ---------- */
+  .trace { margin-top: 8px; border: 1px dashed var(--line); border-radius: 10px; overflow: hidden; }
+  .trace-toggle { width: 100%; text-align: left; background: var(--panel2); color: var(--txt); border: 0; cursor: pointer; padding: 7px 12px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+  .trace-toggle:hover { background: #2d3a52; }
+  .trace-toggle .arrow { transition: transform .15s; display: inline-block; }
+  .trace-body { display: none; padding: 8px 6px 8px 12px; background: #0b1120; }
+  .trace.open .trace-body { display: block; }
+  .tstep { display: flex; gap: 10px; padding: 5px 8px; border-left: 3px solid var(--line); margin-bottom: 6px; font-size: 12px; line-height: 1.55; }
+  .tstep .n { flex: 0 0 30px; color: var(--mut); font-family: var(--mono); font-size: 11px; text-align: right; padding-top: 1px; }
+  .tstep .body { flex: 1; min-width: 0; }
+  .tstep .tag { font-weight: 700; font-size: 11.5px; letter-spacing: .3px; display: inline-block; margin-right: 6px; }
+  .tstep.llm { border-left-color: var(--acc); } .tstep.llm .tag { color: var(--acc); }
+  .tstep.gate { border-left-color: var(--ok); } .tstep.gate.fail { border-left-color: var(--err); }
+  .tstep.gate .tag { color: var(--ok); } .tstep.gate.fail .tag { color: var(--err); }
+  .tstep.retry { border-left-color: var(--warn); } .tstep.retry .tag { color: var(--warn); }
+  .tstep.error { border-left-color: var(--err); } .tstep.error .tag { color: var(--err); }
+  .tstep .sub { color: var(--mut); }
+  .tstep .err-txt { color: var(--err); word-break: break-all; }
+  .tstep .dlg { color: var(--warn); margin-left: 4px; }
+  .tstep .script-mini { font-family: var(--mono); font-size: 11px; color: #cbd5e1; margin-top: 3px; white-space: pre-wrap; word-break: break-word; }
+
+  /* ---------- 输入区 ---------- */
+  .chat-input { flex: 0 0 auto; border-top: 1px solid var(--line); background: var(--panel); padding: 10px 12px; }
+  .chat-input textarea {
+    width: 100%; resize: none; background: var(--panel2); color: var(--txt);
+    border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+    font-family: inherit; font-size: 13px; outline: none; min-height: 58px; max-height: 160px;
+  }
+  .chat-input textarea:focus { border-color: var(--acc); box-shadow: 0 0 0 2px rgba(56,189,248,.15); }
+  .send-row { display: flex; gap: 6px; margin-top: 8px; align-items: center; }
+  .attach-preview { display: none; margin-top: 8px; width: fit-content; position: relative; }
+  .attach-preview img { max-width: 130px; max-height: 90px; border-radius: 8px; border: 1px solid var(--line); display: block; }
+  .attach-preview .x { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,.7); color:#fff; border:none; border-radius: 50%; width:18px; height:18px; cursor:pointer; line-height:16px; font-size:11px; }
   .btn {
     display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
-    border: 1px solid var(--line); border-radius: 8px; padding: 8px 14px;
-    background: var(--panel2); color: var(--txt); font-size: 13px; font-weight: 500;
+    border: 1px solid var(--line); border-radius: 8px; padding: 7px 12px;
+    background: var(--panel2); color: var(--txt); font-size: 12.5px; font-weight: 500;
     transition: filter .12s; user-select: none;
   }
   .btn:hover { filter: brightness(1.12); }
   .btn.primary { background: var(--acc); color: #082f49; border-color: var(--acc); font-weight: 600; }
   .btn:disabled { opacity: .5; cursor: not-allowed; }
-  .row { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
-  .row .spacer { flex: 1; }
   .spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.3); border-top-color: var(--acc); border-radius: 50%; animation: spin .7s linear infinite; display: none; }
   .spinner.show { display: inline-block; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .hint { color: var(--mut); font-size: 12px; margin-top: 6px; }
-  #imgwrap { display: none; margin-top: 8px; position: relative; width: fit-content; }
-  #imgwrap img { max-width: 220px; max-height: 120px; border-radius: 8px; border: 1px solid var(--line); display: block; }
-  #imgwrap .x { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,.7); color:#fff; border:none; border-radius: 50%; width:20px; height:20px; cursor:pointer; line-height:18px; }
-  .script { font-family: var(--mono); font-size: 12px; background: #0b1120; border: 1px solid var(--line); border-radius: 8px; padding: 10px; white-space: pre-wrap; word-break: break-word; min-height: 60px; position: relative; max-height: 320px; overflow:auto; }
-  .script.copy { position: absolute; top: 6px; right: 6px; font-size: 11px; padding: 2px 8px; background: var(--panel2); border:1px solid var(--line); border-radius: 6px; cursor: pointer; color: var(--mut); }
-  .meta { font-size: 12px; color: var(--mut); display: flex; gap: 14px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
-  .meta b { color: var(--acc); font-weight: 600; }
-  .banner { border-radius: 8px; padding: 8px 12px; font-size: 12.5px; margin-top: 10px; display: none; }
-  .banner.show { display: block; }
-  .banner.ok { background: #052e16; border: 1px solid #166534; color: var(--ok); }
-  .banner.err { background: #3b0d0d; border: 1px solid #7f1d1d; color: var(--err); }
-  .banner.gray { background: var(--panel2); border: 1px solid var(--line); color: var(--txt); }
-  .note { color: var(--txt); font-size: 13px; white-space: pre-wrap; }
-  .diag { font-family: var(--mono); font-size: 11.5px; color: var(--warn); margin-top: 6px; }
-  .diag li { margin: 2px 0; }
+  .hint { color: var(--mut); font-size: 11.5px; margin-top: 6px; }
+
+  /* ---------- 配置抽屉 ---------- */
+  .drawer { flex: 0 0 auto; border-top: 1px solid var(--line); background: var(--panel); }
+  .drawer-toggle { width: 100%; text-align: left; background: transparent; color: var(--mut); border: 0; cursor: pointer; padding: 8px 16px; font-size: 12px; font-weight: 600; display: flex; gap: 6px; align-items: center; }
+  .drawer-toggle:hover { color: var(--txt); }
+  .drawer-body { display: none; padding: 12px 16px 16px; border-top: 1px solid var(--line); max-height: 40vh; overflow-y: auto; }
+  .drawer.open .drawer-body { display: block; }
+  .cfg-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .field label { font-size: 11.5px; color: var(--mut); display: block; margin-bottom: 4px; }
+  .field input, .field textarea {
+    width: 100%; background: var(--panel2); color: var(--txt); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12.5px; outline: none; font-family: var(--mono);
+  }
+  .field input:focus { border-color: var(--acc); }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .ggbopt { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--txt); cursor: pointer; user-select: none; padding: 4px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel2); }
+  .ggbopt:hover { border-color: var(--acc); }
+  .ggbopt input { accent-color: var(--acc); cursor: pointer; }
+  .kbd { font-family: var(--mono); background: var(--panel2); border:1px solid var(--line); border-radius:4px; padding:0 5px; font-size:11px; color:var(--mut); }
+
+  /* ---------- 日志 ---------- */
+  .log-list { font-family: var(--mono); font-size: 11px; margin-top: 8px; max-height: 200px; overflow-y:auto; background:#0b1120; border:1px solid var(--line); border-radius:8px; padding:6px 8px; }
+  .log-entry { padding:3px 2px; border-bottom:1px dashed #1f2937; white-space:pre-wrap; word-break:break-all; color:var(--txt); }
+  .log-entry:last-child { border-bottom:0; }
+  .log-entry .t { color:#64748b; margin-right:6px; }
+  .log-entry .lvl { display:inline-block; min-width:32px; margin-right:6px; font-weight:700; }
+  .log-entry .lvl.info { color: var(--acc); } .log-entry .lvl.ok { color: var(--ok); }
+  .log-entry .lvl.warn { color: var(--warn); } .log-entry .lvl.err { color: var(--err); }
+  .log-entry .title { color: #cbd5e1; font-weight: 600; margin-right: 6px; }
+  .log-entry.server { border-left: 2px solid var(--acc); padding-left: 6px; background: #0e1526; }
+  .log-entry.server .lkv { margin: 2px 0 0 2px; }
+  .log-entry.server .key { color: #c084fc; font-weight: 600; }
+  .log-entry.server .srv-reply { color: #a5f3fc; background:#0b1522; border:1px solid var(--line); border-radius:4px; padding:2px 6px; display:block; margin-top:2px; max-height:180px; overflow:auto; white-space:pre-wrap; font-size:10.5px; }
+
   .empty-canvas { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#64748b; font-size:14px; text-align:center; user-select:none; }
   .canvas-tools { position:absolute; top:10px; right:10px; z-index:4; display:flex; gap:6px; }
   .canvas-tools .btn { background: rgba(30,41,59,.85); backdrop-filter: blur(4px); font-size:12px; padding:6px 10px; }
   #ggb-element { position:absolute; inset:0; }
   #ggb-element canvas { cursor: crosshair; }
-  ul { margin: 0; padding-left: 18px; }
-  hr.sep { border:0; border-top:1px solid var(--line); margin: 14px 0; }
-  .kbd { font-family: var(--mono); background: var(--panel2); border:1px solid var(--line); border-radius:4px; padding:0 5px; font-size:11px; color:var(--mut); }
-  .ggbopt { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--txt); cursor:pointer; user-select:none; padding:4px 6px; border:1px solid var(--line); border-radius:6px; background:var(--panel2); }
-  .ggbopt:hover { border-color: var(--acc); }
-  .ggbopt input { accent-color: var(--acc); cursor:pointer; }
-  .log-list { font-family: var(--mono); font-size: 11.5px; margin-top:8px; max-height: 300px; overflow-y:auto; background:#0b1120; border:1px solid var(--line); border-radius:8px; padding:6px 8px; }
-  .log-entry { padding:3px 2px; border-bottom:1px dashed #1f2937; white-space:pre-wrap; word-break:break-all; color:var(--txt); }
-  .log-entry:last-child { border-bottom:0; }
-  .log-entry .t { color:#64748b; margin-right:6px; }
-  .log-entry .lvl { display:inline-block; min-width:32px; margin-right:6px; font-weight:700; }
-  .log-entry .lvl.info { color: var(--acc); }
-  .log-entry .lvl.ok { color: var(--ok); }
-  .log-entry .lvl.warn { color: var(--warn); }
-  .log-entry .lvl.err { color: var(--err); }
-  .log-entry .key { color: #c084fc; }
+  hr.sep { border:0; border-top:1px solid var(--line); margin: 12px 0; }
 </style>
 </head>
 <body>
 <header>
-  <div>
-    <div class="tag">题目（文字/图片）→ GeoGebra 动态几何指令，经 ggcm 校验门自动修复</div>
-  </div>
+  <div class="logo">🧮 GeoGebra · <b>AI</b> 教学构造</div>
   <div class="right">
     <span class="pill" id="badgeStatus">服务未连接</span>
     <span class="pill on">ggcm 校验</span>
+    <button class="btn" id="btnNewChat" title="清空本次对话与画布">新会话</button>
   </div>
 </header>
 
 <div class="layout">
-  <!-- 左栏：输入 + 对话 + 结果 -->
+  <!-- 左栏：聊天对话 -->
   <div class="left">
-    <div class="section" id="cfgSection">
-      <h3 style="cursor:pointer" id="cfgToggle">⓪ 服务配置 <span id="cfgArrow" style="color:var(--acc)">▾</span></h3>
-      <div id="cfgBody">
-        <label style="font-size:12px;color:var(--mut);display:block;margin-bottom:4px">API 接入地址（epoint /v1 结尾）</label>
-        <input id="cfgEndpoint" type="text" spellcheck="false" placeholder="https://.../v1" style="width:100%;background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px;outline:none;font-family:var(--mono)">
-        <label style="font-size:12px;color:var(--mut);display:block;margin:10px 0 4px">模型名</label>
-        <input id="cfgModel" type="text" spellcheck="false" placeholder="Lanz-Medium" style="width:100%;background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px;outline:none">
-        <label style="font-size:12px;color:var(--mut);display:block;margin:10px 0 4px">API Key <span style="color:#f87171">（仅存本浏览器 localStorage，请求时随调用发送）</span></label>
-        <div class="row" style="margin-top:4px">
-          <input id="cfgApiKey" type="password" autocomplete="off" spellcheck="false" placeholder="填了则本次请求用它；留空用服务端环境变量" style="flex:1;background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px;outline:none">
-          <button class="btn" id="btnShowKey" title="显示/隐藏">👁</button>
-          <button class="btn" id="btnClearKey" title="清除已保存的 key">清除</button>
+    <div class="chat">
+      <div class="chat-list" id="chatList"></div>
+      <div class="chat-input">
+        <textarea id="input" rows="2" placeholder="输入几何/数学题目，例如：&#10;已知 A(0,0)、B(4,0)、C(2,3)，作三角形 ABC 及其外接圆。&#10;&#10;也可以配图，或用文字对上一版结果继续追加修改。"></textarea>
+        <div class="attach-preview" id="attachPrev"><img id="attachImg"><button class="x" id="attachClear" title="移除图片">✕</button></div>
+        <div class="send-row">
+          <label class="btn" title="配图（多模态）">🖼 配图<input type="file" id="imgfile" accept="image/*" hidden></label>
+          <div class="spacer" style="flex:1"></div>
+          <span class="hint" id="turnHint" style="margin-top:0">新消息将作为追加修改，基于上一版结果继续调整</span>
+          <button class="btn primary" id="btnSend">发送 <span style="font-size:10px;opacity:.8">↵</span></button>
+          <span class="spinner" id="spinner"></span>
         </div>
-        <div class="hint" id="keyStatus"></div>
-        <label style="font-size:12px;color:var(--mut);display:block;margin:10px 0 4px">GeoGebra 引擎地址（deployggb.js 完整路径，可选）</label>
-        <input id="cfgGGBDeploy" type="text" spellcheck="false" placeholder="/deployggb.js（本服务内嵌）或 https://你的镜像/deployggb.js" style="width:100%;background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:12px;outline:none;font-family:var(--mono)">
-        <label style="font-size:12px;color:var(--mut);display:block;margin:10px 0 4px">GeoGebra 运行库目录（HTML5 codebase，可选；指向含 webSimple/web3d 的目录）</label>
-        <input id="cfgGGBCodebase" type="text" spellcheck="false" placeholder="留空则默认 geogebra.org；离线可填本地镜像如 http://127.0.0.1:8080/static/" style="width:100%;background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:12px;outline:none;font-family:var(--mono)">
-        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line)">
-          <div style="font-size:12px;color:var(--mut);font-weight:600;margin-bottom:8px">GeoGebra 显示</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 12px">
-            <label class="ggbopt"><input type="checkbox" id="optToolbar" checked> 工具栏</label>
-            <label class="ggbopt"><input type="checkbox" id="optAlgebra" checked> 代数区</label>
-            <label class="ggbopt"><input type="checkbox" id="optMenu" checked> 菜单栏</label>
-            <label class="ggbopt"><input type="checkbox" id="optGrid" checked> 网格</label>
-            <label class="ggbopt"><input type="checkbox" id="optAxes" checked> 坐标轴</label>
+        <div class="hint">每次生成都会经过 ggcm 校验，不合格自动修复；展开消息下方的“执行过程”可查看每次调用与重试。</div>
+      </div>
+    </div>
+
+    <!-- 配置 / GeoGebra 显示 抽屉 -->
+    <div class="drawer" id="cfgDrawer">
+      <button class="drawer-toggle" id="cfgToggle">⚙ 服务配置与画布显示 <span id="cfgArrow" style="color:var(--acc)">▸</span></button>
+      <div class="drawer-body" id="cfgBody">
+        <div class="cfg-grid">
+          <div class="field">
+            <label>API 接入地址（epoint /v1 结尾）</label>
+            <input id="cfgEndpoint" type="text" spellcheck="false" placeholder="https://.../v1">
           </div>
-          <div class="hint" style="margin-top:6px">网格/坐标轴即时生效；工具栏/代数区需点击“应用到画布”重建生效。</div>
+          <div class="field">
+            <label>模型名</label>
+            <input id="cfgModel" type="text" spellcheck="false" placeholder="sensenova-6.8-flash-lite">
+          </div>
+          <div class="field">
+            <label>API Key <span style="color:#f87171">（仅存本浏览器 localStorage，请求时随调用发送）</span></label>
+            <div class="row">
+              <input id="cfgApiKey" type="password" autocomplete="off" spellcheck="false" placeholder="填了则本次请求用它；留空用服务端环境变量" style="flex:1">
+              <button class="btn" id="btnShowKey" title="显示/隐藏">👁</button>
+              <button class="btn" id="btnClearKey" title="清除已保存的 key">清除</button>
+            </div>
+            <div class="hint" id="keyStatus" style="margin-top:4px"></div>
+          </div>
+          <div class="field">
+            <label>GeoGebra 引擎地址（deployggb.js 完整路径，可选）</label>
+            <input id="cfgGGBDeploy" type="text" spellcheck="false" placeholder="/deployggb.js（本服务内嵌）或镜像地址">
+          </div>
+          <div class="field">
+            <label>GeoGebra 运行库目录（HTML5 codebase，可选）</label>
+            <input id="cfgGGBCodebase" type="text" spellcheck="false" placeholder="留空默认 geogebra.org；离线可填本地镜像">
+          </div>
         </div>
-        <div class="row">
+        <hr class="sep">
+        <div style="font-size:12px;color:var(--mut);font-weight:600;margin-bottom:8px">GeoGebra 模式与显示</div>
+        <div class="row" style="gap:8px;margin-bottom:10px">
+          <label class="ggbopt"><input type="radio" name="ggmode" id="modeClassic" checked> 经典</label>
+          <label class="ggbopt"><input type="radio" name="ggmode" id="modeGeometry"> 几何</label>
+          <label class="ggbopt"><input type="radio" name="ggmode" id="mode3D"> 3D</label>
+        </div>
+        <div class="row" style="gap:8px 12px">
+          <label class="ggbopt"><input type="checkbox" id="optToolbar" checked> 工具栏</label>
+          <label class="ggbopt"><input type="checkbox" id="optAlgebra" checked> 代数区</label>
+          <label class="ggbopt"><input type="checkbox" id="optMenu" checked> 菜单栏</label>
+          <label class="ggbopt"><input type="checkbox" id="optGrid" checked> 网格</label>
+          <label class="ggbopt"><input type="checkbox" id="optAxes" checked> 坐标轴</label>
+        </div>
+        <div class="hint">网格/坐标轴勾选即时生效；切换模式或改工具栏/代数区/菜单栏后点“应用到画布”重建生效。</div>
+        <div class="row" style="margin-top:8px">
           <button class="btn" id="btnApplyCfg">应用</button>
           <button class="btn" id="btnResetCfg">重置为服务端默认</button>
           <button class="btn" id="btnRetryGGB" title="用上方自定义引擎地址重新初始化 GeoGebra">重试引擎</button>
           <button class="btn" id="btnApplyGGBDisplay" title="把上面的 GeoGebra 显示开关应用到右侧画布">应用到画布</button>
         </div>
-        <div class="hint">endpoint/model 留空则用服务端环境变量（<span class="kbd">GGCM_AI_ENDPOINT / GGCM_AI_MODEL</span>）。API Key 仅存本浏览器 localStorage 并在请求时随调用发送；服务端不保存、不写日志。请只在本机/可信环境使用。</div>
-        <div class="hint" id="cfgReadOnly" style="display:none">已载入服务端默认：<span class="kbd" id="cfgReadEndpoint"></span> · <span class="kbd" id="cfgReadModel"></span></div>
+        <div class="hint">endpoint/model 留空先用服务端环境变量（<span class="kbd">GGCM_AI_ENDPOINT / GGCM_AI_MODEL</span>）。API Key 仅存本浏览器 localStorage，服务端不保存、不写日志。</div>
       </div>
     </div>
 
-    <div class="section">
-      <h3>① 题目</h3>
-      <textarea id="problem" rows="4" placeholder="输入几何/数学题目，例如：&#10;已知 A(0,0)、B(4,0)、C(2,3)，作三角形 ABC 及其外接圆。&#10;&#10;也可从图片读取题干。"></textarea>
-      <div class="row">
-        <label class="btn">配图<input type="file" id="imgfile" accept="image/*" hidden></label>
-        <div class="spacer"></div>
-      </div>
-      <div id="imgwrap"><img id="imgprev"><button class="x" id="imgclear" title="移除图片">✕</button></div>
-      <div class="row">
-        <button class="btn primary" id="btnGen">生成指令</button>
-        <span class="spinner" id="spinner"></span>
-      </div>
-      <div class="hint">生成会通过 ggcm 校验，不合格自动重试修复。图片输入需服务端开启多模态。</div>
-    </div>
-
-    <div class="section">
-      <h3>② 追加修改（可基于上一版继续调整）</h3>
-      <textarea id="append" rows="2" placeholder="例如：把外接圆改成内切圆；隐藏坐标点标签；增加 AB 中点 M。"></textarea>
-      <div class="row">
-        <button class="btn" id="btnAppend">追加修改</button>
-        <span class="spinner" id="spinner2"></span>
-      </div>
-      <div class="hint" id="sessHint" style="display:none">会话 <span class="kbd" id="sessId"></span></div>
-    </div>
-
-    <div class="section">
-      <h3>③ 指令脚本与教学说明</h3>
-      <div class="script" id="scriptOut"><span style="color:#475569">暂无脚本，请先生成。</span><button class="script copy" id="btnCopy">复制</button></div>
-      <div class="meta">
-        <span>状态 <b id="mStatus">—</b></span>
-        <span>尝试 <b id="mAttempts">—</b></span>
-        <span>对象 <b id="mExec">—</b></span>
-      </div>
-      <div class="banner" id="bannerOk"><b>✓ 通过 ggcm 校验，可建立。</b> 已载入右侧 GeoGebra 画布。</div>
-      <div class="banner err" id="bannerErr"></div>
-      <div class="note" id="noteOut"></div>
-      <div class="diag" id="diagOut"></div>
-      <hr class="sep">
-      <div class="hint">提示：若画布为空，请确认 GeoGebra 从 <span class="kbd">geogebra.org</span> 加载成功（需联网）；命令通过 <span class="kbd">evalCommand</span> 逐条执行。</div>
-    </div>
-
-    <div class="section" id="logSection">
-      <h3 style="cursor:pointer" id="logToggle">📜 调用日志 <span id="logArrow" style="color:var(--acc)">▾</span></h3>
-      <div id="logBody">
-        <div class="row" style="margin-top:0">
+    <!-- 日志抽屉 -->
+    <div class="drawer" id="logDrawer">
+      <button class="drawer-toggle" id="logToggle">📜 调用日志 <span id="logArrow" style="color:var(--acc)">▸</span></button>
+      <div class="drawer-body" id="logBody">
+        <div class="row">
           <button class="btn" id="btnLogClear">清空</button>
           <button class="btn" id="btnLogCopy">复制</button>
-          <div class="spacer"></div>
+          <div class="spacer" style="flex:1"></div>
           <span class="hint" id="logCount" style="margin-top:0">0 条</span>
         </div>
-        <div id="logList" class="log-list"><div class="hint" style="margin-top:0;color:var(--mut)">尚无日志。执行“生成/追加修改”或画布操作后，这里会显示请求、响应、报错与耗时。</div></div>
+        <div id="logList" class="log-list"><div class="hint" style="margin-top:0;color:var(--mut)">尚无日志。</div></div>
       </div>
     </div>
   </div>
 
   <!-- 右栏：GeoGebra 画布 -->
   <div class="right">
-    <div class="empty-canvas" id="emptyCanvas">生成后，指令会在这里渲染出 GeoGebra 图形<br><br>（等待 GeoGebra 引擎加载…）</div>
+    <div class="empty-canvas" id="emptyCanvas">在左侧输入题目生成后，指令会在这里渲染出 GeoGebra 图形<br><br>（等待 GeoGebra 引擎加载…）</div>
     <div class="canvas-tools">
       <button class="btn" id="btnReset" title="重置并重新载入当前脚本">↺ 重载</button>
       <button class="btn" id="btnClear" title="清空构造">清空</button>
@@ -215,9 +273,6 @@
 
 <!-- GeoGebra 引擎：动态多源加载，失败自动换源；支持用户自定义本地/镜像地址 -->
 <script>
-  // 本地同源 deployggb.js 优先（随 ai-server 内嵌，稳定可靠），再回退到各 CDN。
-  // 运行时引擎 bundle（webSimple.nocache.js + .cache.js）默认仍取自 geogebra.org；
-  // 若确需完全离线，可在“服务配置”填 GeoGebra 基础目录（HTML5 codebase）。
   window.__GGB_CUSTOM = "";
   window.__GGB_CANDIDATES = [
     "/deployggb.js",
@@ -226,7 +281,7 @@
   ];
   window.__GGB_IDX = 0;
   window.__GGB_FAILED = [];
-  window.__GGB_CODEBASE = ""; // 可选：覆盖引擎运行时代码库目录
+  window.__GGB_CODEBASE = "";
   window.__GGB_BOOT = function () {
     if (!window.__GGB_CANDIDATES.length) { window.__ggcmGGBError && window.__ggcmGGBError("未配置 GeoGebra 引擎地址"); return; }
     if (window.__GGB_IDX >= window.__GGB_CANDIDATES.length) { window.__ggcmGGBAttemptsExhausted && window.__ggcmGGBAttemptsExhausted(); return; }
@@ -244,7 +299,7 @@
 "use strict";
 (function () {
   // ---------- 状态 ----------
-  var state = { sessionId: "", lastScript: "", lastOk: false };
+  var state = { sessionId: "", lastScript: "", lastOk: false, mode: "classic" };
   var appletReady = false;
   var ggb = null; // GeoGebra applet API
 
@@ -255,14 +310,14 @@
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
   }
-
-  // ---------- 前端调用日志 ----------
-  var logCount = 0;
   function ts() {
     var d = new Date();
     var p = function (n) { return (n < 10 ? "0" : "") + n; };
     return p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds());
   }
+
+  // ---------- 前端调用日志 ----------
+  var logCount = 0;
   function logEntry(level, text) {
     logCount++;
     var lvl = (level === "ok" ? "ok" : level === "warn" ? "warn" : level === "err" ? "err" : "info");
@@ -270,8 +325,8 @@
     el.className = "log-entry";
     el.innerHTML = '<span class="t">' + ts() + '</span><span class="lvl ' + lvl + '">' + lvl + '</span>' + escapeHtml(text);
     var list = $("logList");
-    var placeholder = list.querySelector(".log-list > .hint, .log-list .hint");
-    if (list.querySelector(".hint")) list.innerHTML = "";
+    var found = list.querySelector(".hint");
+    if (found) list.innerHTML = "";
     list.appendChild(el);
     var c = $("logCount"); if (c) c.textContent = logCount + " 条";
     list.scrollTop = list.scrollHeight;
@@ -301,12 +356,93 @@
     }
     if (res.teaching_note) logEntry("info", "[教学说明] " + res.teaching_note);
   }
-  function logErr(msg) { logEntry("err", "[报错] " + msg); }
+
+  // 渲染来自服务端（/api/logs SSE）的结构化日志：每次 LLM 调用的具体参数与返回内容。
+  function renderServerLog(rec) {
+    var evt = rec.event || "?";
+    var t = rec.time ? new Date(rec.time) : null;
+    var stamp = t ? t.getHours() + ":" + t.getMinutes() + ":" + t.getSeconds() : "";
+    var lines = [];
+    function kv(k, v, raw) {
+      if (v === undefined || v === null || v === "") return;
+      lines.push("<div class='lkv'><span class='key'>" + escapeHtml(String(k)) + "</span>: " +
+        escapeHtml(raw || JSON.stringify(v)) + "</div>");
+    }
+    var title = "";
+    var lvl = "info";
+    if (evt === "llm.request") {
+      lvl = "info"; title = "LLM 调用 请求";
+      kv("model", rec.model); kv("endpoint", rec.endpoint, rec.endpoint);
+      kv("temperature", rec.temperature); kv("max_tokens", rec.max_tokens);
+      kv("message_count", rec.message_count);
+      if (rec.messages && rec.messages.length) {
+        lines.push("<div class='lkv'><span class='key'>messages</span>: " + rec.messages.map(function (m) {
+          var d = "[" + m.role + " " + m.chars + "字";
+          if (m.images) d += ",图" + m.images;
+          return d + "]";
+        }).join(" ") + "</div>");
+      }
+    } else if (evt === "llm.response") {
+      lvl = "ok"; title = "LLM 调用 返回";
+      kv("chars", rec.chars); kv("latency_ms", rec.latency_ms);
+      // 完整返回内容
+      if (rec.content) lines.push("<div class='lkv'><span class='key'>content</span>: <span class='srv-reply'>" + escapeHtml(String(rec.content)) + "</span></div>");
+      else if (rec.preview) lines.push("<div class='lkv'><span class='key'>preview</span>: " + escapeHtml(String(rec.preview)) + "</div>");
+    } else if (evt === "llm.retry") {
+      lvl = "warn"; title = "LLM 指数退避重试";
+      kv("attempt", rec.attempt); kv("delay_ms", rec.delay_ms); kv("error", rec.error);
+    } else if (evt === "generate.attempt.start") {
+      lvl = "info"; title = "生成 第 " + (rec.attempt || "?") + " 次";
+      kv("retry", rec.retry);
+    } else if (evt === "generate.attempt.error") {
+      lvl = "err"; title = "生成 第 " + (rec.attempt || "?") + " 次 失败";
+      kv("error", rec.error);
+    } else if (evt === "generate.attempt.done") {
+      lvl = rec.gate_ok ? "ok" : "warn"; title = "生成 第 " + (rec.attempt || "?") + " 次 校验";
+      kv("gate_ok", rec.gate_ok);
+      if (rec.executables) kv("executables", rec.executables);
+      if (rec.diagnostics && rec.diagnostics.length) kv("diagnostics", rec.diagnostics);
+      if (rec.script) lines.push("<div class='lkv'><span class='key'>script</span>: <span class='srv-reply'>" + escapeHtml(String(rec.script)) + "</span></div>");
+    } else if (evt === "http.request") {
+      lvl = "info"; title = "HTTP 请求";
+      kv("input_type", rec.input_type); kv("session_id", rec.session_id, rec.session_id);
+      kv("append", rec.append); kv("text_chars", rec.text_chars); kv("image_b64", rec.image_b64);
+    } else if (evt === "http.result") {
+      lvl = rec.ok ? "ok" : "warn"; title = "HTTP 响应";
+      kv("ok", rec.ok); kv("attempts", rec.attempts); kv("executable", rec.executable);
+    } else {
+      title = evt;
+      for (var k in rec) { if (k === "event" || k === "time") continue; kv(k, rec[k]); }
+    }
+    var el = document.createElement("div");
+    el.className = "log-entry server";
+    el.innerHTML = '<span class="t">' + stamp + '</span><span class="lvl ' + lvl + '">' + evt + '</span>'
+      + '<span class="title">' + escapeHtml(title) + '</span>' + lines.join("");
+    var list = $("logList");
+    var found = list.querySelector(".hint");
+    if (found) list.innerHTML = "";
+    list.appendChild(el);
+    list.scrollTop = list.scrollHeight;
+  }
+
+  // 订阅服务端结构化日志（llm.request/response/retry、generate.*、http.*），
+  // 使浏览器日志面板能看到每次调用大模型的参数与返回内容。
+  function initLogStream() {
+    if (typeof EventSource !== "function") return;
+    var es = new EventSource("/api/logs");
+    es.onopen = function () { logEntry("info", "[日志流] 已连接 /api/logs"); };
+    es.addEventListener("log", function (e) {
+      try { renderServerLog(JSON.parse(e.data)); }
+      catch (err) { logEntry("err", "[日志流] 解析失败: " + err); }
+    });
+    es.onerror = function () {
+      // EventSource 自动重连；不制造噪音，仅在状态变更时提示一次
+    };
+  }
 
   // ---------- GeoGebra 初始化 ----------
   window.__onGGBLoaded = function () {
     if (typeof window.GGBApplet === "undefined") {
-      // 该源加载了但全局未就绪，改试下一个源
       if (window.__GGB_BOOT) window.__GGB_BOOT();
       return;
     }
@@ -323,23 +459,21 @@
     var optMenu = $("optMenu") ? $("optMenu").checked : true;
 
     var params = {
-      appName: "classic",           // 经典模式：完整工具栏 + 代数区 + 菜单栏
+      appName: state.mode,
       id: "ggb-applet-" + Date.now(),
       width: w, height: h,
-      showToolBar: optToolbar,      // 工具栏（创建期生效）
-      showAlgebraInput: optAlgebra, // 代数区（创建期生效）
-      showMenuBar: optMenu,         // 菜单栏
+      showToolBar: optToolbar,
+      showAlgebraInput: optAlgebra,
+      showMenuBar: optMenu,
       showResetIcon: false, enableRightClick: false,
       enableShiftDragZoom: true, showZoomButtons: true, language: "zh",
       useBrowserForJS: false,
       scaleContainerClass: "ggb-element",
       borderColor: "#e2e8f0",
       showLogging: false,
-      // 关键：用 appletOnLoad 回调获取 applet API（deployggb 可靠入口），而非依赖 window.ggbApplet
       appletOnLoad: function (api) { engineReady(api); }
     };
 
-    // 可选：覆盖引擎运行时代码库（HTML5 codebase），支持本地镜像/离线
     var cb = window.__GGB_CODEBASE || "";
     if (cb) params.codebase = cb;
 
@@ -351,7 +485,6 @@
     try { app.inject("ggb-element"); }
     catch (e) { engineFailed("注入 GeoGebra Applet 失败：" + e); return; }
 
-    // 兜底：若干秒后仍未通过 appletOnLoad 就绪，则转轮询 window.ggbApplet / getAppletObject
     setTimeout(function () {
       if (!appletReady) poolForAPI();
     }, 1500);
@@ -365,7 +498,6 @@
     setBadge("GeoGebra 就绪", true);
     logEntry("ok", "GeoGebra 引擎就绪（appletOnLoad）");
     try { ggb.setCoordSystem && ggb.setCoordSystem(-6, 8, -4, 4); } catch (e) {}
-    // 立即把画布调整到与右栏一样大，并监听后续尺寸变化
     resizeApplet();
     setupResizeObserver();
     $("emptyCanvas").style.display = "flex";
@@ -374,7 +506,6 @@
     if (state.lastScript) loadScript(state.lastScript);
   }
 
-  // 运行期即时应用的显示项：网格 / 坐标轴（不需重建）。
   function applyGGBRuntimeDisplay() {
     if (!appletReady || !ggb) return;
     var optGrid = $("optGrid") ? $("optGrid").checked : true;
@@ -384,7 +515,6 @@
     try { if (ggb.setAxesVisible) ggb.setAxesVisible(!!optAxes); } catch (e) {}
   }
 
-  // 让 GeoGebra 画布精确等于容器（右栏）的当前尺寸。
   function resizeApplet() {
     if (!appletReady || !ggb) return;
     var container = $("ggb-element");
@@ -396,14 +526,11 @@
     try { if (ggb.setSize) ggb.setSize(w, h); } catch (e) {}
     try { if (ggb.setWidth) ggb.setWidth(w); } catch (e) {}
     try { if (ggb.setHeight) ggb.setHeight(h); } catch (e) {}
-    // DOM 兜底：直接改注入的 iframe 尺寸（与已验证示例一致）
     var iframes = container.querySelectorAll("iframe");
     for (var i = 0; i < iframes.length; i++) {
       var el = iframes[i];
-      el.style.width = w + "px";
-      el.style.height = h + "px";
-      el.style.minWidth = w + "px";
-      el.style.minHeight = h + "px";
+      el.style.width = w + "px"; el.style.height = h + "px";
+      el.style.minWidth = w + "px"; el.style.minHeight = h + "px";
     }
   }
 
@@ -436,51 +563,33 @@
   function engineFailed(msg) {
     appletReady = false;
     setBadge("GeoGebra 引擎失败", false);
-    logErr("GeoGebra 引擎失败：" + msg);
+    logEntry("err", "GeoGebra 引擎失败：" + msg);
     $("emptyCanvas").style.display = "flex";
-    var custom = $("cfgGGBDeploy") && $("cfgGGBDeploy").value
-      ? escapeHtml($("cfgGGBDeploy").value)
-      : "（未填，将使用默认在线地址）";
+    var custom = $("cfgGGBDeploy") && $("cfgGGBDeploy").value ? escapeHtml($("cfgGGBDeploy").value) : "（未填，将使用默认在线地址）";
     $("emptyCanvas").innerHTML =
-      "<b>GeoGebra 渲染引擎加载失败</b><br>" +
-      (msg ? escapeHtml(String(msg)) : "默认来源均不可达。") +
+      "<b>GeoGebra 渲染引擎加载失败</b><br>" + (msg ? escapeHtml(String(msg)) : "默认来源均不可达。") +
       "<br><br>可能原因：当前网络无法访问 <span style='font-family:monospace'>geogebra.org</span>（国内网络常见）。" +
-      "<br>解决：在左侧“服务配置”填入可用的 <span style='font-family:monospace'>deployggb.js</span> 镜像地址与运行库目录，然后点“重试引擎”。" +
+      "<br>解决：在左侧“服务配置与画布显示”填入可用的 <span style='font-family:monospace'>deployggb.js</span> 镜像地址与运行库目录，然后点“重试引擎”。" +
       "<br>当前地址：<span style='font-family:monospace'>" + custom + "</span>";
   }
 
-  window.__ggcmGGBStatus = function (msg) {
-    setBadge(String(msg), false);
-  };
-  window.__ggcmGGBError = function (msg) {
-    engineFailed(msg);
-  };
-  window.__ggcmGGBAttemptsExhausted = function () {
-    engineFailed("GeoGebra 引擎所有来源均加载失败。");
-  };
+  window.__ggcmGGBStatus = function (msg) { setBadge(String(msg), false); };
+  window.__ggcmGGBError = function (msg) { engineFailed(msg); };
+  window.__ggcmGGBAttemptsExhausted = function () { engineFailed("GeoGebra 引擎所有来源均加载失败。"); };
+
   window.__ggcmRetry = function () {
     appletReady = false;
-    // 读取自定义引擎地址与运行时代码库
     var c = ($("cfgGGBDeploy") && $("cfgGGBDeploy").value || "").trim();
     var cbp = ($("cfgGGBCodebase") && $("cfgGGBCodebase").value || "").trim();
     window.__GGB_CODEBASE = cbp;
-    if (c) {
-      // 自定义地址优先，替换候选列表
-      window.__GGB_CANDIDATES = [c];
-    } else {
-      window.__GGB_CANDIDATES = [
-        "/deployggb.js",
-        "https://www.geogebra.org/apps/deployggb.js",
-        "https://www.geogebra.net/apps/deployggb.js"
-      ];
-    }
+    if (c) { window.__GGB_CANDIDATES = [c]; }
+    else { window.__GGB_CANDIDATES = ["/deployggb.js", "https://www.geogebra.org/apps/deployggb.js", "https://www.geogebra.net/apps/deployggb.js"]; }
     window.__GGB_IDX = 0;
     window.__GGB_FAILED = [];
     window.__onGGBLoaded = function () {
       if (typeof window.GGBApplet === "undefined") { if (window.__GGB_BOOT) window.__GGB_BOOT(); return; }
       createApplet();
     };
-    // 移除旧 applet DOM
     var el = $("ggb-element");
     el.innerHTML = "";
     window.__GGB_BOOT();
@@ -488,7 +597,6 @@
 
   function initGeoGebra() {
     if (typeof window.GGBApplet !== "undefined") { createApplet(); return; }
-    // 尚未加载脚本：用兜底加载器
     if (typeof window.__GGB_BOOT === "function") {
       var pre = function () { if (typeof window.GGBApplet === "undefined") setBadge("GeoGebra 引擎加载中…", false); };
       pre();
@@ -499,32 +607,25 @@
     }
   }
 
-  // ---------- 载入脚本 ----------
   function loadScript(script) {
     $("emptyCanvas").style.display = "none";
     if (!appletReady || !ggb) {
-      state.lastScript = script; // 引擎稍后就绪时重放
+      state.lastScript = script;
       return;
     }
     state.lastScript = script;
-    // 重置构造原子化（避免逐条 reset 闪烁）
     try { ggb.newConstruction(); } catch (e) {}
     var lines = String(script || "").split("\n");
     var executed = 0, failed = 0;
     for (var i = 0; i < lines.length; i++) {
       var line = lines[i].trim();
       if (!line) continue;
-      // 跳过注释与空对象标记
       if (line.indexOf("#") === 0 || line.indexOf("//") === 0) continue;
-      try {
-        ggb.evalCommand(line);
-        executed++;
-      } catch (e) { failed++; }
+      try { ggb.evalCommand(line); executed++; }
+      catch (e) { failed++; }
     }
-    try { ggb.setAxisVisible && ggb.setAxisVisible(true); } catch (e) {}
-    if (executed === 0 && failed > 0) {
-      setBadge("命令执行可能失败", false);
-    }
+    applyGGBRuntimeDisplay();
+    if (executed === 0 && failed > 0) { setBadge("命令执行可能失败", false); }
     logEntry(executed > 0 ? "ok" : "warn", "[GeoGebra] 载入脚本：" + executed + " 条命令执行成功" + (failed > 0 ? "，" + failed + " 条失败" : ""));
   }
 
@@ -554,6 +655,7 @@
       cb(null, msg);
     });
   }
+  function logErr(msg) { logEntry("err", "[报错] " + msg); }
 
   function readFileAsB64(file, cb) {
     var fr = new FileReader();
@@ -564,37 +666,272 @@
     fr.readAsDataURL(file);
   }
 
-  // ---------- 渲染结果 ----------
-  function render(result) {
-    state.sessionId = result.session_id || state.sessionId;
-    if (state.sessionId) { $("sessHint").style.display = "block"; $("sessId").textContent = state.sessionId; }
+  // ---------- 聊天渲染 ----------
+  function scrollBottom() {
+    var l = $("chatList");
+    l.scrollTop = l.scrollHeight;
+  }
+  function addUserMsg(text, imgSrc, imgB64) {
+    var wrap = document.createElement("div");
+    wrap.className = "msg user";
+    wrap.innerHTML = '<div class="msg-role">我</div>';
+    var bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.textContent = text || (imgB64 ? "(图片提问)" : "…");
+    if (imgSrc) {
+      var img = document.createElement("img");
+      img.className = "img-prev";
+      img.src = imgSrc;
+      bubble.appendChild(img);
+    }
+    wrap.appendChild(bubble);
+    $("chatList").appendChild(wrap);
+    scrollBottom();
+    return wrap;
+  }
 
-    var r = result; // {session_id, ok, script, executable, teaching_note, diagnostics, attempts}
-    // 状态
-    $("mStatus").textContent = r.ok ? "OK" : "失败";
-    $("mAttempts").textContent = (r.attempts != null ? r.attempts : "?") + " 次尝试";
-    $("mExec").textContent = (r.executable && r.executable.length) ? r.executable.join(", ") : "—";
+  function addBotThinking() {
+    var wrap = document.createElement("div");
+    wrap.className = "msg bot";
+    wrap.innerHTML = '<div class="msg-role">GeoGebra AI</div>';
+    var bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.innerHTML = '<span class="computing">正在分析并生成指令…</span> <span class="typing"><i></i><i></i><i></i></span>';
+    wrap.appendChild(bubble);
+    $("chatList").appendChild(wrap);
+    scrollBottom();
+    return wrap;
+  }
 
-    // 脚本
-    var sc = r.script || "";
-    $("scriptOut").textContent = sc || "（无脚本）";
-    // banner
-    $("bannerOk").classList.remove("show");
-    $("bannerErr").classList.remove("show");
-    $("noteOut").textContent = "";
-    $("diagOut").innerHTML = "";
-    if (r.ok) {
-      $("bannerOk").classList.add("show");
-      if (sc) loadScript(sc);
+  function addBotResult(botEl, res) {
+    // 填充“处理中”为正式结果
+    var bubble = botEl.querySelector(".bubble");
+    bubble.innerHTML = "";
+    bubble.className = "bubble";
+
+    var statusLine = document.createElement("div");
+    statusLine.className = "computing";
+    statusLine.style.marginBottom = "8px";
+    if (res.ok) {
+      statusLine.innerHTML = "✅ 已通过 ggcm 校验，可建立。";
+      statusLine.style.color = "var(--ok)";
+    } else if (res.fallback) {
+      // 降级场景：模型未给出 <gg> 构造脚本，但返回了文字解答。
+      statusLine.innerHTML = "📄 模型未生成构造脚本，以下为文字解答。";
+      statusLine.style.color = "var(--acc)";
     } else {
-      $("bannerErr").classList.add("show");
-      $("bannerErr").textContent = "✗ 未通过 ggcm 校验或生成失败。" + (r.diagnostics && r.diagnostics.length ? "" : "");
-      if (r.diagnostics && r.diagnostics.length) {
-        var ul = "<ul>"; r.diagnostics.forEach(function (d) { ul += "<li>" + escapeHtml(d) + "</li>"; }); ul += "</ul>";
-        $("diagOut").innerHTML = ul;
+      statusLine.innerHTML = "✗ 未通过 ggcm 校验或生成失败。";
+      statusLine.style.color = "var(--err)";
+    }
+    bubble.appendChild(statusLine);
+
+    // 结果卡片：脚本 + 教学说明 + 诊断
+    var card = document.createElement("div");
+    card.className = "result";
+    var head = document.createElement("div");
+    head.className = "result-head";
+    head.innerHTML = '<span class="s ' + (res.ok ? "ok" : "fail") + '">' + (res.ok ? "✓ 通过" : "✗ 失败") + '</span>' +
+      '<span>尝试 <b>' + (res.attempts != null ? res.attempts : "?") + '</b> 次</span>' +
+      '<span class="meta-s">对象 ' + (res.executable && res.executable.length ? res.executable.length + " 个" : "—") + '</span>';
+    card.appendChild(head);
+
+    // 降级文字解答优先展示为正文，而非“无脚本”占位。
+    var sc = res.script || "";
+    if (res.fallback) {
+      var fb = document.createElement("div");
+      fb.className = "script fallback";
+      fb.textContent = res.fallback;
+      card.appendChild(fb);
+    } else {
+      var scr = document.createElement("div");
+      scr.className = "script";
+      scr.textContent = sc || "（无脚本）";
+      card.appendChild(scr);
+    }
+
+    if (res.teaching_note) {
+      var nt = document.createElement("div");
+      nt.className = "note";
+      nt.textContent = "💡 " + res.teaching_note;
+      card.appendChild(nt);
+    }
+    if (!res.ok && res.diagnostics && res.diagnostics.length) {
+      var dg = document.createElement("div");
+      dg.className = "diag";
+      dg.innerHTML = "诊断：<ul>" + res.diagnostics.map(function (d) { return "<li>" + escapeHtml(d) + "</li>"; }).join("") + "</ul>";
+      card.appendChild(dg);
+    }
+    bubble.appendChild(card);
+
+    // 执行过程（trace）
+    if (res.trace && res.trace.length) {
+      bubble.appendChild(buildTrace(res.trace));
+    }
+
+    // 若通过，载入画布
+    if (res.ok && sc) loadScript(sc);
+    scrollBottom();
+  }
+
+  // 把 trace 步骤渲染成“执行过程”折叠块：按 attempt 分组
+  function buildTrace(trace) {
+    var box = document.createElement("div");
+    box.className = "trace";
+
+    var toggle = document.createElement("button");
+    toggle.className = "trace-toggle";
+    toggle.innerHTML = '<span class="arrow">▸</span> 执行过程（' + trace.length + ' 步：LLM 调用 / 重试 / 校验修复）';
+    box.appendChild(toggle);
+
+    var body = document.createElement("div");
+    body.className = "trace-body";
+    box.appendChild(body);
+
+    toggle.addEventListener("click", function () {
+      var open = box.classList.toggle("open");
+      toggle.querySelector(".arrow").textContent = open ? "▾" : "▸";
+    });
+
+    // 按尝试次数分组显示
+    var attempts = {}; // attempt -> {llm:[], retry:[], gate:[], error:[]}
+    trace.forEach(function (s) {
+      var a = attempts[s.attempt] || (attempts[s.attempt] = { llm: [], retry: [], gate: [], error: [] });
+      (a[s.stage] || (a[s.stage] = [])).push(s);
+    });
+    var nums = Object.keys(attempts).map(Number).sort(function (a, b) { return a - b; });
+
+    nums.forEach(function (n) {
+      var grp = attempts[n];
+      // 该尝试结果：出错 > 未通过gate > 通过
+      var outcome = "";
+      if (grp.gate && grp.gate.some(function (g) { return g.gate_ok; })) outcome = "✓ 通过校验";
+      else if (grp.error && grp.error.length) outcome = "✗ 调用失败";
+      else if (grp.gate && grp.gate.length) outcome = "✗ 校验未通过（将修复）";
+      else outcome = "…";
+
+      var h = document.createElement("div");
+      h.className = "tstep";
+      h.innerHTML = '<span class="n">#' + n + '</span><div class="body"><span class="tag" style="color:var(--mut)">尝试 ' + n + '</span> <span class="sub">' + outcome + '</span></div>';
+      body.appendChild(h);
+
+      // LLM 调用
+      (grp.llm || []).forEach(function (s) {
+        var e = document.createElement("div");
+        e.className = "tstep llm";
+        var rep = s.reply ? '<div class="script-mini">' + escapeHtml(s.reply) + '</div>' : "";
+        e.innerHTML = '<span class="n">' + (s.attempt > 9 ? "" : "\u00a0") + '·</span><div class="body"><span class="tag">LLM 调用</span><span class="sub">返回脚本</span> <span class="sub">' + (s.latency_ms != null ? Math.max(0, Math.round(s.latency_ms / 100) / 10) + "s" : "耗时未知") + '</span>' + rep + '</div>';
+        body.appendChild(e);
+      });
+
+      // 重试
+      (grp.retry || []).forEach(function (s) {
+        var e = document.createElement("div");
+        e.className = "tstep retry";
+        e.innerHTML = '<span class="n">·</span><div class="body"><span class="tag">指数退避重试</span><span class="sub">第 ' + (s.retry || 1) + ' 次重试，等待 ' + (s.delay_ms || 0) + 'ms</span> <span class="err-txt">' + escapeHtml(s.error || "") + '</span></div>';
+        body.appendChild(e);
+      });
+
+      // 校验 / 修复 gate
+      (grp.gate || []).forEach(function (s) {
+        var ok = s.gate_ok;
+        var e = document.createElement("div");
+        e.className = "tstep gate" + (ok ? "" : " fail");
+        var dlg = (ok ? "" : ' <span class="dlg">' + (s.diagnostics && s.diagnostics.length ? "诊断 " + s.diagnostics.length + " 条 → 将自动修复" : "未收集到诊断") + '</span>');
+        var scrMini = ok && s.script ? '<div class="script-mini">' + escapeHtml(s.script) + '</div>' : "";
+        e.innerHTML = '<span class="n">' + (ok ? "✓" : "✗") + '</span><div class="body"><span class="tag">ggcm 校验</span><span class="sub">' + (ok ? "通过" : "失败") + '</span>' + dlg + scrMini + '</div>';
+        body.appendChild(e);
+      });
+
+      // 错误
+      (grp.error || []).forEach(function (s) {
+        var e = document.createElement("div");
+        e.className = "tstep error";
+        e.innerHTML = '<span class="n">✗</span><div class="body"><span class="tag">调用失败</span><span class="err-txt">' + escapeHtml(s.error || "") + '</span></div>';
+        body.appendChild(e);
+      });
+    });
+
+    return box;
+  }
+
+  // ---------- 生成 / 对话 ----------
+  var sending = false; // 防止请求进行中重复提交
+  function doSend() {
+    if (sending) return;
+    var text = $("input").value.trim();
+    var hasImg = !!imgB64;
+    if (!text && !hasImg) { setBadge("请先输入题目", false); $("input").focus(); return; }
+    sending = true;
+    setBusy(true);
+    setBadge("正在生成…", false);
+
+    // 用户气泡
+    addUserMsg(text, imgSrc, imgB64);
+    // AI 思考气泡
+    var botEl = addBotThinking();
+    $("input").value = "";
+    clearAttach();
+
+    var payload = { stream: false };
+    // 视图模式（classic/geometry/3d）：让后端按所选模式生成对应维度的构造。
+    payload.mode = state.mode;
+    // 多轮对话：已有会话则始终携带 session_id，使追加修改基于上一版脚本
+    if (state.sessionId) {
+      payload.session_id = state.sessionId;
+    }
+    if (hasImg) {
+      payload.input_type = "image";
+      payload.text = text;
+      payload.image_b64 = imgB64;
+      payload.image_mime = imgMime || "image/png";
+    } else {
+      payload.input_type = "text";
+      // 后续消息作为追加修改（基于上一版结果），保留输入类型以便后端构造消息
+      if (state.sessionId && state.lastOk) {
+        payload.append = text;
+      } else {
+        payload.text = text;
       }
     }
-    if (r.teaching_note) { $("noteOut").textContent = r.teaching_note; }
+    applyCfgToPayload(payload);
+
+    chat(payload, function (res, err) {
+      sending = false;
+      setBusy(false);
+      if (err) {
+        setBadge("请求失败", false);
+        var b = botEl.querySelector(".bubble");
+        b.innerHTML = '<span class="computing" style="color:var(--err)">请求失败：' + escapeHtml(err) + '</span>';
+        return;
+      }
+      render(res, botEl);
+    });
+  }
+
+  function render(res, botEl) {
+    state.sessionId = res.session_id || state.sessionId;
+    state.lastScript = res.script || "";
+    state.lastOk = !!res.ok;
+    addBotResult(botEl, res);
+    updateTurnHint();
+    if (res.ok) setBadge("已完成", true);
+    else if (res.fallback) setBadge("文字解答(无脚本)", true);
+    else setBadge("生成失败", false);
+  }
+
+  function setBusy(busy) {
+    $("btnSend").disabled = busy;
+    $("spinner").classList.toggle("show", busy);
+  }
+  function updateTurnHint() {
+    if (state.sessionId && state.lastOk) $("turnHint").style.visibility = "visible";
+    else $("turnHint").style.visibility = "hidden";
+  }
+  function clearAttach() {
+    imgB64 = ""; imgMime = ""; imgSrc = "";
+    $("attachPrev").style.display = "none";
+    $("attachImg").removeAttribute("src");
+    $("imgfile").value = "";
   }
 
   function setBadge(txt, ok) {
@@ -602,62 +939,10 @@
     b.textContent = txt;
     b.classList.toggle("on", !!ok);
   }
-  function setBusy(spin, busy, btn) {
-    $(spin).classList.toggle("show", busy);
-    if (btn) $(btn).disabled = busy;
-  }
 
-  // ---------- 生成 ----------
-  function doGenerate() {
-    var text = $("problem").value.trim();
-    var hasImg = $("imgprev").src && $("imgprev").src.indexOf("data:") === 0;
-    if (!text && !hasImg) { setBadge("请先输入题目", false); $("problem").focus(); return; }
-    setBusy("spinner", true, "btnGen");
-    setBusy("spinner2", true, "btnAppend");
-    setBadge("正在生成…", false);
-
-    var payload = { input_type: "text", text: text, stream: false };
-    applyCfgToPayload(payload);
-    if (hasImg) {
-      payload.input_type = "image";
-      payload.image_b64 = imgB64 || "";
-      payload.image_mime = imgMime || "image/png";
-    }
-    chat(payload, function (res, err) {
-      setBusy("spinner", false, "btnGen");
-      setBusy("spinner2", false, "btnAppend");
-      if (err) { setBadge("请求失败", false); showErr("请求失败：" + err); return; }
-      render(res);
-    });
-  }
-
-  // ---------- 追加 ----------
-  function doAppend() {
-    var ap = $("append").value.trim();
-    if (!ap) { setBadge("请填写追加指令", false); return; }
-    if (!state.sessionId) { setBadge("尚未生成过结果", false); return; }
-    setBusy("spinner2", true, "btnAppend");
-    setBusy("spinner", true, "btnGen");
-    setBadge("正在追加修改…", false);
-    var p = { session_id: state.sessionId, append: ap, stream: false };
-    applyCfgToPayload(p);
-    chat(p, function (res, err) {
-      setBusy("spinner2", false, "btnAppend");
-      setBusy("spinner", false, "btnGen");
-      if (err) { setBadge("请求失败", false); showErr("请求失败：" + err); return; }
-      render(res);
-      $("append").value = "";
-    });
-  }
-
-  function showErr(msg) {
-    $("bannerOk").classList.remove("show");
-    $("bannerErr").classList.add("show");
-    $("bannerErr").textContent = msg;
-  }
-
-  // ---------- 服务配置（endpoint/model/key） ----------
+  // ---------- 服务配置 ----------
   var savedKey = "";
+  var serverDefaults = { endpoint: "", model: "" };
   function saveKey(k) {
     savedKey = k;
     try { localStorage.setItem("ggcm_api_key", k); } catch (e) {}
@@ -680,27 +965,64 @@
     var mo = $("cfgModel").value.trim();
     if (ep) p.endpoint = ep;
     if (mo) p.model = mo;
-    // 始终带上当前输入框里的 key（若有）；否则回退到已保存 key。这样即使忘了点
-    // 「应用」，填好的 key 也会随请求发送，避免服务端按 401 拒绝。
     var k = $("cfgApiKey").value.trim() || savedKey;
     if (k) p.api_key = k;
   }
   function loadServerConfig() {
     fetch("/api/config").then(function (r) { return r.json(); }).then(function (c) {
       window.__ggcServerHasKey = !!c.has_api_key;
-      $("cfgReadOnly").style.display = "block";
-      $("cfgReadEndpoint").textContent = c.endpoint || "";
-      $("cfgReadModel").textContent = c.model || "";
-      if (!$("cfgEndpoint").value) $("cfgEndpoint").value = c.endpoint || "";
-      if (!$("cfgModel").value) $("cfgModel").value = c.model || "";
+      serverDefaults.endpoint = c.endpoint || "";
+      serverDefaults.model = c.model || "";
+      if (!$("cfgEndpoint").value) $("cfgEndpoint").value = serverDefaults.endpoint;
+      if (!$("cfgModel").value) $("cfgModel").value = serverDefaults.model;
       updateKeyStatus();
-    }).catch(function () {
-      $("cfgReadOnly").style.display = "block";
-      $("cfgReadEndpoint").textContent = "未知";
-      $("cfgReadModel").textContent = "未知";
-      updateKeyStatus();
+    }).catch(function () { updateKeyStatus(); });
+  }
+
+  // ---------- 事件绑定 ----------
+  $("btnSend").addEventListener("click", doSend);
+  $("btnNewChat").addEventListener("click", function () {
+    state.sessionId = ""; state.lastScript = ""; state.lastOk = false;
+    $("chatList").innerHTML = "";
+    if (ggb) { try { ggb.newConstruction(); } catch (e) {} }
+    $("emptyCanvas").style.display = "flex";
+    updateTurnHint();
+    clearAttach();
+    setBadge("新会话", false);
+    $("input").focus();
+  });
+  $("input").addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); doSend(); }
+  });
+
+  // 图片
+  var imgB64 = "", imgMime = "", imgSrc = "";
+  $("imgfile").addEventListener("change", function (ev) {
+    var f = ev.target.files && ev.target.files[0];
+    if (!f) return;
+    imgMime = f.type || "image/png";
+    readFileAsB64(f, function (b64) {
+      imgB64 = b64;
+      imgSrc = "data:" + imgMime + ";base64," + b64;
+      $("attachImg").src = imgSrc;
+      $("attachPrev").style.display = "block";
+      setBadge("已附加图片（多模态）", true);
+    });
+  });
+  $("attachClear").addEventListener("click", clearAttach);
+
+  // 抽屉开关（cfg / log 复用同一个折叠行为）
+  function bindCollapse(drawerEl, arrowEl) {
+    var toggle = drawerEl.querySelector(".drawer-toggle");
+    toggle.addEventListener("click", function () {
+      var open = drawerEl.classList.toggle("open");
+      arrowEl.textContent = open ? "▾" : "▸";
     });
   }
+  bindCollapse($("cfgDrawer"), $("cfgArrow"));
+  bindCollapse($("logDrawer"), $("logArrow"));
+
+  // 配置按钮
   $("btnApplyCfg").addEventListener("click", function () {
     saveKey($("cfgApiKey").value.trim());
     setBadge("已应用服务配置（key 存本机浏览器）", true);
@@ -711,30 +1033,30 @@
     $("btnShowKey").textContent = k.type === "password" ? "👁" : "🙈";
   });
   $("btnClearKey").addEventListener("click", function () {
-    $("cfgApiKey").value = "";
-    saveKey("");
+    $("cfgApiKey").value = ""; saveKey("");
     setBadge("已清除界面 key，改用服务端环境变量", false);
   });
   $("cfgApiKey").addEventListener("input", function () { updateKeyStatus(); });
   $("btnResetCfg").addEventListener("click", function () {
-    $("cfgEndpoint").value = $("cfgReadEndpoint").textContent;
-    $("cfgModel").value = $("cfgReadModel").textContent;
-    // 只重置 endpoint/model，不动已填写的 key
-    setBadge("endpoint/model 已重置为服务端默认", true);
+    if (serverDefaults.endpoint || serverDefaults.model) {
+      $("cfgEndpoint").value = serverDefaults.endpoint;
+      $("cfgModel").value = serverDefaults.model;
+      setBadge("endpoint/model 已重置为服务端默认", true);
+    } else {
+      setBadge("暂无服务端默认配置，请手动填写", false);
+    }
   });
   $("btnRetryGGB").addEventListener("click", function () {
     if (typeof window.__ggcmRetry === "function") window.__ggcmRetry();
     else window.location.reload();
   });
-  // 应用到画布：网格/坐标轴即时；工具栏/代数区重建生效，并重放当前脚本
-  $("btnApplyGGBDisplay").addEventListener("click", function () {
+
+  // GeoGebra 显示重建 + 模式切换
+  function rebuildApplet() {
     if (!appletReady || !ggb) { setBadge("GeoGebra 画布尚未就绪", false); return; }
-    var keep = state.lastScript;
     applyGGBRuntimeDisplay();
-    // 重建 applet，使 showToolBar / showAlgebraInput 创建期参数生效
     appletReady = false; ggb = null;
     var el = $("ggb-element"); el.innerHTML = "";
-    state.lastScript = keep;
     window.__onGGBLoaded = function () {
       if (typeof window.GGBApplet === "undefined") { if (window.__GGB_BOOT) window.__GGB_BOOT(); return; }
       createApplet();
@@ -742,26 +1064,22 @@
     setBadge("正在应用显示设置并重建画布…", false);
     if (typeof window.GGBApplet !== "undefined") createApplet();
     else if (typeof window.__GGB_BOOT === "function") window.__GGB_BOOT();
-  });
-  $("cfgToggle").addEventListener("click", function (ev) {
-    ev.stopPropagation();
-    var body = $("cfgBody");
-    var hidden = body.style.display === "none";
-    body.style.display = hidden ? "block" : "none";
-    $("cfgArrow").textContent = hidden ? "▴" : "▾";
-  });
+  }
+  function setMode(mode) {
+    if (state.mode === mode && appletReady) { setBadge("已是" + (mode === "3d" ? "3D" : mode) + "模式", true); return; }
+    state.mode = mode;
+    rebuildApplet();
+  }
+  $("btnApplyGGBDisplay").addEventListener("click", rebuildApplet);
+  if ($("optGrid")) $("optGrid").addEventListener("change", applyGGBRuntimeDisplay);
+  if ($("optAxes")) $("optAxes").addEventListener("change", applyGGBRuntimeDisplay);
+  if ($("modeClassic")) $("modeClassic").addEventListener("change", function () { if (this.checked) setMode("classic"); });
+  if ($("modeGeometry")) $("modeGeometry").addEventListener("change", function () { if (this.checked) setMode("geometry"); });
+  if ($("mode3D")) $("mode3D").addEventListener("change", function () { if (this.checked) setMode("3d"); });
 
-  // ---------- 日志面板 ----------
-  $("logToggle").addEventListener("click", function (ev) {
-    ev.stopPropagation();
-    var body = $("logBody");
-    var hidden = body.style.display === "none";
-    body.style.display = hidden ? "block" : "none";
-    $("logArrow").textContent = hidden ? "▴" : "▾";
-  });
+  // 日志
   $("btnLogClear").addEventListener("click", function () {
-    $("logList").innerHTML = "";
-    logCount = 0;
+    $("logList").innerHTML = ""; logCount = 0;
     var c = $("logCount"); if (c) c.textContent = "0 条";
     logEntry("info", "日志已清空");
   });
@@ -769,47 +1087,13 @@
     var txt = $("logList").innerText || $("logList").textContent;
     if (!txt) return;
     navigator.clipboard.writeText(txt).then(function () {
-      $("btnLogCopy").textContent = "已复制!";
-      setTimeout(function () { $("btnLogCopy").textContent = "复制"; }, 1200);
-    });
-  });
-
-  // ---------- 图片 ----------
-  var imgB64 = "", imgMime = "";
-  $("imgfile").addEventListener("change", function (ev) {
-    var f = ev.target.files && ev.target.files[0];
-    if (!f) return;
-    imgMime = f.type || "image/png";
-    readFileAsB64(f, function (b64) {
-      imgB64 = b64;
-      $("imgprev").src = "data:" + imgMime + ";base64," + b64;
-      $("imgwrap").style.display = "block";
-      setBadge("已附加图片（多模态）", true);
-    });
-  });
-  $("imgclear").addEventListener("click", function () {
-    imgB64 = ""; imgMime = ""; $("imgwrap").style.display = "none"; $("imgprev").removeAttribute("src"); $("imgfile").value = "";
-    setBadge("", false); setBadge("GeoGebra 就绪", appletReady);
-  });
-
-  // ---------- 按钮 ----------
-  $("btnGen").addEventListener("click", doGenerate);
-  $("btnAppend").addEventListener("click", doAppend);
-  $("btnCopy").addEventListener("click", function () {
-    var sc = $("scriptOut").textContent;
-    if (!sc) return;
-    navigator.clipboard.writeText(sc).then(function () {
-      $("btnCopy").textContent = "已复制!";
-      setTimeout(function () { $("btnCopy").textContent = "复制"; }, 1200);
+      $("btnLogCopy").textContent = "已复制!"; setTimeout(function () { $("btnLogCopy").textContent = "复制"; }, 1200);
     });
   });
   $("btnReset").addEventListener("click", function () { if (state.lastScript) loadScript(state.lastScript); });
-  $("btnClear").addEventListener("click", function () { if (ggb) { ggb.newConstruction(); state.lastScript=""; } });
-  $("problem").addEventListener("keydown", function (e) { if ((e.ctrlKey||e.metaKey) && e.key==="Enter") { e.preventDefault(); doGenerate(); } });
-  $("append").addEventListener("keydown", function (e) { if ((e.ctrlKey||e.metaKey) && e.key==="Enter") { e.preventDefault(); doAppend(); } });
+  $("btnClear").addEventListener("click", function () { if (ggb) { ggb.newConstruction(); state.lastScript = ""; } });
 
   // ---------- 启动 ----------
-  // 免额外 API 轮询：直接用 fetch 探活
   fetch("/api/health").then(function (r) { return r.json(); }).then(function (j) {
     setBadge(j && j.status === "ok" ? "服务已连接" : "服务探活异常", !!(j && j.status === "ok"));
   }).catch(function () { setBadge("服务未连接", false); });
@@ -817,6 +1101,8 @@
   initGeoGebra();
   loadServerConfig();
   loadKey();
+  initLogStream();
+  updateTurnHint();
 })();
 </script>
 </body>

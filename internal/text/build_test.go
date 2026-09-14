@@ -3,6 +3,7 @@ package text
 import (
 	"testing"
 
+	"github.com/hycjack/geogebra-dsl-go/internal/diag"
 	"github.com/hycjack/geogebra-dsl-go/internal/ir"
 )
 
@@ -160,5 +161,83 @@ func TestNestedCommandUnknown(t *testing.T) {
 	}
 	if g.Objects["c.Nope1"].Cmd != "Nope" {
 		t.Fatalf("synthetic cmd=%q", g.Objects["c.Nope1"].Cmd)
+	}
+}
+
+func TestParseModifierStatements(t *testing.T) {
+	// Statement-style commands with no '=' parse as modifiers (modifier=true).
+	src := "SetColor(c, \"red\")\nStartAnimation(a)\nSetLineThickness(l, 4)\n"
+	stmts, probs := Parse(src)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected parse problems: %v", probs)
+	}
+	if len(stmts) != 3 {
+		t.Fatalf("expected 3 modifier statements, got %d", len(stmts))
+	}
+	for _, s := range stmts {
+		if !s.modifier {
+			t.Errorf("expected modifier, got %+v", s)
+		}
+		if s.id != "" {
+			t.Errorf("modifier should have no id, got %q", s.id)
+		}
+	}
+	if stmts[0].cmd != "SetColor" || len(stmts[0].args) != 2 {
+		t.Errorf("SetColor parse wrong: %+v", stmts[0])
+	}
+}
+
+func TestParseNonModifierNoEqualsRejected(t *testing.T) {
+	// A construct command written without '=' is a syntax error, not silently ok.
+	src := "Line(A, B)\n"
+	stmts, probs := Parse(src)
+	if len(stmts) != 0 {
+		t.Fatalf("expected no statements, got %v", stmts)
+	}
+	if len(probs) == 0 {
+		t.Fatal("expected a parse problem for bare non-modifier command")
+	}
+}
+
+func TestBuildModifiersDoNotCreateObjects(t *testing.T) {
+	src := "a = Slider(1, 5, 0.1)\nA = (0, 0)\nB = (4, 0)\nc = Circle(A, B)\nSetColor(c, \"red\")\nSetLineThickness(c, 4)\nStartAnimation(a)\n"
+	stmts, _ := Parse(src)
+	g, probs := Build(stmts)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected build problems: %v", probs)
+	}
+	// Modifiers must NOT appear as graph objects.
+	for _, id := range g.Order {
+		if id == "SetColor" || id == "" {
+			t.Fatalf("modifier leaked into graph: %q", id)
+		}
+	}
+	for _, want := range []string{"a", "A", "B", "c"} {
+		if _, ok := g.Get(want); !ok {
+			t.Errorf("missing object %q; order=%v", want, g.Order)
+		}
+	}
+	// Slider 'a' depends on A/B? No — it's a standalone number; a has no refs.
+	if len(g.Objects["a"].Refs) != 0 {
+		t.Errorf("slider a should have no refs, got %v", g.Objects["a"].Refs)
+	}
+}
+
+func TestBuildModifierUndefinedTargetReports(t *testing.T) {
+	// A modifier whose target isn't defined is an undefined-ref error.
+	src := "SetColor(missing, \"red\")\n"
+	stmts, _ := Parse(src)
+	_, probs := Build(stmts)
+	if len(probs) == 0 {
+		t.Fatal("expected undefined-target error for modifier")
+	}
+	found := false
+	for _, p := range probs {
+		if p.Code == diag.CodeDepUndefined {
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("expected dep/undefined problem, got %v", probs)
 	}
 }

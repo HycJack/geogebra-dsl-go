@@ -32,9 +32,15 @@ func Generate(ctx context.Context, client ChatClient, cfg Config, req GenerateRe
 	// generateOnce, never on a transient error.
 	lastScript := ""
 	lastNote := ""
+	// lastFallback holds the most recent no-script reply that carried meaningful
+	// text (a degraded answer). If the whole loop ends without a buildable
+	// script, this text is returned so pure-calculation answers are shown rather
+	// than reported as a bare "no <gg> script block" failure.
+	lastFallback := ""
 	var lastGate *GateResult // nil until the first script has been extracted
 	producedAny := false
 	attempts := 0
+	trace := newStepTrace()
 
 	for attempt := 1; attempt <= cfg.MaxRepair+1; attempt++ {
 		attempts = attempt
@@ -57,11 +63,25 @@ func Generate(ctx context.Context, client ChatClient, cfg Config, req GenerateRe
 			"retry":   producedAny,
 		})
 
-		as, err := generateOnce(ctx, client, cfg, msgs)
+		as, err := generateOnce(ctx, client, cfg, msgs, attempt, trace)
 		if err != nil {
-			// Transient: Complete already retried with backoff and still failed.
-			// Do not clobber lastScript/lastGate — keep the previous real content
-			// so a subsequent repair round builds on it.
+			// Transient: Complete already retried with backoff and still failed,
+			// or the reply was genuinely empty. Do NOT clobber lastScript/lastGate
+			// — keep the previous real content so a subsequent repair round builds
+			// on it.
+			//
+			// The raw HTTP/network failure was already recorded as an error step
+			// by client.Complete. Only add one here when this attempt's failure
+			// wasn't captured there (e.g. extraction failed after a successful
+			// LLM call, or the client had no trace wired), to avoid duplicate
+			// error rows in the UI.
+			if !trace.hasError(attempt) {
+				trace.add(Step{
+					Stage:   "error",
+					Attempt: attempt,
+					Error:   err.Error(),
+				})
+			}
 			cfg.logEvent("generate.attempt.error", map[string]any{
 				"attempt": attempt,
 				"error":   err.Error(),
@@ -71,11 +91,35 @@ func Generate(ctx context.Context, client ChatClient, cfg Config, req GenerateRe
 			}
 			continue
 		}
+
+		if as.Degraded() {
+			// No <gg> block but a text answer came back (e.g. a pure-calculation
+			// problem with nothing to construct). Keep it as the fallback answer
+			// and let the loop retry in case a later attempt produces a real
+			// figure. Never record this as an error — the UI should present the
+			// model's answer at the end instead of reporting a failure. The LLM
+			// call itself is already in the trace via the llm.* steps.
+			lastFallback = as.Fallback
+			if attempt == cfg.MaxRepair+1 {
+				break
+			}
+			continue
+		}
+
 		producedAny = true
 		lastScript = as.Script
 		lastNote = as.TeachingNote
 
 		lastGate = runGate(as.Script)
+		ok := lastGate.OK
+		trace.add(Step{
+			Stage:       "gate",
+			Attempt:     attempt,
+			Script:      as.Script,
+			GateOK:      &ok,
+			Executable:  lastGate.Executable,
+			Diagnostics: lastGate.Diagnostics,
+		})
 		cfg.logEvent("generate.attempt.done", map[string]any{
 			"attempt":       attempt,
 			"gate_ok":       lastGate.OK,
@@ -85,7 +129,7 @@ func Generate(ctx context.Context, client ChatClient, cfg Config, req GenerateRe
 			"teaching_note": as.TeachingNote,
 		})
 		if lastGate.OK {
-			return NewResult(lastScript, lastNote, lastGate, attempts)
+			return NewResult(lastScript, lastNote, lastGate, attempts, trace)
 		}
 	}
 
@@ -94,5 +138,17 @@ func Generate(ctx context.Context, client ChatClient, cfg Config, req GenerateRe
 	if lastGate == nil {
 		lastGate = &GateResult{OK: false}
 	}
-	return NewResult(lastScript, lastNote, lastGate, attempts)
+	// End of loop with no buildable script: degrade to the last text answer if
+	// the model produced one, so pure-calculation/explanation replies are shown
+	// instead of a bare "no <gg> script block" failure.
+	if lastScript == "" && lastFallback != "" {
+		return &Result{
+			OK:          false,
+			Fallback:    lastFallback,
+			Attempts:    attempts,
+			Trace:       trace.Steps(),
+			Diagnostics: []string{"模型未给出可构造的 <gg> 脚本，以下为其文字解答。"},
+		}
+	}
+	return NewResult(lastScript, lastNote, lastGate, attempts, trace)
 }

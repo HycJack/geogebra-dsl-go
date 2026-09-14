@@ -75,16 +75,14 @@ func Lookup(c *catalog.Catalog, g *ir.Graph, o *ir.Object) Match {
 	var matched *catalog.Overload
 	for i := range cmd.Overloads {
 		ov := &cmd.Overloads[i]
-		if len(o.Args) != len(ov.Params) && !ov.IsVarArg {
-			continue
-		}
 		if ov.IsVarArg {
 			if len(o.Args) < len(ov.Params) {
 				continue
 			}
-		} else {
-			counts[len(ov.Params)] = true
+		} else if required, acceptable := paramCountRange(ov.Params); len(o.Args) < required || len(o.Args) > acceptable {
+			continue
 		}
+		counts[len(ov.Params)] = true
 		if kindsMatch(ov, g, o) {
 			matched = ov
 			break
@@ -105,6 +103,20 @@ func Lookup(c *catalog.Catalog, g *ir.Graph, o *ir.Object) Match {
 	}
 }
 
+// paramCountRange reports the minimum required argument count and the maximum
+// acceptable count for an overload, respecting trailing optional params. An
+// overload with no required params and trailing optionals accepts 0..total.
+func paramCountRange(params []catalog.Param) (required, max int) {
+	max = len(params)
+	for _, p := range params {
+		if p.Optional {
+			break // trailing optionals from here on
+		}
+		required++
+	}
+	return
+}
+
 // kindsMatch checks the positional kinds of o.Args against an overload. Each
 // positional arg is mapped to a kind: a bare identifier that resolves in g is
 // that object's kind; a numeric/other literal contributes no kind (treated as
@@ -112,7 +124,7 @@ func Lookup(c *catalog.Catalog, g *ir.Graph, o *ir.Object) Match {
 // below). For v1 we match on the kinds of refs by position where the arg is a
 // ref;
 func kindsMatch(ov *catalog.Overload, g *ir.Graph, o *ir.Object) bool {
-	if len(o.Args) != len(ov.Params) {
+	if len(o.Args) > len(ov.Params) {
 		return false
 	}
 	for i, arg := range o.Args {

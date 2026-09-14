@@ -14,8 +14,8 @@ import (
 // Config holds the knobs for the AI conversation service. Every field is
 // overridable through GGCM_AI_* environment variables (see LoadConfig).
 type Config struct {
-	Endpoint      string // OpenAI-compatible base URL, e.g. http://lanz.hikvision.com/v3/openai/v1
-	Model         string // e.g. Lanz-Medium, deepseek-chat
+	Endpoint      string // OpenAI-compatible base URL, e.g. https://token.sensenova.cn/v1/
+	Model         string // e.g. sensenova-6.8-flash-lite, deepseek-chat
 	APIKey        string // may be empty for some local compatible backends
 	Temperature   float64
 	MaxTokens     int
@@ -33,16 +33,16 @@ type Config struct {
 // in the documented defaults where absent.
 func LoadConfig() Config {
 	return Config{
-		Endpoint:      envOr("GGCM_AI_ENDPOINT", "http://lanz.hikvision.com/v3/openai/v1"),
-		Model:         envOr("GGCM_AI_MODEL", "Lanz-Medium"),
+		Endpoint:      envOr("GGCM_AI_ENDPOINT", "https://token.sensenova.cn/v1/"),
+		Model:         envOr("GGCM_AI_MODEL", "sensenova-6.8-flash-lite"),
 		APIKey:        os.Getenv("GGCM_AI_API_KEY"),
 		Temperature:   envFloat("GGCM_AI_TEMP", 0.2),
-		MaxTokens:     envInt("GGCM_AI_MAX_TOKENS", 2048),
+		MaxTokens:     envInt("GGCM_AI_MAX_TOKENS", 128000),
 		MaxRepair:     envInt("GGCM_AI_MAX_REPAIR", 3),
 		MaxImageBytes: envInt("GGCM_AI_MAX_IMAGE_BYTES", 10<<20), // 10 MiB
 		DisableVision: envBool("GGCM_AI_DISABLE_VISION"),
 		MaxHistory:    envInt("GGCM_AI_MAX_HISTORY", 20),
-		HTTPTimeoutS:  envInt("GGCM_AI_HTTP_TIMEOUT_S", 60),
+		HTTPTimeoutS:  envInt("GGCM_AI_HTTP_TIMEOUT_S", 300),
 		HTTPRetries:   envInt("GGCM_AI_HTTP_RETRIES", 5),
 		HTTPRetryBase: envInt("GGCM_AI_HTTP_RETRY_BASE_MS", 500),
 	}

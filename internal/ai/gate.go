@@ -46,7 +46,7 @@ func formatProblem(p diag.Problem) string {
 func repairHint(c diag.Code) string {
 	switch c {
 	case diag.CodeCmdUnknown:
-		return "改用命令表内命令或拼对命令名（Point/Line/Circle/…）"
+		return "改用命令表内命令或拼对命令名（Point/Line/Circle/…，也支持 SetColor/SetLineThickness 等样式及 Slider/Checkbox 等动态控件）"
 	case diag.CodeCmdArg:
 		return "对照该命令的正确签名，修正参数个数/类型"
 	case diag.CodeDepUndefined:

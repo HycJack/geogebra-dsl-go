@@ -30,6 +30,32 @@ type statement struct {
 	lineNo        int
 	literalPoint  bool
 	numberLiteral string
+	modifier      bool // statement-style command with no "=", e.g. SetColor(c, "red")
+}
+
+// modifierCommands are statement-style GeoGebra commands whose line has no "="
+// (they modify existing objects or drive the canvas rather than defining a new
+// named object). They are parsed so style/dynamic scripts (colors, line width,
+// sliders, checkboxes, animation) pass the validator instead of being rejected.
+var modifierCommands = map[string]bool{
+	"SetColor":                 true,
+	"SetBackgroundColor":       true,
+	"SetLineThickness":         true,
+	"SetLineStyle":             true,
+	"SetPointSize":             true,
+	"SetPointStyle":            true,
+	"SetFilling":               true,
+	"SetValue":                 true,
+	"SetCaption":               true,
+	"SetVisible":               true,
+	"SetConditionToShowObject": true,
+	"StartAnimation":           true,
+	"ZoomIn":                   true,
+	"ZoomOut":                  true,
+	"SetLayer":                 true,
+	"SetDynamicColor":          true,
+	"SetLabelVisible":          true,
+	"RunClickScript":           true,
 }
 
 // Parse splits a script into statements. Returns parse errors (fail-closed).
@@ -57,6 +83,14 @@ func parseLine(line string, lineNo int) (statement, bool, diag.Problem) {
 	// split on '=' at top level.
 	eq := topLevelIndex(line, '=')
 	if eq < 0 {
+		// No '=' — allow statement-style modifier/scripting commands such as
+		// `SetColor(c, "red")` or `StartAnimation(a)`. Anything else without
+		// '=' remains a syntax error.
+		if cmdArgs, ok, prob := parseCommandCall(line, lineNo); ok {
+			return statement{cmd: cmdArgs.cmd, args: cmdArgs.args, lineNo: lineNo, modifier: true}, true, diag.Problem{}
+		} else if prob != nil {
+			return statement{}, false, *prob
+		}
 		return statement{}, false, diag.Problem{
 			Code: diag.CodeParseSyntax,
 			Msg:  "不是一条指令（缺少 = 或命令调用）",
@@ -95,6 +129,31 @@ func parseLine(line string, lineNo int) (statement, bool, diag.Problem) {
 	inner := strings.TrimSpace(rhs[lp+1 : len(rhs)-1])
 	args := splitArgs(inner)
 	return statement{id: id, cmd: cmd, args: args, lineNo: lineNo}, true, diag.Problem{}
+}
+
+// parseCommandCall parses a bare `Cmd(args)` line (no "="). It only accepts
+// commands in the modifier set, so a non-modifier command with no "=" is a
+// syntax error rather than being silently accepted.
+func parseCommandCall(s string, lineNo int) (argCommand, bool, *diag.Problem) {
+	lp := strings.IndexByte(s, '(')
+	if lp <= 0 || !strings.HasSuffix(s, ")") {
+		return argCommand{}, false, nil
+	}
+	cmd := strings.TrimSpace(s[:lp])
+	if !isIdentName(cmd) {
+		return argCommand{}, false, nil
+	}
+	if !modifierCommands[cmd] {
+		// A real command must be written as Object = Command(...). Reject with a
+		// hint so the model learns the expected assignment syntax.
+		return argCommand{}, false, &diag.Problem{
+			Code: diag.CodeParseSyntax,
+			Msg:  "指令 " + cmd + " 必须以 对象名 = 命令(...) 形式书写；无赋值号的语句仅允许 Set…/StartAnimation 等样式或动画指令",
+			Line: lineNo,
+		}
+	}
+	inner := strings.TrimSpace(s[lp+1 : len(s)-1])
+	return argCommand{cmd: cmd, args: splitArgs(inner)}, true, nil
 }
 
 // parenArgs extracts the comma-separated args inside a parenthesized expression.
@@ -147,17 +206,28 @@ func splitArgs(s string) []string {
 // exist resolve fine — the cycle check handles dependency order afterwards.
 func Build(stmts []statement) (*ir.Graph, []diag.Problem) {
 	g := ir.New()
-	// First pass: register ids so refs resolve regardless of order.
+	var probs []diag.Problem
+	// Pass 0: modifiers are statement-style commands (SetColor etc.) that modify
+	// existing objects; their targets must refer to a defined object, so they
+	// are validated after all named ids are known. Bare no-"=" modifiers are NOT
+	// registered as objects.
+	modifiers := make([]statement, 0)
 	for _, s := range stmts {
+		if s.modifier {
+			modifiers = append(modifiers, s)
+			continue
+		}
 		if _, exists := g.Get(s.id); exists {
 			// redefinition detected below; but keep first occurrence
 			continue
 		}
 		g.Add(&ir.Object{ID: s.id})
 	}
-	var probs []diag.Problem
 	seen := map[string]bool{}
 	for _, s := range stmts {
+		if s.modifier {
+			continue
+		}
 		// A redefinition is reported and the earlier definition is kept: the
 		// redefining statement must NOT overwrite the retained first occurrence
 		// (ids were registered once in the first pass above).
@@ -193,6 +263,18 @@ func Build(stmts []statement) (*ir.Graph, []diag.Problem) {
 					Code: diag.CodeDepUndefined, Msg: "引用了未定义对象：" + u, Obj: s.id, Line: s.lineNo,
 				})
 			}
+		}
+	}
+	// Validate modifiers after all named objects are known: every argument that
+	// is a bare identifier must resolve to a real object (e.g. the target of
+	// SetColor(c, "red") is c). Modifiers add no geometry and no goals.
+	for _, s := range modifiers {
+		refs, undefs := resolveRefs(g, s.cmd, s.args)
+		_ = refs
+		for _, u := range undefs {
+			probs = append(probs, diag.Problem{
+				Code: diag.CodeDepUndefined, Msg: "引用了未定义对象：" + u, Obj: s.cmd, Line: s.lineNo,
+			})
 		}
 	}
 	return g, probs

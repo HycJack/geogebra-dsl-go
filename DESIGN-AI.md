@@ -104,7 +104,7 @@ internal/check/...           # 复用现有校验器(不改，只扩一个"可�
     // …… 历史对话轮 + 最近一次修复反馈(见 §6.3)
   ],
   "temperature": 0.2,               // 生成脚本要稳定，温度偏低
-  "max_tokens": 2048,
+  "max_tokens": 128000,
   "stream": true                    // 服务端用 SSE 把脚本/说明流式返回
 }
 ```
@@ -120,15 +120,16 @@ internal/check/...           # 复用现有校验器(不改，只扩一个"可�
 ### 4.3 配置 env
 
 ```
-GGCM_AI_ENDPOINT    # 默认 http://lanz.hikvision.com/v3/openai/v1
-GGCM_AI_MODEL       # 如 Lanz-Medium / deepseek-chat
+GGCM_AI_ENDPOINT    # 默认 https://token.sensenova.cn/v1/
+GGCM_AI_MODEL       # 如 sensenova-6.8-flash-lite / deepseek-chat
 GGCM_AI_API_KEY     # 缺省时：如果 endpoint 是本地兼容服务可留空
 GGCM_AI_TEMP        # 默认 0.2
 GGCM_AI_MAX_REPAIR  # 默认 3（修复重试上限）
-GGCM_AI_MAX_TOKENS  # 默认 2048
+GGCM_AI_MAX_TOKENS  # 默认 128000（推理 token + 输出共用；sensenova 推理模型建议给足）
 GGCM_AI_DISABLE_VISION  # 默认 false
 GGCM_AI_HTTP_RETRIES     # 默认 5（瞬态错误最多重试次数；0 则不发重试）
 GGCM_AI_HTTP_RETRY_BASE_MS  # 默认 500（首次退避毫秒，每轮翻倍）
+GGCM_AI_HTTP_TIMEOUT_S     # 默认 300（单次 LLM 调用超时秒数；max_tokens 大时需同步调大）
 ```
 
 ### 4.4 结构化日志（调试/审计）

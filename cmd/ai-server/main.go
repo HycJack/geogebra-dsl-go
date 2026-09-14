@@ -47,11 +47,11 @@ func main() {
 	flag.Parse()
 
 	cfg := ai.LoadConfig()
-	client := ai.NewClient(cfg)
 
-	// Wire the structured logger into the config so every LLM call and script
-	// processing event is captured. LogFunc is concurrency-safe here.
-	lj := &logJSON{mu: new(sync.Mutex), w: os.Stdout}
+	// Wire the structured logger into the config BEFORE building the default
+	// client, so the default client's per-call llm.request/llm.response/llm.retry
+	// events are emitted too (NewClient copies Config, so Log must already be set).
+	lj := newLogJSON(os.Stdout)
 	if *logPath != "" {
 		f, err := os.OpenFile(*logPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o644)
 		if err != nil {
@@ -60,6 +60,7 @@ func main() {
 		lj.w = f
 	}
 	cfg.Log = lj.emit
+	client := ai.NewClient(cfg)
 
 	sessions := newSessionStore(cfg.MaxHistory)
 
@@ -70,6 +71,7 @@ func main() {
 	mux.HandleFunc("/deployggb.js", server.handleDeployGGB)
 	mux.HandleFunc("/api/health", server.handleHealth)
 	mux.HandleFunc("/api/config", server.handleConfig)
+	mux.HandleFunc("/api/logs", server.handleLogs)
 	mux.HandleFunc("/api/chat", server.handleChat)
 
 	log.Printf("ai-server listening on %s (model=%s endpoint=%s)", *addr, cfg.Model, cfg.Endpoint)
@@ -78,14 +80,67 @@ func main() {
 	}
 }
 
-// logJSON is a small concurrency-safe JSON-lines writer. It decorates every ai
-// event with a timestamp and a process/session context supplied by the caller.
+// logJSON is a concurrency-safe JSON-lines writer that also fans each event out
+// to live web subscribers (the browser's log panel via SSE /api/logs), so per-call
+// LLM parameters and returned content are visible in the UI, not just the file.
 type logJSON struct {
-	mu *sync.Mutex
-	w  io.Writer
+	mu      *sync.Mutex
+	w       io.Writer
+	pending []json.RawMessage // ring of the last logMax events for late subscribers
+	subs    map[chan json.RawMessage]struct{}
 }
 
-// emit is an ai.LogFunc that serializes the event+fields to one JSON line.
+// logMax is how many recent events a newly-connected subscriber replays so the
+// UI shows history, not just events since the browser connected.
+const logMax = 500
+
+func newLogJSON(w io.Writer) *logJSON {
+	return &logJSON{mu: new(sync.Mutex), w: w, subs: map[chan json.RawMessage]struct{}{}}
+}
+
+// Subscribe registers a live-event receiver. It immediately replays the last
+// buffered events (in order) then streams new ones until the returned cancel is
+// called or the channel is closed. Returned channel receives json.RawMessage of
+// one record per event.
+func (l *logJSON) Subscribe() (chan json.RawMessage, func()) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	ch := make(chan json.RawMessage, 256)
+	for _, rec := range l.pending {
+		ch <- rec
+	}
+	l.subs[ch] = struct{}{}
+	cancel := func() {
+		l.mu.Lock()
+		delete(l.subs, ch)
+		l.mu.Unlock()
+	}
+	return ch, cancel
+}
+
+// buffer appends a record to the rolling ring for late subscribers.
+func (l *logJSON) buffer(rec json.RawMessage) {
+	l.pending = append(l.pending, rec)
+	if len(l.pending) > logMax {
+		l.pending = l.pending[len(l.pending)-logMax:]
+	}
+}
+
+// fanout forwards a record to every live subscriber non-blockingly (a slow or
+// disconnected subscriber is dropped rather than stalling generation). Callers
+// must hold l.mu.
+func (l *logJSON) fanout(rec json.RawMessage) {
+	for ch := range l.subs {
+		select {
+		case ch <- rec:
+		default: // subscriber not keeping up; drop rather than block
+		}
+	}
+}
+
+// emit is an ai.LogFunc that serializes the event+fields to one JSON line and
+// fans it out to live web log subscribers. It is invoked synchronously by the
+// ai package across potentially concurrent requests, so it holds the lock.
 func (l *logJSON) emit(Event string, fields map[string]any) {
 	rec := map[string]any{"time": time.Now().UTC().Format(time.RFC3339Nano), "event": Event}
 	for k, v := range fields {
@@ -98,6 +153,8 @@ func (l *logJSON) emit(Event string, fields map[string]any) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	_, _ = io.WriteString(l.w, string(b)+"\n")
+	l.buffer(b)
+	l.fanout(b)
 }
 
 type server struct {
@@ -123,6 +180,7 @@ type chatRequest struct {
 	ImageMIME string `json:"image_mime,omitempty"` // e.g. image/png
 	Stream    bool   `json:"stream,omitempty"`     // SSE response
 	Append    string `json:"append,omitempty"`     // optional follow-up instruction against prior result
+	Mode      string `json:"mode,omitempty"`       // requested view: "2d"/"classic"/"geometry" or "3d"
 	// Endpoint, Model and APIKey are OPTIONAL per-request overrides chosen in
 	// the web UI. They replace the server defaults for this call only. When a
 	// browser supplies an api_key it is used for that request and never
@@ -167,6 +225,46 @@ func (s *server) handleConfig(w http.ResponseWriter, _ *http.Request) {
 	})
 }
 
+// handleLogs streams the structured service log (llm.request / llm.response /
+// llm.retry / generate.* / http.*) to the browser log panel over Server-Sent
+// Events. Each record is one JSON line, echoed as `event: log`. The connection
+// stays open until the client disconnects or the context is canceled.
+func (s *server) handleLogs(w http.ResponseWriter, r *http.Request) {
+	if s.logs == nil {
+		writeError(w, http.StatusInternalServerError, "logs disabled")
+		return
+	}
+	ch, cancel := s.logs.Subscribe()
+	defer cancel()
+
+	fl, ok := w.(http.Flusher)
+	if !ok {
+		http.Error(w, "streaming unsupported", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/event-stream; charset=utf-8")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Connection", "keep-alive")
+	// Commit the 200 + headers immediately. Go's HTTP server buffers the response
+	// and only sends headers when the handler returns or flushes; without this the
+	// client never sees the SSE response header and the connection handshake hangs.
+	fl.Flush()
+
+	ctx := r.Context()
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case rec, open := <-ch:
+			if !open {
+				return
+			}
+			fmt.Fprintf(w, "event: log\ndata: %s\n\n", rec)
+			fl.Flush()
+		}
+	}
+}
+
 // handleUI serves the embedded single-page web UI at "/". Anything that isn't
 // one of the /api/* endpoints (including "/", "/ui", favicon) is served as the
 // app shell, so a browser loading the server root lands on the GeoGebra + AI UI.
@@ -208,7 +306,9 @@ func (s *server) handleChat(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sess := s.sessions.Get(req.SessionID)
-	sysMsg := ai.SystemMessage()
+	// View mode ("2d"/"classic"/"geometry"/"3d") steers the system prompt so the
+	// model emits a 2D or 3D construction. Defaults to the 2D prompt.
+	sysMsg := ai.SystemMessageFor(req.Mode)
 
 	// Attach the shared logger (already set on s.cfg) to the effective config so
 	// every LLM/script event in this request carries the resolved params.
@@ -216,6 +316,7 @@ func (s *server) handleChat(w http.ResponseWriter, r *http.Request) {
 		"session_id": sess.ID,
 		"input_type": req.InputType,
 		"stream":     req.Stream,
+		"mode":       req.Mode,
 		"text_chars": len(req.Text),
 		"image_b64":  len(req.ImageB64),
 		"append":     req.Append != "",

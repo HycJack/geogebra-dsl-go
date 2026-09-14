@@ -35,6 +35,51 @@ P1 = Intersect(c, l)`
 	}
 }
 
+// TestDynamicStyledScriptOk verifies that dynamic controls (Slider) and
+// statement-style style commands (SetColor / SetLineThickness / StartAnimation)
+// pass the validator end to end and the modifiers are not part of the geometry.
+func TestDynamicStyledScriptOk(t *testing.T) {
+	script := `a = Slider(1, 5, 0.1)
+A = (0, 0)
+B = (4, 0)
+c = Circle(A, B)
+SetColor(c, "red")
+SetLineThickness(c, 4)
+StartAnimation(a)`
+	rc := Check([]byte(script), Options{})
+	if !rc.OK {
+		t.Fatalf("expected dynamic+styled script to be ok, got errors: %v", rc.Errors)
+	}
+	// Slider + 2 points + circle = 4 geometry objects; modifiers add none.
+	if len(rc.Executable) != 4 {
+		t.Fatalf("expected 4 executable objects, got %d: %v", len(rc.Executable), rc.Executable)
+	}
+}
+
+// TestDynamicStyledScriptUndefinedTarget verifies a modifier referencing a
+// missing object is caught.
+func TestDynamicStyledScriptUndefinedTarget(t *testing.T) {
+	rc := Check([]byte("SetColor(ghost, \"red\")\n"), Options{})
+	if rc.OK {
+		t.Fatal("expected failure for undefined modifier target")
+	}
+	if !hasCode(rc, diag.CodeDepUndefined) {
+		t.Errorf("expected dep/undefined, got %v", rc.Errors)
+	}
+}
+
+// TestCheckboxButtonScriptOk verifies Checkbox and Button controls validate
+// (they are constructed with `=` so they are normal objects).
+func TestCheckboxButtonScriptOk(t *testing.T) {
+	script := `chk = Checkbox()
+btn = Button("Show")
+A = (0, 0)`
+	rc := Check([]byte(script), Options{})
+	if !rc.OK {
+		t.Fatalf("expected checkbox+button ok, got errors: %v", rc.Errors)
+	}
+}
+
 func TestUndefinedRef(t *testing.T) {
 	rc := Check([]byte("A = Point(0, 2)\nl = Line(A, X)\n"), Options{})
 	if rc.OK {

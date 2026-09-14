@@ -127,6 +127,65 @@ func TestRetryZeroDisablesBackoff(t *testing.T) {
 	}
 }
 
+// TestTraceRecordsClientRetries proves the explicit StepTrace attached via
+// CompleteOptions captures each backoff retry and the final successful LLM call,
+// so the chat UI can render the raw HTTP retry process.
+func TestTraceRecordsClientRetries(t *testing.T) {
+	rt := &scriptedRT{statuses: []int{503, 429, 200}}
+	cfg := Config{Endpoint: "http://x/v1", Model: "m", HTTPRetries: 5, HTTPRetryBase: 1}
+	cl := testClient(cfg, rt)
+	trace := newStepTrace()
+
+	if _, err := cl.Complete(context.Background(), msgs(), CompleteOptions{MaxTokens: 8, Attempt: 2, Trace: trace}); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	var retries []Step
+	var llms []Step
+	for _, s := range trace.Steps() {
+		switch s.Stage {
+		case "retry":
+			retries = append(retries, s)
+		case "llm":
+			llms = append(llms, s)
+		}
+	}
+	if len(retries) != 2 {
+		t.Fatalf("expected 2 retry steps, got %d", len(retries))
+	}
+	if retries[0].Attempt != 2 || retries[0].Retry != 1 || retries[0].DelayMS < 1 {
+		t.Errorf("bad first retry step: %+v", retries[0])
+	}
+	if len(llms) != 1 || llms[0].Attempt != 2 || llms[0].LatencyMS < 0 {
+		t.Errorf("bad llm step: %+v", llms)
+	}
+	// Backoff doubles: second retry delay should be ~2x the first.
+	if retries[1].DelayMS != 2*retries[0].DelayMS {
+		t.Errorf("retry %d delay=%d, want 2x first=%d", retries[1].Retry, retries[1].DelayMS, retries[0].DelayMS)
+	}
+}
+
+// TestTraceRecordsErrorOnFailure ensures a non-transient final failure emits an
+// error step on the trace.
+func TestTraceRecordsErrorOnFailure(t *testing.T) {
+	rt := &scriptedRT{statuses: []int{404}}
+	cfg := Config{Endpoint: "http://x/v1", Model: "m", HTTPRetries: 5, HTTPRetryBase: 1}
+	cl := testClient(cfg, rt)
+	trace := newStepTrace()
+	if _, err := cl.Complete(context.Background(), msgs(), CompleteOptions{MaxTokens: 8, Attempt: 1, Trace: trace}); err == nil {
+		t.Fatal("expected error on 404")
+	}
+	var got bool
+	for _, s := range trace.Steps() {
+		if s.Stage == "error" && s.Attempt == 1 && s.Error != "" {
+			got = true
+		}
+	}
+	if !got {
+		t.Error("expected an error step for the 404 failure")
+	}
+}
+
 // TestRetryBodyIsValidJSON proves the frozen body is still valid OpenAI JSON on
 // every retry (messages preserved, not corrupted by re-wrapping).
 func TestRetryBodyIsValidJSON(t *testing.T) {

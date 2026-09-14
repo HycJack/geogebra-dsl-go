@@ -148,9 +148,9 @@ unknown-cmd、ai-bad、nested 命令嵌套、pi-script 保留字、mirror-arc �
 浏览器 localStorage 并在请求时随调用发送，服务端不保存、不写日志）。
 
 ```bash
-# 启动（缺省会用内置的澜智 / DeepSeek-V4 兼容端点；需配 GGCM_AI_API_KEY）
-GGCM_AI_ENDPOINT=http://lanz.hikvision.com/v3/openai/v1 \
-GGCM_AI_MODEL=Lanz-Medium \
+# 启动（缺省会用内置的 sensenova 端点；需配 GGCM_AI_API_KEY）
+GGCM_AI_ENDPOINT=https://token.sensenova.cn/v1/ \
+GGCM_AI_MODEL=sensenova-6.8-flash-lite \
 GGCM_AI_API_KEY=... \
   go run ./cmd/ai-server -addr :8080
 
@@ -169,7 +169,7 @@ GGCM_AI_API_KEY=... \
 ```
 
 核心配置均可用 `GGCM_AI_*` 环境变量覆盖（见 `internal/ai/config.go`）。
-默认端点/模型为澜智 `http://lanz.hikvision.com/v3/openai/v1` + `Lanz-Medium`；
+默认端点/模型为 sensenova `https://token.sensenova.cn/v1/` + `sensenova-6.8-flash-lite`；
 API Key 必须由 `GGCM_AI_API_KEY` 环境变量或界面配置面板提供（不会写入代码/仓库）。
 
 生成中遇到瞬态错误（`429`/`5xx`/断网）会自动**指数退避重试**：默认首次
