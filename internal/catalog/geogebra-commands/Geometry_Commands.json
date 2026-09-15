@@ -1043,6 +1043,25 @@
               { "name": "<Point>", "role": "vertices", "type": "Point", "optional": false }
             ],
             "description": "通过顶点创建多边形"
+          },
+          {
+            "syntax": "Polygon(<Point>, <Point>, <Number of Vertices>)",
+            "params": [
+              { "name": "<Point>", "role": "vertex1", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "vertex2", "type": "Point", "optional": false },
+              { "name": "<Number of Vertices>", "role": "vertices", "type": "Number", "optional": false }
+            ],
+            "description": "由起点、终点和顶点数创建正多边形（如 Polygon(A,B,5) 为正五边形）"
+          },
+          {
+            "syntax": "Polygon(<Point>, <Point>, <Number of Vertices n>, <Direction>)",
+            "params": [
+              { "name": "<Point>", "role": "vertex1", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "vertex2", "type": "Point", "optional": false },
+              { "name": "<Number of Vertices n>", "role": "vertices", "type": "Number", "optional": false },
+              { "name": "<Direction>", "role": "direction", "type": "Vector/Plane", "optional": false }
+            ],
+            "description": "按方向（向量或平面）创建正多边形，多边形尽量与该方向平行"
           }
         ]
       },

@@ -2,14 +2,20 @@
 // grammar is intentionally small (enough for AI-generated teaching scripts):
 //
 //	# comment
-//	A = Point(0, 2)
+//	A = Point(0, 2)      # command object
 //	l = Line(A, B)
 //	c = Circle(C, T)
-//	M = (1, 2)          # literal point
-//	r = 3               # number variable
+//	M = (1, 2)           # literal point
+//	r = 3                # number variable
+//	L = {1, 2, 3}        # list literal (Kind List)
+//	y = x^2 + 1          # algebraic expression (Kind Function)
+//	f(x) = 2x + 1        # function definition (Kind Function, param x local)
+//	SetColor(c, "red")   # statement-style modifier (no "=")
 //
 // Each object is `ID = Command(arg, ...)`. Arguments that are bare identifiers
-// resolve to references; numbers, coordinates, and expressions are literals.
+// resolve to references; numbers, coordinates, lists, and expressions are
+// literals. Bare no-"=" statements are accepted only for the modifier/scripting
+// command set (Set…/StartAnimation/Rename/…).
 package text
 
 import (
@@ -30,7 +36,10 @@ type statement struct {
 	lineNo        int
 	literalPoint  bool
 	numberLiteral string
-	modifier      bool // statement-style command with no "=", e.g. SetColor(c, "red")
+	literalList   []string // elements of a { ... } list literal (Kind KList)
+	exprLiteral   string   // non-empty: RHS is a raw expression / function body
+	fnParams      []string // parameter names for a function def like f(x,y) = ...
+	modifier      bool     // statement-style command with no "=", e.g. SetColor(c, "red")
 }
 
 // modifierCommands are statement-style GeoGebra commands whose line has no "="
@@ -38,24 +47,40 @@ type statement struct {
 // named object). They are parsed so style/dynamic scripts (colors, line width,
 // sliders, checkboxes, animation) pass the validator instead of being rejected.
 var modifierCommands = map[string]bool{
-	"SetColor":                 true,
-	"SetBackgroundColor":       true,
-	"SetLineThickness":         true,
-	"SetLineStyle":             true,
-	"SetPointSize":             true,
-	"SetPointStyle":            true,
-	"SetFilling":               true,
-	"SetValue":                 true,
-	"SetCaption":               true,
-	"SetVisible":               true,
-	"SetConditionToShowObject": true,
-	"StartAnimation":           true,
-	"ZoomIn":                   true,
-	"ZoomOut":                  true,
-	"SetLayer":                 true,
-	"SetDynamicColor":          true,
-	"SetLabelVisible":          true,
-	"RunClickScript":           true,
+	"SETCOLOR":                 true,
+	"SETBACKGROUNDCOLOR":       true,
+	"SETLINETHICKNESS":         true,
+	"SETLINESTYLE":             true,
+	"SETPOINTSIZE":             true,
+	"SETPOINTSTYLE":            true,
+	"SETFILLING":               true,
+	"SETVALUE":                 true,
+	"SETCAPTION":               true,
+	"SETVISIBLE":               true,
+	"SETCONDITIONTOSHOWOBJECT": true,
+	"STARTANIMATION":           true,
+	"ZOOMIN":                   true,
+	"ZOOMOUT":                  true,
+	"SETLAYER":                 true,
+	"SETDYNAMICCOLOR":          true,
+	"SETLABELVISIBLE":          true,
+	"RUNCLICKSCRIPT":           true,
+	// Additional statement-style scripting/UI commands (no "=") commonly emitted
+	// in teaching scripts: repositioning, renaming, toggling, view settings.
+	"SETCOORDS":          true,
+	"SETTRACE":           true,
+	"SETFIXED":           true,
+	"SETACTIVEVIEW":      true,
+	"SETPERSPECTIVE":     true,
+	"SETAXESRATIO":       true,
+	"SETDECORATION":      true,
+	"SETLABELMODE":       true,
+	"SETTOOLTIPMODE":     true,
+	"SETVISIBLEINVIEW":   true,
+	"SHOWLABEL":          true,
+	"RENAME":             true,
+	"UPDATECONSTRUCTION": true,
+	"SETSEED":            true,
 }
 
 // Parse splits a script into statements. Returns parse errors (fail-closed).
@@ -102,12 +127,21 @@ func parseLine(line string, lineNo int) (statement, bool, diag.Problem) {
 	if id == "" || rhs == "" {
 		return statement{}, false, diag.Problem{Code: diag.CodeParseSyntax, Msg: "赋值两端不能为空", Line: lineNo}
 	}
-	if !isIdentName(id) {
+	// LHS may be a function definition `f(x, y) = ...` or a plain object name.
+	name, fnParams, idOK := parseLHS(id)
+	if !idOK {
 		return statement{}, false, diag.Problem{Code: diag.CodeParseSyntax, Msg: "对象名不合法：" + id, Line: lineNo}
+	}
+	// A function definition `f(x) = <body>` always treats the whole RHS as the
+	// function body expression — even if it looks like a command call such as
+	// `f(x) = sin(x)`. GeoGebra parses these as the body, not an assignment of a
+	// command result, so skip the command/list/point dispatch below.
+	if len(fnParams) > 0 {
+		return statement{id: name, fnParams: fnParams, exprLiteral: rhs, lineNo: lineNo}, true, diag.Problem{}
 	}
 	// Number literal: ID = 3.5
 	if isNumber(rhs) {
-		return statement{id: id, numberLiteral: rhs, lineNo: lineNo}, true, diag.Problem{}
+		return statement{id: name, fnParams: fnParams, numberLiteral: rhs, lineNo: lineNo}, true, diag.Problem{}
 	}
 	// Literal point: ID = (0, 2)
 	if strings.HasPrefix(rhs, "(") {
@@ -115,20 +149,78 @@ func parseLine(line string, lineNo int) (statement, bool, diag.Problem) {
 		if !ok {
 			return statement{}, false, prob
 		}
-		return statement{id: id, args: inner, literalPoint: true, lineNo: lineNo}, true, diag.Problem{}
+		return statement{id: name, literalPoint: true, args: inner, lineNo: lineNo}, true, diag.Problem{}
 	}
-	// Command: ID = Command(args)
+	// Literal list: ID = {a, b, c}
+	if strings.HasPrefix(rhs, "{") {
+		inner, ok, prob := braceArgs(rhs, lineNo)
+		if !ok {
+			return statement{}, false, prob
+		}
+		return statement{id: name, literalList: inner, lineNo: lineNo}, true, diag.Problem{}
+	}
+	// Command: ID = Command(args). Only a leading identifier followed by '('
+	// is a command call. Anything else that merely ends in ')' (e.g.
+	// `g = 2*k + Sqrt(4)`) is an arithmetic expression, routed below, so a
+	// nested call embedded in an expression isn't misread as a command name.
 	lp := strings.IndexByte(rhs, '(')
-	if lp < 0 || !strings.HasSuffix(rhs, ")") {
-		return statement{}, false, diag.Problem{Code: diag.CodeParseSyntax, Msg: "命令调用语法错误：" + rhs, Line: lineNo}
+	if lp >= 0 && strings.HasSuffix(rhs, ")") {
+		cmd := strings.TrimSpace(rhs[:lp])
+		if cmd == "" {
+			return statement{}, false, diag.Problem{Code: diag.CodeParseSyntax, Msg: "缺命令名：" + rhs, Line: lineNo}
+		}
+		if isIdentName(cmd) {
+			inner := strings.TrimSpace(rhs[lp+1 : len(rhs)-1])
+			args := splitArgs(inner)
+			return statement{id: name, fnParams: fnParams, cmd: cmd, args: args, lineNo: lineNo}, true, diag.Problem{}
+		}
+		// prefix isn't a valid command name → fall through to expression RHS
 	}
-	cmd := strings.TrimSpace(rhs[:lp])
-	if cmd == "" {
-		return statement{}, false, diag.Problem{Code: diag.CodeParseSyntax, Msg: "缺命令名：" + rhs, Line: lineNo}
+	// Expression right-hand side: y = x^2 + 1, f(x) = 2x + 1, etc. A well-formed
+	// expression (not a bare command call missing its "=") is accepted as an
+	// algebraic object so implicit curves / functions don't hard-fail parsing.
+	if rhs != "" {
+		return statement{id: name, fnParams: fnParams, exprLiteral: rhs, lineNo: lineNo}, true, diag.Problem{}
 	}
-	inner := strings.TrimSpace(rhs[lp+1 : len(rhs)-1])
-	args := splitArgs(inner)
-	return statement{id: id, cmd: cmd, args: args, lineNo: lineNo}, true, diag.Problem{}
+	return statement{}, false, diag.Problem{Code: diag.CodeParseSyntax, Msg: "命令调用语法错误：" + rhs, Line: lineNo}
+}
+
+// parseLHS splits an assignment's left-hand side into a plain object name and,
+// for a function definition like `f(x, y)`, the parameter names. It returns
+// ok=false when the LHS is not a valid object name (with optional params).
+func parseLHS(lhs string) (name string, params []string, ok bool) {
+	lhs = strings.TrimSpace(lhs)
+	lp := strings.IndexByte(lhs, '(')
+	if lp < 0 {
+		if !isIdentName(lhs) {
+			return "", nil, false
+		}
+		return lhs, nil, true
+	}
+	if !strings.HasSuffix(lhs, ")") {
+		return "", nil, false
+	}
+	name = strings.TrimSpace(lhs[:lp])
+	if !isIdentName(name) {
+		return "", nil, false
+	}
+	inner := strings.TrimSpace(lhs[lp+1 : len(lhs)-1])
+	ps := splitArgs(inner)
+	for _, p := range ps {
+		if !isIdentName(p) {
+			return "", nil, false
+		}
+	}
+	return name, ps, true
+}
+
+// braceArgs extracts the comma-separated elements inside a { ... } list literal.
+func braceArgs(rhs string, lineNo int) ([]string, bool, diag.Problem) {
+	if !strings.HasPrefix(rhs, "{") || !strings.HasSuffix(rhs, "}") {
+		return nil, false, diag.Problem{Code: diag.CodeParseSyntax, Msg: "花括号不配对", Line: lineNo}
+	}
+	inner := strings.TrimSpace(rhs[1 : len(rhs)-1])
+	return splitArgs(inner), true, diag.Problem{}
 }
 
 // parseCommandCall parses a bare `Cmd(args)` line (no "="). It only accepts
@@ -143,7 +235,9 @@ func parseCommandCall(s string, lineNo int) (argCommand, bool, *diag.Problem) {
 	if !isIdentName(cmd) {
 		return argCommand{}, false, nil
 	}
-	if !modifierCommands[cmd] {
+	// Modifier command names are matched case-insensitively (setcolor == SetColor),
+	// consistent with the rest of the command handling.
+	if !modifierCommands[strings.ToUpper(cmd)] {
 		// A real command must be written as Object = Command(...). Reject with a
 		// hint so the model learns the expected assignment syntax.
 		return argCommand{}, false, &diag.Problem{
@@ -244,17 +338,55 @@ func Build(stmts []statement) (*ir.Graph, []diag.Problem) {
 		switch {
 		case s.literalPoint:
 			o.Kind = ir.KPoint
-			o.Args = s.args
+			// Nested command calls in a point's coordinates (e.g. Sqrt(3) in
+			// (Sqrt(3), 0)) are materialized as synthetic validated objects. The
+			// raw coordinate text is kept for other stages; points are not
+			// reference-resolved so symbolic coordinates (x, y) never error.
+			seq := &synthSeq{}
+			var nested []diag.Problem
+			o.Args, nested = flattenArgs(g, s.id, s.args, s.lineNo, seq, nil)
+			probs = append(probs, nested...)
 		case s.numberLiteral != "":
 			o.Kind = ir.KNumber
 			o.Args = []string{s.numberLiteral}
+		case s.literalList != nil:
+			// { ... } list literal → a List object. Elements may contain nested
+			// command calls (e.g. {Sqrt(2), 3}); flatten first, then resolve refs.
+			o.Kind = ir.KList
+			seq := &synthSeq{}
+			var nested []diag.Problem
+			o.Args, nested = flattenArgs(g, s.id, s.literalList, s.lineNo, seq, nil)
+			probs = append(probs, nested...)
+			refs, undefs := resolveRefs(g, s.cmd, o.Args)
+			o.Refs = refs
+			for _, u := range undefs {
+				probs = append(probs, diag.Problem{
+					Code: diag.CodeDepUndefined, Msg: "引用了未定义对象：" + u, Obj: s.id, Line: s.lineNo,
+				})
+			}
+		case s.exprLiteral != "":
+			// Raw algebraic expression / function body → a Function-ish object.
+			// An expression's free variables (independent var x, etc.) are local,
+			// not object refs; only identifiers that are actually defined objects
+			// become dependency edges. fnParams are in-scope locals, never refs.
+			o.Kind = ir.KFunction
+			o.Args = []string{s.exprLiteral}
+			bindings := map[string]bool{}
+			for _, p := range s.fnParams {
+				bindings[p] = true
+			}
+			refs, undefs := resolveRefsExpr(g, s.exprLiteral, bindings)
+			o.Refs = refs
+			_ = undefs // free variables are not reported as undefined for expressions
 		default:
 			// command object; first flatten any nested command calls in the
 			// arguments (each becomes a synthetic object in the graph), then
-			// resolve refs from the partly-flattened args.
+			// resolve refs from the partly-flattened args. Bound variables of
+			// the command (Curve/Sequence/Sum/...) stay in scope for nested
+			// calls inside its arguments.
 			seq := &synthSeq{}
 			var nested []diag.Problem
-			o.Args, nested = flattenArgs(g, s.id, s.args, s.lineNo, seq)
+			o.Args, nested = flattenArgs(g, s.id, s.args, s.lineNo, seq, boundVarSet(s.cmd, s.args))
 			probs = append(probs, nested...)
 			refs, undefs := resolveRefs(g, s.cmd, o.Args)
 			o.Refs = refs
@@ -284,71 +416,131 @@ func Build(stmts []statement) (*ir.Graph, []diag.Problem) {
 // command calls.
 type synthSeq struct{ n int }
 
-// flattenArgs rewrites an argument list so that any argument that is itself a
-// command call (e.g. Midpoint(A,B) inside Circle(Midpoint(A,B),3)) becomes a
-// synthetic object added to the graph, with the argument position replaced by
-// that synthetic object's id. It recurses so arbitrarily deep nesting is
-// captured, and each nested command gets its own dependency edges.
-func flattenArgs(g *ir.Graph, owner string, args []string, lineNo int, seq *synthSeq) ([]string, []diag.Problem) {
+// flattenArgs rewrites an argument list so that any nested command call found
+// in an argument (a whole-argument call such as Midpoint(A,B), or one embedded
+// in arithmetic such as Sqrt(3)/2) becomes a synthetic object added to the
+// graph, with that call replaced by its synthetic object's id. It recurses so
+// arbitrarily deep nesting is captured, and each nested command gets its own
+// dependency edges. Applied uniformly to command args, literal point
+// coordinates, and list literal elements so nested commands validate wherever
+// they appear. bindings are in-scope variable names (e.g. a Curve/Sequence
+// parameter) that must not be treated as undefined when they appear inside a
+// nested call.
+func flattenArgs(g *ir.Graph, owner string, args []string, lineNo int, seq *synthSeq, bindings map[string]bool) ([]string, []diag.Problem) {
 	var probs []diag.Problem
 	out := make([]string, len(args))
 	for i, a := range args {
-		a = strings.TrimSpace(a)
-		sub, ok, prob := parseArgCommand(a, lineNo)
-		if !ok {
-			out[i] = a // not a command call: keep as literal/ref
-			if prob != nil {
-				probs = append(probs, *prob)
-			}
-			continue
-		}
-		// a is `SubCmd(inner...)`: materialize as synthetic object.
-		seq.n++
-		sid := owner + "." + sub.cmd + strconv.Itoa(seq.n)
-		if _, exists := g.Get(sid); exists {
-			probs = append(probs, diag.Problem{
-				Code: diag.CodeDepRedefine, Msg: "嵌套命令 id 冲突：" + sid, Obj: owner, Line: lineNo,
-			})
-			out[i] = sid
-			continue
-		}
-		g.Add(&ir.Object{ID: sid, Cmd: sub.cmd, Line: lineNo})
-		subArgs, subProbs := flattenArgs(g, sid, sub.args, lineNo, seq)
-		probs = append(probs, subProbs...)
-		obj, _ := g.Get(sid)
-		obj.Args = subArgs
-		refs, undefs := resolveRefs(g, sub.cmd, subArgs)
-		obj.Refs = refs
-		for _, u := range undefs {
-			probs = append(probs, diag.Problem{
-				Code: diag.CodeDepUndefined, Msg: "引用了未定义对象（嵌套）：" + u, Obj: sid, Line: lineNo,
-			})
-		}
-		out[i] = sid
+		rewritten, p := scanFlatten(g, owner, strings.TrimSpace(a), lineNo, seq, bindings)
+		probs = append(probs, p...)
+		out[i] = rewritten
 	}
 	return out, probs
 }
 
-// argCommand is a decomposed nested command call found inside an argument.
+// scanFlatten rewrites src so that every command call `Func(args)` found
+// anywhere in the string — including one embedded in a longer expression such
+// as Sqrt(3)/2 or 2*Cos(t) — is materialized as a synthetic object in the
+// graph and replaced by that object's id. It recurses bottom-up (innermost
+// calls first) so each produced synthetic object carries its own dependency
+// edges. Non-call text (numbers, operators, plain identifiers) passes through
+// unchanged.
+func scanFlatten(g *ir.Graph, owner, src string, lineNo int, seq *synthSeq, bindings map[string]bool) (string, []diag.Problem) {
+	var probs []diag.Problem
+	var sb strings.Builder
+	i, n := 0, len(src)
+	for i < n {
+		c := src[i]
+		if isIdentStart(rune(c)) {
+			j := i
+			for j < n && isIdentChar(rune(src[j])) {
+				j++
+			}
+			ident := src[i:j]
+			// skip whitespace between the name and '(' so `point (1,2)` still
+			// reads as a call; this only ever adds precision.
+			k := j
+			for k < n && (src[k] == ' ' || src[k] == '\t') {
+				k++
+			}
+			if k < n && src[k] == '(' {
+				if close := matchParen(src, k); close >= 0 {
+					inner := src[k+1 : close]
+					rewrittenInner, ip := scanFlatten(g, owner, inner, lineNo, seq, bindings)
+					probs = append(probs, ip...)
+					callArgs := splitArgs(rewrittenInner)
+					seq.n++
+					sid := owner + "." + ident + strconv.Itoa(seq.n)
+					if _, exists := g.Get(sid); exists {
+						probs = append(probs, diag.Problem{
+							Code: diag.CodeDepRedefine, Msg: "嵌套命令 id 冲突：" + sid, Obj: owner, Line: lineNo,
+						})
+					} else {
+						g.Add(&ir.Object{ID: sid, Cmd: ident, Line: lineNo})
+						obj, _ := g.Get(sid)
+						obj.Args = callArgs
+						refs, undefs := resolveRefs(g, ident, callArgs)
+						// In-scope bound variables of the enclosing command are
+						// local symbols, so drop them from the undefined list
+						// (e.g. t in Curve(cos(t), ...)).
+						if len(bindings) > 0 && len(undefs) > 0 {
+							kept := undefs[:0]
+							for _, u := range undefs {
+								if !bindings[u] {
+									kept = append(kept, u)
+								}
+							}
+							undefs = kept
+						}
+						obj.Refs = refs
+						for _, u := range undefs {
+							probs = append(probs, diag.Problem{
+								Code: diag.CodeDepUndefined, Msg: "引用了未定义对象（嵌套）：" + u, Obj: sid, Line: lineNo,
+							})
+						}
+					}
+					sb.WriteString(sid)
+					i = close + 1
+					continue
+				}
+			}
+			sb.WriteString(ident)
+			i = j
+			continue
+		}
+		sb.WriteByte(c)
+		i++
+	}
+	return sb.String(), probs
+}
+
+// matchParen finds the index of the closing parenthesis that balances the '('
+// at pos, or -1 if unbalanced. Assumes src[pos] == '('.
+func matchParen(src string, pos int) int {
+	depth := 0
+	for i := pos; i < len(src); i++ {
+		switch src[i] {
+		case '(':
+			depth++
+		case ')':
+			depth--
+			if depth == 0 {
+				return i
+			}
+		}
+	}
+	return -1
+}
+
+// isIdentStart reports whether r can begin an identifier (letters, '_', ':').
+// Digits are excluded so a number is never mistaken for a name.
+func isIdentStart(r rune) bool {
+	return r == '_' || r == ':' || unicode.IsLetter(r)
+}
+
+// argCommand is a decomposed command call found on a bare (no "=") line.
 type argCommand struct {
 	cmd  string
 	args []string
-}
-
-// parseArgCommand detects whether s parses as `Cmd(...)` and, if so, returns
-// its command name and inner args. Non-command expression returns ok=false.
-func parseArgCommand(s string, lineNo int) (argCommand, bool, *diag.Problem) {
-	lp := strings.IndexByte(s, '(')
-	if lp <= 0 || !strings.HasSuffix(s, ")") {
-		return argCommand{}, false, nil
-	}
-	cmd := strings.TrimSpace(s[:lp])
-	// the command name must be a plain identifier (no operators inside)
-	if !isIdentName(cmd) {
-		return argCommand{}, false, nil
-	}
-	inner := strings.TrimSpace(s[lp+1 : len(s)-1])
-	return argCommand{cmd: cmd, args: splitArgs(inner)}, true, nil
 }
 
 // resolveRefs finds which args are bare identifiers referring to defined objects,
@@ -378,7 +570,57 @@ func resolveRefs(g *ir.Graph, cmd string, args []string) (refs, undefs []string)
 	return refs, undefs
 }
 
-// boundVars returns, for each arg index, whether that arg is a variable *bound*
+// resolveRefsExpr scans a raw algebraic expression for object references. Unlike
+// resolveRefs (whole-arg matching), it tokenizes the expression and only treats
+// tokens that are *defined objects* as dependency refs. Free variables (the
+// independent var x, trig args, etc.) and explicit fn params are local symbols,
+// never refs and never undefined-ref errors.
+func resolveRefsExpr(g *ir.Graph, expr string, bindings map[string]bool) (refs, _ []string) {
+	seen := map[string]bool{}
+	for _, tok := range tokenizeIdentifiers(expr) {
+		if seen[tok] || bindings[tok] {
+			continue
+		}
+		seen[tok] = true
+		if isNumber(tok) || number.KnownConstant(tok) {
+			continue
+		}
+		if _, ok := g.Get(tok); ok {
+			refs = append(refs, tok)
+		}
+	}
+	return refs, nil
+}
+
+// tokenizeIdentifiers extracts maximal runs of identifier characters from s,
+// skipping numbers and operators. Used to find object references inside an
+// expression string.
+func tokenizeIdentifiers(s string) []string {
+	var out []string
+	var cur strings.Builder
+	flush := func() {
+		if cur.Len() > 0 {
+			out = append(out, cur.String())
+			cur.Reset()
+		}
+	}
+	for _, r := range s {
+		if isIdentChar(r) {
+			cur.WriteRune(r)
+		} else {
+			flush()
+		}
+	}
+	flush()
+	return out
+}
+
+// isIdentChar reports whether r can appear in an identifier (letters, digits,
+// '_', ':' — digits not at the start are handled by the run-level caller).
+func isIdentChar(r rune) bool {
+	return r == '_' || r == ':' || unicode.IsLetter(r) || unicode.IsDigit(r)
+}
+
 // by the command (e.g. Sequence(<expr>, <k>, <start>, <end>, [step]) binds k at
 // index 1). Such names are in-scope local symbols and must not be treated as
 // object references.
@@ -390,18 +632,49 @@ func boundVars(cmd string, args []string) []bool {
 		if len(args) >= 2 {
 			out[1] = true
 		}
-	case "CURVE", "SURFACE":
-		// Curve(x_expr, k, a, b[, z_expr]) binds k at index 1 and, for 3D, t at 4.
-		if len(args) >= 2 {
-			out[1] = true
+	case "CURVE":
+		// Curve(x_e, y_e, t, a, b)          (2D, 5 args)
+		// Curve(x_e, y_e, z_e, t, a, b)     (3D, 6 args)
+		// The parameter variable is the 3rd arg in 2D, the 4th in 3D.
+		if len(args) == 6 {
+			out[3] = true
+		} else if len(args) >= 3 {
+			out[2] = true
 		}
-		if len(args) >= 5 {
-			out[4] = true
+	case "SURFACE":
+		// Surface(x, y, z, u, u_min, u_max, t, t_min, t_max) — vars at 3 and 6.
+		if len(args) >= 4 {
+			out[3] = true
+		}
+		if len(args) >= 7 {
+			out[6] = true
 		}
 	default:
 		// no bound variables
 	}
 	return out
+}
+
+// boundVarSet returns the set of bound-variable names of a command's args (the
+// iteration/parameter variables it binds), used so nested command calls inside
+// those args treat the variable as a local symbol rather than an undefined ref.
+func boundVarSet(cmd string, args []string) map[string]bool {
+	mark := boundVars(cmd, args)
+	var set map[string]bool
+	for i, yes := range mark {
+		if !yes || i >= len(args) {
+			continue
+		}
+		// the arg at a bound position is the variable's name
+		name := strings.TrimSpace(args[i])
+		if isIdentName(name) {
+			if set == nil {
+				set = map[string]bool{}
+			}
+			set[name] = true
+		}
+	}
+	return set
 }
 
 // isIdentName reports whether s is a valid identifier (letters/digits/_/colon,

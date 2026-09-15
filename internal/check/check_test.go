@@ -100,6 +100,79 @@ func TestUnknownCommand(t *testing.T) {
 	}
 }
 
+// TestNestedCommandsInPointsOk verifies that nested command calls inside point
+// coordinates (B = (Sqrt(3),0,0), D = (Sqrt(3)/2, 3/2, 0)) and as number
+// assignments (h = Sqrt(5)) are recognized and validated end to end.
+func TestNestedCommandsInPointsOk(t *testing.T) {
+	script := `A = (0, 0, 0)
+B = (Sqrt(3), 0, 0)
+C = (Sqrt(3), 1, 0)
+D = (Sqrt(3)/2, 3/2, 0)
+h = Sqrt(5)
+L = {Sqrt(2), Sqrt(8), 3}`
+	rc := Check([]byte(script), Options{})
+	if !rc.OK {
+		t.Fatalf("expected nested commands to validate ok, got errors: %v", rc.Errors)
+	}
+}
+
+// TestNestedCommandTypoCaught verifies a typo inside a point coordinate is
+// reported as cmd/unknown rather than silently ignored.
+func TestNestedCommandTypoCaught(t *testing.T) {
+	rc := Check([]byte("B = (Sqrrt(3), 0, 0)\n"), Options{})
+	if rc.OK {
+		t.Fatal("expected failure for unknown nested command")
+	}
+	if !hasCode(rc, diag.CodeCmdUnknown) {
+		t.Fatalf("expected cmd/unknown, got %v", rc.Errors)
+	}
+}
+
+// TestSqrtNumberAssignmentOk verifies a scalar math function used as a command
+// result (h = Sqrt(5)) is a valid known command.
+func TestSqrtNumberAssignmentOk(t *testing.T) {
+	rc := Check([]byte("h = Sqrt(5)\nr = Cos(0)\n"), Options{})
+	if !rc.OK {
+		t.Fatalf("expected Sqrt/Cos assignments ok, got errors: %v", rc.Errors)
+	}
+}
+
+// TestNestedCommandInCurveBoundVar verifies a trig call inside Curve uses the
+// parameter variable t (Curve's bound variable), so t is a local symbol, not an
+// undefined reference.
+func TestNestedCommandInCurveBoundVar(t *testing.T) {
+	script := `c = Curve(cos(t), sin(t), t, 0, 2pi)`
+	rc := Check([]byte(script), Options{})
+	if !rc.OK {
+		t.Fatalf("expected Curve(cos(t), sin(t), ...) ok, got errors: %v", rc.Errors)
+	}
+}
+
+// TestNestedCommandInSequenceBoundVar verifies a nested Sqrt call under a
+// Sequence doesn't misreport the iteration variable k as undefined.
+func TestNestedCommandInSequenceBoundVar(t *testing.T) {
+	script := `S = Sequence((k*Sqrt(2), k), k, 1, 5)`
+	rc := Check([]byte(script), Options{})
+	if !rc.OK {
+		t.Fatalf("expected Sequence with nested Sqrt ok, got errors: %v", rc.Errors)
+	}
+}
+
+// TestLowercaseMathCommandsOk verifies the built-in math functions written
+// lowercase (sqrt, sin, cos, abs, ln, exp, tan) — GeoGebra's usual spelling —
+// are recognized and validate, in number assignments and inside point coords.
+func TestLowercaseMathCommandsOk(t *testing.T) {
+	script := `h = sqrt(5)
+r = cos(0)
+s = sin(0)
+q = abs(-3)
+P = (sqrt(2), cos(0), 0)`
+	rc := Check([]byte(script), Options{})
+	if !rc.OK {
+		t.Fatalf("expected lowercase math commands ok, got errors: %v", rc.Errors)
+	}
+}
+
 func TestDegenerateLine(t *testing.T) {
 	rc := Check([]byte("A = Point(1, 1)\nl = Line(A, A)\n"), Options{})
 	if rc.OK {
@@ -207,5 +280,83 @@ func TestSniff(t *testing.T) {
 	}
 	if s := sniff([]byte("{"), "text"); s != "text" {
 		t.Fatalf("force text should win, got %s", s)
+	}
+}
+
+// TestListLiteralAndElement verifies a { ... } list literal builds a List object
+// that can feed Element / FitPoly.
+func TestListLiteralAndElement(t *testing.T) {
+	script := "L = {1, 2, 3}\ne = Element(L, 1)\n"
+	rc := Check([]byte(script), Options{})
+	if !rc.OK {
+		t.Fatalf("expected ok, got %v", rc.Errors)
+	}
+}
+
+func TestPointListFitPoly(t *testing.T) {
+	script := "pts = {(0,0), (1,1), (2,4)}\nl = FitPoly(pts, 2)\n"
+	rc := Check([]byte(script), Options{})
+	if !rc.OK {
+		t.Fatalf("expected ok, got %v", rc.Errors)
+	}
+}
+
+func TestExpressionRHSOk(t *testing.T) {
+	// Expression RHS / implicit curve no longer hard-fails parsing.
+	script := "k = 3\ny = x^2 + k\n"
+	rc := Check([]byte(script), Options{})
+	if !rc.OK {
+		t.Fatalf("expected ok, got %v", rc.Errors)
+	}
+}
+
+func TestFunctionDefBuiltinBody(t *testing.T) {
+	// f(x) = sin(x) — the command-call-looking body must parse as a function
+	// body expression, not an assignment, and pass validation.
+	script := "f(x) = sin(x)\ng(t) = cos(t) + 1\n"
+	rc := Check([]byte(script), Options{})
+	if !rc.OK {
+		t.Fatalf("expected ok, got %v", rc.Errors)
+	}
+}
+
+func TestRegularPolygonOk(t *testing.T) {
+	script := "A=(0,0)\nB=(2,0)\np = RegularPolygon(A, B, 5)\n"
+	rc := Check([]byte(script), Options{})
+	if !rc.OK {
+		t.Fatalf("expected ok, got %v", rc.Errors)
+	}
+}
+
+func TestPolygonVerticesNumberOk(t *testing.T) {
+	script := "A=(0,0)\nB=(2,0)\np = Polygon(A, B, 5)\n"
+	rc := Check([]byte(script), Options{})
+	if !rc.OK {
+		t.Fatalf("expected ok, got %v", rc.Errors)
+	}
+}
+
+func TestCircumcircleOk(t *testing.T) {
+	script := "A=(0,0)\nB=(2,0)\nC=(1,2)\nc = Circumcircle(A, B, C)\n"
+	rc := Check([]byte(script), Options{})
+	if !rc.OK {
+		t.Fatalf("expected ok, got %v", rc.Errors)
+	}
+}
+
+func TestTriangleCentersOk(t *testing.T) {
+	script := "A=(0,0)\nB=(2,0)\nC=(1,2)\nI = Incenter(A, B, C)\no = Orthocenter(A,B,C)\n"
+	rc := Check([]byte(script), Options{})
+	if !rc.OK {
+		t.Fatalf("expected ok, got %v", rc.Errors)
+	}
+}
+
+func TestNewModifierStatementsOk(t *testing.T) {
+	// SetCoords / SetTrace / Rename as no-'=' statements are now accepted.
+	script := "A=(0,0)\nB=(2,0)\ns=Segment(A,B)\nSetCoords(A, 1, 1)\nSetTrace(s)\nRename(B)\n"
+	rc := Check([]byte(script), Options{})
+	if !rc.OK {
+		t.Fatalf("expected ok, got %v", rc.Errors)
 	}
 }

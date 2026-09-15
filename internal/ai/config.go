@@ -37,7 +37,7 @@ func LoadConfig() Config {
 		Model:         envOr("GGCM_AI_MODEL", "sensenova-6.8-flash-lite"),
 		APIKey:        os.Getenv("GGCM_AI_API_KEY"),
 		Temperature:   envFloat("GGCM_AI_TEMP", 0.2),
-		MaxTokens:     envInt("GGCM_AI_MAX_TOKENS", 128000),
+		MaxTokens:     envInt("GGCM_AI_MAX_TOKENS", 16384),
 		MaxRepair:     envInt("GGCM_AI_MAX_REPAIR", 3),
 		MaxImageBytes: envInt("GGCM_AI_MAX_IMAGE_BYTES", 10<<20), // 10 MiB
 		DisableVision: envBool("GGCM_AI_DISABLE_VISION"),

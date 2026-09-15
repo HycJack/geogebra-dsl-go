@@ -72,4 +72,11 @@ func TestDefaultLoadsAll(t *testing.T) {
 			t.Errorf("missing merged command %q", want)
 		}
 	}
+	// Built-in scalar math commands (used inside coordinates / expressions) must
+	// be recognized so nested calls like Sqrt(3) validate instead of cmd/unknown.
+	for _, want := range []string{"Sqrt", "Cbrt", "NRoot", "Abs", "Sin", "Cos", "Tan", "ln", "Log", "exp"} {
+		if !c.Has(want) {
+			t.Errorf("missing math command %q", want)
+		}
+	}
 }

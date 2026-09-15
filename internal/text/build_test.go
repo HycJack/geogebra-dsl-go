@@ -241,3 +241,217 @@ func TestBuildModifierUndefinedTargetReports(t *testing.T) {
 		t.Errorf("expected dep/undefined problem, got %v", probs)
 	}
 }
+
+func TestParseListLiteral(t *testing.T) {
+	src := "L = {1, 2, 3}\npts = {(0,0), (1,1), (2,4)}\n"
+	stmts, probs := Parse(src)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected parse problems: %v", probs)
+	}
+	g, probs := Build(stmts)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected build problems: %v", probs)
+	}
+	l := g.Objects["L"]
+	if l.Kind != ir.KList {
+		t.Errorf("L kind=%v, want List", l.Kind)
+	}
+	if len(l.Args) != 3 || l.Args[0] != "1" || l.Args[2] != "3" {
+		t.Errorf("L args=%v", l.Args)
+	}
+	pts := g.Objects["pts"]
+	if pts.Kind != ir.KList {
+		t.Errorf("pts kind=%v, want List", pts.Kind)
+	}
+}
+
+func TestParseExpressionRHS(t *testing.T) {
+	// An expression RHS (implicit curve / algebraic) is accepted, not a syntax
+	// error, and references to defined objects become deps.
+	src := "k = 3\ny = x^2 + k\n"
+	stmts, probs := Parse(src)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected parse problems: %v", probs)
+	}
+	g, probs := Build(stmts)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected build problems (free var x must be tolerated): %v", probs)
+	}
+	y := g.Objects["y"]
+	if y.Kind != ir.KFunction {
+		t.Errorf("y kind=%v, want Function", y.Kind)
+	}
+	if !containsRef(y.Refs, "k") {
+		t.Errorf("y should depend on k, refs=%v", y.Refs)
+	}
+}
+
+func TestParseFunctionDef(t *testing.T) {
+	// f(x) = ... registers object "f" (KFunction); the param x is local, the
+	// body may reference defined objects.
+	src := "f(x) = 2x + 1\nh = 2*f\n"
+	stmts, probs := Parse(src)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected parse problems: %v", probs)
+	}
+	g, probs := Build(stmts)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected build problems: %v", probs)
+	}
+	f := g.Objects["f"]
+	if f.Kind != ir.KFunction {
+		t.Errorf("f kind=%v, want Function", f.Kind)
+	}
+	h := g.Objects["h"]
+	if !containsRef(h.Refs, "f") {
+		t.Errorf("h should depend on f, refs=%v", h.Refs)
+	}
+}
+
+func TestParseFunctionDefCommandLikeBody(t *testing.T) {
+	// f(x) = sin(x) has a command-call-looking body; it must be parsed as a
+	// function body expression, not as `f = sin(x)` assignment (which would
+	// flag x undefined / sin unknown).
+	src := "f(x) = sin(x)\ng(t) = cos(t) + 1\n"
+	stmts, probs := Parse(src)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected parse problems: %v", probs)
+	}
+	g, probs := Build(stmts)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected build problems (body must be expression): %v", probs)
+	}
+	if g.Objects["f"].Kind != ir.KFunction {
+		t.Errorf("f kind=%v, want Function", g.Objects["f"].Kind)
+	}
+	// The body is stored whole; neither sin nor x become refs.
+	if len(g.Objects["f"].Refs) != 0 {
+		t.Errorf("f should have no refs (sin/x are local), got %v", g.Objects["f"].Refs)
+	}
+}
+
+func TestListElementsResolveRefs(t *testing.T) {
+	// A list literal containing a defined object records that dependency and
+	// an undefined standalone identifier is reported.
+	src := "A = (0, 0)\nB = (2, 0)\nl = {A, B, Seven}\n"
+	stmts, _ := Parse(src)
+	g, probs := Build(stmts)
+	foundUndef := false
+	for _, p := range probs {
+		if p.Code == diag.CodeDepUndefined {
+			foundUndef = true
+		}
+	}
+	if !foundUndef {
+		t.Errorf("expected undefined-ref for Seven, got %v", probs)
+	}
+	if len(g.Objects["l"].Refs) != 2 || !containsRef(g.Objects["l"].Refs, "A") || !containsRef(g.Objects["l"].Refs, "B") {
+		t.Errorf("list refs=%v", g.Objects["l"].Refs)
+	}
+}
+
+func TestNestedCommandInPointCoords(t *testing.T) {
+	// A numeric function call inside a point's coordinate (B = (Sqrt(3),0,0))
+	// is materialized as a synthetic object so it is validated, not silently
+	// dropped.
+	src := "B = (Sqrt(3), 0, 0)\n"
+	stmts, probs := Parse(src)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected parse problems: %v", probs)
+	}
+	g, probs := Build(stmts)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected build problems: %v", probs)
+	}
+	inner, ok := g.Get("B.Sqrt1")
+	if !ok {
+		t.Fatalf("synthetic Sqrt object missing; order=%v", g.Order)
+	}
+	if inner.Cmd != "Sqrt" {
+		t.Fatalf("synthetic cmd=%q, want Sqrt", inner.Cmd)
+	}
+	if len(inner.Args) != 1 || inner.Args[0] != "3" {
+		t.Fatalf("synthetic args=%v, want [3]", inner.Args)
+	}
+	// the point retains its coordinate text (with the call rewritten to the id)
+	b := g.Objects["B"]
+	if b.Kind != ir.KPoint {
+		t.Fatalf("B kind=%v, want Point", b.Kind)
+	}
+	if len(b.Args) != 3 || b.Args[0] != "B.Sqrt1" {
+		t.Fatalf("B args=%v, want leading B.Sqrt1", b.Args)
+	}
+}
+
+func TestNestedCommandEmbeddedInPointCoord(t *testing.T) {
+	// A call embedded inside arithmetic (D = (Sqrt(3)/2, 3/2, 0)) must be found
+	// and materialized, not just whole-argument calls.
+	src := "D = (Sqrt(3)/2, 3/2, 0)\n"
+	stmts, _ := Parse(src)
+	g, probs := Build(stmts)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected build problems: %v", probs)
+	}
+	inner, ok := g.Get("D.Sqrt1")
+	if !ok {
+		t.Fatalf("synthetic Sqrt object missing; order=%v", g.Order)
+	}
+	if inner.Cmd != "Sqrt" || len(inner.Args) != 1 || inner.Args[0] != "3" {
+		t.Fatalf("synthetic=%+v, want Sqrt(3)", inner)
+	}
+	d := g.Objects["D"]
+	if len(d.Args) != 3 || d.Args[0] != "D.Sqrt1/2" {
+		t.Fatalf("D args=%v, want leading D.Sqrt1/2", d.Args)
+	}
+}
+
+func TestNestedCommandInListLiteral(t *testing.T) {
+	// A list literal element that is a command call is materialized and the list
+	// depends on the synthetic object.
+	src := "L = {Sqrt(2), 3}\n"
+	stmts, _ := Parse(src)
+	g, probs := Build(stmts)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected build problems: %v", probs)
+	}
+	inner, ok := g.Get("L.Sqrt1")
+	if !ok {
+		t.Fatalf("synthetic Sqrt object missing; order=%v", g.Order)
+	}
+	if inner.Cmd != "Sqrt" || len(inner.Args) != 1 || inner.Args[0] != "2" {
+		t.Fatalf("synthetic=%+v, want Sqrt(2)", inner)
+	}
+	l := g.Objects["L"]
+	if len(l.Args) != 2 || l.Args[0] != "L.Sqrt1" {
+		t.Fatalf("L args=%v, want leading L.Sqrt1", l.Args)
+	}
+	if !containsRef(l.Refs, "L.Sqrt1") {
+		t.Fatalf("list should depend on synthetic Sqrt, refs=%v", l.Refs)
+	}
+}
+
+func TestNestedCommandUnknownInPoint(t *testing.T) {
+	// A typo in a nested command inside a point coordinate is materialized and
+	// reported (cmd/unknown via the sig stage) instead of being silently ignored.
+	src := "B = (Sqrrt(3), 0, 0)\n"
+	stmts, _ := Parse(src)
+	g, probs := Build(stmts)
+	if len(probs) != 0 {
+		t.Fatalf("build should still succeed (sig stage flags cmd/unknown): %v", probs)
+	}
+	if _, ok := g.Get("B.Sqrrt1"); !ok {
+		t.Fatalf("synthetic Sqrrt object missing")
+	}
+	if g.Objects["B.Sqrrt1"].Cmd != "Sqrrt" {
+		t.Fatalf("synthetic cmd=%q", g.Objects["B.Sqrrt1"].Cmd)
+	}
+}
+
+func containsRef(refs []string, want string) bool {
+	for _, r := range refs {
+		if r == want {
+			return true
+		}
+	}
+	return false
+}

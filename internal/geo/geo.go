@@ -6,6 +6,7 @@ package geo
 
 import (
 	"math/big"
+	"strings"
 
 	"github.com/hycjack/geogebra-dsl-go/internal/diag"
 	"github.com/hycjack/geogebra-dsl-go/internal/ir"
@@ -18,12 +19,12 @@ func Check(g *ir.Graph, order []string) []diag.Problem {
 	var probs []diag.Problem
 	for _, id := range order {
 		o := g.Objects[id]
-		switch o.Cmd {
-		case "Line":
+		switch strings.ToUpper(o.Cmd) {
+		case "LINE":
 			if prob := lineThroughIdenticalPoints(g, o); prob != nil {
 				probs = append(probs, *prob)
 			}
-		case "Circle", "CircleWithCenter", "CircleByRadiusM":
+		case "CIRCLE", "CIRCLEWITHCENTER", "CIRCLEBYRADIUSM":
 			if prob := zeroRadius(g, o); prob != nil {
 				probs = append(probs, *prob)
 			}

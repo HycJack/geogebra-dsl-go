@@ -3,6 +3,8 @@
 // reads an *ir.Graph; the seam the design isolates is this package.
 package ir
 
+import "strings"
+
 // Kind is the coarse geometric type of an object. The catalog expresses every
 // overloaded param type as one of these (or an "or" of several, resolved via
 // CompatibleType below).
@@ -139,35 +141,44 @@ func (g *Graph) RefKinds(o *Object) []Kind {
 // degeneracy). Commands outside the map produce KUnknown and are still checked
 // for signature/args.
 func kindForCmd(cmd string) Kind {
-	switch cmd {
-	case "Point", "PointIn", "Midpoint", "Vertex", "Intersect":
+	switch strings.ToUpper(cmd) {
+	case "POINT", "POINTIN", "MIDPOINT", "VERTEX", "INTERSECT":
 		return KPoint
-	case "Line", "LineThrough", "PerpendicularLine", "ParallelLine",
-		"Tangent", "PerpendicularBisector", "AngleBisector":
+	case "LINE", "LINETHROUGH", "PERPENDICULARLINE", "PARALLELLINE",
+		"TANGENT", "PERPENDICULARBISECTOR", "ANGLEBISECTOR":
 		return KLine
-	case "Segment", "Side":
+	case "SEGMENT", "SIDE":
 		return KSegment
-	case "Ray":
+	case "RAY":
 		return KRay
-	case "Vector":
+	case "VECTOR":
 		return KVector
-	case "Circle", "CircleWithCenter", "CircleByRadiusM", "Semicircle":
+	case "CIRCLE", "CIRCLEWITHCENTER", "CIRCLEBYRADIUSM", "SEMICIRCLE":
 		return KCircle
-	case "Polygon", "Polyline":
+	case "POLYGON", "POLYLINE":
 		return KPolygon
-	case "Distance", "Length", "Perimeter", "Area", "Angle", "Slope",
-		"Radius", "Volume", "Circumference", "abs", "Abs":
+	case "DISTANCE", "LENGTH", "PERIMETER", "AREA", "ANGLE", "SLOPE",
+		"RADIUS", "VOLUME", "CIRCUMFERENCE", "ABS", "SIGN",
+		"FLOOR", "CEIL", "ROUND":
+		return KNumber
+	// Built-in scalar math functions (sqrt, trig, log/exp, roots) produce a
+	// Number value. Matched case-insensitively so sqrt/sin/ln (and Sqrt/Sin)
+	// all resolve consistently with the catalog. Mapped so nested
+	// coordinate/argument uses keep the right coarse kind for signature matching.
+	case "SQRT", "CBRT", "NROOT", "EXP", "LN", "LOG", "LOG10",
+		"SIN", "COS", "TAN", "COT", "SEC", "CSC",
+		"ARCSIN", "ARCCOS", "ARCTAN", "ARCCOT", "ARCSEC", "ARCCSC":
 		return KNumber
 	// 3D: map coarse result kinds so signature/geo checks stay consistent. A
 	// surface/solid command yields a Quadric- or Solid-typed object, and a
 	// Plane command yields a Plane.
-	case "Sphere", "Cone", "Cylinder", "Quadric", "Ellipsoid", "Hyperboloid",
-		"Surface":
+	case "SPHERE", "CONE", "CYLINDER", "QUADRIC", "ELLIPSOID", "HYPERBOLOID",
+		"SURFACE":
 		return KQuadric
-	case "Plane", "OrthogonalPlane", "PerpendicularPlane", "ParallelPlane":
+	case "PLANE", "ORTHOGONALPLANE", "PERPENDICULARPLANE", "PARALLELPLANE":
 		return KPlane
-	case "Cube", "Prism", "Pyramid", "Polyhedron", "Tetrahedron", "Octahedron",
-		"Hexahedron", "Icosahedron", "Dodecahedron":
+	case "CUBE", "PRISM", "PYRAMID", "POLYHEDRON", "TETRAHEDRON", "OCTAHEDRON",
+		"HEXAHEDRON", "ICOSAHEDRON", "DODECAHEDRON":
 		return KSolid
 	default:
 		return KUnknown

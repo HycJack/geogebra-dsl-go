@@ -1,6 +1,6 @@
 {
   "command_category": "Supplement (from kernel source)",
-  "total_commands": 19,
+  "total_commands": 60,
   "commands": [
     { "name": "CircleArc", "url": "", "overloads": [
       { "syntax": "CircleArc(<Point>,<Point>,<Point>)", "params": [
@@ -191,6 +191,158 @@
     ]},
     { "name": "TableToChart", "url": "", "overloads": [
       { "syntax": "TableToChart(<Object>,<Text>,<Number>,<Number>)", "params": [{"name":"<Table>","role":"table","type":"GeoObject"},{"name":"<Type>","role":"type","type":"Text"},{"name":"<Column>","role":"col","type":"Number"},{"name":"<EmbedID>","role":"id","type":"Number"}]}
+    ]},
+    { "name": "RegularPolygon", "url": "https://geogebra.github.io/docs/manual/en/commands/RegularPolygon/", "overloads": [
+      { "syntax": "RegularPolygon(<Point>,<Point>,<Number>)", "params": [{"name":"<Point>","role":"vertex1","type":"Point"},{"name":"<Point>","role":"vertex2","type":"Point"},{"name":"<Number>","role":"vertices","type":"Number"}]},
+      { "syntax": "RegularPolygon(<Point>,<Point>,<Number>,<Direction>)", "params": [{"name":"<Point>","role":"vertex1","type":"Point"},{"name":"<Point>","role":"vertex2","type":"Point"},{"name":"<Number>","role":"vertices","type":"Number"},{"name":"<Direction>","role":"direction","type":"Vector/Plane"}]}
+    ]},
+    { "name": "Circumcircle", "url": "https://geogebra.github.io/docs/manual/en/commands/Circumcircle/", "overloads": [
+      { "syntax": "Circumcircle(<Point>,<Point>,<Point>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"},{"name":"<Point>","role":"c","type":"Point"}]}
+    ]},
+    { "name": "Incenter", "url": "https://geogebra.github.io/docs/manual/en/commands/Incenter/", "overloads": [
+      { "syntax": "Incenter(<Polygon>)", "params": [{"name":"<Polygon>","role":"polygon","type":"Polygon"}]},
+      { "syntax": "Incenter(<Point>,<Point>,<Point>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"},{"name":"<Point>","role":"c","type":"Point"}]}
+    ]},
+    { "name": "Circumcenter", "url": "https://geogebra.github.io/docs/manual/en/commands/Circumcenter/", "overloads": [
+      { "syntax": "Circumcenter(<Point>,<Point>,<Point>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"},{"name":"<Point>","role":"c","type":"Point"}]},
+      { "syntax": "Circumcenter(<Polygon>)", "params": [{"name":"<Polygon>","role":"polygon","type":"Polygon"}]}
+    ]},
+    { "name": "Orthocenter", "url": "https://geogebra.github.io/docs/manual/en/commands/Orthocenter/", "overloads": [
+      { "syntax": "Orthocenter(<Point>,<Point>,<Point>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"},{"name":"<Point>","role":"c","type":"Point"}]},
+      { "syntax": "Orthocenter(<Polygon>)", "params": [{"name":"<Polygon>","role":"polygon","type":"Polygon"}]}
+    ]},
+    { "name": "Excenter", "url": "https://geogebra.github.io/docs/manual/en/commands/Excenter/", "overloads": [
+      { "syntax": "Excenter(<Polygon>,<Number>)", "params": [{"name":"<Polygon>","role":"polygon","type":"Polygon"},{"name":"<Number>","role":"index","type":"Number"}]}
+    ]},
+    { "name": "FitLine", "url": "https://geogebra.github.io/docs/manual/en/commands/FitLine/", "overloads": [
+      { "syntax": "FitLine(<List of Points>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
+    ]},
+    { "name": "FitExp", "url": "https://geogebra.github.io/docs/manual/en/commands/FitExp/", "overloads": [
+      { "syntax": "FitExp(<List of Points>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
+    ]},
+    { "name": "FitLog", "url": "https://geogebra.github.io/docs/manual/en/commands/FitLog/", "overloads": [
+      { "syntax": "FitLog(<List of Points>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
+    ]},
+    { "name": "FitGrowth", "url": "https://geogebra.github.io/docs/manual/en/commands/FitGrowth/", "overloads": [
+      { "syntax": "FitGrowth(<List of Points>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
+    ]},
+    { "name": "FitImplicit", "url": "https://geogebra.github.io/docs/manual/en/commands/FitImplicit/", "overloads": [
+      { "syntax": "FitImplicit(<List of Points>,<Function>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"},{"name":"<Function>","role":"pattern","type":"Function"}]}
+    ]},
+    { "name": "FitSin", "url": "https://geogebra.github.io/docs/manual/en/commands/FitSin/", "overloads": [
+      { "syntax": "FitSin(<List of Points>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
+    ]},
+    { "name": "FitPow", "url": "https://geogebra.github.io/docs/manual/en/commands/FitPow/", "overloads": [
+      { "syntax": "FitPow(<List of Points>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
+    ]},
+    { "name": "StDev", "url": "https://geogebra.github.io/docs/manual/en/commands/StDev/", "overloads": [
+      { "syntax": "StDev(<List of Raw Data>)", "params": [{"name":"<List of Raw Data>","role":"list","type":"List"}]},
+      { "syntax": "StDev(<List of Numbers>,<List of Frequencies>)", "params": [{"name":"<List of Numbers>","role":"list","type":"List"},{"name":"<List of Frequencies>","role":"freq","type":"List"}]}
+    ]},
+    { "name": "Correlation", "url": "https://geogebra.github.io/docs/manual/en/commands/Correlation/", "overloads": [
+      { "syntax": "Correlation(<List of Points>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
+    ]},
+    { "name": "TextBox", "url": "https://geogebra.github.io/docs/manual/en/commands/TextBox/", "overloads": [
+      { "syntax": "TextBox(<Text>,<Point>)", "params": [{"name":"<Text>","role":"text","type":"Text"},{"name":"<Point>","role":"corner","type":"Point"}]}
+    ]},
+    { "name": "Sqrt", "url": "https://geogebra.github.io/docs/manual/en/commands/Sqrt/", "overloads": [
+      { "syntax": "Sqrt(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
+      { "syntax": "Sqrt(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
+    ]},
+    { "name": "Cbrt", "url": "https://geogebra.github.io/docs/manual/en/commands/Cbrt/", "overloads": [
+      { "syntax": "Cbrt(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
+      { "syntax": "Cbrt(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
+    ]},
+    { "name": "NRoot", "url": "https://geogebra.github.io/docs/manual/en/commands/NRoot/", "overloads": [
+      { "syntax": "NRoot(<Expression>,<Number>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"},{"name":"<Number>","role":"index","type":"Number"}]}
+    ]},
+    { "name": "Abs", "url": "https://geogebra.github.io/docs/manual/en/commands/Abs/", "overloads": [
+      { "syntax": "Abs(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
+      { "syntax": "Abs(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]},
+      { "syntax": "Abs(<Vector>)", "params": [{"name":"<Vector>","role":"vector","type":"Vector"}]}
+    ]},
+    { "name": "Sign", "url": "https://geogebra.github.io/docs/manual/en/commands/Sign/", "overloads": [
+      { "syntax": "Sign(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
+      { "syntax": "Sign(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
+    ]},
+    { "name": "Floor", "url": "https://geogebra.github.io/docs/manual/en/commands/Floor/", "overloads": [
+      { "syntax": "Floor(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
+      { "syntax": "Floor(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
+    ]},
+    { "name": "Ceil", "url": "https://geogebra.github.io/docs/manual/en/commands/Ceil/", "overloads": [
+      { "syntax": "Ceil(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
+      { "syntax": "Ceil(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
+    ]},
+    { "name": "Round", "url": "https://geogebra.github.io/docs/manual/en/commands/Round/", "overloads": [
+      { "syntax": "Round(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
+      { "syntax": "Round(<Number>,<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"},{"name":"<Number>","role":"decimals","type":"Number"}]},
+      { "syntax": "Round(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
+    ]},
+    { "name": "exp", "url": "https://geogebra.github.io/docs/manual/en/commands/exp/", "overloads": [
+      { "syntax": "exp(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
+      { "syntax": "exp(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
+    ]},
+    { "name": "ln", "url": "https://geogebra.github.io/docs/manual/en/commands/ln/", "overloads": [
+      { "syntax": "ln(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
+      { "syntax": "ln(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
+    ]},
+    { "name": "Log", "url": "https://geogebra.github.io/docs/manual/en/commands/Log/", "overloads": [
+      { "syntax": "Log(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
+      { "syntax": "Log(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]},
+      { "syntax": "Log(<Expression>,<Number>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"},{"name":"<Number>","role":"base","type":"Number"}]}
+    ]},
+    { "name": "log10", "url": "https://geogebra.github.io/docs/manual/en/commands/log10/", "overloads": [
+      { "syntax": "log10(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
+      { "syntax": "log10(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
+    ]},
+    { "name": "Sin", "url": "https://geogebra.github.io/docs/manual/en/commands/Sin/", "overloads": [
+      { "syntax": "Sin(<Number>)", "params": [{"name":"<Number>","role":"angle","type":"Number"}]},
+      { "syntax": "Sin(<Expression>)", "params": [{"name":"<Expression>","role":"angle","type":"Expression"}]}
+    ]},
+    { "name": "Cos", "url": "https://geogebra.github.io/docs/manual/en/commands/Cos/", "overloads": [
+      { "syntax": "Cos(<Number>)", "params": [{"name":"<Number>","role":"angle","type":"Number"}]},
+      { "syntax": "Cos(<Expression>)", "params": [{"name":"<Expression>","role":"angle","type":"Expression"}]}
+    ]},
+    { "name": "Tan", "url": "https://geogebra.github.io/docs/manual/en/commands/Tan/", "overloads": [
+      { "syntax": "Tan(<Number>)", "params": [{"name":"<Number>","role":"angle","type":"Number"}]},
+      { "syntax": "Tan(<Expression>)", "params": [{"name":"<Expression>","role":"angle","type":"Expression"}]}
+    ]},
+    { "name": "Cot", "url": "https://geogebra.github.io/docs/manual/en/commands/Cot/", "overloads": [
+      { "syntax": "Cot(<Number>)", "params": [{"name":"<Number>","role":"angle","type":"Number"}]},
+      { "syntax": "Cot(<Expression>)", "params": [{"name":"<Expression>","role":"angle","type":"Expression"}]}
+    ]},
+    { "name": "Sec", "url": "https://geogebra.github.io/docs/manual/en/commands/Sec/", "overloads": [
+      { "syntax": "Sec(<Number>)", "params": [{"name":"<Number>","role":"angle","type":"Number"}]},
+      { "syntax": "Sec(<Expression>)", "params": [{"name":"<Expression>","role":"angle","type":"Expression"}]}
+    ]},
+    { "name": "Csc", "url": "https://geogebra.github.io/docs/manual/en/commands/Csc/", "overloads": [
+      { "syntax": "Csc(<Number>)", "params": [{"name":"<Number>","role":"angle","type":"Number"}]},
+      { "syntax": "Csc(<Expression>)", "params": [{"name":"<Expression>","role":"angle","type":"Expression"}]}
+    ]},
+    { "name": "ArcSin", "url": "https://geogebra.github.io/docs/manual/en/commands/ArcSin/", "overloads": [
+      { "syntax": "ArcSin(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
+      { "syntax": "ArcSin(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
+    ]},
+    { "name": "ArcCos", "url": "https://geogebra.github.io/docs/manual/en/commands/ArcCos/", "overloads": [
+      { "syntax": "ArcCos(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
+      { "syntax": "ArcCos(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
+    ]},
+    { "name": "ArcTan", "url": "https://geogebra.github.io/docs/manual/en/commands/ArcTan/", "overloads": [
+      { "syntax": "ArcTan(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
+      { "syntax": "ArcTan(<Number>,<Number>)", "params": [{"name":"<Number>","role":"y","type":"Number"},{"name":"<Number>","role":"x","type":"Number"}]},
+      { "syntax": "ArcTan(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
+    ]},
+    { "name": "ArcCot", "url": "https://geogebra.github.io/docs/manual/en/commands/ArcCot/", "overloads": [
+      { "syntax": "ArcCot(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
+      { "syntax": "ArcCot(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
+    ]},
+    { "name": "ArcSec", "url": "https://geogebra.github.io/docs/manual/en/commands/ArcSec/", "overloads": [
+      { "syntax": "ArcSec(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
+      { "syntax": "ArcSec(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
+    ]},
+    { "name": "ArcCsc", "url": "https://geogebra.github.io/docs/manual/en/commands/ArcCsc/", "overloads": [
+      { "syntax": "ArcCsc(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
+      { "syntax": "ArcCsc(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
     ]}
   ]
 }

@@ -104,7 +104,7 @@ internal/check/...           # 复用现有校验器(不改，只扩一个"可�
     // …… 历史对话轮 + 最近一次修复反馈(见 §6.3)
   ],
   "temperature": 0.2,               // 生成脚本要稳定，温度偏低
-  "max_tokens": 128000,
+  "max_tokens": 16384,
   "stream": true                    // 服务端用 SSE 把脚本/说明流式返回
 }
 ```
@@ -125,7 +125,7 @@ GGCM_AI_MODEL       # 如 sensenova-6.8-flash-lite / deepseek-chat
 GGCM_AI_API_KEY     # 缺省时：如果 endpoint 是本地兼容服务可留空
 GGCM_AI_TEMP        # 默认 0.2
 GGCM_AI_MAX_REPAIR  # 默认 3（修复重试上限）
-GGCM_AI_MAX_TOKENS  # 默认 128000（推理 token + 输出共用；sensenova 推理模型建议给足）
+GGCM_AI_MAX_TOKENS  # 默认 16384（推理 token + 输出共用；sensenova 上限 65536）
 GGCM_AI_DISABLE_VISION  # 默认 false
 GGCM_AI_HTTP_RETRIES     # 默认 5（瞬态错误最多重试次数；0 则不发重试）
 GGCM_AI_HTTP_RETRY_BASE_MS  # 默认 500（首次退避毫秒，每轮翻倍）
@@ -313,7 +313,7 @@ type ChatClient interface {
 ## 10. 与 ggcm 的关系（明确边界）
 
 - `ggcm` 校验器**不改**；`ai/gate.go` 是它在新场景的唯一新调用方。
-- 生成器只输出 ggcm grammar **能解析**的指令（单行一条、`ID = Command(args)`、字面点/数字）。这与 DESIGN.md 的文本输入 grammar 完全一致。
+- 生成器只输出 ggcm grammar **能解析**的指令（单行一条、`ID = Command(args)`/`ID = 数字`/字面点/列表 `{...}`/代数表达式 `y = x^2+1`/函数定义 `f(x)=...`,以及无赋值号的 `Set…`/`StartAnimation` 等修饰语句）。这与 DESIGN.md 的文本输入 grammar 一致。
 - 若未来某命令确实需要但不在现有 549 条表内，属于 `catalog` 层扩展，不在本设计范围。
 
 ---

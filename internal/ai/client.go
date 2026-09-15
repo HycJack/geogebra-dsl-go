@@ -72,7 +72,7 @@ func (c *openAIClient) Complete(ctx context.Context, messages []Message, opts Co
 		Model:       c.cfg.Model,
 		Messages:    make([]apiMessage, len(messages)),
 		Temperature: opts.Temperature,
-		MaxTokens:   opts.MaxTokens,
+		MaxTokens:   cappedMaxTokens(opts.MaxTokens),
 	}
 	for i, m := range messages {
 		req.Messages[i] = toAPIMessage(m)
@@ -193,6 +193,22 @@ func isRetryableStatus(code int) bool {
 	default:
 		return false
 	}
+}
+
+// maxTokensCeiling caps the outgoing max_tokens. sensenova (and many OpenAI-
+// compatible backends) reject max_tokens above a hard limit (sensenova: 65536).
+// Clamp so an over-large config or per-request override never produces a 400 at
+// the wire, and zero/negative is never sent.
+const maxTokensCeiling = 32768
+
+func cappedMaxTokens(v int) int {
+	if v > maxTokensCeiling {
+		return maxTokensCeiling
+	}
+	if v <= 0 {
+		return maxTokensCeiling
+	}
+	return v
 }
 
 // sleepCtx waits for delay, aborting early if ctx is done.

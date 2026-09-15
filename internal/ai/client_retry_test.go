@@ -213,3 +213,20 @@ func TestRetryBodyIsValidJSON(t *testing.T) {
 		}
 	}
 }
+
+func TestCappedMaxTokens(t *testing.T) {
+	cases := []struct {
+		in, want int
+	}{
+		{16384, 16384}, // reasonable value passes through
+		{128000, maxTokensCeiling},
+		{100000, maxTokensCeiling},
+		{0, maxTokensCeiling},
+		{-5, maxTokensCeiling},
+	}
+	for _, c := range cases {
+		if got := cappedMaxTokens(c.in); got != c.want {
+			t.Errorf("cappedMaxTokens(%d)=%d, want %d", c.in, got, c.want)
+		}
+	}
+}
