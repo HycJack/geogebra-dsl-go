@@ -1,6 +1,8 @@
-# ggcm — GeoGebra 指令校验器
+# ggbcheck — GeoGebra 指令校验器
 
 校验 AI 生成的 GeoGebra 指令**是否正确、能否被执行**。单二进制的命令行工具，纯标准库（Go ≥ 1.21）。
+
+> 名字：**ggbcheck** = **G**eo**G**ebra（ggb）+ **check**，即「GeoGebra 指令校验器」。它只做"能不能建立"的校验，不做数值求坐标、不产 `.ggb` 文件、不内置绘图。
 
 输入两种形态，走同一套判定链，**支持命令嵌套**：
 
@@ -14,11 +16,11 @@
 ## 构建与运行
 
 ```bash
-go build -o ggcm.exe ./cmd/ggcm
+go build -o ggbcheck.exe ./cmd/ggbcheck
 
-ggcm check path/to/script.txt        # 人类可读收据
-ggcm check --json path/to/file       # 结构化收据（管道/脚本用）
-ggcm check --input text|ir <file>    # 强制输入形态（默认自动识别）
+ggbcheck check path/to/script.txt        # 人类可读收据
+ggbcheck check --json path/to/file       # 结构化收据（管道/脚本用）
+ggbcheck check --input text|ir <file>    # 强制输入形态（默认自动识别）
 ```
 
 退出码：`0` 全部通过 / `1` 构造不可建立 / `2` 用法或输入错误。
@@ -111,7 +113,7 @@ GeoGebra 内核里被保留、不能用作变量名的常数（来自
 ## 目录结构
 
 ```
-cmd/ggcm         CLI 入口（check 子命令 → exit code）
+cmd/ggbcheck         CLI 入口（check 子命令 → exit code）
 internal/
   text/          文本脚本 → 对象图（解析+命令嵌套物化+绑定变量）
   ir/            共享对象图 + IR JSON 解析（两条输入的汇合点）
@@ -175,3 +177,8 @@ API Key 必须由 `GGCM_AI_API_KEY` 环境变量或界面配置面板提供（�
 生成中遇到瞬态错误（`429`/`5xx`/断网）会自动**指数退避重试**：默认首次
 `500ms`、每轮翻倍、最多重试 5 次，且每次重试复用同一批消息内容不丢失
 （可用 `GGCM_AI_HTTP_RETRIES` / `GGCM_AI_HTTP_RETRY_BASE_MS` 调整）。
+
+**安全约束**：Web 配置面板可逐次覆盖 `endpoint`/`model`/`api_key`，但服务端
+**不会**把 `GGCM_AI_API_KEY` 附带发往请求方指定的第三方端点——自定义
+`endpoint` 时请求方必须同时提供自己的 `api_key`，否则拒绝（400）。API Key
+不落盘、不进日志（见 [`DESIGN-AI.md`](DESIGN-AI.md) §8）。

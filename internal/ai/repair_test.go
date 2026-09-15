@@ -191,7 +191,7 @@ func TestGenerateFirstCallTransientStillSucceeds(t *testing.T) {
 }
 
 // TestGenerateTraceRecordsSteps verifies the trace exposed to the chat UI
-// captures each attempt: the LLM call, the ggcm gate outcome (driving repair),
+// captures each attempt: the LLM call, the ggbcheck gate outcome (driving repair),
 // and any transient error (mid-repair network failure).
 func TestGenerateTraceRecordsSteps(t *testing.T) {
 	bad := "l = Line(A, Missing)"

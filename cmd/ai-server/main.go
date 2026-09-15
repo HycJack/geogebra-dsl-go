@@ -1,6 +1,6 @@
 // Command ai-server is an HTTP service that accepts a geometry/Math problem
 // (as text or an inline image) and returns GeoGebra teaching instructions,
-// generated via an OpenAI-compatible chat backend and gated through the ggcm
+// generated via an OpenAI-compatible chat backend and gated through the ggbcheck
 // validator with a bounded auto-repair loop.
 //
 // Usage:
@@ -24,6 +24,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 	"sync"
@@ -101,13 +102,19 @@ func newLogJSON(w io.Writer) *logJSON {
 // Subscribe registers a live-event receiver. It immediately replays the last
 // buffered events (in order) then streams new ones until the returned cancel is
 // called or the channel is closed. Returned channel receives json.RawMessage of
-// one record per event.
+// one record per event. The replay is best-effort and non-blocking: a backlog
+// larger than the channel's capacity drops the oldest already-buffered events
+// rather than stalling the caller (and, critically, the lock in emit) behind a
+// subscriber that has not started draining yet.
 func (l *logJSON) Subscribe() (chan json.RawMessage, func()) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	ch := make(chan json.RawMessage, 256)
 	for _, rec := range l.pending {
-		ch <- rec
+		select {
+		case ch <- rec:
+		default: // channel full while replaying: drop rather than block under lock
+		}
 	}
 	l.subs[ch] = struct{}{}
 	cancel := func() {
@@ -191,19 +198,57 @@ type chatRequest struct {
 }
 
 // effectiveConfig returns the config used for one request: the server defaults
-// with any per-request endpoint/model/key overrides applied.
-func (s *server) effectiveConfig(req chatRequest) ai.Config {
-	cfg := s.cfg
-	if strings.TrimSpace(req.Endpoint) != "" {
-		cfg.Endpoint = strings.TrimSpace(req.Endpoint)
+// with any per-request endpoint/model/key overrides applied, and a guard against
+// credential leakage.
+//
+// Security rule: a per-request `endpoint` override (a foreign/base URL) must be
+// paired with the caller's OWN `api_key`. The server's environment key must
+// never be forwarded to an arbitrary, caller-controlled host — that would leak
+// the server credential to any URL. Mirroring, a caller-supplied endpoint is
+// also validated to be an http(s) URL before it is accepted. The single
+// argument is a Config, and overrides are read from it.
+func (s *server) effectiveConfig(cfg ai.Config, endpoint, model, apiKey string) (ai.Config, error) {
+	endpoint = strings.TrimSpace(endpoint)
+	model = strings.TrimSpace(model)
+	apiKey = strings.TrimSpace(apiKey)
+
+	switch {
+	case endpoint != "" && apiKey == "":
+		// A custom endpoint with no explicit key: the server must not attach its
+		// own env key to a host it does not control. Refuse rather than leak.
+		return cfg, fmt.Errorf("a custom endpoint requires its own 'api_key'; the server will not send its key to a third-party endpoint")
+	case endpoint != "":
+		if err := validEndpointURL(endpoint); err != nil {
+			return cfg, err
+		}
+		cfg.Endpoint = endpoint
+		cfg.APIKey = apiKey
+	case apiKey != "":
+		// Same endpoint as the server, but the caller supplies its own key for
+		// this call only.
+		cfg.APIKey = apiKey
 	}
-	if strings.TrimSpace(req.Model) != "" {
-		cfg.Model = strings.TrimSpace(req.Model)
+	if model != "" {
+		cfg.Model = model
 	}
-	if strings.TrimSpace(req.APIKey) != "" {
-		cfg.APIKey = strings.TrimSpace(req.APIKey)
+	return cfg, nil
+}
+
+// validEndpointURL reports whether endpoint is an http(s) base URL with a host
+// and a scheme we will actually forward requests to. Rejects file:, data:,
+// ftp: and other non-HTTP schemes so the client can never be steered to a
+// non-HTTP transport.
+func validEndpointURL(endpoint string) error {
+	u, err := url.Parse(endpoint)
+	if err != nil || u.Host == "" {
+		return fmt.Errorf("invalid endpoint URL: %q", endpoint)
 	}
-	return cfg
+	switch u.Scheme {
+	case "http", "https":
+		return nil
+	default:
+		return fmt.Errorf("endpoint URL must use http or https, got %q", u.Scheme)
+	}
 }
 
 func (s *server) handleHealth(w http.ResponseWriter, _ *http.Request) {
@@ -299,9 +344,14 @@ func (s *server) handleChat(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var req chatRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		s.logJSON("http.request", map[string]any{"session_id": req.SessionID, "error": "invalid_json: " + err.Error()})
-		writeError(w, 400, "invalid JSON: "+err.Error())
+	// Bound the whole request body up front. The base64 image is decoded into
+	// memory here, so without a cap an oversized body would be fully buffered
+	// before buildUserMessage's MaxImageBytes check runs. The cap is the image
+	// byte limit plus generous headroom for the JSON envelope + text fields.
+	body := http.MaxBytesReader(w, r.Body, int64(s.cfg.MaxImageBytes)+64<<10)
+	if err := json.NewDecoder(body).Decode(&req); err != nil {
+		s.logJSON("http.request", map[string]any{"session_id": req.SessionID, "error": "invalid_json"})
+		writeError(w, 400, "invalid JSON request body")
 		return
 	}
 
@@ -325,8 +375,15 @@ func (s *server) handleChat(w http.ResponseWriter, r *http.Request) {
 	})
 
 	// Apply per-request endpoint/model/key overrides (from the UI panel). A
-	// fresh client carries the resolved config for this call only.
-	effCfg := s.effectiveConfig(req)
+	// fresh client carries the resolved config for this call only. The guard in
+	// effectiveConfig refuses a custom endpoint without an explicit key so the
+	// server's own credential is never forwarded to a caller-chosen host.
+	effCfg, err := s.effectiveConfig(s.cfg, req.Endpoint, req.Model, req.APIKey)
+	if err != nil {
+		s.logJSON("http.request", map[string]any{"session_id": sess.ID, "error": "invalid_overrides: " + err.Error()})
+		writeError(w, 400, err.Error())
+		return
+	}
 	effCfg.Log = s.cfg.Log // the shared logger is not part of the request overrides
 	effClient := s.client
 	if strings.TrimSpace(req.Endpoint) != "" || strings.TrimSpace(req.Model) != "" || strings.TrimSpace(req.APIKey) != "" {
@@ -452,22 +509,50 @@ func writeError(w http.ResponseWriter, code int, msg string) {
 	_ = json.NewEncoder(w).Encode(map[string]string{"error": msg})
 }
 
-// sessionStore keeps in-memory sessions, creating one on first use.
+// sessionStore keeps a bounded set of in-memory sessions, creating one on first
+// use. It is safe for concurrent use by the HTTP handler.
+//
+// The map is bounded: session ids are client-controlled, so without a cap an
+// attacker could fill memory by sending many distinct ids. When the map reaches
+// maxSessions the oldest-created session (smallest Unix-nano id, i.e. the
+// earliest) is evicted to make room. This bounds memory while keeping active
+// conversations intact.
 type sessionStore struct {
+	mu       sync.Mutex
 	max      int
 	sessions map[string]*ai.Session
 }
+
+const maxSessions = 1000
 
 func newSessionStore(max int) *sessionStore {
 	return &sessionStore{max: max, sessions: map[string]*ai.Session{}}
 }
 
+// Get returns the session for id (creating one if absent). An empty id is
+// assigned a fresh one-name unique id.
 func (ss *sessionStore) Get(id string) *ai.Session {
 	if id == "" {
 		id = fmt.Sprintf("sess-%d", time.Now().UnixNano())
 	}
+	ss.mu.Lock()
+	defer ss.mu.Unlock()
 	if s, ok := ss.sessions[id]; ok {
 		return s
+	}
+	if len(ss.sessions) >= maxSessions {
+		// Evict the earliest-created session to keep the map bounded. Session ids
+		// use an increasing Unix-nano timestamp, so the lexicographically smallest
+		// id is the oldest.
+		var oldest string
+		for k := range ss.sessions {
+			if oldest == "" || k < oldest {
+				oldest = k
+			}
+		}
+		if oldest != "" {
+			delete(ss.sessions, oldest)
+		}
 	}
 	s := ai.NewSession(id, ss.max)
 	ss.sessions[id] = s

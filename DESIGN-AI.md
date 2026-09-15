@@ -1,6 +1,6 @@
 # AI 对话流程设计 — 题目 → GeoGebra 动态几何指令
 
-> 目标：用户把一道**数学/几何题目**（以**图片**或**纯文本**给出）发给一个对话式服务，服务借助 **OpenAI 兼容接口**的大模型，生成可用于**教学演示**的 **GeoGebra 动态几何指令**文本，并交给现有 `ggcm` 校验器做质量门控，必要时自动多轮修复，最终把"可直接执行的指令 + 可执行顺序 + 诊断"返回给用户。
+> 目标：用户把一道**数学/几何题目**（以**图片**或**纯文本**给出）发给一个对话式服务，服务借助 **OpenAI 兼容接口**的大模型，生成可用于**教学演示**的 **GeoGebra 动态几何指令**文本，并交给现有 `ggbcheck` 校验器做质量门控，必要时自动多轮修复，最终把"可直接执行的指令 + 可执行顺序 + 诊断"返回给用户。
 >
 > 复用：本仓库已有的 `internal/check.Check`（文本→对象图→语义/无环/退化/可达全链校验）作为**生成后校验**的唯一权威。
 
@@ -11,9 +11,9 @@
 | 做 | 不做 |
 |---|---|
 | 接收题目图片或题目文本 | 不内置渲染 GeoGebra（前端/教师端自行粘贴进 GeoGebra） |
-| 用多模态/文本 LLM 把题目解析成**教学意图**（已知/未知、目标对象） | 不做精确数值求解（沿用 ggcm 的"判可建立"哲学） |
+| 用多模态/文本 LLM 把题目解析成**教学意图**（已知/未知、目标对象） | 不做精确数值求解（沿用 ggbcheck 的"判可建立"哲学） |
 | 生成 GeoGebra 指令脚本（本仓库 grammar，单行一条指令） | 不做细粒度 curriculum 编排（一次一道题的对话式生成） |
-| 用 `ggcm` 校验生成结果，错误码反馈给 LLM 自动重试（有限轮） | 不接入真实 GeoGebra 内核执行 |
+| 用 `ggbcheck` 校验生成结果，错误码反馈给 LLM 自动重试（有限轮） | 不接入真实 GeoGebra 内核执行 |
 | 多轮对话：用户可追加"再构造一个高"、"改成半径/位置"等修正指令 | 不自动授课/不评判学生答案对错 |
 
 > 教学演示侧重点：输出**稳定、可解释、可执行**的指令，而不是"最简"。生成器应倾向使用**命名对象**（`A = Point(...)` → `c = Circle(C, T)`），使其教学语义清楚，也让校验错误定位到对象名。
@@ -41,7 +41,7 @@
 │        生成 指令脚本 draft        │
 │                ▼                 │
 │  ┌─────────────────────────────┐ │
-│  │  ggcm 校验门 (internal/check)│ │
+│  │  ggbcheck 校验门 (internal/check)│ │
 │  │  通过? ──是──▶ 直接返回      │ │
 │  │   否                        │ │
 │  │   └─▶ 错误码序列化 ──▶ 提示词  │ │
@@ -57,9 +57,9 @@
 ```
 
 要点：
-- **一次"生成"不是单次 LLM 调用**，而是一个**有限重试的修正循环**：`generate → ggcm.Check → (fail? 构造修复提示 → regenerate) → success`。
+- **一次"生成"不是单次 LLM 调用**，而是一个**有限重试的修正循环**：`generate → ggbcheck.Check → (fail? 构造修复提示 → regenerate) → success`。
 - **对话**由独立的会话（session）承载：历史上下文跨轮保留，用户追加指令时把上一版脚本与校验结果一并喂回 LLM。
-- LLM 每次只输出**纯指令脚本**（结构化区块），服务端负责切片：把脚本抽出来喂 ggcm，把 LLM 的文字说明单独透传。
+- LLM 每次只输出**纯指令脚本**（结构化区块），服务端负责切片：把脚本抽出来喂 ggbcheck，把 LLM 的文字说明单独透传。
 
 ---
 
@@ -74,7 +74,7 @@ internal/ai/
   client.go                  # OpenAI 兼容 client（chat/completions，支持 vision）
   prompt.go                  # 提示词模板：system + user + 修复反馈(repair scaffold)
   generate.go                # 单轮生成：LLM 调用 + 脚本抽取
-  gate.go                    # ggcm 校验门：调 internal/check，错误码→结构化反馈
+  gate.go                    # ggbcheck 校验门：调 internal/check，错误码→结构化反馈
   repair.go                  # 修正循环：gate 未过 → 组装修复提示 → 重生成
   respond.go                 # 收据 → 面向用户的响应(脚本/可执行序/诊断/streaming)
   config.go                  # 配置：endpoint/model/api-key/temperature/图片开关/重试上限
@@ -82,7 +82,7 @@ internal/ai/
 internal/check/...           # 复用现有校验器(不改，只扩一个"可编程入口")
 ```
 
-**接缝原则（延续 DESIGN.md §6）**：`ggcm` 的 `check.Check(input, Options)` 已经是可编程入口，`ai/gate.go` 只依赖它返回的 `*diag.Receipt`（`OK` / `Errors[]Code+Msg+Obj` / `Executable`）。`ai` 层不碰 `ir`/`catalog`/`geo` 内部。
+**接缝原则（延续 DESIGN.md §6）**：`ggbcheck` 的 `check.Check(input, Options)` 已经是可编程入口，`ai/gate.go` 只依赖它返回的 `*diag.Receipt`（`OK` / `Errors[]Code+Msg+Obj` / `Executable`）。`ai` 层不碰 `ir`/`catalog`/`geo` 内部。
 
 ---
 
@@ -179,7 +179,7 @@ c = Circle(C, T)
 
 ### 5.3 修复反馈（repair scaffold，非首轮才追加）
 
-当 ggcm 校验失败，把下列结构化反馈作为一条新的 `user`（或 `system`-adjacent）消息喂回：
+当 ggbcheck 校验失败，把下列结构化反馈作为一条新的 `user`（或 `system`-adjacent）消息喂回：
 
 ```
 你上一版脚本校验失败，诊断如下（逐条）：
@@ -217,11 +217,11 @@ for attempt := 1; attempt <= cfg.MaxRepair; attempt++ {
 ```
 
 - 每次重试把**上一版脚本 + 全部诊断**塞进上下文（会话历史保留给 LLM）。
-- 诊断按 ggcm 的 `Errors[]` 原样透传（`Code`/`Msg`/`Obj`），LLM 据此针对性修。
+- 诊断按 ggbcheck 的 `Errors[]` 原样透传（`Code`/`Msg`/`Obj`），LLM 据此针对性修。
 
 ### 6.3 serializeDiagnostics —— 错误码 → 修复建议（译文表，指导 LLM 也指导用户）
 
-| ggcm Code | 含义 | 建议 |
+| ggbcheck Code | 含义 | 建议 |
 |---|---|---|
 | `cmd/unknown` | 命令不在表里 | 改用表内命令（Point/Line/Circle/…）或拼对命令名 |
 | `cmd/arg` | 参数个数/类型不匹配 | 对照该命令 overload 的正确签名 |
@@ -238,7 +238,7 @@ for attempt := 1; attempt <= cfg.MaxRepair; attempt++ {
 
 ### 7.1 会话
 
-- `POST /api/chat` 每次请求带 `session_id`（无则新建）。服务端按 session 保存消息历史（内存 map；可选落盘 `data/sessions/<id>.json`）。
+- `POST /api/chat` 每次请求带 `session_id`（无则新建）。服务端按 session 保存消息历史（**仅内存** map，不落盘；磁盘持久化见 §11.4 扩展预留，`maxSessions` 硬上限与加锁见 §8）。
 - **每轮必存「用户消息 + 助手最终脚本」成对**：成功时 assistant 存最终 ggb 脚本，失败时也存（空脚本则存空 `<gg></gg>` 占位），保证历史里每轮都是 `user → assistant` 完整配对，让下一轮 LLM 看到"上一版做了什么、成功还是失败"。
 - 属于同一轮、尚未完成的消息不会预追加到历史（当前 `userMsg` 通过 `GenerateRequest.UserMsg` 传给本次生成），避免在同一轮回车里重复。
 
@@ -269,16 +269,19 @@ for attempt := 1; attempt <= cfg.MaxRepair; attempt++ {
 
 ```jsonc
 {
+  "session_id": "sess-1700000000", // 已解析/新建的会话 id，后续 append 轮用它
   "ok": true,
   "script": "A = Point(...)\n…",
   "executable": ["A","B","C","l"],
   "teaching_note": "第一段为已知量…",
-  "diagnostics": [],                // 空 = 通过 ggcm
-  "attempts": 2                     // 重试次数（含首次）
+  "fallback": "",                  // 无 <gg> 可构造时降级为纯文字解答
+  "diagnostics": [],                // 空 = 通过 ggbcheck
+  "attempts": 2,                    // 重试次数（含首次）
+  "trace": [ { "stage":"llm", ... } ] // 每轮 LLM/重试/gate 步骤，供 UI 展示
 }
 ```
 
-失败（重试耗尽）返回 `ok:false` + `script`（最后可用版）+ `diagnostics`（未消诊断）+ `note: "建议人工检查"`。
+失败（重试耗尽）返回 `ok:false` + `script`（最后可用版）+ `diagnostics`（未消诊断）+ `trace`。若模型全程未给出可构造的 `<gg>` 脚本但给了文字解答，`ok:false` + `fallback`（纯文本答案）+ 一条提示诊断。
 
 ---
 
@@ -286,15 +289,29 @@ for attempt := 1; attempt <= cfg.MaxRepair; attempt++ {
 
 - **图片后端不支持**：调用报错 → 降级提示"改用文本输入"；`DisableVision=true` 时可提前跳过图片 branch。
 - **LLM 弱：连续重试仍不过**：达到 `MaxRepair` 后不再空转，返回带诊断的失败收据（不吞错误）。
-- **瞬时网络/限流**：429/5xx/超时 → 指数退避重试 ≤2 次。
+- **瞬时网络/限流**：429/408/409/5xx/超时 → 指数退避重试，默认最多 `GGCM_AI_HTTP_RETRIES` 次（默认 5，`GGCM_AI_HTTP_RETRY_BASE_MS`=500ms 起、每轮翻倍；见 §4.2）。永久 4xx（400/401/403/404）不重试。
 - **脚本抽取失败**：LLM 输出里没有 `<gg>` 区块 → 视为一次失败重试；仍无则报 `format` 错误。
-- **会话放大**：设 `MaxHistoryTurns`（默认 20）截断，防止上下文膨胀。
+- **会话放大**：设 `MaxHistoryTurns`（默认 20）截断单会话历史，防止上下文膨胀。
+
+### 服务端安全约束（请求方覆盖时的凭证保护）
+
+`/api/chat` 允许逐次覆盖 `endpoint`/`model`/`api_key`（用于自带大模型网关）。为防服务器把**自己的 API Key** 转发到请求方指定的任意地址（凭证泄露）：
+
+- **自定义 `endpoint` 必须同时提供 `api_key`**：若请求带了非空 `endpoint` 却没有自己的 `api_key`，服务端直接拒绝（400），绝不把 `GGCM_AI_API_KEY` 附带发往第三方主机。
+- `endpoint` 必须是 `http`/`https` 且带主机名的合法 URL，其他 scheme 拒绝。
+- 仅改 `model`、或仅提供 `api_key` 而沿用服务器默认端点时不受影响（此时使用调用方自己的 Key 覆盖一次）。
+- **请求体上限**：`/api/chat` 用 `MaxBytesReader` 把整个请求体（含 base64 图片）限制在 `MaxImageBytes` 之外再留 64 KiB 头寸，防超大 body 先整块缓冲进内存。
+
+### 会话上限与线程安全
+
+- 会话是**仅内存**结构（不落盘；磁盘持久化见 §11.4 扩展预留）。服务端对 `sessions` map 加锁，`Session` 内部也加锁，多并发 `/api/chat` 写同一会话安全。
+- **全局会话数有硬上限（`maxSessions=1000`）**：`session_id` 由客户端任意提供，若不设防可无限填充内存。达到上限后淘汰最早创建的会话腾出空间。
 
 ---
 
 ## 9. 测试策略（新增 internal/ai 单测）
 
-- **gate_test**：用真实 ggcm 校验一段正确脚本 → OK；一段含 `dep/undefined` 的 → 正确 `serializeDiagnostics` 译文。
+- **gate_test**：用真实 ggbcheck 校验一段正确脚本 → OK；一段含 `dep/undefined` 的 → 正确 `serializeDiagnostics` 译文。
 - **repair_test**：用**假 LLM 注入**（实现了 `client` 接口的 stub）：第一次输出坏脚本、第二次输出好脚本 → 断言恰好在重试 2 次内通过，且调用序列里第 2 条带诊断反馈。
 - **prompt_test**：断言 system 含规则、修复反馈正确拼入。
 - **多轮会话测试**：append 追加后历史长度/内容正确。
@@ -310,10 +327,10 @@ type ChatClient interface {
 
 ---
 
-## 10. 与 ggcm 的关系（明确边界）
+## 10. 与 ggbcheck 的关系（明确边界）
 
-- `ggcm` 校验器**不改**；`ai/gate.go` 是它在新场景的唯一新调用方。
-- 生成器只输出 ggcm grammar **能解析**的指令（单行一条、`ID = Command(args)`/`ID = 数字`/字面点/列表 `{...}`/代数表达式 `y = x^2+1`/函数定义 `f(x)=...`,以及无赋值号的 `Set…`/`StartAnimation` 等修饰语句）。这与 DESIGN.md 的文本输入 grammar 一致。
+- `ggbcheck` 校验器**不改**；`ai/gate.go` 是它在新场景的唯一新调用方。
+- 生成器只输出 ggbcheck grammar **能解析**的指令（单行一条、`ID = Command(args)`/`ID = 数字`/字面点/列表 `{...}`/代数表达式 `y = x^2+1`/函数定义 `f(x)=...`,以及无赋值号的 `Set…`/`StartAnimation` 等修饰语句）。这与 DESIGN.md 的文本输入 grammar 一致。
 - 若未来某命令确实需要但不在现有 549 条表内，属于 `catalog` 层扩展，不在本设计范围。
 
 ---

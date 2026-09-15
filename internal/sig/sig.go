@@ -122,12 +122,17 @@ func paramCountRange(params []catalog.Param) (required, max int) {
 // that object's kind; a numeric/other literal contributes no kind (treated as
 // satisfying a Number-ish/unknown slot only — handled by matching combinatorics
 // below). For v1 we match on the kinds of refs by position where the arg is a
-// ref;
+// ref. For a vararg overload the fixed params are still checked positionally,
+// but additional args beyond them are accepted (barring a concrete constraint
+// we can't model at the coarse-kind level).
 func kindsMatch(ov *catalog.Overload, g *ir.Graph, o *ir.Object) bool {
-	if len(o.Args) > len(ov.Params) {
-		return false
-	}
 	for i, arg := range o.Args {
+		if i >= len(ov.Params) {
+			// Past the fixed params. For a vararg the extra args are accepted;
+			// a non-vararg overload should never reach here (Lookup filtered
+			// the count), but guard anyway.
+			break
+		}
 		param := ov.Params[i]
 		actual := argKind(g, arg)
 		if !paramAccepts(param.Type, actual) {

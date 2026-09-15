@@ -111,7 +111,7 @@ func (p *parser) term() (*big.Rat, bool) {
 }
 
 func (p *parser) factor() (*big.Rat, bool) {
-	left, ok := p.power()
+	left, ok := p.unaryFactor()
 	if !ok {
 		return nil, false
 	}
@@ -120,7 +120,7 @@ func (p *parser) factor() (*big.Rat, bool) {
 		c := p.peek()
 		if c == '*' || c == '/' {
 			p.pos++
-			right, ok := p.power()
+			right, ok := p.unaryFactor()
 			if !ok {
 				return nil, false
 			}
@@ -138,38 +138,45 @@ func (p *parser) factor() (*big.Rat, bool) {
 	}
 }
 
-func (p *parser) power() (*big.Rat, bool) {
-	base, ok := p.unary()
-	if !ok {
-		return nil, false
-	}
-	p.skipWS()
-	if p.peek() == '^' {
-		p.pos++
-		exp, ok := p.power()
-		if !ok {
-			return nil, false
-		}
-		return powRat(base, exp)
-	}
-	return base, true
-}
-
-func (p *parser) unary() (*big.Rat, bool) {
+// unaryFactor parses an optional leading sign applied to a power, with the sign
+// binding LOOSER than '^' so that `-2^2` means `-(2^2)` (as in standard math and
+// GeoGebra), not `(-2)^2`. To get the negated base, write `(-2)^2`.
+func (p *parser) unaryFactor() (*big.Rat, bool) {
 	p.skipWS()
 	switch p.peek() {
 	case '+':
 		p.pos++
-		return p.unary()
+		return p.power()
 	case '-':
 		p.pos++
-		v, ok := p.unary()
+		v, ok := p.power()
 		if !ok {
 			return nil, false
 		}
 		return new(big.Rat).Neg(v), true
 	}
-	return p.primary()
+	return p.power()
+}
+
+// power parses `base ^ exp` (right-associative). The base is a primary
+// (literal, parenthesized expression, or constant); an exponent may itself be a
+// signed power so `2^-3` and `2^(-3)` both work. The base must NOT be a bare
+// signed value — a leading '-' is consumed by unaryFactor first.
+func (p *parser) power() (*big.Rat, bool) {
+	base, ok := p.primary()
+	if !ok {
+		return nil, false
+	}
+	p.skipWS()
+	if p.peek() != '^' {
+		return base, true
+	}
+	p.pos++
+	exp, ok := p.unaryFactor()
+	if !ok {
+		return nil, false
+	}
+	return powRat(base, exp)
 }
 
 func (p *parser) primary() (*big.Rat, bool) {
@@ -232,12 +239,38 @@ func powRat(base, exp *big.Rat) (*big.Rat, bool) {
 	if n == 0 {
 		return big.NewRat(1, 1), true
 	}
+	// Bound the exponent: the value is only used for sign/zero decisions, so an
+	// astronomically large exponent (which could come from untrusted AI output)
+	// must not trigger an unbounded loop here. Cap the iteration count. Bigger
+	// exponents are treated as "resolvable sign" conservatively via overflow of
+	// the loop instead of an endless, CPU-exhausting computation.
+	if n > maxExponent {
+		// 2^maxExponent is enormous; only the sign (of a negative base) could
+		// flip, and only for odd exponents. Bases here are non-zero rationals
+		// used for radius/coordinate sign checks.
+		if base.Sign() == 0 {
+			return big.NewRat(0, 1), true // 0^n == 0 (n>0)
+		}
+		neg := base.Sign() < 0 && n%2 == 1
+		r := big.NewRat(1, 1)
+		if neg {
+			r.Neg(r)
+		}
+		return r, true
+	}
 	res := big.NewRat(1, 1)
 	for i := int64(0); i < n; i++ {
 		res = new(big.Rat).Mul(res, base)
 	}
 	return res, true
 }
+
+// maxExponent caps the iterative exponentiation loop. Values beyond this are
+// so large that their exact magnitude is irrelevant to the sign/zero decisions
+// the evaluator supports; only the sign (especially for a negative base raised
+// to an odd power) matters, which is handled by overflow above. Kept small so
+// untrusted input can never force an unbounded CPU loop.
+const maxExponent = 1 << 12 // 4096
 
 // isNumberToken reports whether tok is a plain decimal numeral (with optional
 // sign already handled by unary).

@@ -65,12 +65,13 @@
 
 - **退化判定**走精确求值：`math/big.Rat` + 保留常量 + **嵌套算术**（`+ - * / ^ 括号`）。用于判断半径/坐标的正、零、负，决定是否退化。
 - π/e 为无理数，按**高精度有理逼近**求符号（足够精确判正/零/负；不做逐位相等）。
+- 幂运算右结合、且 `^` 比一元负号更紧（`-2^2 == -(2^2)`，与 GeoGebra/数学一致）；`^` 仅接受非负小整数指数，且指数有上限（`maxExponent`），防在不可信 AI 输出里出现超大指数时失控循环。
 - 不全局求坐标 → 不引入 float 交点误差问题，这也是"只判可建立"比数值校验轻的原因。
 
 ## 6. 包布局（Go，纯 stdlib）
 
 ```
-cmd/ggcm/main.go      # 单二进制：check 子命令 + --json / --input + 退出码
+cmd/ggbcheck/main.go      # 单二进制：check 子命令 + --json / --input + 退出码
 internal/
   text/               # 文本 → 对象图：lexer+parser+build+命令嵌套物化+绑定变量
   ir/                 # 唯一共享对象图 ir.Graph + 种类 + IR JSON 解析（两条输入的接缝）
@@ -89,9 +90,9 @@ internal/
 ## 7. CLI
 
 ```
-ggcm check <file>                 # 主命令：整条链 + 收据
-ggcm check --json <file>          # 结构化收据（默认人类可读中文）
-ggcm check --input text|ir <file> # 强制输入形态（默认自动识别）
+ggbcheck check <file>                 # 主命令：整条链 + 收据
+ggbcheck check --json <file>          # 结构化收据（默认人类可读中文）
+ggbcheck check --input text|ir <file> # 强制输入形态（默认自动识别）
 ```
 退出码：`0` 全部通过 / `1` 构造不可建立（有错误码）/ `2` 用法或输入错误。
 

@@ -80,6 +80,22 @@ A = (0, 0)`
 	}
 }
 
+// TestVarArgCommandsOk verifies a vararg command (e.g. ANOVA, Polyline) with
+// more args than its fixed params is accepted. This guards the regression
+// where kindsMatch rejected any overload whose args outnumbered its params,
+// falsely reporting valid vararg calls as cmd/arg.
+func TestVarArgCommandsOk(t *testing.T) {
+	for _, script := range []string{
+		"l1 = {1, 2, 3}\nl2 = {3, 4, 5}\nl3 = {5, 6, 7}\na = ANOVA(l1, l2, l3)\n",
+		"A = (0, 0)\nB = (1, 1)\nC = (2, 2)\npl = Polyline(A, B, C)\n",
+	} {
+		rc := Check([]byte(script), Options{})
+		if !rc.OK {
+			t.Fatalf("expected vararg script to validate, got errors: %v (script=%q)", rc.Errors, script)
+		}
+	}
+}
+
 func TestUndefinedRef(t *testing.T) {
 	rc := Check([]byte("A = Point(0, 2)\nl = Line(A, X)\n"), Options{})
 	if rc.OK {

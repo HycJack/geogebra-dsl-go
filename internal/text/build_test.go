@@ -120,6 +120,51 @@ func TestReservedConstantsNotUndefinedRefs(t *testing.T) {
 	}
 }
 
+// TestHashInsideStringIsNotComment verifies a '#' inside a double-quoted string
+// argument (e.g. SetCaption(c, "Answer #1")) is treated as part of the string,
+// not as a comment terminator.
+func TestHashInsideStringIsNotComment(t *testing.T) {
+	src := "c = Circle((0,0), (4,0))\nSetCaption(c, \"Answer #1\")\n"
+	stmts, parseProbs := Parse(src)
+	if len(parseProbs) != 0 {
+		t.Fatalf("unexpected parse errors: %v", parseProbs)
+	}
+	_, probs := Build(stmts)
+	if len(probs) != 0 {
+		t.Fatalf("expected clean build, got %v", probs)
+	}
+	// The SetCaption line must still be a full modifier command with the # intact.
+	if len(stmts) != 2 {
+		t.Fatalf("expected 2 statements (circle + SetCaption), got %d", len(stmts))
+	}
+	mod := stmts[1]
+	if !mod.modifier || len(mod.args) != 2 || mod.args[1] != "\"Answer #1\"" {
+		t.Fatalf("SetCaption arg mangled by comment stripping: modifier=%v args=%v", mod.modifier, mod.args)
+	}
+}
+
+// TestReservedNameShadowingKeepsRef verifies that if a script defines an object
+// with a name that is also a reserved constant (pi/e/...), a later reference to
+// that object is treated as a real dependency rather than silently dropped.
+func TestReservedNameShadowingKeepsRef(t *testing.T) {
+	src := "pi = Point(0, 0)\nc = Circle(pi, 3)\n"
+	stmts, _ := Parse(src)
+	g, probs := Build(stmts)
+	if len(probs) != 0 {
+		t.Fatalf("expected clean build, got %v", probs)
+	}
+	refs := g.Objects["c"].Refs
+	found := false
+	for _, r := range refs {
+		if r == "pi" {
+			found = true
+		}
+	}
+	if !found {
+		t.Fatalf("object named 'pi' referenced by c must be a dependency ref; refs=%v", refs)
+	}
+}
+
 func TestNestedCommandMaterialized(t *testing.T) {
 	// Circle(Midpoint(A,B), 3) creates a synthetic object for Midpoint(A,B)
 	// that participates in the graph with correct dependencies.

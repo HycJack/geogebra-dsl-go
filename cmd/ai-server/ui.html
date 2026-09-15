@@ -165,7 +165,7 @@
   <div class="logo">🧮 GeoGebra · <b>AI</b> 教学构造</div>
   <div class="right">
     <span class="pill" id="badgeStatus">服务未连接</span>
-    <span class="pill on">ggcm 校验</span>
+    <span class="pill on">ggbcheck 校验</span>
     <button class="btn" id="btnNewChat" title="清空本次对话与画布">新会话</button>
   </div>
 </header>
@@ -185,7 +185,7 @@
           <button class="btn primary" id="btnSend">发送 <span style="font-size:10px;opacity:.8">↵</span></button>
           <span class="spinner" id="spinner"></span>
         </div>
-        <div class="hint">每次生成都会经过 ggcm 校验，不合格自动修复；展开消息下方的“执行过程”可查看每次调用与重试。</div>
+        <div class="hint">每次生成都会经过 ggbcheck 校验，不合格自动修复；展开消息下方的“执行过程”可查看每次调用与重试。</div>
       </div>
     </div>
 
@@ -283,11 +283,11 @@
   window.__GGB_FAILED = [];
   window.__GGB_CODEBASE = "";
   window.__GGB_BOOT = function () {
-    if (!window.__GGB_CANDIDATES.length) { window.__ggcmGGBError && window.__ggcmGGBError("未配置 GeoGebra 引擎地址"); return; }
-    if (window.__GGB_IDX >= window.__GGB_CANDIDATES.length) { window.__ggcmGGBAttemptsExhausted && window.__ggcmGGBAttemptsExhausted(); return; }
+    if (!window.__GGB_CANDIDATES.length) { window.__ggbcheckGGBError && window.__ggbcheckGGBError("未配置 GeoGebra 引擎地址"); return; }
+    if (window.__GGB_IDX >= window.__GGB_CANDIDATES.length) { window.__ggbcheckGGBAttemptsExhausted && window.__ggbcheckGGBAttemptsExhausted(); return; }
     var src = window.__GGB_CANDIDATES[window.__GGB_IDX];
     window.__GGB_IDX++;
-    window.__ggcmGGBStatus && window.__ggcmGGBStatus("正在加载 GeoGebra 引擎… (" + window.__GGB_IDX + "/" + window.__GGB_CANDIDATES.length + ")");
+    window.__ggbcheckGGBStatus && window.__ggbcheckGGBStatus("正在加载 GeoGebra 引擎… (" + window.__GGB_IDX + "/" + window.__GGB_CANDIDATES.length + ")");
     var s = document.createElement("script");
     s.src = src;
     s.onload = function () { if (window.__onGGBLoaded) window.__onGGBLoaded(src); };
@@ -573,11 +573,11 @@
       "<br>当前地址：<span style='font-family:monospace'>" + custom + "</span>";
   }
 
-  window.__ggcmGGBStatus = function (msg) { setBadge(String(msg), false); };
-  window.__ggcmGGBError = function (msg) { engineFailed(msg); };
-  window.__ggcmGGBAttemptsExhausted = function () { engineFailed("GeoGebra 引擎所有来源均加载失败。"); };
+  window.__ggbcheckGGBStatus = function (msg) { setBadge(String(msg), false); };
+  window.__ggbcheckGGBError = function (msg) { engineFailed(msg); };
+  window.__ggbcheckGGBAttemptsExhausted = function () { engineFailed("GeoGebra 引擎所有来源均加载失败。"); };
 
-  window.__ggcmRetry = function () {
+  window.__ggbcheckRetry = function () {
     appletReady = false;
     var c = ($("cfgGGBDeploy") && $("cfgGGBDeploy").value || "").trim();
     var cbp = ($("cfgGGBCodebase") && $("cfgGGBCodebase").value || "").trim();
@@ -713,14 +713,14 @@
     statusLine.className = "computing";
     statusLine.style.marginBottom = "8px";
     if (res.ok) {
-      statusLine.innerHTML = "✅ 已通过 ggcm 校验，可建立。";
+      statusLine.innerHTML = "✅ 已通过 ggbcheck 校验，可建立。";
       statusLine.style.color = "var(--ok)";
     } else if (res.fallback) {
       // 降级场景：模型未给出 <gg> 构造脚本，但返回了文字解答。
       statusLine.innerHTML = "📄 模型未生成构造脚本，以下为文字解答。";
       statusLine.style.color = "var(--acc)";
     } else {
-      statusLine.innerHTML = "✗ 未通过 ggcm 校验或生成失败。";
+      statusLine.innerHTML = "✗ 未通过 ggbcheck 校验或生成失败。";
       statusLine.style.color = "var(--err)";
     }
     bubble.appendChild(statusLine);
@@ -838,7 +838,7 @@
         e.className = "tstep gate" + (ok ? "" : " fail");
         var dlg = (ok ? "" : ' <span class="dlg">' + (s.diagnostics && s.diagnostics.length ? "诊断 " + s.diagnostics.length + " 条 → 将自动修复" : "未收集到诊断") + '</span>');
         var scrMini = ok && s.script ? '<div class="script-mini">' + escapeHtml(s.script) + '</div>' : "";
-        e.innerHTML = '<span class="n">' + (ok ? "✓" : "✗") + '</span><div class="body"><span class="tag">ggcm 校验</span><span class="sub">' + (ok ? "通过" : "失败") + '</span>' + dlg + scrMini + '</div>';
+        e.innerHTML = '<span class="n">' + (ok ? "✓" : "✗") + '</span><div class="body"><span class="tag">ggbcheck 校验</span><span class="sub">' + (ok ? "通过" : "失败") + '</span>' + dlg + scrMini + '</div>';
         body.appendChild(e);
       });
 
@@ -945,11 +945,11 @@
   var serverDefaults = { endpoint: "", model: "" };
   function saveKey(k) {
     savedKey = k;
-    try { localStorage.setItem("ggcm_api_key", k); } catch (e) {}
+    try { localStorage.setItem("ggbcheck_api_key", k); } catch (e) {}
     updateKeyStatus();
   }
   function loadKey() {
-    try { savedKey = localStorage.getItem("ggcm_api_key") || ""; } catch (e) { savedKey = ""; }
+    try { savedKey = localStorage.getItem("ggbcheck_api_key") || ""; } catch (e) { savedKey = ""; }
     $("cfgApiKey").value = savedKey;
     updateKeyStatus();
   }
@@ -1047,7 +1047,7 @@
     }
   });
   $("btnRetryGGB").addEventListener("click", function () {
-    if (typeof window.__ggcmRetry === "function") window.__ggcmRetry();
+    if (typeof window.__ggbcheckRetry === "function") window.__ggbcheckRetry();
     else window.location.reload();
   });
 

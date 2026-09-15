@@ -57,7 +57,7 @@ func (c *captureClient) Complete(_ context.Context, msgs []ai.Message, _ ai.Comp
 }
 
 // goodGGBReply returns a reply whose extracted script builds a valid circle, so
-// the ggcm gate passes on the first attempt.
+// the ggbcheck gate passes on the first attempt.
 func goodGGBReply(script string) string {
 	return "<gg>\n" + script + "\n</gg>\n<!-- 说明：已构造 -->"
 }

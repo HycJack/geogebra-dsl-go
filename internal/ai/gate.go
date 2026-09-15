@@ -8,14 +8,14 @@ import (
 	"github.com/hycjack/geogebra-dsl-go/internal/diag"
 )
 
-// GateResult is the outcome of running the ggcm validator on a script.
+// GateResult is the outcome of running the ggbcheck validator on a script.
 type GateResult struct {
 	OK          bool
 	Executable  []string // topologically ordered object ids, empty when !OK
 	Diagnostics []string // human/repair-formatted findings, empty when OK
 }
 
-// runGate validates a script via the existing ggcm checker and turns the
+// runGate validates a script via the existing ggbcheck checker and turns the
 // receipt into repair-friendly diagnostics. This is the single seam between the
 // AI layer and the validator — it depends only on check.Check's *diag.Receipt.
 func runGate(script string) *GateResult {

@@ -1,7 +1,7 @@
 // Package ai implements a conversational flow that turns a geometry/Math
 // problem (given as text or an image) into GeoGebra dynamic-geometry
 // instructions, using an OpenAI-compatible chat backend. Generated scripts are
-// gated through the existing ggcm validator and auto-repaired in a bounded
+// gated through the existing ggbcheck validator and auto-repaired in a bounded
 // loop, so the final output is executable in GeoGebra for teaching demos.
 package ai
 

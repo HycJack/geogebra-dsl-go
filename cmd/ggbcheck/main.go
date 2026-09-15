@@ -1,8 +1,8 @@
-// Command ggcm checks whether ai-generated GeoGebra instructions are correct
+// Command ggbcheck checks whether ai-generated GeoGebra instructions are correct
 // and executable. Usage:
 //
-//	ggcm check <file>         validate a text script or IR JSON file
-//	ggcm check --json <file>  structured receipt on stdout
+//	ggbcheck check <file>         validate a text script or IR JSON file
+//	ggbcheck check --json <file>  structured receipt on stdout
 //
 // Exit codes: 0 all-ok / 1 construct not buildable / 2 usage or input error.
 package main
@@ -23,16 +23,16 @@ func main() {
 
 func run(args []string) int {
 	// Optional leading subcommand "check"; strip it before flag parsing so
-	// flags can follow in any order (ggcm check --json file / ggcm --json check file).
+	// flags can follow in any order (ggbcheck check --json file / ggbcheck --json check file).
 	if len(args) > 0 && args[0] == "check" {
 		args = args[1:]
 	}
-	fs := flag.NewFlagSet("ggcm", flag.ContinueOnError)
+	fs := flag.NewFlagSet("ggbcheck", flag.ContinueOnError)
 	useJSON := fs.Bool("json", false, "print structured receipt as JSON")
 	force := fs.String("input", "", "force input shape: text | ir (default auto)")
 	fs.Usage = func() {
-		fmt.Fprintln(os.Stderr, "ggcm — 校验 AI 生成的 GeoGebra 指令")
-		fmt.Fprintln(os.Stderr, "用法: ggcm check [--json] [--input text|ir] <文件>")
+		fmt.Fprintln(os.Stderr, "ggbcheck — 校验 AI 生成的 GeoGebra 指令")
+		fmt.Fprintln(os.Stderr, "用法: ggbcheck check [--json] [--input text|ir] <文件>")
 	}
 	if err := fs.Parse(args); err != nil {
 		return 2

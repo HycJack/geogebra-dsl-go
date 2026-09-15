@@ -2,7 +2,7 @@ package ai
 
 // Step describes one recorded stage of a generation pass. It is surfaced in the
 // web UI so the chat can visualize each LLM call, every exponential-backoff HTTP
-// retry, each ggcm gate run, and any transient failure. A Step is immutable
+// retry, each ggbcheck gate run, and any transient failure. A Step is immutable
 // after creation.
 type Step struct {
 	Stage       string   `json:"stage"`                 // "llm" | "retry" | "gate" | "error"

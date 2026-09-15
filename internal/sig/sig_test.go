@@ -23,6 +23,9 @@ func testCatalog() *catalog.Catalog {
     {"syntax":"Circle(<Point>, <Segment>)","params":[{"name":"<Point>","role":"c","type":"Point"},{"name":"<Segment>","role":"s","type":"Segment"}]},
     {"syntax":"Circle(<Point>, <Point>)","params":[{"name":"<Point>","role":"c","type":"Point"},{"name":"<Point>","role":"p","type":"Point"}]},
     {"syntax":"Circle(<Point>, <Number>)","params":[{"name":"<Point>","role":"c","type":"Point"},{"name":"<Number>","role":"r","type":"Number"}]}
+  ]},
+  "Polyline": {"name":"Polyline","overloads":[
+    {"syntax":"Polyline(<Point>, <Point>, ...)","params":[{"name":"<Point>","role":"p","type":"Point"},{"name":"<Point>","role":"q","type":"Point"}]}
   ]}
 }}`
 	c, err := catalog.Load([]byte(js))
@@ -100,6 +103,24 @@ func TestLookupConstantExprIsNumber(t *testing.T) {
 	m2 := Lookup(testCatalog(), g2, g2.Objects["c2"])
 	if m2.OK {
 		t.Fatalf("expected no match for Circle(2*pi,0), got OK")
+	}
+}
+
+func TestLookupVarArgAcceptsExtraArgs(t *testing.T) {
+	// A vararg command (Polyline) declared with N fixed params must accept a
+	// call with MORE than N args — the extra args are the variable tail. This
+	// guards against the regression where kindsMatch rejected any overload
+	// whose args outnumbered its params, breaking valid calls like
+	// ANOVA(l1,l2,l3) / Polyline(A,B,C) / PenStroke(...).
+	g := graphWith(t,
+		&ir.Object{ID: "A", Kind: ir.KPoint, Args: []string{"0", "0"}},
+		&ir.Object{ID: "B", Kind: ir.KPoint, Args: []string{"1", "1"}},
+		&ir.Object{ID: "C", Kind: ir.KPoint, Args: []string{"2", "2"}},
+		&ir.Object{ID: "pl", Cmd: "Polyline", Args: []string{"A", "B", "C"}, Refs: []string{"A", "B", "C"}},
+	)
+	m := Lookup(testCatalog(), g, g.Objects["pl"])
+	if !m.OK {
+		t.Fatalf("Polyline(A,B,C) with 3 args (2 fixed + vararg) should match, got %+v (explain=%s)", m, m.Explain)
 	}
 }
 

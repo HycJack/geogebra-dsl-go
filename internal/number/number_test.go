@@ -63,6 +63,48 @@ func TestEvalZero(t *testing.T) {
 	}
 }
 
+// TestEvalUnaryMinusPrecedence verifies that '^' binds tighter than a unary
+// minus, so -2^2 == -(2^2) == -4 (as in standard math and GeoGebra) rather than
+// (-2)^2 == 4. A negated base must be parenthesized: (-2)^2 == 4.
+func TestEvalUnaryMinusPrecedence(t *testing.T) {
+	cases := map[string]string{ // expr -> exact rational
+		"-2^2":   "-4",
+		"(-2)^2": "4",
+		"-2^3":   "-8",
+		"2^3^2":  "512", // right-associative: 2^(3^2)
+		"-2*3^2": "-18",
+		"-(2^2)": "-4",
+		"1-2^2":  "-3",
+		"4^0":    "1",
+	}
+	for expr, want := range cases {
+		v, ok := Eval(expr)
+		if !ok {
+			t.Errorf("expr %q should evaluate", expr)
+			continue
+		}
+		w, ok := new(big.Rat).SetString(want)
+		if !ok {
+			t.Fatalf("bad want %q", want)
+		}
+		if v.Cmp(w) != 0 {
+			t.Errorf("expr %q = %v, want %s", expr, v, want)
+		}
+	}
+}
+
+// TestEvalHugeExponentBounded verifies an astronomically large exponent in
+// untrusted input returns quickly (boundary cap) instead of looping unboundedly.
+func TestEvalHugeExponentBounded(t *testing.T) {
+	// 2^1000000000 would loop ~1e9 times if unbounded; the cap must short-circuit.
+	if _, ok := Eval("2^1000000000"); !ok {
+		t.Fatal("huge exponent should still be conservatively evaluable")
+	}
+	if _, ok := Eval("(-2)^1000000001"); !ok {
+		t.Fatal("huge odd exponent of a negative base should be evaluable")
+	}
+}
+
 func TestEvalUnsupported(t *testing.T) {
 	for _, bad := range []string{"", "abc", "2+", "||||", "1/0", "i", "deg", "2^"} {
 		if _, ok := Eval(bad); ok {

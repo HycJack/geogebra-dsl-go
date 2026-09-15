@@ -555,15 +555,24 @@ func resolveRefs(g *ir.Graph, cmd string, args []string) (refs, undefs []string)
 		if bound[i] {
 			continue // the arg is the command's own iteration/parameter variable, not a ref
 		}
-		if isNumber(a) || number.KnownConstant(a) {
-			continue // literal or reserved constant, not a reference
+		if isNumber(a) {
+			continue // literal, not a reference
 		}
 		if _, ok := g.Get(a); ok {
 			// a defined object (a named object, or a synthetic nested-command
 			// id like A.Midpoint1) is a dependency ref regardless of whether it
-			// is a "clean" identifier.
+			// is a "clean" identifier. A token that is BOTH a reserved constant
+			// name (pi/e/...) and a defined object is treated as the object
+			// first, matching GeoGebra, where such names are reserved and would
+			// not be usable as object ids anyway.
 			refs = append(refs, a)
 		} else if isIdentName(a) {
+			if number.KnownConstant(a) {
+				// A reserved numeric constant (pi/e/euler/gamma...) used as an
+				// argument and not shadowed by a defined object: not a ref and
+				// not an undefined reference.
+				continue
+			}
 			undefs = append(undefs, a)
 		}
 	}
@@ -582,10 +591,12 @@ func resolveRefsExpr(g *ir.Graph, expr string, bindings map[string]bool) (refs, 
 			continue
 		}
 		seen[tok] = true
-		if isNumber(tok) || number.KnownConstant(tok) {
+		if isNumber(tok) {
 			continue
 		}
 		if _, ok := g.Get(tok); ok {
+			// A defined object is a dependency ref, even if its name shadows a
+			// reserved constant (pi/e/...).
 			refs = append(refs, tok)
 		}
 	}
@@ -718,11 +729,21 @@ func isNumber(s string) bool {
 }
 
 // stripComment removes a trailing "# ..." comment from a line. Comments start
-// at the first '#' and run to end of line; the grammar has no string literals
-// that could contain '#', so this is safe.
+// at the first '#' that is NOT inside a double-quoted string literal; a '#' in
+// a string argument (e.g. SetCaption(c, "Answer #1")) is part of the string,
+// not a comment. The grammar does not use backslash escapes inside strings, so
+// a plain scan for "…" ranges is sufficient.
 func stripComment(line string) string {
-	if i := strings.IndexByte(line, '#'); i >= 0 {
-		return line[:i]
+	inStr := false
+	for i := 0; i < len(line); i++ {
+		switch line[i] {
+		case '"':
+			inStr = !inStr
+		case '#':
+			if !inStr {
+				return line[:i]
+			}
+		}
 	}
 	return line
 }
