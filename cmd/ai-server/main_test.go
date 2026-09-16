@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http/httptest"
 	"strings"
 	"testing"
@@ -143,5 +144,31 @@ func TestHandleChatDefaultModeUses2DPrompt(t *testing.T) {
 	doChat(t, srv, `{"input_type":"text","text":"作圆","stream":false}`)
 	if strings.Contains(stub.calls[0], "3D 模式") {
 		t.Errorf("default mode should use 2D prompt; call=%q", stub.calls[0])
+	}
+}
+
+// TestSessionStoreEvictsOldestByCreatedAt — regression: eviction must pick the
+// OLDEST-CREATED session, tracked explicitly, not the lexicographically
+// smallest id. Client-supplied ids are arbitrary strings ("zzz" < "aaa" says
+// nothing about age), and a generated id must not collide with a client id.
+func TestSessionStoreEvictsOldestByCreatedAt(t *testing.T) {
+	ss := newSessionStore(20) // history cap; the map cap is the maxSessions const
+	old := ss.Get("zzz")      // created first, but lexicographically LARGEST
+	for i := 0; i < maxSessions; i++ {
+		ss.Get(fmt.Sprintf("s-%d", i))
+	}
+	// Filling past maxSessions must evict the earliest-created session, which
+	// is "zzz" (created first) — NOT the lexicographically smallest ("s-0").
+	if _, ok := ss.sessions["zzz"]; ok {
+		t.Error("expected the oldest-created session (zzz) to be evicted, got it still present")
+	}
+	if old.ID != "zzz" {
+		t.Fatalf("session id mismatch: %q", old.ID)
+	}
+	// Generated ids are unique and do not collide with client-supplied ones.
+	g1 := ss.Get("")
+	g2 := ss.Get("")
+	if g1.ID == g2.ID {
+		t.Errorf("generated session ids must be unique, got %q twice", g1.ID)
 	}
 }

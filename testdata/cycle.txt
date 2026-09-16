@@ -1,3 +1,0 @@
-A = Point(0, 0)
-B = Line(A, C)
-C = Line(A, B)

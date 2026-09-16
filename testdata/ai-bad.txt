@@ -1,8 +1,0 @@
-# 一段 AI 生成的疑似有问题的指令
-A = Point(0, 2)
-B = Point(4, 2)
-c = Circle(A, 0)          # 错误1：半径 0 退化
-d = Circle(B, Point(1,1))
-l = Line(A, A)            # 错误2：重合点退化
-P1 = Intersect(c, Ridiculous)
-P2 = Intersec(c, l)       # 错误3：命令拼错 Intersec

@@ -222,6 +222,20 @@ func (p *parser) primary() (*big.Rat, bool) {
 		return nil, false
 	}
 	tok := p.src[start:p.pos]
+	// An exponent sign (+/-) is not part of the alnum run above, so a
+	// scientific-notation literal like 1E-2 or 2.5e+3 stops at the sign and
+	// would fail. Absorb the sign and following digits here, but ONLY when the
+	// token so far is a numeric mantissa ending in e/E — never for a bare
+	// constant `e` followed by `-3` (that is `e - 3`, which the grammar handles
+	// via unary).
+	if mantissaEndsWithE(tok) && p.pos < len(p.src) && (p.src[p.pos] == '+' || p.src[p.pos] == '-') &&
+		p.pos+1 < len(p.src) && isDigit(p.src[p.pos+1]) {
+		p.pos++
+		for p.pos < len(p.src) && isDigit(p.src[p.pos]) {
+			p.pos++
+		}
+		tok = p.src[start:p.pos]
+	}
 	if isNumberToken(tok) {
 		r, ok := new(big.Rat).SetString(tok)
 		if !ok {
@@ -284,21 +298,66 @@ func powRat(base, exp *big.Rat) (*big.Rat, bool) {
 // untrusted input can never force an unbounded CPU loop.
 const maxExponent = 1 << 12 // 4096
 
-// isNumberToken reports whether tok is a plain decimal numeral (with optional
-// sign already handled by unary).
+// mantissaEndsWithE reports whether tok is a numeric mantissa (digits with an
+// optional decimal point) immediately followed by e/E — the head of a
+// scientific-notation literal whose sign-and-digits exponent follows. A bare
+// constant `e` (no mantissa digits) returns false so `e - 3` is never
+// absorbed into one token.
+func mantissaEndsWithE(tok string) bool {
+	if len(tok) < 2 {
+		return false
+	}
+	last := tok[len(tok)-1]
+	if last != 'e' && last != 'E' {
+		return false
+	}
+	return isNumberToken(tok[:len(tok)-1])
+}
+
+// isDigit reports whether b is an ASCII decimal digit.
+func isDigit(b byte) bool {
+	return '0' <= b && b <= '9'
+}
+
+// isNumberToken reports whether tok is a plain decimal numeral, optionally in
+// scientific notation (1e3, 2.5E-2) — GeoGebra accepts both, and the text
+// package's number-literal detector already does, so the evaluator must not
+// fall out of step with the parser it serves. At least one digit is required;
+// the sign is handled by unary before this is called. big.Rat.SetString
+// parses the exponent form natively.
 func isNumberToken(tok string) bool {
 	if tok == "" {
 		return false
 	}
-	dot := false
-	for _, r := range tok {
-		switch {
-		case '0' <= r && r <= '9':
-		case r == '.' && !dot:
-			dot = true
-		default:
+	i, n := 0, len(tok)
+	digits := 0
+	for i < n && '0' <= tok[i] && tok[i] <= '9' {
+		i++
+		digits++
+	}
+	if i < n && tok[i] == '.' {
+		i++
+		for i < n && '0' <= tok[i] && tok[i] <= '9' {
+			i++
+			digits++
+		}
+	}
+	if digits == 0 {
+		return false
+	}
+	if i < n && (tok[i] == 'e' || tok[i] == 'E') {
+		i++
+		if i < n && (tok[i] == '+' || tok[i] == '-') {
+			i++
+		}
+		expDigits := 0
+		for i < n && '0' <= tok[i] && tok[i] <= '9' {
+			i++
+			expDigits++
+		}
+		if expDigits == 0 {
 			return false
 		}
 	}
-	return true
+	return i == n
 }

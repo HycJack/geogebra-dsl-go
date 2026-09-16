@@ -666,3 +666,97 @@ func TestRotateAxisMustBeALine(t *testing.T) {
 		}
 	}
 }
+
+// TestArithmeticNumberAsRadiusOk — regression: `r = 2/3` is an arithmetic
+// expression, hence a Number object (not KFunction), so Circle(O, r) must
+// validate. Before the fix the expression RHS was always typed KFunction and
+// the circle was falsely rejected with cmd/arg.
+func TestArithmeticNumberAsRadiusOk(t *testing.T) {
+	rc := Check([]byte("r = 2/3\nO = Point(0, 0)\nc1 = Circle(O, r)\n"), Options{})
+	if !rc.OK {
+		t.Fatalf("expected arithmetic number to satisfy a <Number> slot, got %v", rc.Errors)
+	}
+}
+
+// TestScientificNotationNumberOk — regression: GeoGebra accepts scientific
+// notation (1e3); the number-literal detector must too, so `r = 1e3` becomes a
+// Number object instead of an expression.
+func TestScientificNotationNumberOk(t *testing.T) {
+	rc := Check([]byte("r = 1e3\nO = Point(0, 0)\nc1 = Circle(O, r)\n"), Options{})
+	if !rc.OK {
+		t.Fatalf("expected scientific-notation literal to satisfy a <Number> slot, got %v", rc.Errors)
+	}
+}
+
+// TestNumberExprOverCommandNumberOk — regression: `r = d + 1` where
+// `d = Distance(A,B)` is a Number expression, so Circle(O, r) must validate.
+// The first review pass only classified expressions over literals; this is the
+// command-produced-number case it missed.
+func TestNumberExprOverCommandNumberOk(t *testing.T) {
+	rc := Check([]byte("A = (0, 0)\nB = (4, 0)\nd = Distance(A, B)\nr = d + 1\nO = (0, 0)\nc1 = Circle(O, r)\n"), Options{})
+	if !rc.OK {
+		t.Fatalf("expected r = d+1 to satisfy a <Number> slot, got %v", rc.Errors)
+	}
+}
+
+// TestStringArgWithCommaOk — regression: splitArgs must not split inside a
+// double-quoted string, so Text("hello, world", A) keeps two arguments. Before
+// the fix the comma in the string produced three args and a false cmd/arg.
+func TestStringArgWithCommaOk(t *testing.T) {
+	rc := Check([]byte("A = Point(0, 0)\nt1 = Text(\"hello, world\", A)\n"), Options{})
+	if !rc.OK {
+		t.Fatalf("expected a string literal containing a comma to stay one arg, got %v", rc.Errors)
+	}
+}
+
+// TestCycleAttributionPrecise — regression: the dep/cycle message must name the
+// true cycle (B ↔ C) and report downstream dependents (D, E) separately as
+// blocked, not lump them into the "环" list. The old implementation reported
+// "环：B, C, D, E" and sent the AI repair loop after innocent objects.
+func TestCycleAttributionPrecise(t *testing.T) {
+	rc := Check([]byte("A = Point(0, 0)\nB = Midpoint(C, A)\nC = Midpoint(A, B)\nD = Circle(C, 2)\nE = Line(D, A)\n"), Options{})
+	if rc.OK {
+		t.Fatal("expected failure")
+	}
+	var cycleMsg, blockedMsg string
+	for _, p := range rc.Errors {
+		if p.Code == diag.CodeDepCycle {
+			if strings.Contains(p.Msg, "成环节点") {
+				blockedMsg = p.Msg
+			} else {
+				cycleMsg = p.Msg
+			}
+		}
+	}
+	if !strings.Contains(cycleMsg, "B") || !strings.Contains(cycleMsg, "C") {
+		t.Fatalf("cycle message should name B and C, got %q", cycleMsg)
+	}
+	if strings.Contains(cycleMsg, "D") || strings.Contains(cycleMsg, "E") {
+		t.Fatalf("cycle message must not include downstream dependents, got %q", cycleMsg)
+	}
+	if !strings.Contains(blockedMsg, "D") || !strings.Contains(blockedMsg, "E") {
+		t.Fatalf("blocked message should name D and E, got %q", blockedMsg)
+	}
+}
+
+// TestCmdArgDiagnosticCarriesSignatures — regression: a rejected command must
+// tell the caller (and the LLM repair loop) the accepted overload syntaxes, so
+// a bare rejection becomes a self-correctable instruction.
+func TestCmdArgDiagnosticCarriesSignatures(t *testing.T) {
+	rc := Check([]byte("O = Point(0, 0)\nc1 = Circle(O)\n"), Options{})
+	if rc.OK {
+		t.Fatal("expected failure")
+	}
+	var msg string
+	for _, p := range rc.Errors {
+		if p.Code == diag.CodeCmdArg {
+			msg = p.Msg
+		}
+	}
+	if msg == "" {
+		t.Fatalf("expected a cmd/arg diagnostic, got %v", rc.Errors)
+	}
+	if !strings.Contains(msg, "Circle(<Point>") {
+		t.Fatalf("cmd/arg diagnostic should carry the accepted signatures, got %q", msg)
+	}
+}

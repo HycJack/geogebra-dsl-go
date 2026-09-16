@@ -3,6 +3,7 @@
 package sig
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/hycjack/geogebra-dsl-go/internal/catalog"
@@ -247,11 +248,10 @@ func tokenAlternatives(token string) []string {
 
 // Match holds the outcome of matching an object against the catalog.
 type Match struct {
-	Known      bool // command exists in catalog
-	OK         bool // at least one overload accepted (known && args+types)
-	Matched    *catalog.Overload
-	ParamCount []int  // accepted param counts, for diagnostics
-	Explain    string // human text when !OK
+	Known   bool // command exists in catalog
+	OK      bool // at least one overload accepted (known && args+types)
+	Matched *catalog.Overload
+	Explain string // human text when !OK
 }
 
 // unknownExplain builds the diagnostic for a command that is not in the table.
@@ -280,7 +280,6 @@ func Lookup(c *catalog.Catalog, g *ir.Graph, o *ir.Object) Match {
 	if !known {
 		return Match{Known: false, Explain: unknownExplain(c, o.Cmd)}
 	}
-	counts := map[int]bool{}
 	var matched *catalog.Overload
 	for i := range cmd.Overloads {
 		ov := &cmd.Overloads[i]
@@ -297,7 +296,6 @@ func Lookup(c *catalog.Catalog, g *ir.Graph, o *ir.Object) Match {
 		} else if required, acceptable := paramCountRange(ov.Params); len(o.Args) < required || len(o.Args) > acceptable {
 			continue
 		}
-		counts[len(ov.Params)] = true
 		if kindsMatch(ov, g, o) {
 			matched = ov
 			break
@@ -306,16 +304,37 @@ func Lookup(c *catalog.Catalog, g *ir.Graph, o *ir.Object) Match {
 	if matched != nil {
 		return Match{Known: true, OK: true, Matched: matched}
 	}
-	pc := make([]int, 0, len(counts))
-	for c := range counts {
-		pc = append(pc, c)
-	}
 	return Match{
-		Known:      true,
-		OK:         false,
-		ParamCount: pc,
-		Explain:    "命令 " + o.Cmd + " 的参数个数或类型不匹配任何签名",
+		Known:   true,
+		OK:      false,
+		Explain: "命令 " + o.Cmd + " 的参数个数或类型不匹配任何签名；正确签名：" + syntaxList(cmd.Overloads),
 	}
+}
+
+// syntaxList renders the accepted overload syntaxes of a command for a
+// diagnostic. It collects every unique syntax first (so the total is honest),
+// then shows the first three plus a count of the rest — the total is the part
+// that tells the LLM repair loop "you can keep guessing against more
+// signatures", not just the three shown.
+func syntaxList(overloads []catalog.Overload) string {
+	seen := map[string]bool{}
+	var all []string
+	for _, ov := range overloads {
+		s := strings.TrimSpace(ov.Syntax)
+		if s == "" || seen[s] {
+			continue
+		}
+		seen[s] = true
+		all = append(all, s)
+	}
+	if len(all) == 0 {
+		return "（命令表未提供签名）"
+	}
+	const shown = 3
+	if len(all) <= shown {
+		return strings.Join(all, "；")
+	}
+	return strings.Join(all[:shown], "；") + fmt.Sprintf("；等共 %d 种", len(all))
 }
 
 // paramCountRange reports the minimum required argument count and the maximum

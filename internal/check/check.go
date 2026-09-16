@@ -53,7 +53,7 @@ func Check(input []byte, opt Options) *diag.Receipt {
 			fatal = []diag.Problem{{Code: diag.CodeParseJSON, Msg: "IR 解析失败"}}
 		}
 	case "text":
-		g, fatal, buildProbs = buildText(input)
+		g, fatal, buildProbs = buildText(input, cat)
 	default:
 		rc.Fail(diag.Problem{Code: diag.CodeUsage, Msg: "无法识别输入形态"})
 		return rc
@@ -81,7 +81,11 @@ func Check(input []byte, opt Options) *diag.Receipt {
 	}
 
 	// Resolve object kinds from their commands (text input leaves them unknown).
-	g.SetKindFromCmd()
+	// The command→kind mapping is data (cmdmeta.json) in the catalog, not code.
+	// Expression objects are classified afterwards: once command kinds exist we
+	// can tell `r = 2/3` and `r = d+1` (d a Number) are Numbers, not Functions.
+	cat.ApplyKinds(g)
+	text.ReclassifyNumericExprs(g)
 
 	// Stages B..E collect every independent problem rather than stopping at the
 	// first, so the receipt reports the full list of what's wrong with the AI
@@ -130,8 +134,8 @@ func sniff(input []byte, force string) string {
 	return "text"
 }
 
-func buildText(input []byte) (g *ir.Graph, fatal []diag.Problem, build []diag.Problem) {
-	stmts, parseProbs := text.Parse(string(input))
+func buildText(input []byte, cat *catalog.Catalog) (g *ir.Graph, fatal []diag.Problem, build []diag.Problem) {
+	stmts, parseProbs := text.Parse(string(input), cat)
 	if len(parseProbs) > 0 {
 		// Unparseable → cannot even construct statements: fail-closed, nothing
 		// downstream can run.

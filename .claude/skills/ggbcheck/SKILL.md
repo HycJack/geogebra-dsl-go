@@ -20,7 +20,9 @@ description: 用 ggbcheck 校验 AI 生成的 GeoGebra 指令脚本（文本或 
 go build -o ggbcheck.exe ./cmd/ggbcheck
 ```
 
-校验一条脚本（默认自动识别文本脚本还是 IR JSON，但**必须写成文件**，不支持 stdin）：
+校验一条脚本（默认自动识别文本脚本还是 IR JSON）。需要给一个**文件路径**；不想落盘时，
+Unix 下可把路径写成 `/dev/stdin` 走管道/重定向（如 `ggbcheck check /dev/stdin`），
+但不支持 `-` 简写：
 
 ```bash
 ggbcheck check path/to/script.txt        # 人类可读收据（最常用）
@@ -73,9 +75,9 @@ ggbcheck check --input text|ir <file>    # 强制输入形态（默认自动识�
 | `parse/json` | IR JSON 结构损坏 | 缺 `objects`、JSON 不合法 | 修 JSON |
 | `dep/redefine` | 对象重复定义 | 同一变量名赋了两次 | 改名或合并 |
 | `dep/undefined` | 引用了未定义对象 | 打字错误、对象名不一致、前面没用过 | 先定义再引用，或统一名字 |
-| `dep/cycle` | 依赖成环，无法定序 | `A` 依赖 `B` 又反向依赖 | 打破环 |
-| `cmd/unknown` | 命令不在命令表里 | **拼写错误最常见** | 核对命令名（如 `Circle` 不是 `Ciricle`） |
-| `cmd/arg` | 参数个数/类型不匹配任何签名 | 参数个数错、类型错 | 查该命令的合法签名 |
+| `dep/cycle` | 依赖成环，无法定序 | `A` 依赖 `B` 又反向依赖 | 打破环（诊断只列**真环成员**，被牵连的下游对象单独报告） |
+| `cmd/unknown` | 命令不在命令表里 | **拼写错误最常见** | 核对命令名（如 `Circle` 不是 `Ciricle`；诊断附最近命令+官方 URL） |
+| `cmd/arg` | 参数个数/类型不匹配任何签名 | 参数个数错、类型错 | 按诊断里附的**正确签名**改（前 3 条 + 总数） |
 | `geo/degenerate` | 退化构造 | 半径≤0 的圆、重合两点的直线 | 改参数 |
 | `goal/unreachable` | goals 里有不存在的目标对象 | IR 里 `goals` 提到未定义 id | 补定义或改 goals |
 

@@ -210,6 +210,17 @@ func TestLookupConicRejectsPoint(t *testing.T) {
 	}
 }
 
+// fullCatalog is the embedded rich catalog (cached), including the cmdmeta
+// command→result-kind data. Used by tests that exercise kind resolution, since
+// kindForCmd now lives in catalog data rather than the minimal testCatalog.
+func fullCatalog() *catalog.Catalog {
+	c, err := catalog.Default()
+	if err != nil {
+		panic(err)
+	}
+	return c
+}
+
 func TestKindForCmdConicsAndCenters(t *testing.T) {
 	// Commands that used to fall through to KUnknown (and so slipped through the
 	// lenient fallback everywhere) must now resolve to a real kind.
@@ -222,7 +233,7 @@ func TestKindForCmdConicsAndCenters(t *testing.T) {
 	}
 	for cmd, k := range want {
 		g := graphWith(t, &ir.Object{ID: "o", Cmd: cmd})
-		g.SetKindFromCmd()
+		fullCatalog().ApplyKinds(g)
 		if got := g.Objects["o"].Kind; got != k {
 			t.Errorf("%s: expected kind %v, got %v", cmd, k, got)
 		}
@@ -240,7 +251,7 @@ func TestCenterCircumcircle(t *testing.T) {
 		&ir.Object{ID: "c", Cmd: "Circumcircle", Args: []string{"A", "B", "C"}},
 		&ir.Object{ID: "O", Cmd: "Center", Args: []string{"c"}, Refs: []string{"c"}},
 	)
-	g.SetKindFromCmd()
+	fullCatalog().ApplyKinds(g)
 	m := Lookup(testCatalog(), g, g.Objects["O"])
 	if !m.OK {
 		t.Fatalf("expected Center(Circumcircle(...)) to match, got %+v (explain=%s)", m, m.Explain)
@@ -439,7 +450,7 @@ func TestKindForCmdNewObjectKinds(t *testing.T) {
 	} {
 		g.Add(&ir.Object{ID: id, Cmd: cmd})
 	}
-	g.SetKindFromCmd()
+	fullCatalog().ApplyKinds(g)
 	want := map[string]ir.Kind{
 		"t": ir.KText, "m": ir.KMatrix, "q": ir.KPolynomial, "c": ir.KCurve,
 		"s": ir.KLocus, "u": ir.KSet, "tt": ir.KTurtle, "ls": ir.KList, "sq": ir.KList,
@@ -462,7 +473,7 @@ func TestKindForCmdPolyhedra(t *testing.T) {
 	} {
 		g.Add(&ir.Object{ID: id, Cmd: cmd})
 	}
-	g.SetKindFromCmd()
+	fullCatalog().ApplyKinds(g)
 	for id := range map[string]string{
 		"tet": "Tetrahedron", "cube": "Cube", "pr": "Prism", "py": "Pyramid",
 		"ph": "Polyhedron", "oct": "Octahedron", "do": "Dodecahedron",
@@ -497,4 +508,23 @@ func equalStrs(a, b []string) bool {
 		}
 	}
 	return true
+}
+
+// TestArgMismatchExplainCarriesSignatures — regression: a rejected overload
+// must name the accepted syntaxes (from the catalog) so the AI repair loop (and
+// humans) can self-correct instead of guessing. ParamCount used to be computed
+// and discarded; the syntaxes replace it.
+func TestArgMismatchExplainCarriesSignatures(t *testing.T) {
+	g := graphWith(t, &ir.Object{ID: "O", Kind: ir.KPoint, Args: []string{"0", "0"}})
+	g.Add(&ir.Object{ID: "c1", Cmd: "Circle", Args: []string{"O"}, Refs: []string{"O"}})
+	m := Lookup(testCatalog(), g, g.Objects["c1"])
+	if m.OK {
+		t.Fatal("expected Circle(O) to be rejected (needs 2 args)")
+	}
+	if !strings.Contains(m.Explain, "Circle(<Point>, <Segment>)") {
+		t.Fatalf("explain should carry the accepted overload syntaxes, got %q", m.Explain)
+	}
+	if strings.Contains(m.Explain, "（命令表未提供签名）") {
+		t.Fatalf("explain should not be the empty-syntax fallback, got %q", m.Explain)
+	}
 }

@@ -1,2 +1,0 @@
-A = Point(1, 1)
-l = Line(A, A)

@@ -17,7 +17,10 @@
 package main
 
 import (
+	"context"
+	"crypto/rand"
 	"embed"
+	"encoding/hex"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -76,7 +79,16 @@ func main() {
 	mux.HandleFunc("/api/chat", server.handleChat)
 
 	log.Printf("ai-server listening on %s (model=%s endpoint=%s)", *addr, cfg.Model, cfg.Endpoint)
-	if err := http.ListenAndServe(*addr, mux); err != nil {
+	// ReadHeaderTimeout guards against slowloris (headers trickled in forever);
+	// ReadTimeout/WriteTimeout stay unset so the SSE log stream and streamed
+	// results are never killed by an idle-writing connection. Per-request cost
+	// is bounded separately in handleChat by cfg.RequestBudgetS.
+	srv := &http.Server{
+		Addr:              *addr,
+		Handler:           mux,
+		ReadHeaderTimeout: 30 * time.Second,
+	}
+	if err := srv.ListenAndServe(); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -409,7 +421,17 @@ func (s *server) handleChat(w http.ResponseWriter, r *http.Request) {
 		userMsg = *usrMsg
 	}
 
-	res := ai.Generate(r.Context(), effClient, effCfg, ai.GenerateRequest{
+	// Bound the WHOLE request (the repair loop can make MaxRepair+1 LLM calls,
+	// each with its own HTTPTimeoutS) so a single misbehaving request cannot
+	// occupy the handler for unbounded time. Budget is derived from config.
+	budget := time.Duration(effCfg.RequestBudgetS) * time.Second
+	if budget <= 0 {
+		budget = time.Duration(effCfg.HTTPTimeoutS) * time.Second * time.Duration(effCfg.MaxRepair+1)
+	}
+	ctx, cancel := context.WithTimeout(r.Context(), budget)
+	defer cancel()
+
+	res := ai.Generate(ctx, effClient, effCfg, ai.GenerateRequest{
 		Session:   sess,
 		SystemMsg: sysMsg,
 		UserMsg:   userMsg,
@@ -514,47 +536,63 @@ func writeError(w http.ResponseWriter, code int, msg string) {
 //
 // The map is bounded: session ids are client-controlled, so without a cap an
 // attacker could fill memory by sending many distinct ids. When the map reaches
-// maxSessions the oldest-created session (smallest Unix-nano id, i.e. the
-// earliest) is evicted to make room. This bounds memory while keeping active
-// conversations intact.
+// maxSessions the OLDEST-CREATED session (smallest createdAt, tracked
+// explicitly) is evicted to make room. Client-supplied ids are arbitrary
+// strings, so "oldest" must not be inferred from the id (the old lexicographic
+// trick only worked for our own sess-<nano> ids).
 type sessionStore struct {
-	mu       sync.Mutex
-	max      int
-	sessions map[string]*ai.Session
+	mu         sync.Mutex
+	historyMax int // per-session history turns cap (passed to ai.NewSession)
+	sessions   map[string]*sessionEntry
+}
+
+type sessionEntry struct {
+	sess      *ai.Session
+	createdAt time.Time
 }
 
 const maxSessions = 1000
 
-func newSessionStore(max int) *sessionStore {
-	return &sessionStore{max: max, sessions: map[string]*ai.Session{}}
+func newSessionStore(historyMax int) *sessionStore {
+	return &sessionStore{historyMax: historyMax, sessions: map[string]*sessionEntry{}}
 }
 
 // Get returns the session for id (creating one if absent). An empty id is
-// assigned a fresh one-name unique id.
+// assigned a fresh unique id.
 func (ss *sessionStore) Get(id string) *ai.Session {
 	if id == "" {
-		id = fmt.Sprintf("sess-%d", time.Now().UnixNano())
+		id = fmt.Sprintf("sess-%d-%s", time.Now().UnixNano(), randSuffix())
 	}
 	ss.mu.Lock()
 	defer ss.mu.Unlock()
-	if s, ok := ss.sessions[id]; ok {
-		return s
+	if e, ok := ss.sessions[id]; ok {
+		return e.sess
 	}
 	if len(ss.sessions) >= maxSessions {
-		// Evict the earliest-created session to keep the map bounded. Session ids
-		// use an increasing Unix-nano timestamp, so the lexicographically smallest
-		// id is the oldest.
-		var oldest string
-		for k := range ss.sessions {
-			if oldest == "" || k < oldest {
-				oldest = k
+		// Evict the earliest-created session to keep the map bounded.
+		var oldestKey string
+		var oldestAt time.Time
+		for k, e := range ss.sessions {
+			if oldestKey == "" || e.createdAt.Before(oldestAt) {
+				oldestKey = k
+				oldestAt = e.createdAt
 			}
 		}
-		if oldest != "" {
-			delete(ss.sessions, oldest)
+		if oldestKey != "" {
+			delete(ss.sessions, oldestKey)
 		}
 	}
-	s := ai.NewSession(id, ss.max)
-	ss.sessions[id] = s
+	s := ai.NewSession(id, ss.historyMax)
+	ss.sessions[id] = &sessionEntry{sess: s, createdAt: time.Now()}
 	return s
+}
+
+// randSuffix returns 4 random hex bytes, so a freshly generated session id is
+// not guessable by a client that sees an earlier one.
+func randSuffix() string {
+	var b [4]byte
+	if _, err := rand.Read(b[:]); err != nil {
+		return "00000000"
+	}
+	return hex.EncodeToString(b[:])
 }

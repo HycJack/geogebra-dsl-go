@@ -130,6 +130,7 @@ GGCM_AI_DISABLE_VISION  # 默认 false
 GGCM_AI_HTTP_RETRIES     # 默认 5（瞬态错误最多重试次数；0 则不发重试）
 GGCM_AI_HTTP_RETRY_BASE_MS  # 默认 500（首次退避毫秒，每轮翻倍）
 GGCM_AI_HTTP_TIMEOUT_S     # 默认 300（单次 LLM 调用超时秒数；max_tokens 大时需同步调大）
+GGCM_AI_REQUEST_TIMEOUT_S  # 默认 900（整个 /api/chat 请求预算秒数，含全部修复轮次；<=0 时退化为 (MaxRepair+1)×HTTP_TIMEOUT_S）
 ```
 
 ### 4.4 结构化日志（调试/审计）
@@ -223,8 +224,8 @@ for attempt := 1; attempt <= cfg.MaxRepair; attempt++ {
 
 | ggbcheck Code | 含义 | 建议 |
 |---|---|---|
-| `cmd/unknown` | 命令不在表里 | 改用表内命令（Point/Line/Circle/…）或拼对命令名 |
-| `cmd/arg` | 参数个数/类型不匹配 | 对照该命令 overload 的正确签名 |
+| `cmd/unknown` | 命令不在表里 | 改用表内命令（Point/Line/Circle/…）或拼对命令名；诊断已附最近命令+官方 URL |
+| `cmd/arg` | 参数个数/类型不匹配 | **诊断已附该命令的正确 overload 签名**（前 3 条），LLM 据此直接修正 |
 | `dep/undefined` | 引用了未定义对象 | 先定义被引用对象，或取消该引用 |
 | `dep/cycle` | 依赖成环 | 调整定义顺序，避免互相定义 |
 | `dep/redefine` | 重复定义 | 保留一个定义，改名其他 |
@@ -292,6 +293,7 @@ for attempt := 1; attempt <= cfg.MaxRepair; attempt++ {
 - **瞬时网络/限流**：429/408/409/5xx/超时 → 指数退避重试，默认最多 `GGCM_AI_HTTP_RETRIES` 次（默认 5，`GGCM_AI_HTTP_RETRY_BASE_MS`=500ms 起、每轮翻倍；见 §4.2）。永久 4xx（400/401/403/404）不重试。
 - **脚本抽取失败**：LLM 输出里没有 `<gg>` 区块 → 视为一次失败重试；仍无则报 `format` 错误。
 - **会话放大**：设 `MaxHistoryTurns`（默认 20）截断单会话历史，防止上下文膨胀。
+- **请求总预算**：`/api/chat` 用 `context.WithTimeout` 包住整个修复循环（默认 `GGCM_AI_REQUEST_TIMEOUT_S`=900s），防止一个坏请求在 `(MaxRepair+1)×HTTPTimeoutS` 的最坏路径上无限占用 handler；HTTP 层另设 `ReadHeaderTimeout`（30s）防 slowloris（不设 Read/WriteTimeout，保住 SSE 长连接）。
 
 ### 服务端安全约束（请求方覆盖时的凭证保护）
 
@@ -305,7 +307,8 @@ for attempt := 1; attempt <= cfg.MaxRepair; attempt++ {
 ### 会话上限与线程安全
 
 - 会话是**仅内存**结构（不落盘；磁盘持久化见 §11.4 扩展预留）。服务端对 `sessions` map 加锁，`Session` 内部也加锁，多并发 `/api/chat` 写同一会话安全。
-- **全局会话数有硬上限（`maxSessions=1000`）**：`session_id` 由客户端任意提供，若不设防可无限填充内存。达到上限后淘汰最早创建的会话腾出空间。
+- **全局会话数有硬上限（`maxSessions=1000`）**：`session_id` 由客户端任意提供，若不设防可无限填充内存。达到上限后淘汰**最早创建**（按 `createdAt` 显式记录）的会话腾出空间——客户端 id 可以是任意字符串，淘汰不能靠 id 字典序推断。
+- **新建会话 id 不可猜**：空 `session_id` 时服务端生成 `sess-<unixnano>-<hex8>`（4 字节随机后缀），让看到自己旧 id 的客户端无法预测下一个新 id。
 
 ---
 

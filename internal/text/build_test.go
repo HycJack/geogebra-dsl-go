@@ -3,9 +3,21 @@ package text
 import (
 	"testing"
 
+	"github.com/hycjack/geogebra-dsl-go/internal/catalog"
 	"github.com/hycjack/geogebra-dsl-go/internal/diag"
 	"github.com/hycjack/geogebra-dsl-go/internal/ir"
 )
+
+// testCat is the process-wide catalog (cached), shared by every Parse call in
+// these tests. It is needed because Parse now takes the catalog that decides
+// which bare statements are legal.
+var testCat = func() *catalog.Catalog {
+	c, err := catalog.Default()
+	if err != nil {
+		panic("catalog.Default: " + err.Error())
+	}
+	return c
+}()
 
 func TestParseDispatch(t *testing.T) {
 	src := `# comment
@@ -13,7 +25,7 @@ A = Point(0, 2)
 l = Line(A, B)
 M = (1, 2)
 r = 3`
-	stmts, probs := Parse(src)
+	stmts, probs := Parse(src, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected parse problems: %v", probs)
 	}
@@ -33,14 +45,14 @@ r = 3`
 
 func TestBuildKindsAndRefs(t *testing.T) {
 	src := "A = Point(0, 2)\nB = Point(4, 2)\nl = Line(A, B)\n"
-	stmts, _ := Parse(src)
+	stmts, _ := Parse(src, testCat)
 	g, probs := Build(stmts)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected build problems: %v", probs)
 	}
-	// Kind resolution is centralized in ir.SetKindFromCmd (run later by check);
+	// Kind resolution is centralized in catalog.ApplyKinds (run later by check);
 	// Build guarantees structure + refs, not kinds.
-	g.SetKindFromCmd()
+	testCat.ApplyKinds(g)
 	a := g.Objects["A"]
 	if a.Kind != ir.KPoint {
 		t.Errorf("A kind=%v, want Point", a.Kind)
@@ -53,7 +65,7 @@ func TestBuildKindsAndRefs(t *testing.T) {
 
 func TestUndefinedRefReported(t *testing.T) {
 	src := "A = Point(0,2)\nl = Line(A, Missing)\n"
-	stmts, _ := Parse(src)
+	stmts, _ := Parse(src, testCat)
 	g, probs := Build(stmts)
 	if len(probs) != 1 {
 		t.Fatalf("expected 1 problem, got %v", probs)
@@ -70,7 +82,7 @@ func TestUndefinedRefReported(t *testing.T) {
 
 func TestRedefinitionReported(t *testing.T) {
 	src := "A = Point(0,0)\nA = Point(1,1)\n"
-	stmts, _ := Parse(src)
+	stmts, _ := Parse(src, testCat)
 	g, probs := Build(stmts)
 	if len(probs) != 1 {
 		t.Fatalf("expected 1 redefinition problem, got %v", probs)
@@ -79,7 +91,7 @@ func TestRedefinitionReported(t *testing.T) {
 		t.Errorf("expected dep/redefine, got %s", probs[0].Code)
 	}
 	// The first definition is kept; the redefining line must not overwrite it.
-	g.SetKindFromCmd()
+	testCat.ApplyKinds(g)
 	if got := g.Objects["A"].Args; len(got) != 2 || got[0] != "0" || got[1] != "0" {
 		t.Errorf("redefinition overwrote first definition: args=%v (want [0 0])", got)
 	}
@@ -89,7 +101,7 @@ func TestBoundVariableNotUndefined(t *testing.T) {
 	// k is Sequence's iteration variable; must not be reported as undefined
 	// nor become a ref targeting a nonexistent object.
 	src := "n = 8\npts = Sequence(B + (k, 0), k, 1, n)\n"
-	stmts, _ := Parse(src)
+	stmts, _ := Parse(src, testCat)
 	g, probs := Build(stmts)
 	if len(probs) != 0 {
 		t.Fatalf("expected no problems (k is bound), got %v", probs)
@@ -106,7 +118,7 @@ func TestReservedConstantsNotUndefinedRefs(t *testing.T) {
 	// pi / e are reserved constants, not object references; they must not be
 	// reported as undefined and must not become dependency refs.
 	src := "A = Point(0, 0)\nc1 = Circle(A, pi)\nc2 = Circle(A, 2*e)\n"
-	stmts, _ := Parse(src)
+	stmts, _ := Parse(src, testCat)
 	g, probs := Build(stmts)
 	if len(probs) != 0 {
 		t.Fatalf("expected no problems for reserved constants, got %v", probs)
@@ -125,7 +137,7 @@ func TestReservedConstantsNotUndefinedRefs(t *testing.T) {
 // not as a comment terminator.
 func TestHashInsideStringIsNotComment(t *testing.T) {
 	src := "c = Circle((0,0), (4,0))\nSetCaption(c, \"Answer #1\")\n"
-	stmts, parseProbs := Parse(src)
+	stmts, parseProbs := Parse(src, testCat)
 	if len(parseProbs) != 0 {
 		t.Fatalf("unexpected parse errors: %v", parseProbs)
 	}
@@ -148,7 +160,7 @@ func TestHashInsideStringIsNotComment(t *testing.T) {
 // that object is treated as a real dependency rather than silently dropped.
 func TestReservedNameShadowingKeepsRef(t *testing.T) {
 	src := "pi = Point(0, 0)\nc = Circle(pi, 3)\n"
-	stmts, _ := Parse(src)
+	stmts, _ := Parse(src, testCat)
 	g, probs := Build(stmts)
 	if len(probs) != 0 {
 		t.Fatalf("expected clean build, got %v", probs)
@@ -169,7 +181,7 @@ func TestNestedCommandMaterialized(t *testing.T) {
 	// Circle(Midpoint(A,B), 3) creates a synthetic object for Midpoint(A,B)
 	// that participates in the graph with correct dependencies.
 	src := "A = Point(0, 0)\nB = Point(4, 0)\nc = Circle(Midpoint(A, B), 3)\n"
-	stmts, _ := Parse(src)
+	stmts, _ := Parse(src, testCat)
 	g, probs := Build(stmts)
 	if len(probs) != 0 {
 		t.Fatalf("expected no problems, got %v", probs)
@@ -194,7 +206,7 @@ func TestNestedCommandMaterialized(t *testing.T) {
 func TestNestedCommandUnknown(t *testing.T) {
 	// An unknown command nested in an arg is not silently dropped: build flags it.
 	src := "A = Point(0, 0)\nB = Point(4, 0)\nc = Circle(Nope(A, B), 2)\n"
-	stmts, _ := Parse(src)
+	stmts, _ := Parse(src, testCat)
 	g, probs := Build(stmts)
 	// build itself doesn't know the command table; it synthesizes the object.
 	// The existence of "c.Nope1" is what the sig stage checks. No dep problems here.
@@ -212,7 +224,7 @@ func TestNestedCommandUnknown(t *testing.T) {
 func TestParseModifierStatements(t *testing.T) {
 	// Statement-style commands with no '=' parse as modifiers (modifier=true).
 	src := "SetColor(c, \"red\")\nStartAnimation(a)\nSetLineThickness(l, 4)\n"
-	stmts, probs := Parse(src)
+	stmts, probs := Parse(src, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected parse problems: %v", probs)
 	}
@@ -235,7 +247,7 @@ func TestParseModifierStatements(t *testing.T) {
 func TestParseNonModifierNoEqualsRejected(t *testing.T) {
 	// A construct command written without '=' is a syntax error, not silently ok.
 	src := "Line(A, B)\n"
-	stmts, probs := Parse(src)
+	stmts, probs := Parse(src, testCat)
 	if len(stmts) != 0 {
 		t.Fatalf("expected no statements, got %v", stmts)
 	}
@@ -246,7 +258,7 @@ func TestParseNonModifierNoEqualsRejected(t *testing.T) {
 
 func TestBuildModifiersDoNotCreateObjects(t *testing.T) {
 	src := "a = Slider(1, 5, 0.1)\nA = (0, 0)\nB = (4, 0)\nc = Circle(A, B)\nSetColor(c, \"red\")\nSetLineThickness(c, 4)\nStartAnimation(a)\n"
-	stmts, _ := Parse(src)
+	stmts, _ := Parse(src, testCat)
 	g, probs := Build(stmts)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected build problems: %v", probs)
@@ -271,7 +283,7 @@ func TestBuildModifiersDoNotCreateObjects(t *testing.T) {
 func TestBuildModifierUndefinedTargetReports(t *testing.T) {
 	// A modifier whose target isn't defined is an undefined-ref error.
 	src := "SetColor(missing, \"red\")\n"
-	stmts, _ := Parse(src)
+	stmts, _ := Parse(src, testCat)
 	_, probs := Build(stmts)
 	if len(probs) == 0 {
 		t.Fatal("expected undefined-target error for modifier")
@@ -289,7 +301,7 @@ func TestBuildModifierUndefinedTargetReports(t *testing.T) {
 
 func TestParseListLiteral(t *testing.T) {
 	src := "L = {1, 2, 3}\npts = {(0,0), (1,1), (2,4)}\n"
-	stmts, probs := Parse(src)
+	stmts, probs := Parse(src, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected parse problems: %v", probs)
 	}
@@ -314,7 +326,7 @@ func TestParseExpressionRHS(t *testing.T) {
 	// An expression RHS (implicit curve / algebraic) is accepted, not a syntax
 	// error, and references to defined objects become deps.
 	src := "k = 3\ny = x^2 + k\n"
-	stmts, probs := Parse(src)
+	stmts, probs := Parse(src, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected parse problems: %v", probs)
 	}
@@ -335,7 +347,7 @@ func TestParseFunctionDef(t *testing.T) {
 	// f(x) = ... registers object "f" (KFunction); the param x is local, the
 	// body may reference defined objects.
 	src := "f(x) = 2x + 1\nh = 2*f\n"
-	stmts, probs := Parse(src)
+	stmts, probs := Parse(src, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected parse problems: %v", probs)
 	}
@@ -358,7 +370,7 @@ func TestParseFunctionDefCommandLikeBody(t *testing.T) {
 	// function body expression, not as `f = sin(x)` assignment (which would
 	// flag x undefined / sin unknown).
 	src := "f(x) = sin(x)\ng(t) = cos(t) + 1\n"
-	stmts, probs := Parse(src)
+	stmts, probs := Parse(src, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected parse problems: %v", probs)
 	}
@@ -379,7 +391,7 @@ func TestListElementsResolveRefs(t *testing.T) {
 	// A list literal containing a defined object records that dependency and
 	// an undefined standalone identifier is reported.
 	src := "A = (0, 0)\nB = (2, 0)\nl = {A, B, Seven}\n"
-	stmts, _ := Parse(src)
+	stmts, _ := Parse(src, testCat)
 	g, probs := Build(stmts)
 	foundUndef := false
 	for _, p := range probs {
@@ -400,7 +412,7 @@ func TestNestedCommandInPointCoords(t *testing.T) {
 	// is materialized as a synthetic object so it is validated, not silently
 	// dropped.
 	src := "B = (Sqrt(3), 0, 0)\n"
-	stmts, probs := Parse(src)
+	stmts, probs := Parse(src, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected parse problems: %v", probs)
 	}
@@ -432,7 +444,7 @@ func TestNestedCommandEmbeddedInPointCoord(t *testing.T) {
 	// A call embedded inside arithmetic (D = (Sqrt(3)/2, 3/2, 0)) must be found
 	// and materialized, not just whole-argument calls.
 	src := "D = (Sqrt(3)/2, 3/2, 0)\n"
-	stmts, _ := Parse(src)
+	stmts, _ := Parse(src, testCat)
 	g, probs := Build(stmts)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected build problems: %v", probs)
@@ -454,7 +466,7 @@ func TestNestedCommandInListLiteral(t *testing.T) {
 	// A list literal element that is a command call is materialized and the list
 	// depends on the synthetic object.
 	src := "L = {Sqrt(2), 3}\n"
-	stmts, _ := Parse(src)
+	stmts, _ := Parse(src, testCat)
 	g, probs := Build(stmts)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected build problems: %v", probs)
@@ -479,7 +491,7 @@ func TestNestedCommandUnknownInPoint(t *testing.T) {
 	// A typo in a nested command inside a point coordinate is materialized and
 	// reported (cmd/unknown via the sig stage) instead of being silently ignored.
 	src := "B = (Sqrrt(3), 0, 0)\n"
-	stmts, _ := Parse(src)
+	stmts, _ := Parse(src, testCat)
 	g, probs := Build(stmts)
 	if len(probs) != 0 {
 		t.Fatalf("build should still succeed (sig stage flags cmd/unknown): %v", probs)
@@ -497,7 +509,7 @@ func TestParseBoolLiteral(t *testing.T) {
 	// `x = false` must be a literal, not an expression or a reference to an
 	// undefined object named "false".
 	for _, src := range []string{"x = false\n", "x = true\n", "x = FALSE\n", "x = True\n"} {
-		stmts, probs := Parse(src)
+		stmts, probs := Parse(src, testCat)
 		if len(probs) != 0 {
 			t.Fatalf("%q: unexpected parse problems: %v", src, probs)
 		}
@@ -511,7 +523,7 @@ func TestBuildBoolLiteralKind(t *testing.T) {
 	// KBool was previously declared in ir.Kind but unreachable: no statement
 	// could produce it, so no <Boolean> parameter slot was satisfiable.
 	src := "flag = false\non = true\n"
-	stmts, _ := Parse(src)
+	stmts, _ := Parse(src, testCat)
 	g, probs := Build(stmts)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected build problems: %v", probs)
@@ -531,7 +543,7 @@ func TestBoolLiteralArgumentNotUndefinedRef(t *testing.T) {
 	// ShowAxes(false) used to report "undefined object: false" because false is
 	// a valid identifier and got ref-resolved like any other name.
 	src := "ShowAxes(false)\nShowGrid(true)\n"
-	stmts, probs := Parse(src)
+	stmts, probs := Parse(src, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("parse problems: %v", probs)
 	}
@@ -563,7 +575,7 @@ func TestParseScriptingCategoryAcceptsBare(t *testing.T) {
 		"TurtleLeft(A, 90)", "TurtleRight(A, 90)",
 		"TurtleUp(A)", "TurtleDown(A)", "TurtleBack(A, 5)",
 	} {
-		stmts, probs := Parse(line + "\n")
+		stmts, probs := Parse(line+"\n", testCat)
 		if len(probs) != 0 {
 			t.Errorf("%q: unexpected parse problems: %v", line, probs)
 			continue
@@ -578,7 +590,7 @@ func TestParseNonScriptingCommandStillRejected(t *testing.T) {
 	// A command that returns an object must not be accepted bare: that is how a
 	// typo'd assignment looks, and rejecting it is what makes the error useful.
 	for _, line := range []string{"Segment(A, B)", "Line(A, B)", "Circle(A, B)", "Polygon(A, B, C)", "Text(A, \"hi\")"} {
-		stmts, probs := Parse(line + "\n")
+		stmts, probs := Parse(line+"\n", testCat)
 		if len(probs) == 0 {
 			t.Errorf("%q: expected a parse problem for a bare construct command", line)
 		}
@@ -593,7 +605,7 @@ func TestDeadModifierAliasesRemoved(t *testing.T) {
 	// from the catalog entirely (GeoGebra has ShowLabel, not SetLabelVisible),
 	// so they must no longer parse as modifiers.
 	for _, line := range []string{"SetVisible(A, false)", "SetLabelVisible(A, false)"} {
-		_, probs := Parse(line + "\n")
+		_, probs := Parse(line+"\n", testCat)
 		if len(probs) == 0 {
 			t.Errorf("%q: expected a parse problem for a non-existent command", line)
 		}
@@ -644,7 +656,7 @@ tri = Polygon(A, B, C)
 I = Incenter(tri)
 t = Text("http://example.com") // 字符串里的 // 不是注释
 `
-	stmts, probs := Parse(src)
+	stmts, probs := Parse(src, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected parse problems: %v", probs)
 	}
@@ -704,7 +716,7 @@ C = (2, 5)
 tri = Polygon(A, B, C)
 I = Incenter(tri)   /* 内心 */
 `
-	stmts, probs := Parse(src)
+	stmts, probs := Parse(src, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected parse problems: %v", probs)
 	}
@@ -716,7 +728,163 @@ I = Incenter(tri)   /* 内心 */
 	}
 
 	// An unclosed block comment is a parse error, fail-closed.
-	if _, probs := Parse("A=(0,0)\n/* 没闭合\n"); len(probs) != 1 || probs[0].Line != 2 || probs[0].Code != diag.CodeParseSyntax {
+	if _, probs := Parse("A=(0,0)\n/* 没闭合\n", testCat); len(probs) != 1 || probs[0].Line != 2 || probs[0].Code != diag.CodeParseSyntax {
 		t.Fatalf("unclosed block comment should be a parse/syntax error on line 2, got %v", probs)
+	}
+}
+
+// TestScientificNotationIsNumberLiteral — regression: GeoGebra accepts
+// scientific notation, so `r = 1e3` must parse as a number literal (Kind
+// Number), not fall through to the expression branch (Kind Function).
+func TestScientificNotationIsNumberLiteral(t *testing.T) {
+	stmts, probs := Parse("r = 1e3\n", testCat)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected problems: %v", probs)
+	}
+	if stmts[0].numberLiteral != "1e3" {
+		t.Fatalf("expected numberLiteral=1e3, got %q (expr=%q)", stmts[0].numberLiteral, stmts[0].exprLiteral)
+	}
+	if stmts[0].exprLiteral != "" {
+		t.Fatalf("scientific notation must not be treated as an expression, got %q", stmts[0].exprLiteral)
+	}
+}
+
+// TestArithmeticExpressionIsNumberObject — regression: `r = 2/3` is a pure
+// arithmetic expression, so after kind reclassification it must be KNumber
+// (usable in Circle(O, r)) rather than KFunction.
+func TestArithmeticExpressionIsNumberObject(t *testing.T) {
+	stmts, probs := Parse("r = 2/3\n", testCat)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected problems: %v", probs)
+	}
+	g, bprobs := Build(stmts)
+	if len(bprobs) != 0 {
+		t.Fatalf("unexpected build problems: %v", bprobs)
+	}
+	if got := g.Objects["r"].Kind; got != ir.KFunction {
+		t.Fatalf("r = 2/3 kind=%v, want Function before reclassification", got)
+	}
+	ReclassifyNumericExprs(g)
+	if got := g.Objects["r"].Kind; got != ir.KNumber {
+		t.Fatalf("r = 2/3 kind=%v, want Number after reclassification", got)
+	}
+}
+
+// TestNumberExprWithNumberRefIsNumberObject — `g = k + 1` with k a defined
+// Number object is a Number, not a Function.
+func TestNumberExprWithNumberRefIsNumberObject(t *testing.T) {
+	stmts, probs := Parse("k = 2\ng = k + 1\n", testCat)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected problems: %v", probs)
+	}
+	g, bprobs := Build(stmts)
+	if len(bprobs) != 0 {
+		t.Fatalf("unexpected build problems: %v", bprobs)
+	}
+	ReclassifyNumericExprs(g)
+	if got := g.Objects["g"].Kind; got != ir.KNumber {
+		t.Fatalf("g = k+1 kind=%v, want Number", got)
+	}
+	if got := g.Objects["g"].Refs; len(got) != 1 || got[0] != "k" {
+		t.Fatalf("g refs=%v, want [k]", got)
+	}
+}
+
+// TestNumberExprWithCommandNumberRef — regression: an expression over a
+// command-produced number (`r = d + 1` where `d = Distance(A,B)`) is a Number
+// once command kinds are applied. This is the case the build-time
+// classification could not see (d was still KUnknown during Build); it must
+// resolve after ReclassifyNumericExprs runs on kind-annotated kinds.
+func TestNumberExprWithCommandNumberRef(t *testing.T) {
+	stmts, probs := Parse("A = (0, 0)\nB = (4, 0)\nd = Distance(A, B)\nr = d + 1\n", testCat)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected problems: %v", probs)
+	}
+	g, bprobs := Build(stmts)
+	if len(bprobs) != 0 {
+		t.Fatalf("unexpected build problems: %v", bprobs)
+	}
+	testCat.ApplyKinds(g) // what check does before reclassification
+	ReclassifyNumericExprs(g)
+	if got := g.Objects["r"].Kind; got != ir.KNumber {
+		t.Fatalf("r = d+1 kind=%v, want Number (d is a Distance)", got)
+	}
+}
+
+// TestNumberExprForwardRefResolves — `r = d + 1` written BEFORE `d = ...`
+// still resolves to Number on a later reclassification pass.
+func TestNumberExprForwardRefResolves(t *testing.T) {
+	stmts, probs := Parse("A = (0, 0)\nB = (4, 0)\nr = d + 1\nd = Distance(A, B)\n", testCat)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected problems: %v", probs)
+	}
+	g, bprobs := Build(stmts)
+	if len(bprobs) != 0 {
+		t.Fatalf("unexpected build problems: %v", bprobs)
+	}
+	testCat.ApplyKinds(g)
+	ReclassifyNumericExprs(g)
+	if got := g.Objects["r"].Kind; got != ir.KNumber {
+		t.Fatalf("forward-ref r = d+1 kind=%v, want Number", got)
+	}
+}
+
+// TestFunctionDefStaysFunction — f(x) = 2x+1 is a function even though its
+// body is numeric: the parameter makes it a Function object, before and after
+// reclassification.
+func TestFunctionDefStaysFunction(t *testing.T) {
+	stmts, probs := Parse("f(x) = 2x + 1\n", testCat)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected problems: %v", probs)
+	}
+	g, bprobs := Build(stmts)
+	if len(bprobs) != 0 {
+		t.Fatalf("unexpected build problems: %v", bprobs)
+	}
+	ReclassifyNumericExprs(g)
+	if got := g.Objects["f"].Kind; got != ir.KFunction {
+		t.Fatalf("f(x)=2x+1 kind=%v, want Function", got)
+	}
+	if got := g.Objects["f"].Params; len(got) != 1 || got[0] != "x" {
+		t.Fatalf("f params=%v, want [x]", got)
+	}
+}
+
+// TestSplitArgsQuoteAware — regression: splitArgs must not split on commas
+// inside double-quoted strings, so Text("hello, world", A) has two arguments.
+func TestSplitArgsQuoteAware(t *testing.T) {
+	got := splitArgs(`"hello, world", A, Point(1, 2)`)
+	if len(got) != 3 {
+		t.Fatalf("splitArgs = %v, want 3 args", got)
+	}
+	if got[0] != `"hello, world"` {
+		t.Errorf("arg0=%q, want the whole quoted string", got[0])
+	}
+	if got[1] != "A" {
+		t.Errorf("arg1=%q, want A", got[1])
+	}
+	if got[2] != "Point(1, 2)" {
+		t.Errorf("arg2=%q, want Point(1, 2)", got[2])
+	}
+}
+
+// TestQuotedStringArgBuildsCleanly — end-to-end through Parse+Build: a string
+// argument containing a comma is one arg, produces no undefined refs, and the
+// object keeps two args.
+func TestQuotedStringArgBuildsCleanly(t *testing.T) {
+	stmts, probs := Parse("A = Point(0, 0)\nt1 = Text(\"hello, world\", A)\n", testCat)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected problems: %v", probs)
+	}
+	g, bprobs := Build(stmts)
+	if len(bprobs) != 0 {
+		t.Fatalf("unexpected build problems: %v", bprobs)
+	}
+	t1 := g.Objects["t1"]
+	if len(t1.Args) != 2 {
+		t.Fatalf("t1 args=%v, want 2 (string + point)", t1.Args)
+	}
+	if len(t1.Refs) != 1 || t1.Refs[0] != "A" {
+		t.Fatalf("t1 refs=%v, want [A]", t1.Refs)
 	}
 }

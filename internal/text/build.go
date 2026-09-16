@@ -26,6 +26,7 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/hycjack/geogebra-dsl-go/internal/catalog"
 	"github.com/hycjack/geogebra-dsl-go/internal/diag"
 	"github.com/hycjack/geogebra-dsl-go/internal/ir"
 	"github.com/hycjack/geogebra-dsl-go/internal/number"
@@ -48,14 +49,17 @@ type statement struct {
 
 // A bare no-"=" statement is legal only for an official GeoGebra Scripting
 // command (SetColor, ShowAxes, Slider, TurtleForward, ...). The set lives in
-// ir.IsScriptingCommand so the parser and the command→kind table cannot drift.
+// the command catalog (cmdmeta.json) so the parser and the command→kind data
+// cannot drift.
 //
 // Kept as an explicit table rather than an "everything is a modifier" rule: a
 // bare `Circle(A, B)` must remain a parse error, because Circle does return an
 // object and writing it bare is how a typo'd assignment looks.
 
 // Parse splits a script into statements. Returns parse errors (fail-closed).
-func Parse(src string) ([]statement, []diag.Problem) {
+// cat provides the scripting-command set that decides which bare no-"=" lines
+// are legal statements.
+func Parse(src string, cat *catalog.Catalog) ([]statement, []diag.Problem) {
 	src = strings.TrimPrefix(src, "\uFEFF") // strip UTF-8 BOM
 	// /* … */ is stripped before the source is split into lines, because a block
 	// comment spans lines. Line comments ("#", "//") are stripped per line below.
@@ -72,7 +76,7 @@ func Parse(src string) ([]statement, []diag.Problem) {
 		if line == "" {
 			continue
 		}
-		s, ok, prob := parseLine(line, i+1)
+		s, ok, prob := parseLine(line, i+1, cat)
 		if !ok {
 			probs = append(probs, prob)
 			continue
@@ -82,14 +86,14 @@ func Parse(src string) ([]statement, []diag.Problem) {
 	return stmts, probs
 }
 
-func parseLine(line string, lineNo int) (statement, bool, diag.Problem) {
+func parseLine(line string, lineNo int, cat *catalog.Catalog) (statement, bool, diag.Problem) {
 	// split on '=' at top level.
 	eq := topLevelIndex(line, '=')
 	if eq < 0 {
 		// No '=' — allow statement-style modifier/scripting commands such as
 		// `SetColor(c, "red")` or `StartAnimation(a)`. Anything else without
 		// '=' remains a syntax error.
-		if cmdArgs, ok, prob := parseCommandCall(line, lineNo); ok {
+		if cmdArgs, ok, prob := parseCommandCall(line, lineNo, cat); ok {
 			return statement{cmd: cmdArgs.cmd, args: cmdArgs.args, lineNo: lineNo, modifier: true}, true, diag.Problem{}
 		} else if prob != nil {
 			return statement{}, false, *prob
@@ -206,9 +210,9 @@ func braceArgs(rhs string, lineNo int) ([]string, bool, diag.Problem) {
 }
 
 // parseCommandCall parses a bare `Cmd(args)` line (no "="). It only accepts
-// commands in the modifier set, so a non-modifier command with no "=" is a
+// commands in the scripting set, so a non-scripting command with no "=" is a
 // syntax error rather than being silently accepted.
-func parseCommandCall(s string, lineNo int) (argCommand, bool, *diag.Problem) {
+func parseCommandCall(s string, lineNo int, cat *catalog.Catalog) (argCommand, bool, *diag.Problem) {
 	lp := strings.IndexByte(s, '(')
 	if lp <= 0 || !strings.HasSuffix(s, ")") {
 		return argCommand{}, false, nil
@@ -219,7 +223,7 @@ func parseCommandCall(s string, lineNo int) (argCommand, bool, *diag.Problem) {
 	}
 	// Modifier command names are matched case-insensitively (setcolor == SetColor),
 	// consistent with the rest of the command handling.
-	if !ir.IsScriptingCommand(cmd) {
+	if !cat.IsScriptingCommand(cmd) {
 		// A real command must be written as Object = Command(...). Reject with a
 		// hint so the model learns the expected assignment syntax.
 		return argCommand{}, false, &diag.Problem{
@@ -243,29 +247,34 @@ func parenArgs(rhs string, lineNo int) ([]string, bool, diag.Problem) {
 }
 
 // splitArgs splits a comma-separated argument list at the top level, respecting
-// nested parentheses/brackets.
+// nested parentheses/brackets and double-quoted string literals. Commas inside
+// a string ("Text("a, b")") are part of the string, not separators — the same
+// string-awareness stripComment already has, kept here so the whole package
+// agrees on what a token is.
 func splitArgs(s string) []string {
 	var out []string
 	depth := 0
+	inStr := false
 	var cur strings.Builder
 	for _, r := range s {
-		switch r {
-		case '(', '[', '{':
+		switch {
+		case r == '"':
+			inStr = !inStr
+			cur.WriteRune(r)
+		case !inStr && (r == '(' || r == '[' || r == '{'):
 			depth++
 			cur.WriteRune(r)
-		case ')', ']', '}':
-			depth--
-			cur.WriteRune(r)
-		case ',':
-			if depth == 0 {
-				a := strings.TrimSpace(cur.String())
-				if a != "" {
-					out = append(out, a)
-				}
-				cur.Reset()
-			} else {
-				cur.WriteRune(r)
+		case !inStr && (r == ')' || r == ']' || r == '}'):
+			if depth > 0 {
+				depth--
 			}
+			cur.WriteRune(r)
+		case !inStr && r == ',' && depth == 0:
+			a := strings.TrimSpace(cur.String())
+			if a != "" {
+				out = append(out, a)
+			}
+			cur.Reset()
 		default:
 			cur.WriteRune(r)
 		}
@@ -354,12 +363,17 @@ func Build(stmts []statement) (*ir.Graph, []diag.Problem) {
 				})
 			}
 		case s.exprLiteral != "":
-			// Raw algebraic expression / function body → a Function-ish object.
-			// An expression's free variables (independent var x, etc.) are local,
-			// not object refs; only identifiers that are actually defined objects
-			// become dependency edges. fnParams are in-scope locals, never refs.
-			o.Kind = ir.KFunction
+			// Raw algebraic expression / function body. Build types it KFunction
+			// and records fnParams on the object; whether a parameterless
+			// expression is really a Number (2/3, k+1 with k a defined Number,
+			// d+1 with d = Distance(A,B)) is decided AFTER command kinds are
+			// resolved, by ReclassifyNumericExprs in check — classifying here
+			// would run before command-produced kinds exist. An expression's
+			// free variables (independent var x, etc.) are local, not object
+			// refs; only identifiers that are actually defined objects become
+			// dependency edges. fnParams are in-scope locals, never refs.
 			o.Args = []string{s.exprLiteral}
+			o.Params = s.fnParams
 			bindings := map[string]bool{}
 			for _, p := range s.fnParams {
 				bindings[p] = true
@@ -367,6 +381,7 @@ func Build(stmts []statement) (*ir.Graph, []diag.Problem) {
 			refs, undefs := resolveRefsExpr(g, s.exprLiteral, bindings)
 			o.Refs = refs
 			_ = undefs // free variables are not reported as undefined for expressions
+			o.Kind = ir.KFunction
 		default:
 			// command object; first flatten any nested command calls in the
 			// arguments (each becomes a synthetic object in the graph), then
@@ -614,6 +629,54 @@ func resolveRefsExpr(g *ir.Graph, expr string, bindings map[string]bool) (refs, 
 	return refs, nil
 }
 
+// ReclassifyNumericExprs upgrades expression objects (a bare `x = <expr>`
+// right-hand side, no function params) whose expression is purely numeric to
+// KNumber. It must run AFTER command kinds are resolved (catalog.ApplyKinds),
+// because an expression like `r = d + 1` is numeric only once `d = Distance(...)`
+// is known to be a Number. Function definitions (`f(x) = 2x+1`, Params set)
+// stay KFunction. Iterates to a fixpoint so a forward reference
+// (`r = d + 1` before `d = ...`) still resolves on a later pass; each pass
+// only upgrades KFunction → KNumber, so the loop converges within |V| passes.
+func ReclassifyNumericExprs(g *ir.Graph) {
+	for pass := 0; pass <= len(g.Order); pass++ {
+		changed := false
+		for _, id := range g.Order {
+			o := g.Objects[id]
+			if o.Kind != ir.KFunction || o.Cmd != "" || len(o.Params) > 0 {
+				continue
+			}
+			if numericExpr(g, o.Args[0]) {
+				o.Kind = ir.KNumber
+				changed = true
+			}
+		}
+		if !changed {
+			return
+		}
+	}
+}
+
+// numericExpr reports whether an expression's free identifiers are all plain
+// numbers: numeric literals, reserved constants (pi/e/...), or objects already
+// known to be KNumber. A true result means the expression is a Number object
+// (e.g. r = 2/3, g = k+1 with k a defined Number), not a Function or implicit
+// curve. Callers decide whether bound parameters disqualify the expression.
+func numericExpr(g *ir.Graph, expr string) bool {
+	for _, tok := range tokenizeIdentifiers(expr) {
+		if isNumber(tok) {
+			continue
+		}
+		if number.KnownConstant(tok) {
+			continue
+		}
+		if o, ok := g.Get(tok); ok && o.Kind == ir.KNumber {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
 // tokenizeIdentifiers extracts maximal runs of identifier characters from s,
 // skipping numbers and operators. Used to find object references inside an
 // expression string.
@@ -718,8 +781,6 @@ func isIdentName(s string) bool {
 	return true
 }
 
-// isNumber reports whether s is a plain number literal (optional sign, digits,
-// optional decimal point).
 // isBoolLiteral reports whether s is the GeoGebra boolean literal true or
 // false, case-insensitively. These are literals, not object references: treating
 // them as identifiers made `ShowAxes(false)` report "undefined object: false".
@@ -734,23 +795,47 @@ func isBoolLiteral(s string) bool {
 	return false
 }
 
+// isNumber reports whether s is a plain number literal: optional sign, digit
+// mantissa with optional decimal point, and an optional scientific-notation
+// exponent (1e3, 2.5E-2) — GeoGebra accepts scientific notation. At least one
+// digit is required, so "." and "+" alone are not numbers.
 func isNumber(s string) bool {
 	if s == "" {
 		return false
 	}
 	s = strings.TrimPrefix(s, "-")
 	s = strings.TrimPrefix(s, "+")
-	dot := false
-	for _, r := range s {
-		switch {
-		case '0' <= r && r <= '9':
-		case r == '.' && !dot:
-			dot = true
-		default:
+	i, n := 0, len(s)
+	digits := 0
+	for i < n && '0' <= s[i] && s[i] <= '9' {
+		i++
+		digits++
+	}
+	if i < n && s[i] == '.' {
+		i++
+		for i < n && '0' <= s[i] && s[i] <= '9' {
+			i++
+			digits++
+		}
+	}
+	if digits == 0 {
+		return false
+	}
+	if i < n && (s[i] == 'e' || s[i] == 'E') {
+		i++
+		if i < n && (s[i] == '+' || s[i] == '-') {
+			i++
+		}
+		expDigits := 0
+		for i < n && '0' <= s[i] && s[i] <= '9' {
+			i++
+			expDigits++
+		}
+		if expDigits == 0 {
 			return false
 		}
 	}
-	return true
+	return i == n
 }
 
 // stripComment removes a trailing "# ..." comment from a line. Comments start

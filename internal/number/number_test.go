@@ -24,6 +24,42 @@ func TestEvalConstants(t *testing.T) {
 	}
 }
 
+// TestEvalScientificNotation — regression: the evaluator must accept the same
+// scientific-notation literals (1e3, 2.5E-2) that the text package's
+// number-literal detector does, so the two lexers stay in step.
+func TestEvalScientificNotation(t *testing.T) {
+	cases := map[string]string{
+		"1e3":   "1000",
+		"2.5e2": "250",
+		"1E-2":  "0.01",
+		"1e0":   "1",
+	}
+	for expr, want := range cases {
+		v, ok := Eval(expr)
+		if !ok {
+			t.Errorf("Eval(%q) failed", expr)
+			continue
+		}
+		w, _ := new(big.Rat).SetString(want)
+		if v.Cmp(w) != 0 {
+			t.Errorf("Eval(%q) = %v, want %s", expr, v, want)
+		}
+	}
+	if _, ok := Eval("1e"); ok {
+		t.Error("Eval(\"1e\") should fail (no exponent digits)")
+	}
+	// The exponent-sign absorption must not swallow a bare constant `e`:
+	// 2*e-3 is `2*e - 3`, not a malformed "2*e-3" token.
+	v, ok := Eval("2*e-3")
+	if !ok {
+		t.Fatal("Eval(\"2*e-3\") should parse as 2*e - 3")
+	}
+	want := new(big.Rat).Sub(new(big.Rat).Mul(big.NewRat(2, 1), constants["e"]), big.NewRat(3, 1))
+	if v.Cmp(want) != 0 {
+		t.Errorf("Eval(\"2*e-3\") = %v, want 2*e - 3", v)
+	}
+}
+
 func TestEvalNested(t *testing.T) {
 	cases := map[string]string{ // expr -> float result
 		"2*pi":       "6.2831853",
