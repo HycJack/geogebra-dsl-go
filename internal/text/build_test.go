@@ -652,3 +652,71 @@ t = Text("http://example.com") // 字符串里的 // 不是注释
 		t.Fatalf("got %d statements, want 6", len(stmts))
 	}
 }
+
+func TestStripBlockComments(t *testing.T) {
+	cases := []struct {
+		in        string
+		want      string
+		wantUncop int // unclosed-comment line, 0 = well formed
+	}{
+		{"A=(0,0)\n", "A=(0,0)\n", 0},
+		// A block comment on its own line disappears.
+		{"/* 整行块注释 */\nA=(0,0)\n", " \nA=(0,0)\n", 0},
+		// Multi-line block comment.
+		{"/* 跨行\n   块注释 */\nA=(0,0)\n", " \nA=(0,0)\n", 0},
+		// Inline block comment, and it must not glue the two tokens together.
+		{"A = /* c */ B", "A =   B", 0},
+		// Nested-looking content: the first "*/" closes the block.
+		// The first "*/" closes the block (C/JS semantics, not pairing), so the
+		// trailing "*/" is left behind — a genuine syntax error the user made.
+		{"/* /* */ */\nA=(0,0)\n", "  */\nA=(0,0)\n", 0},
+		// "/*" inside a string literal is not a comment start.
+		{"t=Text(\"a/*b\")", "t=Text(\"a/*b\")", 0},
+		// A string containing "*/" is inert once the real block has closed.
+		{"/* c */ t=Text(\"x */ y\")", "  t=Text(\"x */ y\")", 0},
+		// Adjacent string and block comment must not confuse the scanner.
+		{"t=Text(\"/*\") /* real */", "t=Text(\"/*\")  ", 0},
+		// Quotes inside a comment are inert: they do not reopen a string.
+		{"/* \" /* c */ A=(0,0)\n", "  A=(0,0)\n", 0},
+		// "*" separated from "/" by a space is ordinary multiplication, not a
+		// block start. (Adjacent "x/*2" IS an unclosed block: see below.)
+		{"y=x/ *2", "y=x/ *2", 0},
+		{"y=x/*2", "", 1},
+		// Unclosed blocks are reported with the line where they opened.
+		{"A=(0,0)\n/* 没闭合", "", 2},
+		{"/* 第一行就没闭合", "", 1},
+		{"A=(0,0)\nB=(1,1)\n/*\n", "", 3},
+	}
+	for _, c := range cases {
+		got, line := stripBlockComments(c.in)
+		if got != c.want || line != c.wantUncop {
+			t.Errorf("stripBlockComments(%q) = (%q, %d), want (%q, %d)", c.in, got, line, c.want, c.wantUncop)
+		}
+	}
+}
+
+func TestParseBlockComments(t *testing.T) {
+	src := `/* 几何题：三角形的内心
+   块注释跨行 */
+A = (0, 0)
+B = (6, 0)   // 底边
+C = (2, 5)
+tri = Polygon(A, B, C)
+I = Incenter(tri)   /* 内心 */
+`
+	stmts, probs := Parse(src)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected parse problems: %v", probs)
+	}
+	if len(stmts) != 5 {
+		t.Fatalf("got %d statements, want 5", len(stmts))
+	}
+	if stmts[1].id != "B" {
+		t.Errorf("second statement = %q, want B", stmts[1].id)
+	}
+
+	// An unclosed block comment is a parse error, fail-closed.
+	if _, probs := Parse("A=(0,0)\n/* 没闭合\n"); len(probs) != 1 || probs[0].Line != 2 || probs[0].Code != diag.CodeParseSyntax {
+		t.Fatalf("unclosed block comment should be a parse/syntax error on line 2, got %v", probs)
+	}
+}

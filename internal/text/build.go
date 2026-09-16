@@ -1,8 +1,10 @@
 // Package text converts a GeoGebra-style text script into an ir.Graph. The
 // grammar is intentionally small (enough for AI-generated teaching scripts):
 //
-//	# comment                // this DSL's own comment marker
-//	// comment               // GeoGebra's own comment marker; both are ignored
+//	# comment                // GGBScript's comment marker (documented by GeoGebra)
+//	// comment               // JavaScript's comment marker
+//	/* block comment */       // JavaScript's block comment, may span lines
+//	                        // all three are ignored; "#" is also this DSL's own
 //	A = Point(0, 2)      # command object
 //	l = Line(A, B)
 //	c = Circle(C, T)
@@ -55,6 +57,13 @@ type statement struct {
 // Parse splits a script into statements. Returns parse errors (fail-closed).
 func Parse(src string) ([]statement, []diag.Problem) {
 	src = strings.TrimPrefix(src, "\uFEFF") // strip UTF-8 BOM
+	// /* … */ is stripped before the source is split into lines, because a block
+	// comment spans lines. Line comments ("#", "//") are stripped per line below.
+	cleaned, unclosed := stripBlockComments(src)
+	if unclosed > 0 {
+		return nil, []diag.Problem{{Code: diag.CodeParseSyntax, Msg: "块注释 /* */ 未闭合", Line: unclosed}}
+	}
+	src = cleaned
 	var stmts []statement
 	var probs []diag.Problem
 	lines := strings.Split(src, "\n")
@@ -749,28 +758,83 @@ func isNumber(s string) bool {
 // a string argument (e.g. SetCaption(c, "Answer #1")) is part of the string,
 // not a comment. The grammar does not use backslash escapes inside strings, so
 // a plain scan for "…" ranges is sufficient.
+// stripComment cuts a line at its comment marker. Three are recognised, one
+// per language GeoGebra's scripting tabs accept:
+//
+//	"#"      GGBScript — the marker the GeoGebra manual documents
+//	           ("You can use # to start a comment", docs/manual/en/Scripting/)
+//	"//"     JavaScript — the other language GeoGebra supports
+//	"/* … */"  JavaScript block comment, handled by stripBlockComments
+//
+// "/*" is not handled here because it can span lines, so it must be removed
+// from the whole source before it is split.
+//
+// Outside a string "//" cannot collide with the division operator: a variable
+// or number never starts with "/", so "x/2" and "x/2/3" keep their single
+// slashes. "x//2" is malformed GeoGebra either way, so no legal script is
+// misread.
 func stripComment(line string) string {
 	inStr := false
 	for i := 0; i < len(line); i++ {
 		switch line[i] {
 		case '"':
 			inStr = !inStr
-		case '#':
-			if !inStr {
-				return line[:i]
+		case '#', '/':
+			if inStr {
+				continue // inside a string: Text("http://x"), Text("a/*b")
 			}
-		case '/':
-			// "//" is GeoGebra's own line comment, which is what a script pasted
-			// from GeoGebra uses; "#" is kept for this DSL's own fixtures.
-			// Outside a string "//" cannot collide with the division operator:
-			// a variable or number never starts with "/", so "x/2//3" is
-			// malformed input either way.
-			if !inStr && i+1 < len(line) && line[i+1] == '/' {
+			if line[i] == '#' || (i+1 < len(line) && line[i+1] == '/') {
 				return line[:i]
 			}
 		}
 	}
 	return line
+}
+
+// stripBlockComments removes /* … */ blocks from the whole source and returns
+// the cleaned string. The second return value is the 1-based line where an
+// unclosed block opened, or 0 when the input is well formed.
+//
+// Quotes matter only when looking for the opening "/*": "/*" inside a string
+// literal (Text("a/*b")) is not a comment. Once inside a comment the scan runs
+// to the first "*/" and quotes are inert, matching how C and JavaScript
+// lex comments. A block is replaced by a single space so it cannot glue two
+// tokens together ("A = /* c */ B" stays two arguments).
+func stripBlockComments(src string) (string, int) {
+	var sb strings.Builder
+	sb.Grow(len(src))
+	inStr := false
+	i, n := 0, len(src)
+	for i < n {
+		c := src[i]
+		if c == '"' {
+			inStr = !inStr
+			sb.WriteByte(c)
+			i++
+			continue
+		}
+		if inStr || c != '/' || i+1 >= n || src[i+1] != '*' {
+			sb.WriteByte(c)
+			i++
+			continue
+		}
+		line := strings.Count(src[:i], "\n") + 1
+		i += 2
+		closed := false
+		for i < n {
+			if src[i] == '*' && i+1 < n && src[i+1] == '/' {
+				i += 2
+				closed = true
+				break
+			}
+			i++
+		}
+		if !closed {
+			return "", line
+		}
+		sb.WriteByte(' ')
+	}
+	return sb.String(), 0
 }
 
 // topLevelIndex finds idx of the first '=' at nesting depth 0.
