@@ -608,3 +608,47 @@ func containsRef(refs []string, want string) bool {
 	}
 	return false
 }
+
+func TestStripCommentSlashes(t *testing.T) {
+	cases := []struct{ in, want string }{
+		{"// 整行注释", ""},
+		{"   // 前面有空白", "   "}, // stripComment 只截断不 trim，Parse 再做 TrimSpace
+		{"A=(0,0) // 行尾注释", "A=(0,0) "},
+		{"A=(0,0)\t// tab 分隔", "A=(0,0)\t"},
+		{"# 老注释仍然支持", ""},
+		{"A=(0,0) # 行尾老注释", "A=(0,0) "},
+		// A "//" inside a string is not a comment.
+		{"t=Text(\"http://example.com\")", "t=Text(\"http://example.com\")"},
+		{"t=Text(\"http://x\") // 真注释", "t=Text(\"http://x\") "},
+		// Division must survive: "/" is not followed by "/" in any of these.
+		{"y=x/2", "y=x/2"},
+		{"y=x/2/3", "y=x/2/3"},
+		{"y=Area(A,B,C)/2", "y=Area(A,B,C)/2"},
+		{"r=1/", "r=1/"},
+		{"A=(0,0)", "A=(0,0)"},
+	}
+	for _, c := range cases {
+		if got := stripComment(c.in); got != c.want {
+			t.Errorf("stripComment(%q) = %q, want %q", c.in, got, c.want)
+		}
+	}
+}
+
+func TestParseSlashComments(t *testing.T) {
+	src := `// 几何题：三角形的内心
+# 两种注释可以混用
+A = (0, 0)
+B = (6, 0)      // 底边
+C = (2, 5)
+tri = Polygon(A, B, C)
+I = Incenter(tri)
+t = Text("http://example.com") // 字符串里的 // 不是注释
+`
+	stmts, probs := Parse(src)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected parse problems: %v", probs)
+	}
+	if len(stmts) != 6 {
+		t.Fatalf("got %d statements, want 6", len(stmts))
+	}
+}

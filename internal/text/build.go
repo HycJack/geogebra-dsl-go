@@ -1,7 +1,8 @@
 // Package text converts a GeoGebra-style text script into an ir.Graph. The
 // grammar is intentionally small (enough for AI-generated teaching scripts):
 //
-//	# comment
+//	# comment                // this DSL's own comment marker
+//	// comment               // GeoGebra's own comment marker; both are ignored
 //	A = Point(0, 2)      # command object
 //	l = Line(A, B)
 //	c = Circle(C, T)
@@ -756,6 +757,15 @@ func stripComment(line string) string {
 			inStr = !inStr
 		case '#':
 			if !inStr {
+				return line[:i]
+			}
+		case '/':
+			// "//" is GeoGebra's own line comment, which is what a script pasted
+			// from GeoGebra uses; "#" is kept for this DSL's own fixtures.
+			// Outside a string "//" cannot collide with the division operator:
+			// a variable or number never starts with "/", so "x/2//3" is
+			// malformed input either way.
+			if !inStr && i+1 < len(line) && line[i+1] == '/' {
 				return line[:i]
 			}
 		}

@@ -1,0 +1,10 @@
+// 中考·等边三角形的高与面积（用 GeoGebra 原生的 // 注释书写，可直接原样粘贴）
+// 边长 a = 6，高 h = 3√3，面积 S = 9√3
+a = 6
+A = (0, 0)
+B = (6, 0)
+C = (3, 3*sqrt(3))
+tri = Polygon(A, B, C)
+h = Length(Line(C, Midpoint(A, B)))
+S = Area(tri)
+lab = Text("h=") // 字符串里的 // 不算注释
