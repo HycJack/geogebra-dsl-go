@@ -1,0 +1,5 @@
+# b05_Area两点 — Area 至少三个顶点
+A = (-1, 0)
+B = (3, 0)
+tri = Polygon(A, B)
+area = Area(tri)

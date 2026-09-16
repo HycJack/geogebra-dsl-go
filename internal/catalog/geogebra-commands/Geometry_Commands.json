@@ -163,7 +163,19 @@
       "params": [
         {
           "name": "<Point>",
-          "role": "vertex",
+          "role": "vertex1",
+          "type": "Point",
+          "optional": false
+        },
+        {
+          "name": "<Point>",
+          "role": "vertex2",
+          "type": "Point",
+          "optional": false
+        },
+        {
+          "name": "<Point>",
+          "role": "vertices",
           "type": "Point",
           "optional": false
         }
@@ -1042,6 +1054,8 @@
           {
             "syntax": "Polygon(<Point>, ..., <Point>)",
             "params": [
+              { "name": "<Point>", "role": "vertex1", "type": "Point", "optional": false },
+              { "name": "<Point>", "role": "vertex2", "type": "Point", "optional": false },
               { "name": "<Point>", "role": "vertices", "type": "Point", "optional": false }
             ],
             "description": "通过顶点创建多边形"

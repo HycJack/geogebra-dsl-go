@@ -32,9 +32,21 @@ func mustRat(s string) *big.Rat {
 }
 
 // KnownConstant reports whether name is a reserved numeric constant.
+//
+// Single-letter constants are matched case-sensitively: only the canonical
+// lowercase forms e and i count. A bare uppercase single letter is an object
+// name, not a constant — GeoGebra auto-names points A, B, C, D, E, F…, so E and
+// I are the everyday letters for a fifth vertex and for an incenter. Matching
+// them case-insensitively made an undefined reference disappear silently:
+// Polygon(A, B, C, E) validated as if E were 2.718 instead of reporting that E
+// is not defined. Multi-letter spellings keep case-insensitive matching, since
+// PI / Pi / Euler / Gamma are unambiguous constant forms.
 func KnownConstant(name string) bool {
-	name = strings.ToLower(name)
-	_, ok := constants[name]
+	lower := strings.ToLower(name)
+	if len(name) == 1 && name != lower {
+		return false
+	}
+	_, ok := constants[lower]
 	return ok
 }
 

@@ -1,0 +1,7 @@
+# p05_角平分线 — 中考·角平分线定理
+A = (0, 0)
+B = (8, 0)
+C = (3, 6)
+l1 = Line(B, A)
+l2 = Line(B, C)
+bis = AngleBisector(l1, l2)

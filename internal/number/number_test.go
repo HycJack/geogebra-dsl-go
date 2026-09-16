@@ -131,3 +131,29 @@ func diff(a, b float64) float64 {
 	}
 	return a - b
 }
+
+func TestKnownConstantSingleLetterCaseSensitive(t *testing.T) {
+	// Lowercase single letters are the canonical constant spellings.
+	for _, name := range []string{"e", "i"} {
+		if !KnownConstant(name) {
+			t.Errorf("KnownConstant(%q) = false, want true", name)
+		}
+	}
+	// Uppercase single letters are object names, not constants: GeoGebra
+	// auto-names points A, B, C, D, E, F…, so E and I are the everyday letters
+	// for a fifth vertex and an incenter. Treating them as constants made an
+	// undefined reference disappear silently — Polygon(A, B, C, E) validated as
+	// if E were 2.718 instead of reporting that E is not defined.
+	for _, name := range []string{"E", "I"} {
+		if KnownConstant(name) {
+			t.Errorf("KnownConstant(%q) = true, want false", name)
+		}
+	}
+	// Multi-letter spellings stay case-insensitive: PI / Pi / Euler / Gamma are
+	// unambiguous constant forms.
+	for _, name := range []string{"pi", "PI", "Pi", "e", "Euler", "EULER", "Gamma", "GAMMA", "deg"} {
+		if !KnownConstant(name) {
+			t.Errorf("KnownConstant(%q) = false, want true", name)
+		}
+	}
+}

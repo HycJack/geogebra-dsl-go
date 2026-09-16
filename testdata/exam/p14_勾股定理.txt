@@ -1,0 +1,8 @@
+# p14_勾股定理 — 中考·勾股定理验证
+A = (0, 0)
+B = (3, 0)
+C = (3, 4)
+s1 = Length(Segment(A, B))
+s2 = Length(Segment(B, C))
+s3 = Length(Segment(A, C))
+chk = If(s1^2 + s2^2 == s3^2, "勾股成立", "不成立")

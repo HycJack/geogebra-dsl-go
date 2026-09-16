@@ -1,0 +1,5 @@
+# b02_AngleBisector传点 — AngleBisector 要两条线，给了两个点
+A = (0, 0)
+B = (8, 0)
+C = (3, 6)
+bis = AngleBisector(B, A)

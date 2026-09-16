@@ -1,6 +1,8 @@
 package check
 
 import (
+	"os"
+	"strings"
 	"testing"
 
 	"github.com/hycjack/geogebra-dsl-go/internal/diag"
@@ -531,5 +533,136 @@ func TestNestedCommandKindIsChecked(t *testing.T) {
 	rc = Check([]byte("A=(0,0)\nB=(4,0)\ns=Segment(A,B)\nR=Round(Length(s), 1)\n"), Options{})
 	if !rc.OK {
 		t.Fatalf("expected Round(Length(s), 1) to pass, got %v", rc.Errors)
+	}
+}
+
+// TestExamSuite runs every 中考/高考-style problem in testdata/exam/ and
+// asserts it validates clean. They are realistic exam-archetype constructions
+// (三角形四心、圆的切线、半圆圆周角、圆内接四边形、角平分线、旋转、平移与
+// 轴对称、抛物线面积、多项式拟合、椭圆焦点、动点轨迹、正多边形、勾股定理、
+// 向量点积) covering both junior-high plane geometry and the gaokao conic and
+// vector material. They live as fixture files rather than inline strings so
+// they can be opened in GeoGebra itself and extended.
+func TestExamSuite(t *testing.T) {
+	for _, entry := range listFixture("../../testdata/exam") {
+		rc := Check(mustRead(t, "../../testdata/exam/", entry), Options{})
+		if !rc.OK {
+			t.Errorf("%s: expected ok, got %v", entry, rc.Errors)
+		}
+	}
+}
+
+// TestExamBadSuite runs every deliberately-broken exam script in
+// testdata/exam-bad/ and asserts the checker refuses it. These are the
+// regression guard for the four gaps the exam sweep exposed:
+//
+//	b01/b03/b02/b06/b08/b11/b14  wrong argument type or arity
+//	b04/b16                      coincident endpoints (geo degeneracy)
+//	b05                          Polygon/Area need at least three vertices
+//	b07                          Rotate's axis slot must be a line
+//	b09                          an undefined reference is an undefined reference
+//	b15                          a scripting command result is not an object
+func TestExamBadSuite(t *testing.T) {
+	for _, entry := range listFixture("../../testdata/exam-bad") {
+		rc := Check(mustRead(t, "../../testdata/exam-bad/", entry), Options{})
+		if rc.OK {
+			t.Errorf("%s: expected the checker to reject it", entry)
+		}
+	}
+}
+
+func listFixture(dir string) []string {
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return nil
+	}
+	var out []string
+	for _, e := range entries {
+		if !e.IsDir() && strings.HasSuffix(e.Name(), ".txt") {
+			out = append(out, e.Name())
+		}
+	}
+	return out
+}
+
+func mustRead(t *testing.T, dir, name string) []byte {
+	t.Helper()
+	b, err := os.ReadFile(dir + name)
+	if err != nil {
+		t.Fatalf("read %s/%s: %v", dir, name, err)
+	}
+	return b
+}
+
+// TestUpperCaseSingleLetterIsNotAConstant pins the constant-name rule: a bare
+// uppercase single letter is an object name, not a reserved constant. GeoGebra
+// auto-names points A, B, C, D, E, F…, so E and I are the everyday letters for
+// a fifth vertex and an incenter; treating them as constants made an undefined
+// reference disappear silently, and Polygon(A, B, C, E) validated as if E were
+// 2.718 instead of reporting that E is not defined.
+func TestUpperCaseSingleLetterIsNotAConstant(t *testing.T) {
+	for _, name := range []string{"E", "I"} {
+		script := "A=(0,0)\nB=(1,0)\nC=(0,1)\nt=Polygon(A,B,C," + name + ")\n"
+		rc := Check([]byte(script), Options{})
+		if rc.OK {
+			t.Errorf("expected %s to be reported as an undefined reference, got ok", name)
+		}
+	}
+	// Lowercase stays a constant, and multi-letter spellings keep working in
+	// any case.
+	rc := Check([]byte("x=pi\ny=PI\nz=e\nw=Pi\nv=Euler\nu=Gamma\nt=Polygon((0,0),(1,0),(0,1),(1,1))\n"), Options{})
+	if !rc.OK {
+		t.Fatalf("constant spellings should validate, got %v", rc.Errors)
+	}
+}
+
+// TestPolygonNeedsThreeVertices — a polygon (and an area of points) needs at
+// least three vertices. The catalog encoded the variadic form with a single
+// repeated <Point> parameter, which made the minimum one.
+func TestPolygonNeedsThreeVertices(t *testing.T) {
+	for _, script := range []string{
+		"A=(0,0)\np=Polygon(A)\n",
+		"A=(0,0)\nB=(1,0)\np=Polygon(A,B)\n",
+		"A=(0,0)\nB=(1,0)\na=Area(A,B)\n",
+	} {
+		if rc := Check([]byte(script), Options{}); rc.OK {
+			t.Errorf("expected %q to be rejected, got ok", script)
+		}
+	}
+	// Three and more vertices are fine, and the vertex-count overload still works.
+	for _, script := range []string{
+		"A=(0,0)\nB=(1,0)\nC=(0,1)\np=Polygon(A,B,C)\n",
+		"A=(0,0)\nB=(1,0)\nC=(0,1)\nD=(1,1)\np=Polygon(A,B,C,D)\n",
+		"A=(0,0)\nB=(1,0)\nC=(0,1)\na=Area(A,B,C)\n",
+		"A=(0,0)\nB=(1,1)\np=Polygon(A,B,5)\n",
+	} {
+		if rc := Check([]byte(script), Options{}); !rc.OK {
+			t.Errorf("expected %q to pass, got %v", script, rc.Errors)
+		}
+	}
+}
+
+// TestRotateAxisMustBeALine — Rotate(<Object>, <Angle>, <Axis of Rotation>) is
+// the 3D rotation-about-a-line form. The axis slot was wildcarded, so a bare
+// number validated; the <Point> overload correctly rejected the same script.
+func TestRotateAxisMustBeALine(t *testing.T) {
+	for _, script := range []string{
+		"A=(0,0)\nB=(4,0)\nC=(4,4)\nD=(0,4)\nsq=Polygon(A,B,C,D)\nang=Slider(0,90,1)\nq=Rotate(sq,ang,5)\n",
+		"A=(0,0)\nB=(4,0)\nC=(4,4)\nD=(0,4)\nsq=Polygon(A,B,C,D)\nang=Slider(0,90,1)\nP=(0,0)\nq=Rotate(sq,ang,P,P)\n",
+		"A=(0,0)\nB=(4,0)\nC=(4,4)\nD=(0,4)\nsq=Polygon(A,B,C,D)\nang=Slider(0,90,1)\nP=(0,0)\nq=Rotate(sq,ang,P,5)\n",
+	} {
+		if rc := Check([]byte(script), Options{}); rc.OK {
+			t.Errorf("expected a bad rotation axis to be rejected, got ok: %s", script)
+		}
+	}
+	// Rotation about a point (2D) and about a line (3D) are both legitimate.
+	for _, script := range []string{
+		"A=(0,0)\nB=(4,0)\nC=(4,4)\nD=(0,4)\nsq=Polygon(A,B,C,D)\nang=Slider(0,90,1)\nq=Rotate(sq,ang,A)\n",
+		"A=(0,0)\nB=(4,0)\nC=(4,4)\nD=(0,4)\nsq=Polygon(A,B,C,D)\nang=Slider(0,90,1)\nax=Line((0,0),(0,0,5))\nq=Rotate(sq,ang,ax)\n",
+		"A=(0,0)\nB=(4,0)\nC=(4,4)\nD=(0,4)\nsq=Polygon(A,B,C,D)\nang=Slider(0,90,1)\nP=(0,0)\nax=Line((0,0),(0,0,5))\nq=Rotate(sq,ang,P,ax)\n",
+	} {
+		if rc := Check([]byte(script), Options{}); !rc.OK {
+			t.Errorf("expected a legitimate rotation to pass, got %v", rc.Errors)
+		}
 	}
 }

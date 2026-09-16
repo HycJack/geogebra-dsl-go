@@ -1,0 +1,3 @@
+# b04_Semicircle退化 — Semicircle 两点重合
+A = (-4, 0)
+s = Semicircle(A, A)

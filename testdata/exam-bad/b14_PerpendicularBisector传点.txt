@@ -1,0 +1,3 @@
+# b14_PerpendicularBisector传点 — PerpendicularBisector 要线段或两点
+A = (1, 2)
+perp = PerpendicularBisector(A)

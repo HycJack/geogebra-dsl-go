@@ -1,0 +1,8 @@
+# p04_圆内接四边形 — 中考·圆内接四边形对角互补
+A = (3*cos(0.3), 3*sin(0.3))
+B = (3*cos(1.5), 3*sin(1.5))
+C = (3*cos(2.7), 3*sin(2.7))
+D = (3*cos(4.0), 3*sin(4.0))
+quad = Polygon(A, B, C, D)
+angs = InteriorAngles(quad)
+cyc = AreConcyclic(A, B, C, D)

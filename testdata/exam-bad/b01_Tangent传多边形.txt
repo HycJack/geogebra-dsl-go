@@ -1,0 +1,11 @@
+# Tangent 的第一参不能是多边形：8 个重载(Point/Conic、Point/Function、Point/Curve、
+# Number/Function、Line/Conic、Circle/Circle、Point/Spline、Point/ImplicitCurve)
+# 都不接受 Polygon
+O = (3, 3)
+c = Circle(O, 3)
+A = (0, 0)
+B = (4, 0)
+C = (4, 4)
+D = (0, 4)
+sq = Polygon(A, B, C, D)
+t = Tangent(sq, c)

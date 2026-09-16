@@ -28,9 +28,52 @@ func Check(g *ir.Graph, order []string) []diag.Problem {
 			if prob := zeroRadius(g, o); prob != nil {
 				probs = append(probs, *prob)
 			}
+		// Objects built from two points that must be distinct. Before this the
+		// degeneracy check only covered Line and Circle, so Semicircle(A, A)
+		// validated even though both endpoints of the diameter coincide.
+		case "SEMICIRCLE":
+			if prob := coincidentEndpoints(g, o, "半圆直径两端点"); prob != nil {
+				probs = append(probs, *prob)
+			}
+		case "SEGMENT", "RAY", "POLYLINE":
+			if prob := coincidentEndpoints(g, o, "两端点"); prob != nil {
+				probs = append(probs, *prob)
+			}
+		case "LINEBISECTOR", "PERPENDICULARBISECTOR":
+			if prob := coincidentEndpoints(g, o, "被平分的两个端点"); prob != nil {
+				probs = append(probs, *prob)
+			}
+		case "ELLIPSE", "HYPERBOLA":
+			if prob := coincidentEndpoints(g, o, "两个焦点"); prob != nil {
+				probs = append(probs, *prob)
+			}
 		}
 	}
 	return probs
+}
+
+// coincidentEndpoints flags an object whose first two referenced points are
+// literal points that coincide. Like lineThroughIdenticalPoints it gives up when
+// it cannot prove degeneracy from literals, which is the conservative choice:
+// these commands take a <Segment> too, and a segment's endpoints are not
+// resolvable here.
+func coincidentEndpoints(g *ir.Graph, o *ir.Object, what string) *diag.Problem {
+	if len(o.Refs) < 2 {
+		return nil
+	}
+	ax, ay, oka := pointCoords(g, o.Refs[0])
+	bx, by, okb := pointCoords(g, o.Refs[1])
+	if !oka || !okb {
+		return nil
+	}
+	if ax.Cmp(bx) == 0 && ay.Cmp(by) == 0 {
+		return &diag.Problem{
+			Code: diag.CodeGeoDegenerate,
+			Msg:  "退化：" + what + " 重合：" + o.Refs[0] + " 与 " + o.Refs[1],
+			Obj:  o.ID,
+		}
+	}
+	return nil
 }
 
 // pointCoords returns the exact coordinates of a literal point object, and

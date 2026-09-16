@@ -1,0 +1,3 @@
+# b11_Midpoint单参 — Midpoint 要两个点或一条线段
+A = (1, 2)
+mid = Midpoint(A)

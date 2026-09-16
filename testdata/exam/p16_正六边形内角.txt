@@ -1,0 +1,5 @@
+# p16_正六边形内角 — 中考·正六边形的内角
+A = (3, 0)
+B = (1.5, 2.598076211)
+hex = RegularPolygon(A, B, 6)
+angs = InteriorAngles(hex)

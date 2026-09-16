@@ -1,0 +1,8 @@
+# p07_旋转正方形 — 中考压轴·正方形绕顶点旋转
+A = (0, 0)
+B = (4, 0)
+C = (4, 4)
+D = (0, 4)
+sq = Polygon(A, B, C, D)
+ang = Slider(0, 90, 1)
+sq2 = Rotate(sq, ang, A)

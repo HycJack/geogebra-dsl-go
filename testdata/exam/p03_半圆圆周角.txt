@@ -1,0 +1,9 @@
+# p03_半圆圆周角 — 中考·直径所对圆周角为直角
+A = (-4, 0)
+B = (4, 0)
+s = Semicircle(A, B)
+t = Slider(0.2, 3.0, 0.1)
+P = (4*cos(t), 4*sin(t))
+l1 = Line(A, P)
+l2 = Line(B, P)
+a = Angle(l1, l2)

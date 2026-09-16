@@ -100,35 +100,52 @@ var kindTokens = map[string]struct {
 	// cells, none of which our coarse model types. Being a wildcard (rather than
 	// unmodeled) is the difference between "accept anything" and "reject every
 	// known kind", and accepting is what GeoGebra does here.
-	"Quadratic Function":                   {any: true},
-	"Boolean expression":                   {any: true},
-	"Symbol":                               {any: true},
-	"Equation":                             {any: true},
-	"Inequality":                           {any: true},
-	"FunctionName":                         {any: true},
-	"Name":                                 {any: true},
-	"Keyword":                              {any: true},
-	"Button":                               {any: true},
-	"ActionObject":                         {any: true},
-	"Image":                                {any: true},
-	"GraphicsView":                         {any: true},
-	"Spreadsheet Cell":                     {any: true},
-	"Column":                               {any: true},
-	"Row":                                  {any: true},
-	"Cell":                                 {any: true},
-	"CellRange":                            {any: true},
-	"Start Cell":                           {any: true},
-	"End Cell":                             {any: true},
-	"Face":                                 {any: true},
-	"Edge":                                 {any: true},
-	"Axes":                                 {any: true},
-	"Axis of Rotation":                     {any: true},
-	"Axis Direction or Plane":              {any: true},
+	"Quadratic Function": {any: true},
+	"Boolean expression": {any: true},
+	"Symbol":             {any: true},
+	"Equation":           {any: true},
+	"Inequality":         {any: true},
+	"FunctionName":       {any: true},
+	"Name":               {any: true},
+	"Keyword":            {any: true},
+	"Button":             {any: true},
+	"ActionObject":       {any: true},
+	"Image":              {any: true},
+	"GraphicsView":       {any: true},
+	"Spreadsheet Cell":   {any: true},
+	"Column":             {any: true},
+	"Row":                {any: true},
+	"Cell":               {any: true},
+	"CellRange":          {any: true},
+	"Start Cell":         {any: true},
+	"End Cell":           {any: true},
+	"Face":               {any: true},
+	"Edge":               {any: true},
+	"Axes":               {any: true},
+	// Rotate(<Object>, <Angle>, <Axis of Rotation>) is the 3D form of a
+	// rotation about a line. Wildcarding it let a bare number fill the axis
+	// slot — Rotate(sq, ang, 5) validated even though the <Point> overload
+	// correctly rejected the same script. "Axis Direction or Plane" is a
+	// genuine union of three real kinds; see unionTokens.
+	"Axis of Rotation":                     {kind: ir.KLine},
 	"SurfaceOr3DObject":                    {any: true},
 	"3DObject":                             {any: true},
 	"PointOrObjectWithPosition":            {any: true},
 	"Enum(-1|0|1)":                         {any: true},
 	"Composite(ListOfText+FrequencyTable)": {any: true},
+}
+
+// unionTokens maps a catalog type token that is genuinely a union of two or
+// more concrete kinds to those kinds. kindTokens holds one kind per token,
+// which cannot express "Line, Vector or Plane". Such a token is returned
+// whole by tokenAlternatives (it contains a space) and would otherwise be a
+// wildcard, which let any value — including a bare number — fill the slot.
+//
+// For Rotate(<Object>, <Angle>, <Point on Axis>, <Axis Direction or Plane>)
+// the axis direction may be given as the axis line itself, as a direction
+// vector, or as the plane of rotation.
+var unionTokens = map[string][]ir.Kind{
+	"Axis Direction or Plane": {ir.KLine, ir.KVector, ir.KPlane},
 }
 
 // subkind reports whether actual is accepted where want is required.
@@ -149,6 +166,14 @@ func subkind(want, actual ir.Kind) bool {
 // tokenAccepts reports whether an actual ir.Kind satisfies a catalog type token.
 func tokenAccepts(token string, actual ir.Kind) bool {
 	for _, alt := range tokenAlternatives(token) {
+		if ks, ok := unionTokens[alt]; ok {
+			for _, k := range ks {
+				if subkind(k, actual) {
+					return true
+				}
+			}
+			continue
+		}
 		t, ok := kindTokens[alt]
 		if !ok {
 			continue

@@ -1,0 +1,6 @@
+# p06_垂直平分线 — 中考·垂直平分线（垂径定理）
+A = (1, 2)
+B = (7, 5)
+seg = Segment(A, B)
+mid = Midpoint(seg)
+perp = PerpendicularBisector(seg)

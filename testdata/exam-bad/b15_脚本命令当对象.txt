@@ -1,0 +1,3 @@
+# b15_脚本命令当对象 — scripting 命令结果不能当对象用
+A = (1, 0)
+SetColor(ShowAxes(true), "red")

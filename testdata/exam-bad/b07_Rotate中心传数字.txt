@@ -1,0 +1,8 @@
+# b07_Rotate中心传数字 — Rotate 中心必须是点，给了数字
+A = (0, 0)
+B = (4, 0)
+C = (4, 4)
+D = (0, 4)
+sq = Polygon(A, B, C, D)
+ang = Slider(0, 90, 1)
+sq2 = Rotate(sq, ang, 5)

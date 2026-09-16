@@ -1,0 +1,9 @@
+# p01_三角形四心 — 中考·三角形四心：内心/外心/重心/垂心
+A = (0, 0)
+B = (6, 0)
+C = (2, 5)
+tri = Polygon(A, B, C)
+I = Incenter(tri)
+O = Circumcenter(A, B, C)
+G = Centroid(tri)
+H = Orthocenter(A, B, C)

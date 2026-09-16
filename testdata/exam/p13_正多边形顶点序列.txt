@@ -1,0 +1,4 @@
+# p13_正多边形顶点序列 — 中考·正八边形顶点生成
+n = 8
+pts = Sequence((4*cos(k*2*PI/n), 4*sin(k*2*PI/n)), k, 0, n-1)
+poly = Polygon(pts)

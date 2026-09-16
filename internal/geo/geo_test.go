@@ -84,3 +84,40 @@ func TestCircleRadiusNegativeDegenerate(t *testing.T) {
 		t.Fatal("Circle(A, -pi) should be degenerate (negative radius)")
 	}
 }
+
+func TestSemicircleCoincidentEndpointsDegenerate(t *testing.T) {
+	g := ir.New()
+	g.Add(&ir.Object{ID: "A", Kind: ir.KPoint, Args: []string{"-4", "0"}})
+	g.Add(&ir.Object{ID: "s", Cmd: "Semicircle", Kind: ir.KConic, Args: []string{"A", "A"}, Refs: []string{"A", "A"}})
+	if probs := Check(g, []string{"A", "s"}); len(probs) == 0 {
+		t.Fatal("Semicircle(A, A) should be degenerate: both diameter endpoints coincide")
+	}
+}
+
+func TestSemicircleDistinctEndpointsOk(t *testing.T) {
+	g := ir.New()
+	g.Add(&ir.Object{ID: "A", Kind: ir.KPoint, Args: []string{"-4", "0"}})
+	g.Add(&ir.Object{ID: "B", Kind: ir.KPoint, Args: []string{"4", "0"}})
+	g.Add(&ir.Object{ID: "s", Cmd: "Semicircle", Kind: ir.KConic, Args: []string{"A", "B"}, Refs: []string{"A", "B"}})
+	if probs := Check(g, []string{"A", "B", "s"}); len(probs) != 0 {
+		t.Fatalf("Semicircle(A, B) with distinct endpoints should validate, got %v", probs)
+	}
+}
+
+func TestEllipseCoincidentFociDegenerate(t *testing.T) {
+	g := ir.New()
+	g.Add(&ir.Object{ID: "f", Kind: ir.KPoint, Args: []string{"3", "0"}})
+	g.Add(&ir.Object{ID: "e", Cmd: "Ellipse", Kind: ir.KConic, Args: []string{"f", "f", "10"}, Refs: []string{"f", "f"}})
+	if probs := Check(g, []string{"f", "e"}); len(probs) == 0 {
+		t.Fatal("Ellipse(f, f, 10) should be degenerate: both foci coincide")
+	}
+}
+
+func TestSegmentCoincidentEndpointsDegenerate(t *testing.T) {
+	g := ir.New()
+	g.Add(&ir.Object{ID: "A", Kind: ir.KPoint, Args: []string{"1", "2"}})
+	g.Add(&ir.Object{ID: "s", Cmd: "Segment", Kind: ir.KSegment, Args: []string{"A", "A"}, Refs: []string{"A", "A"}})
+	if probs := Check(g, []string{"A", "s"}); len(probs) == 0 {
+		t.Fatal("Segment(A, A) should be degenerate")
+	}
+}

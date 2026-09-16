@@ -1,0 +1,8 @@
+# p02_圆的切线 — 中考·圆的切线与切线长
+O = (3, 3)
+r = 3
+c = Circle(O, r)
+P = (9, 3)
+t = Tangent(P, c)
+T = Point(t)
+d = Distance(P, T)
