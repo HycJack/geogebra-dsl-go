@@ -94,6 +94,9 @@ func Check(input []byte, opt Options) *diag.Receipt {
 		rc.Errors = append(rc.Errors, checkIRRefs(g)...)
 	}
 	rc.Errors = append(rc.Errors, runSig(cat, g)...)
+	// Statement-style commands (SetColor, ShowAxes, ...) are not graph objects,
+	// so runSig never saw them; validate them here against the same catalog.
+	rc.Errors = append(rc.Errors, runSigStatements(cat, g)...)
 
 	order, cycleProbs := deps.Order(g)
 	rc.Errors = append(rc.Errors, cycleProbs...)
@@ -155,6 +158,29 @@ func runSig(c *catalog.Catalog, g *ir.Graph) []diag.Problem {
 		} else if !m.OK {
 			probs = append(probs, diag.Problem{
 				Code: diag.CodeCmdArg, Msg: m.Explain, Obj: id, Line: o.Line,
+			})
+		}
+	}
+	return probs
+}
+
+// runSigStatements type-checks statement-style commands (modifiers) against the
+// catalog. They are not graph objects, so runSig skips them; they are carried on
+// the graph as ir.Statement by the text builder. Lookup is called with a
+// temporary Object because it only reads Cmd and Args — arg kinds are resolved
+// against g, where the modifier's real targets live.
+func runSigStatements(c *catalog.Catalog, g *ir.Graph) []diag.Problem {
+	var probs []diag.Problem
+	for _, st := range g.Statements {
+		o := &ir.Object{Cmd: st.Cmd, Args: st.Args, Line: st.Line}
+		m := sig.Lookup(c, g, o)
+		if !m.Known {
+			probs = append(probs, diag.Problem{
+				Code: diag.CodeCmdUnknown, Msg: m.Explain, Obj: st.Cmd, Line: st.Line,
+			})
+		} else if !m.OK {
+			probs = append(probs, diag.Problem{
+				Code: diag.CodeCmdArg, Msg: m.Explain, Obj: st.Cmd, Line: st.Line,
 			})
 		}
 	}

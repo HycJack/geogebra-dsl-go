@@ -2090,9 +2090,9 @@
           "syntax": "StartAnimation(<PointOrSlider1>, <PointOrSlider2>, ...)",
           "params": [
             {
-              "name": "PointOrSliderList",
+              "name": "PointOrSlider",
               "role": "points_on_paths_and_sliders_to_start_animation",
-              "type": "List<PointOrSlider>",
+              "type": "PointOrSlider",
               "optional": false
             }
           ],
@@ -2102,9 +2102,9 @@
           "syntax": "StartAnimation(<PointOrSlider1>, <PointOrSlider2>, ..., <Boolean>)",
           "params": [
             {
-              "name": "PointOrSliderList",
+              "name": "PointOrSlider",
               "role": "points_on_paths_and_sliders_to_control_animation",
-              "type": "List<PointOrSlider>",
+              "type": "PointOrSlider",
               "optional": false
             },
             {

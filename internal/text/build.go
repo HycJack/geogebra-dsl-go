@@ -36,52 +36,20 @@ type statement struct {
 	lineNo        int
 	literalPoint  bool
 	numberLiteral string
+	boolLiteral   string   // "true"/"false" literal (Kind KBool)
 	literalList   []string // elements of a { ... } list literal (Kind KList)
 	exprLiteral   string   // non-empty: RHS is a raw expression / function body
 	fnParams      []string // parameter names for a function def like f(x,y) = ...
 	modifier      bool     // statement-style command with no "=", e.g. SetColor(c, "red")
 }
 
-// modifierCommands are statement-style GeoGebra commands whose line has no "="
-// (they modify existing objects or drive the canvas rather than defining a new
-// named object). They are parsed so style/dynamic scripts (colors, line width,
-// sliders, checkboxes, animation) pass the validator instead of being rejected.
-var modifierCommands = map[string]bool{
-	"SETCOLOR":                 true,
-	"SETBACKGROUNDCOLOR":       true,
-	"SETLINETHICKNESS":         true,
-	"SETLINESTYLE":             true,
-	"SETPOINTSIZE":             true,
-	"SETPOINTSTYLE":            true,
-	"SETFILLING":               true,
-	"SETVALUE":                 true,
-	"SETCAPTION":               true,
-	"SETVISIBLE":               true,
-	"SETCONDITIONTOSHOWOBJECT": true,
-	"STARTANIMATION":           true,
-	"ZOOMIN":                   true,
-	"ZOOMOUT":                  true,
-	"SETLAYER":                 true,
-	"SETDYNAMICCOLOR":          true,
-	"SETLABELVISIBLE":          true,
-	"RUNCLICKSCRIPT":           true,
-	// Additional statement-style scripting/UI commands (no "=") commonly emitted
-	// in teaching scripts: repositioning, renaming, toggling, view settings.
-	"SETCOORDS":          true,
-	"SETTRACE":           true,
-	"SETFIXED":           true,
-	"SETACTIVEVIEW":      true,
-	"SETPERSPECTIVE":     true,
-	"SETAXESRATIO":       true,
-	"SETDECORATION":      true,
-	"SETLABELMODE":       true,
-	"SETTOOLTIPMODE":     true,
-	"SETVISIBLEINVIEW":   true,
-	"SHOWLABEL":          true,
-	"RENAME":             true,
-	"UPDATECONSTRUCTION": true,
-	"SETSEED":            true,
-}
+// A bare no-"=" statement is legal only for an official GeoGebra Scripting
+// command (SetColor, ShowAxes, Slider, TurtleForward, ...). The set lives in
+// ir.IsScriptingCommand so the parser and the command→kind table cannot drift.
+//
+// Kept as an explicit table rather than an "everything is a modifier" rule: a
+// bare `Circle(A, B)` must remain a parse error, because Circle does return an
+// object and writing it bare is how a typo'd assignment looks.
 
 // Parse splits a script into statements. Returns parse errors (fail-closed).
 func Parse(src string) ([]statement, []diag.Problem) {
@@ -142,6 +110,10 @@ func parseLine(line string, lineNo int) (statement, bool, diag.Problem) {
 	// Number literal: ID = 3.5
 	if isNumber(rhs) {
 		return statement{id: name, fnParams: fnParams, numberLiteral: rhs, lineNo: lineNo}, true, diag.Problem{}
+	}
+	// Boolean literal: ID = true / ID = false
+	if isBoolLiteral(rhs) {
+		return statement{id: name, fnParams: fnParams, boolLiteral: rhs, lineNo: lineNo}, true, diag.Problem{}
 	}
 	// Literal point: ID = (0, 2)
 	if strings.HasPrefix(rhs, "(") {
@@ -237,12 +209,13 @@ func parseCommandCall(s string, lineNo int) (argCommand, bool, *diag.Problem) {
 	}
 	// Modifier command names are matched case-insensitively (setcolor == SetColor),
 	// consistent with the rest of the command handling.
-	if !modifierCommands[strings.ToUpper(cmd)] {
+	if !ir.IsScriptingCommand(cmd) {
 		// A real command must be written as Object = Command(...). Reject with a
 		// hint so the model learns the expected assignment syntax.
 		return argCommand{}, false, &diag.Problem{
 			Code: diag.CodeParseSyntax,
-			Msg:  "指令 " + cmd + " 必须以 对象名 = 命令(...) 形式书写；无赋值号的语句仅允许 Set…/StartAnimation 等样式或动画指令",
+			Msg: "指令 " + cmd + " 会返回对象，必须写成 对象名 = " + cmd +
+				"(…) 的形式；无赋值号的裸语句仅限官方 Scripting 类指令（Set*/Show*/Slider/Turtle* 等 67 条，见 manual 的 Scripting_Commands 页）",
 			Line: lineNo,
 		}
 	}
@@ -349,6 +322,12 @@ func Build(stmts []statement) (*ir.Graph, []diag.Problem) {
 		case s.numberLiteral != "":
 			o.Kind = ir.KNumber
 			o.Args = []string{s.numberLiteral}
+		case s.boolLiteral != "":
+			// A boolean literal defines a KBool object. KBool was previously
+			// declared in ir.Kind but unreachable, so every <Boolean> parameter
+			// slot had no way to be satisfied.
+			o.Kind = ir.KBool
+			o.Args = []string{s.boolLiteral}
 		case s.literalList != nil:
 			// { ... } list literal → a List object. Elements may contain nested
 			// command calls (e.g. {Sqrt(2), 3}); flatten first, then resolve refs.
@@ -397,17 +376,33 @@ func Build(stmts []statement) (*ir.Graph, []diag.Problem) {
 			}
 		}
 	}
-	// Validate modifiers after all named objects are known: every argument that
-	// is a bare identifier must resolve to a real object (e.g. the target of
-	// SetColor(c, "red") is c). Modifiers add no geometry and no goals.
-	for _, s := range modifiers {
-		refs, undefs := resolveRefs(g, s.cmd, s.args)
-		_ = refs
+	// Validate modifiers after all named objects are known. A modifier defines
+	// no object, so it stays out of the graph's object map and out of the
+	// executable order — but it is carried on the graph as an ir.Statement so
+	// the sig stage can type-check it against the same catalog. Before modifiers
+	// were carried this way, only their bare-identifier arguments were
+	// ref-checked here, so SetLineStyle(A, 2) with a Point argument passed
+	// silently. Nested command calls in the arguments are flattened like for any
+	// other command, so SetColor(c, RGB(1,0,0)) reports RGB as unknown; the
+	// modifier's own id is "stmtN", matching the synthetic-nested-command ids
+	// (cur.cos1, ...) that already appear in the executable order.
+	for i, s := range modifiers {
+		owner := "stmt" + strconv.Itoa(i+1)
+		seq := &synthSeq{}
+		args, nested := flattenArgs(g, owner, s.args, s.lineNo, seq, nil)
+		probs = append(probs, nested...)
+		refs, undefs := resolveRefs(g, s.cmd, args)
 		for _, u := range undefs {
 			probs = append(probs, diag.Problem{
-				Code: diag.CodeDepUndefined, Msg: "引用了未定义对象：" + u, Obj: s.cmd, Line: s.lineNo,
+				Code: diag.CodeDepUndefined, Msg: "引用了未定义对象：" + u, Obj: owner, Line: s.lineNo,
 			})
 		}
+		g.Statements = append(g.Statements, &ir.Statement{
+			Cmd:  s.cmd,
+			Args: args,
+			Refs: refs,
+			Line: s.lineNo,
+		})
 	}
 	return g, probs
 }
@@ -558,6 +553,9 @@ func resolveRefs(g *ir.Graph, cmd string, args []string) (refs, undefs []string)
 		if isNumber(a) {
 			continue // literal, not a reference
 		}
+		if isBoolLiteral(a) {
+			continue // true/false literal, not a reference
+		}
 		if _, ok := g.Get(a); ok {
 			// a defined object (a named object, or a synthetic nested-command
 			// id like A.Midpoint1) is a dependency ref regardless of whether it
@@ -592,6 +590,9 @@ func resolveRefsExpr(g *ir.Graph, expr string, bindings map[string]bool) (refs, 
 		}
 		seen[tok] = true
 		if isNumber(tok) {
+			continue
+		}
+		if isBoolLiteral(tok) {
 			continue
 		}
 		if _, ok := g.Get(tok); ok {
@@ -709,6 +710,20 @@ func isIdentName(s string) bool {
 
 // isNumber reports whether s is a plain number literal (optional sign, digits,
 // optional decimal point).
+// isBoolLiteral reports whether s is the GeoGebra boolean literal true or
+// false, case-insensitively. These are literals, not object references: treating
+// them as identifiers made `ShowAxes(false)` report "undefined object: false".
+//
+// GeoGebra writes booleans bare — the Slider manual documents its <Is Angle>
+// parameter as "can be true or false", default false.
+func isBoolLiteral(s string) bool {
+	switch strings.ToLower(strings.TrimSpace(s)) {
+	case "true", "false":
+		return true
+	}
+	return false
+}
+
 func isNumber(s string) bool {
 	if s == "" {
 		return false

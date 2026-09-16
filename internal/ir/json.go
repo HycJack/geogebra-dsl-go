@@ -106,6 +106,20 @@ func KindFromString(s string) Kind {
 		return KSolid
 	case "Polyhedron", "polyhedron":
 		return KPolyhedron
+	case "Text", "text":
+		return KText
+	case "Matrix", "matrix":
+		return KMatrix
+	case "Polynomial", "polynomial":
+		return KPolynomial
+	case "Curve", "curve":
+		return KCurve
+	case "Locus", "locus":
+		return KLocus
+	case "Set", "set":
+		return KSet
+	case "Turtle", "turtle":
+		return KTurtle
 	default:
 		return KUnknown
 	}

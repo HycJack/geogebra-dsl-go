@@ -30,6 +30,19 @@ const (
 	KSolid
 	KPolyhedron
 	KScript // free point, never directly usable
+	// Non-geometric GeoGebra object kinds. Appended (not inserted) so the
+	// existing numeric values never shift. Before these existed, every <Text>,
+	// <Matrix>, <Polynomial>, <Curve>, <Locus>, <Set> or <Turtle> parameter slot
+	// was unmodeled: the checker could reject a Point there but had no positive
+	// way to accept the object that really belongs, because no command was
+	// mapped to such a kind.
+	KText       // Text("<label>", <Point>), ReadText
+	KMatrix     // Matrix(...)
+	KPolynomial // Polynomial(...)
+	KCurve      // Curve(...)
+	KLocus      // Locus(...)
+	KSet        // Union, Difference
+	KTurtle     // Turtle(...)
 )
 
 // String returns the canonical lowercase name for a Kind.
@@ -71,6 +84,20 @@ func (k Kind) String() string {
 		return "Polyhedron"
 	case KScript:
 		return "Script"
+	case KText:
+		return "Text"
+	case KMatrix:
+		return "Matrix"
+	case KPolynomial:
+		return "Polynomial"
+	case KCurve:
+		return "Curve"
+	case KLocus:
+		return "Locus"
+	case KSet:
+		return "Set"
+	case KTurtle:
+		return "Turtle"
 	default:
 		return "Unknown"
 	}
@@ -86,11 +113,25 @@ type Object struct {
 	Line int      `json:"-"`              // 1-based source line (text input)
 }
 
+// Statement is a statement-style command (SetColor, ShowAxes, ...) that is
+// validated against the catalog but deliberately is not a graph object: it has
+// no id, adds no geometry and no goal, and is not part of the executable order.
+// It is carried on the Graph so the sig stage can type-check it against the
+// same catalog. Before this existed modifiers were ref-checked only, so
+// `SetLineStyle(A, 2)` with a Point argument passed silently.
+type Statement struct {
+	Cmd  string   // command name as written
+	Args []string // raw arg expressions
+	Refs []string // resolved object ids this depends on
+	Line int      // 1-based source line (text input)
+}
+
 // Graph is the shared object graph. Insertion order is preserved.
 type Graph struct {
-	Objects map[string]*Object
-	Order   []string
-	Goals   []string
+	Objects    map[string]*Object
+	Order      []string
+	Goals      []string
+	Statements []*Statement
 }
 
 // New returns an empty graph.
@@ -136,6 +177,97 @@ func (g *Graph) RefKinds(o *Object) []Kind {
 	return out
 }
 
+// scriptingCommands is the official GeoGebra "Scripting Commands" category
+// (67 commands), verified against
+// https://geogebra.github.io/docs/manual/en/commands/Scripting_Commands/ .
+// That page documents the rule both uses of this set encode:
+//
+//	"These commands don't return any object, therefore cannot be nested in
+//	 other commands."
+//
+// They live here rather than in the text package because two independent
+// consumers need the same set: the text builder (a bare no-"=" line is only
+// legal for one of these) and kindForCmd (a nested call to one of these is a
+// script statement, not a value). Kept as an explicit table rather than an
+// "everything is a modifier" rule: a bare `Circle(A, B)` must remain a parse
+// error, because Circle does return an object and writing it bare is how a
+// typo'd assignment looks.
+var scriptingCommands = map[string]bool{
+	"ATTACHCOPYTOVIEW":         true,
+	"BUTTON":                   true,
+	"CENTERVIEW":               true,
+	"CHECKBOX":                 true,
+	"COPYFREEOBJECT":           true,
+	"DELETE":                   true,
+	"EXECUTE":                  true,
+	"EXPORTIMAGE":              true,
+	"GETTIME":                  true,
+	"HIDELAYER":                true,
+	"INPUTBOX":                 true,
+	"PAN":                      true,
+	"PARSETOFUNCTION":          true,
+	"PARSETONUMBER":            true,
+	"PLAYSOUND":                true,
+	"READTEXT":                 true,
+	"RENAME":                   true,
+	"REPEAT":                   true,
+	"RUNCLICKSCRIPT":           true,
+	"RUNUPDATESCRIPT":          true,
+	"SELECTOBJECTS":            true,
+	"SETACTIVEVIEW":            true,
+	"SETAXESRATIO":             true,
+	"SETBACKGROUNDCOLOR":       true,
+	"SETCAPTION":               true,
+	"SETCOLOR":                 true,
+	"SETCONDITIONTOSHOWOBJECT": true,
+	"SETCONSTRUCTIONSTEP":      true,
+	"SETCOORDS":                true,
+	"SETDECORATION":            true,
+	"SETDYNAMICCOLOR":          true,
+	"SETFILLING":               true,
+	"SETFIXED":                 true,
+	"SETIMAGE":                 true,
+	"SETLABELMODE":             true,
+	"SETLAYER":                 true,
+	"SETLEVELOFDETAIL":         true,
+	"SETLINEOPACITY":           true,
+	"SETLINESTYLE":             true,
+	"SETLINETHICKNESS":         true,
+	"SETPERSPECTIVE":           true,
+	"SETPOINTSIZE":             true,
+	"SETPOINTSTYLE":            true,
+	"SETSEED":                  true,
+	"SETSPINSPEED":             true,
+	"SETTOOLTIPMODE":           true,
+	"SETTRACE":                 true,
+	"SETVALUE":                 true,
+	"SETVIEWDIRECTION":         true,
+	"SETVISIBLEINVIEW":         true,
+	"SHOWAXES":                 true,
+	"SHOWGRID":                 true,
+	"SHOWLABEL":                true,
+	"SHOWLAYER":                true,
+	"SLIDER":                   true,
+	"STARTANIMATION":           true,
+	"STARTRECORD":              true,
+	"TURTLE":                   true,
+	"TURTLEBACK":               true,
+	"TURTLEDOWN":               true,
+	"TURTLEFORWARD":            true,
+	"TURTLELEFT":               true,
+	"TURTLERIGHT":              true,
+	"TURTLEUP":                 true,
+	"UPDATECONSTRUCTION":       true,
+	"ZOOMIN":                   true,
+	"ZOOMOUT":                  true,
+}
+
+// IsScriptingCommand reports whether cmd (any case) is an official GeoGebra
+// Scripting command — one that returns no object.
+func IsScriptingCommand(cmd string) bool {
+	return scriptingCommands[strings.ToUpper(cmd)]
+}
+
 // kindForCmd maps a command name to the coarse Kind it produces, for commands
 // whose result type is well-known and needed by later stages (kind checks,
 // degeneracy). Commands outside the map produce KUnknown and are still checked
@@ -153,8 +285,16 @@ func kindForCmd(cmd string) Kind {
 		return KRay
 	case "VECTOR":
 		return KVector
-	case "CIRCLE", "CIRCLEWITHCENTER", "CIRCLEBYRADIUSM", "SEMICIRCLE":
+	case "CIRCLE", "CIRCLEWITHCENTER", "CIRCLEBYRADIUSM", "SEMICIRCLE",
+		"CIRCUMCIRCLE":
 		return KCircle
+	case "ELLIPSE", "PARABOLA", "HYPERBOLA", "CONIC":
+		return KConic
+	// Triangle center commands all yield a Point. Mapped so their results are
+	// type-checked instead of falling through to KUnknown (which the lenient
+	// fallback would silently accept anywhere).
+	case "CIRCUMCENTER", "INCENTER", "CENTROID", "ORTHOCENTER", "TRIANGLECENTER":
+		return KPoint
 	case "POLYGON", "POLYLINE":
 		return KPolygon
 	case "DISTANCE", "LENGTH", "PERIMETER", "AREA", "ANGLE", "SLOPE",
@@ -179,8 +319,55 @@ func kindForCmd(cmd string) Kind {
 		return KPlane
 	case "CUBE", "PRISM", "PYRAMID", "POLYHEDRON", "TETRAHEDRON", "OCTAHEDRON",
 		"HEXAHEDRON", "ICOSAHEDRON", "DODECAHEDRON":
-		return KSolid
+		// Polyhedra, not just "Solids": Net(<Polyhedron>, ...) and
+		// Vertex(<Polyhedron>, ...) require the Polyhedron type, and a
+		// Tetrahedron is a convex polyhedron. KSolid was also unreachable from
+		// any other command, so KPolyhedron is the correct coarse kind.
+		return KPolyhedron
+	// Lists and sequences yield KList. Mapped so <List>-typed slots are checked
+	// against the real kind instead of the KUnknown lenient fallback.
+	case "LIST", "SEQUENCE":
+		return KList
+	// Sliders and GetTime are Scripting commands that nevertheless yield a
+	// usable number: StartAnimation(<Point or Slider>, ...) consumes them.
+	// Without a specific case they fall through to KScript, which a
+	// <Point or Slider> slot rightly refuses.
+	case "SLIDER", "GETTIME":
+		return KNumber
+	// Non-geometric object kinds. Each maps only commands that unambiguously
+	// produce that kind, so the result is type-checked rather than falling
+	// through to KUnknown.
+	case "TEXT", "READTEXT":
+		return KText
+	case "MATRIX":
+		return KMatrix
+	case "POLYNOMIAL":
+		return KPolynomial
+	case "CURVE", "SPLINE":
+		return KCurve
+	case "LOCUS":
+		return KLocus
+	case "UNION", "DIFFERENCE":
+		return KSet
+	case "TURTLE":
+		return KTurtle
+	// An arc and an implicit curve are partial curves; GeoGebra's conic slots
+	// accept them, and mapping them to KConic keeps <Arc>/<ImplicitCurve>
+	// checkable instead of unmodeled.
+	case "ARC", "CIRCULARARC", "CIRCUMCIRCULARARC", "IMPLICITCURVE":
+		return KConic
 	default:
+		// A nested scripting call is a statement, not a value. Giving it a real
+		// kind lets Repeat(<Number>, <Scripting Command>, ...) check that its
+		// arguments really are scripting commands instead of accepting a Number
+		// or a Point, and keeps them out of the "Any"-style wildcard slots,
+		// matching the manual's rule that these cannot be nested. This is the
+		// fallback: a specific case above wins first, because some scripting
+		// commands (Turtle, Slider, Button, Checkbox, GetTime, ReadText) do
+		// create a usable object that later commands consume.
+		if IsScriptingCommand(cmd) {
+			return KScript
+		}
 		return KUnknown
 	}
 }

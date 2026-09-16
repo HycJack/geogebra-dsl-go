@@ -10,48 +10,214 @@ import (
 	"github.com/hycjack/geogebra-dsl-go/internal/number"
 )
 
-// kindAliases maps catalog type tokens (as they appear in a TypeExpr, after
-// splitting on "/") to the ir.Kind they represent. Some catalog types are
-// wildcards that accept any object.
+// kindTokens maps catalog type tokens (as they appear in a TypeExpr, after
+// splitting on "/" and "Or") to the ir.Kind they represent. Some catalog types
+// are wildcards that accept any object.
+//
+// Groups:
+//   - core geometric kinds,
+//   - non-geometric GeoGebra objects (Text/Matrix/Polynomial/Curve/Locus/Set/Turtle),
+//   - numeric subtypes that collapse to KNumber,
+//   - wildcards for types outside our coarse model.
+//
+// <List<...>> and <List of ...> variants are handled by kindForToken's prefix
+// rule rather than enumerated here — there are ~18 spellings and they are all
+// KList.
 var kindTokens = map[string]struct {
 	kind ir.Kind
 	any  bool
 }{
-	"Point":      {kind: ir.KPoint},
-	"Line":       {kind: ir.KLine},
-	"Segment":    {kind: ir.KSegment},
-	"Ray":        {kind: ir.KRay},
-	"Vector":     {kind: ir.KVector},
-	"Circle":     {kind: ir.KCircle},
-	"Conic":      {kind: ir.KConic},
-	"Polygon":    {kind: ir.KPolygon},
-	"Number":     {kind: ir.KNumber},
-	"Boolean":    {kind: ir.KBool},
-	"Function":   {kind: ir.KFunction},
-	"List":       {kind: ir.KList},
-	"Plane":      {kind: ir.KPlane},
-	"Quadric":    {kind: ir.KQuadric},
-	"Solid":      {kind: ir.KSolid},
-	"Polyhedron": {kind: ir.KPolyhedron},
-	"GeoObject":  {any: true}, // generic object wildcard
-	"Object":     {any: true},
-	"Expression": {any: true}, // treat as wildcard; deep expr parsing is out of v1 scope
-	"Variable":   {any: true},
-	"Interval":   {kind: ir.KNumber},
-	"Region":     {any: true},
+	"Point":            {kind: ir.KPoint},
+	"Line":             {kind: ir.KLine},
+	"Segment":          {kind: ir.KSegment},
+	"Ray":              {kind: ir.KRay},
+	"Vector":           {kind: ir.KVector},
+	"Circle":           {kind: ir.KCircle},
+	"Conic":            {kind: ir.KConic},
+	"Ellipse":          {kind: ir.KConic}, // an ellipse is a conic
+	"Parabola":         {kind: ir.KConic},
+	"Polygon":          {kind: ir.KPolygon},
+	"Polyline":         {kind: ir.KPolygon}, // a polyline is a degenerate polygon
+	"Sector":           {kind: ir.KPolygon}, // a sector is a filled polygon
+	"Number":           {kind: ir.KNumber},
+	"Slider":           {kind: ir.KNumber}, // a slider holds a number
+	"Boolean":          {kind: ir.KBool},
+	"Function":         {kind: ir.KFunction},
+	"List":             {kind: ir.KList},
+	"Plane":            {kind: ir.KPlane},
+	"Quadric":          {kind: ir.KQuadric},
+	"Surface":          {kind: ir.KQuadric}, // GeoGebra's Surface command yields a quadric
+	"Solid":            {kind: ir.KSolid},
+	"Polyhedron":       {kind: ir.KPolyhedron},
+	"Text":             {kind: ir.KText},
+	"String":           {kind: ir.KText}, // GeoGebra's <String> is a text literal/slot
+	"Matrix":           {kind: ir.KMatrix},
+	"Polynomial":       {kind: ir.KPolynomial},
+	"Curve":            {kind: ir.KCurve},
+	"Spline":           {kind: ir.KCurve}, // a spline is a curve
+	"Locus":            {kind: ir.KLocus},
+	"Set":              {kind: ir.KSet},
+	"Turtle":           {kind: ir.KTurtle},
+	"ScriptingCommand": {kind: ir.KScript}, // Repeat's second slot: a real call
+	// Arc and implicit curves are partial curves; GeoGebra accepts them in
+	// conic slots, and matching them here is what makes <Arc> checkable instead
+	// of silently rejecting every known kind.
+	"Arc":              {kind: ir.KConic},
+	"ImplicitCurve":    {kind: ir.KConic},
+	"Implicit Curve":   {kind: ir.KConic},
+	"GeoObject":        {any: true}, // generic object wildcard
+	"Any":              {any: true}, // GeoGebra's catch-all: accepts any object type
+	"Object":           {any: true},
+	"Geometric Object": {any: true},
+	"Expression":       {any: true}, // treat as wildcard; deep expr parsing is out of v1 scope
+	"Variable":         {any: true},
+	"Interval":         {kind: ir.KNumber},
+	"Region":           {any: true},
+	// Numeric subtypes. GeoGebra writes <Integer>/<Real>/<Angle> for value slots
+	// and a bare number literal fills them — an angle measure is just a number of
+	// degrees. Our coarse model cannot tell 3 from 3.5, so these collapse to
+	// KNumber; the leniency is one-directional, matching real GeoGebra.
+	"Integer":       {kind: ir.KNumber},
+	"Real":          {kind: ir.KNumber},
+	"Complex":       {kind: ir.KNumber},
+	"ComplexNumber": {kind: ir.KNumber},
+	"Angle":         {kind: ir.KNumber},
+	// Single-token value-ish slots, all plain numbers in practice: the value a
+	// limit is taken at, a summation bound, an intersection index, a stretch ratio,
+	// a parameter value, and a screen/view index.
+	"Value":     {kind: ir.KNumber},
+	"Infinity":  {kind: ir.KNumber},
+	"Index":     {kind: ir.KNumber},
+	"Ratio":     {kind: ir.KNumber},
+	"Parameter": {kind: ir.KNumber},
+	// A view index is an integer, and a screen point is a point in window
+	// coordinates rather than in the construction — both collapse to the coarse
+	// kinds we do track.
+	"ViewIndex":   {kind: ir.KNumber},
+	"ScreenPoint": {kind: ir.KPoint},
+	"Sequence":    {kind: ir.KList},
+	// Wildcards: these describe expressions, names, UI widgets or spreadsheet
+	// cells, none of which our coarse model types. Being a wildcard (rather than
+	// unmodeled) is the difference between "accept anything" and "reject every
+	// known kind", and accepting is what GeoGebra does here.
+	"Quadratic Function":                   {any: true},
+	"Boolean expression":                   {any: true},
+	"Symbol":                               {any: true},
+	"Equation":                             {any: true},
+	"Inequality":                           {any: true},
+	"FunctionName":                         {any: true},
+	"Name":                                 {any: true},
+	"Keyword":                              {any: true},
+	"Button":                               {any: true},
+	"ActionObject":                         {any: true},
+	"Image":                                {any: true},
+	"GraphicsView":                         {any: true},
+	"Spreadsheet Cell":                     {any: true},
+	"Column":                               {any: true},
+	"Row":                                  {any: true},
+	"Cell":                                 {any: true},
+	"CellRange":                            {any: true},
+	"Start Cell":                           {any: true},
+	"End Cell":                             {any: true},
+	"Face":                                 {any: true},
+	"Edge":                                 {any: true},
+	"Axes":                                 {any: true},
+	"Axis of Rotation":                     {any: true},
+	"Axis Direction or Plane":              {any: true},
+	"SurfaceOr3DObject":                    {any: true},
+	"3DObject":                             {any: true},
+	"PointOrObjectWithPosition":            {any: true},
+	"Enum(-1|0|1)":                         {any: true},
+	"Composite(ListOfText+FrequencyTable)": {any: true},
 }
 
-// compatible reports whether an actual ir.Kind satisfies a catalog type token.
-func tokenAccepts(token string, actual ir.Kind) bool {
-	token = strings.TrimSpace(token)
-	if t, ok := kindTokens[token]; ok {
-		if t.any {
-			return actual != ir.KUnknown && actual != ir.KScript
-		}
-		return t.kind == actual
+// subkind reports whether actual is accepted where want is required.
+func subkind(want, actual ir.Kind) bool {
+	if actual == want {
+		return true
 	}
-	// Unknown token: be lenient (don't reject on a type we can't model yet).
-	return true
+	switch want {
+	case ir.KConic:
+		return actual == ir.KCircle
+	case ir.KSolid:
+		// A polyhedron is a solid, so a <Solid> slot also accepts one.
+		return actual == ir.KPolyhedron
+	}
+	return false
+}
+
+// tokenAccepts reports whether an actual ir.Kind satisfies a catalog type token.
+func tokenAccepts(token string, actual ir.Kind) bool {
+	for _, alt := range tokenAlternatives(token) {
+		t, ok := kindTokens[alt]
+		if !ok {
+			continue
+		}
+		if t.any {
+			if actual != ir.KUnknown && actual != ir.KScript {
+				return true
+			}
+		} else if subkind(t.kind, actual) {
+			return true
+		}
+	}
+	// No recognized alternative: the expected type is outside our coarse model.
+	// Commands are still checked strictly against GeoGebra's syntax, so reject
+	// whenever we CAN judge — the actual object has a known kind (a Point is not
+	// a <Set>, a Number is not a <Polynomial>). Stay lenient only for KUnknown
+	// actuals, which are results of commands we have not mapped plus unclassified
+	// literals; that is the "字面量参数宽松通过" leniency DESIGN.md documents.
+	if actual == ir.KUnknown {
+		return true
+	}
+	return false
+}
+
+// tokenAlternatives expands one catalog type token into the atomic tokens it
+// means, so a union type is satisfied by any of its members:
+//
+//	"VectorOrList"              → Vector, List
+//	"LineOrSegmentOrPolyline"   → Line, Segment, Polyline
+//	"StringOrNumber"            → String, Number
+//	"List<Number>" / "List of Numbers" / "ListOfText" → List
+//
+// Tokens containing spaces or brackets are returned whole: "Axis Direction or
+// Plane" and "List<PointOrSlider>" must NOT be split on "Or" or "<". An exact
+// table hit always wins and is checked first, because a token like
+// "Axis Direction or Plane" is a wildcard in the table and splitting it on the
+// lowercase "or" would destroy it.
+func tokenAlternatives(token string) []string {
+	token = strings.TrimSpace(token)
+	if token == "" {
+		return nil
+	}
+	if _, ok := kindTokens[token]; ok {
+		return []string{token}
+	}
+	if strings.HasPrefix(strings.ToLower(token), "list") {
+		// ~18 spellings of a list of something; all are KList in our model, and
+		// the element type is not tracked.
+		return []string{"List"}
+	}
+	if strings.HasPrefix(strings.ToLower(token), "expression") {
+		// <Expression f(x,y)>, <Expression y'(t)>, <Expression in (x,y)>: a
+		// labelled expression. Prefix-checked rather than exact because the label
+		// varies and all of them are untyped expressions.
+		return []string{"Expression"}
+	}
+	if strings.HasPrefix(strings.ToLower(token), "function") {
+		// <Function f(x)>, <Function b(x)> (SolveODE): a labelled function.
+		// "FunctionName" hits the exact table above first, so it stays a wildcard.
+		return []string{"Function"}
+	}
+	if strings.HasPrefix(strings.ToLower(token), "equation") {
+		// <Equation in A,B,C> (TriangleCurve): a labelled equation.
+		return []string{"Equation"}
+	}
+	if !strings.ContainsAny(token, "<>() ") {
+		return strings.Split(token, "Or")
+	}
+	return []string{token}
 }
 
 // Match holds the outcome of matching an object against the catalog.
@@ -63,20 +229,44 @@ type Match struct {
 	Explain    string // human text when !OK
 }
 
+// unknownExplain builds the diagnostic for a command that is not in the table.
+// Besides saying it's unknown, it points at the nearest catalog command and its
+// official GeoGebra manual URL, so an AI or a human sees the correct syntax
+// instead of just a rejection.
+func unknownExplain(c *catalog.Catalog, name string) string {
+	msg := "命令 " + name + " 不在命令表里"
+	sugg := c.Suggest(name, 3)
+	if len(sugg) == 0 {
+		return msg
+	}
+	if cmd, ok := c.Lookup(sugg[0]); ok && cmd.URL != "" {
+		msg += "；GeoGebra 中可能是 " + sugg[0] + "，官方用法见 " + cmd.URL
+	} else {
+		msg += "；相近命令：" + strings.Join(sugg, " / ")
+	}
+	return msg
+}
+
 // Lookup matches an object against the catalog. g provides the kinds of the
 // object's refs; args that are literal tokens (numbers etc.) are treated as
 // literals, not refs.
 func Lookup(c *catalog.Catalog, g *ir.Graph, o *ir.Object) Match {
 	cmd, known := c.Lookup(o.Cmd)
 	if !known {
-		return Match{Known: false, Explain: "命令 " + o.Cmd + " 不在命令表里"}
+		return Match{Known: false, Explain: unknownExplain(c, o.Cmd)}
 	}
 	counts := map[int]bool{}
 	var matched *catalog.Overload
 	for i := range cmd.Overloads {
 		ov := &cmd.Overloads[i]
 		if ov.IsVarArg {
-			if len(o.Args) < len(ov.Params) {
+			// The minimum is the number of REQUIRED params, not the total:
+			// trailing optionals may all be omitted. Comparing against len
+			// (Params) made valid GeoGebra usages fail — Join({1,2},{3,4}),
+			// Zip(f, k, l) with only the first pair, If(c, then, c, then) with
+			// no Else, and ExportImage() with every named option omitted.
+			required, _ := paramCountRange(ov.Params)
+			if len(o.Args) < required {
 				continue
 			}
 		} else if required, acceptable := paramCountRange(ov.Params); len(o.Args) < required || len(o.Args) > acceptable {
@@ -142,13 +332,17 @@ func kindsMatch(ov *catalog.Overload, g *ir.Graph, o *ir.Object) bool {
 	return true
 }
 
-// argKind resolves an individual argument expression to an ir.Kind. Bare
-// identifiers resolve to the referenced object's kind; a pure numeric value
-// (a number literal or a constant arithmetic expression) resolves to KNumber so
-// it can fill a Number slot but never impersonate a named-type slot (Point,
-// Line, ...). Anything else resolves to KUnknown, which is lenient below.
+// argKind resolves an individual argument expression to an ir.Kind. Boolean
+// literals resolve to KBool; bare identifiers resolve to the referenced
+// object's kind; a pure numeric value (a number literal or a constant arithmetic
+// expression) resolves to KNumber so it can fill a Number slot but never
+// impersonate a named-type slot (Point, Line, ...). Anything else resolves to
+// KUnknown, which is lenient below.
 func argKind(g *ir.Graph, arg string) ir.Kind {
 	arg = strings.TrimSpace(arg)
+	if isBoolLiteral(arg) {
+		return ir.KBool
+	}
 	if isIdent(arg) {
 		if obj, ok := g.Get(arg); ok {
 			return obj.Kind
@@ -159,6 +353,17 @@ func argKind(g *ir.Graph, arg string) ir.Kind {
 		return ir.KNumber
 	}
 	return ir.KUnknown
+}
+
+// isBoolLiteral reports whether s is GeoGebra's true/false literal,
+// case-insensitively. Duplicated from the text package rather than imported:
+// sig type-checks the graph and must not depend on the parser that built it.
+func isBoolLiteral(s string) bool {
+	switch strings.ToLower(strings.TrimSpace(s)) {
+	case "true", "false":
+		return true
+	}
+	return false
 }
 
 // paramAccepts reports whether a catalog param type accepts an actual kind.
@@ -177,9 +382,13 @@ func paramAccepts(t catalog.TypeExpr, actual ir.Kind) bool {
 }
 
 // isIdent reports whether s is a plain identifier (object name): letters,
-// digits, '_' or ':' — but not starting with a digit, so a bare number like
-// "0" or a malformed token like "2ab" is never mistaken for a reference. This
-// mirrors the identifier rule used by the text package for object names.
+// digits, '_', ':' or '.' — but not starting with a digit, so a bare number
+// like "0" or a malformed token like "2ab" is never mistaken for a reference.
+// The '.' is accepted because the builder mints synthetic ids for nested
+// command calls using it as a separator (A.Midpoint1, stmt1.TurtleForward2),
+// and those ids are reachable from argument positions. Without it argKind
+// resolved every nested call to KUnknown, so a nested command's result kind was
+// never consulted and any slot accepted it — Midpoint(Line(A,B), C) passed.
 func isIdent(s string) bool {
 	if s == "" {
 		return false
@@ -189,7 +398,8 @@ func isIdent(s string) bool {
 		return false
 	}
 	for _, r := range s {
-		ok := r == '_' || r == ':' || (('a' <= r && r <= 'z') || ('A' <= r && r <= 'Z') || ('0' <= r && r <= '9'))
+		ok := r == '_' || r == ':' || r == '.' ||
+			(('a' <= r && r <= 'z') || ('A' <= r && r <= 'Z') || ('0' <= r && r <= '9'))
 		if !ok {
 			return false
 		}

@@ -492,6 +492,114 @@ func TestNestedCommandUnknownInPoint(t *testing.T) {
 	}
 }
 
+func TestParseBoolLiteral(t *testing.T) {
+	// GeoGebra writes booleans bare (Slider's <Is Angle> defaults to false), so
+	// `x = false` must be a literal, not an expression or a reference to an
+	// undefined object named "false".
+	for _, src := range []string{"x = false\n", "x = true\n", "x = FALSE\n", "x = True\n"} {
+		stmts, probs := Parse(src)
+		if len(probs) != 0 {
+			t.Fatalf("%q: unexpected parse problems: %v", src, probs)
+		}
+		if len(stmts) != 1 || stmts[0].boolLiteral == "" {
+			t.Fatalf("%q: expected a bool literal statement, got %+v", src, stmts)
+		}
+	}
+}
+
+func TestBuildBoolLiteralKind(t *testing.T) {
+	// KBool was previously declared in ir.Kind but unreachable: no statement
+	// could produce it, so no <Boolean> parameter slot was satisfiable.
+	src := "flag = false\non = true\n"
+	stmts, _ := Parse(src)
+	g, probs := Build(stmts)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected build problems: %v", probs)
+	}
+	for _, id := range []string{"flag", "on"} {
+		obj, ok := g.Get(id)
+		if !ok {
+			t.Fatalf("missing object %q", id)
+		}
+		if obj.Kind != ir.KBool {
+			t.Errorf("%s: expected KBool, got %s", id, obj.Kind)
+		}
+	}
+}
+
+func TestBoolLiteralArgumentNotUndefinedRef(t *testing.T) {
+	// ShowAxes(false) used to report "undefined object: false" because false is
+	// a valid identifier and got ref-resolved like any other name.
+	src := "ShowAxes(false)\nShowGrid(true)\n"
+	stmts, probs := Parse(src)
+	if len(probs) != 0 {
+		t.Fatalf("parse problems: %v", probs)
+	}
+	_, bprobs := Build(stmts)
+	if len(bprobs) != 0 {
+		t.Fatalf("build problems: %v", bprobs)
+	}
+}
+
+func TestParseScriptingCategoryAcceptsBare(t *testing.T) {
+	// The modifier allowlist is the official GeoGebra Scripting Commands category
+	// (67 commands, Scripting_Commands page). Every one of these must parse bare.
+	// All are written with an explicit argument list (possibly empty), because
+	// parseCommandCall requires `Cmd(...)`: GeoGebra also accepts a paren-less
+	// `ZoomIn`, but supporting that bare-name form is a separate grammar change.
+	for _, line := range []string{
+		"ShowAxes(false)", "ShowGrid(false)", "ShowLayer(1)", "HideLayer(1)",
+		"CenterView()", "Pan(1, 2)", "ZoomIn()", "ZoomOut()",
+		"Delete(A)", "Repeat(3)", "Execute(A)", "ReadText(f, \"t\")",
+		"PlaySound(f, 1)", "ExportImage(\"a.png\")", "StartRecord()",
+		"SelectObjects(A, B)", "Rename(A, \"P\")", "RunUpdateScript(A)",
+		"CopyFreeObject(A)", "AttachCopyToView(A, 1)", "Slider(0, 10, 0.1)",
+		"Button(\"Go\", f)", "Checkbox(\"flip\", x)", "InputBox(\"n=\", x)",
+		"GetTime()", "ParseToFunction(\"x^2\")", "ParseToNumber(\"3.5\")",
+		"SetLabelMode(A, 2)", "SetLineOpacity(c, 0.5)",
+		"SetLevelOfDetail(A, 2)", "SetSpinSpeed(A, 1)",
+		"SetViewDirection(0, 0, 1)", "SetImage(A, \"x.png\")",
+		"SetConstructionStep(A, 3)", "Turtle(A)", "TurtleForward(A, 5)",
+		"TurtleLeft(A, 90)", "TurtleRight(A, 90)",
+		"TurtleUp(A)", "TurtleDown(A)", "TurtleBack(A, 5)",
+	} {
+		stmts, probs := Parse(line + "\n")
+		if len(probs) != 0 {
+			t.Errorf("%q: unexpected parse problems: %v", line, probs)
+			continue
+		}
+		if len(stmts) != 1 || !stmts[0].modifier {
+			t.Errorf("%q: expected one modifier statement, got %+v", line, stmts)
+		}
+	}
+}
+
+func TestParseNonScriptingCommandStillRejected(t *testing.T) {
+	// A command that returns an object must not be accepted bare: that is how a
+	// typo'd assignment looks, and rejecting it is what makes the error useful.
+	for _, line := range []string{"Segment(A, B)", "Line(A, B)", "Circle(A, B)", "Polygon(A, B, C)", "Text(A, \"hi\")"} {
+		stmts, probs := Parse(line + "\n")
+		if len(probs) == 0 {
+			t.Errorf("%q: expected a parse problem for a bare construct command", line)
+		}
+		if len(stmts) != 0 {
+			t.Errorf("%q: expected no statements", line)
+		}
+	}
+}
+
+func TestDeadModifierAliasesRemoved(t *testing.T) {
+	// SETVISIBLE and SETLABELVISIBLE were in the old allowlist but are absent
+	// from the catalog entirely (GeoGebra has ShowLabel, not SetLabelVisible),
+	// so they must no longer parse as modifiers.
+	for _, line := range []string{"SetVisible(A, false)", "SetLabelVisible(A, false)"} {
+		_, probs := Parse(line + "\n")
+		if len(probs) == 0 {
+			t.Errorf("%q: expected a parse problem for a non-existent command", line)
+		}
+	}
+}
+
 func containsRef(refs []string, want string) bool {
 	for _, r := range refs {
 		if r == want {

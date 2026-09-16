@@ -80,3 +80,40 @@ func TestDefaultLoadsAll(t *testing.T) {
 		}
 	}
 }
+
+// TestVarArgEllipsisSpellings verifies both ellipsis spellings used by the
+// catalog mark an overload as variadic. Only matching the ASCII "..." left the
+// Unicode-ellipsis overloads fixed-arity, so Element(lst, 1, 2, 3) and
+// Repeat(8, c1, c2) were rejected.
+func TestVarArgEllipsisSpellings(t *testing.T) {
+	c, err := Default()
+	if err != nil {
+		t.Fatalf("default: %v", err)
+	}
+	for _, name := range []string{"Repeat", "Element", "Join", "Net", "Area", "If", "Zip", "SelectObjects", "TableText"} {
+		cmd, ok := c.Lookup(name)
+		if !ok {
+			t.Errorf("missing command %q", name)
+			continue
+		}
+		variadic := false
+		for _, ov := range cmd.Overloads {
+			if ov.IsVarArg {
+				variadic = true
+			}
+		}
+		if !variadic {
+			t.Errorf("expected %s to have a variadic overload", name)
+		}
+	}
+}
+
+// TestHasEllipsis covers the two spellings directly.
+func TestHasEllipsis(t *testing.T) {
+	for _, in := range []string{"Join(<List>,<List>, ...)", "Zip(<Expression>,<Var1>,<List1>, …)", "A(<B>)"} {
+		want := in != "A(<B>)"
+		if hasEllipsis(in) != want {
+			t.Errorf("hasEllipsis(%q) = %v, want %v", in, hasEllipsis(in), want)
+		}
+	}
+}

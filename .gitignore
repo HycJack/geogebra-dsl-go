@@ -2,3 +2,6 @@
 /ggbcheck.exe
 *.exe
 .gocache/
+/ai-server
+*.DS_Store
+.DS_Store

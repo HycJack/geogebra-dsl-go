@@ -156,11 +156,21 @@ func (c *Catalog) add(rd rawDoc) {
 			continue // skip malformed overload
 		}
 		ov := Overload{Syntax: ro.Syntax, Params: ro.Params}
-		if strings.Contains(ro.Syntax, "...") {
+		// Both spellings occur in the catalog: the scripting commands use ASCII
+		// "..." while the command pages use the Unicode ellipsis "…". Matching
+		// only "..." left 14 overloads (Repeat, Element, Join, Net, Area, If,
+		// Zip, TableText, SelectObjects) fixed-arity, so valid variadic calls
+		// such as Element(lst, 1, 2, 3) were rejected.
+		if hasEllipsis(ro.Syntax) {
 			ov.IsVarArg = true
 		}
 		cmd.Overloads = append(cmd.Overloads, ov)
 	}
+}
+
+// hasEllipsis reports whether a syntax string marks a variadic overload.
+func hasEllipsis(syntax string) bool {
+	return strings.Contains(syntax, "...") || strings.Contains(syntax, "\u2026")
 }
 
 // Lookup returns the command by the given (case-insensitive) name.

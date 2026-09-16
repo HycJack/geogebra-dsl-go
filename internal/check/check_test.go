@@ -370,9 +370,166 @@ func TestTriangleCentersOk(t *testing.T) {
 
 func TestNewModifierStatementsOk(t *testing.T) {
 	// SetCoords / SetTrace / Rename as no-'=' statements are now accepted.
-	script := "A=(0,0)\nB=(2,0)\ns=Segment(A,B)\nSetCoords(A, 1, 1)\nSetTrace(s)\nRename(B)\n"
+	// SetTrace and Rename both require their second argument per the official
+	// manual: SetTrace(<Object>, <true|false>), Rename(<Object>, <Name>).
+	script := "A=(0,0)\nB=(2,0)\ns=Segment(A,B)\nSetCoords(A, 1, 1)\nSetTrace(s, true)\nRename(B, \"P\")\n"
 	rc := Check([]byte(script), Options{})
 	if !rc.OK {
 		t.Fatalf("expected ok, got %v", rc.Errors)
+	}
+}
+
+func TestModifierSignatureRejected(t *testing.T) {
+	// Modifiers were previously ref-checked only, so a well-defined target with
+	// the wrong type passed silently. SetLineStyle takes
+	// LineOrSegmentOrPolyline, and a Point must be rejected.
+	rc := Check([]byte("A=(1,0)\nSetLineStyle(A, 2)\n"), Options{})
+	if rc.OK {
+		t.Fatal("expected SetLineStyle(<Point>) to be rejected")
+	}
+	found := false
+	for _, p := range rc.Errors {
+		if p.Code == diag.CodeCmdArg && p.Obj == "SetLineStyle" {
+			found = true
+		}
+	}
+	if !found {
+		t.Fatalf("expected cmd/arg for SetLineStyle, got %v", rc.Errors)
+	}
+}
+
+func TestModifierMissingArgRejected(t *testing.T) {
+	// Rename(<Object>, <Name>) needs both arguments; the old ref-only check
+	// accepted Rename(B).
+	rc := Check([]byte("B=(2,0)\nRename(B)\n"), Options{})
+	if rc.OK {
+		t.Fatal("expected Rename(<Object>) to be rejected for a missing name")
+	}
+}
+
+func TestModifierArgTypeRejected(t *testing.T) {
+	// TurtleLeft(<Turtle>, <Angle>) — passing a Point for the angle must fail.
+	rc := Check([]byte("A=(1,0)\nT=Turtle()\nTurtleLeft(A, T)\n"), Options{})
+	if rc.OK {
+		t.Fatal("expected TurtleLeft(<Point>, <Turtle>) to be rejected")
+	}
+}
+
+func TestModifierStillNotAGraphObject(t *testing.T) {
+	// Validating a modifier must not turn it into a construction object: it is
+	// absent from the executable order, and the modifier's target is still the
+	// only thing reported for a dangling reference.
+	rc := Check([]byte("A=(1,0)\nB=(2,0)\nSetColor(A, \"red\")\n"), Options{})
+	if !rc.OK {
+		t.Fatalf("expected ok, got %v", rc.Errors)
+	}
+	for _, id := range rc.Executable {
+		if id == "SetColor" || id == "stmt1" {
+			t.Errorf("modifier leaked into executable order: %q", id)
+		}
+	}
+}
+
+func TestModifierNestedCommandReported(t *testing.T) {
+	// A nested command inside a modifier argument is materialized, so an unknown
+	// nested command name is reported instead of being silently ignored.
+	rc := Check([]byte("A=(1,0)\nSetColor(A, RBG(1, 0, 0))\n"), Options{})
+	found := false
+	for _, p := range rc.Errors {
+		if p.Code == diag.CodeCmdUnknown {
+			found = true
+		}
+	}
+	if !found {
+		t.Fatalf("expected cmd/unknown for the nested RBG call, got %v", rc.Errors)
+	}
+}
+
+func TestScriptingCommandSlotRequiresScriptingCall(t *testing.T) {
+	// Repeat(<Number>, <Scripting Command>, ...) must reject a Number or a Point
+	// where it wants a scripting command. Before <Scripting Command> was modeled
+	// as KScript it was a wildcard, so Repeat(8, 42) passed.
+	for _, script := range []string{
+		"T=Turtle()\nRepeat(8, 42)\n",
+		"A=(1,0)\nT=Turtle()\nRepeat(8, A)\n",
+	} {
+		rc := Check([]byte(script), Options{})
+		if rc.OK {
+			t.Errorf("expected rejection for %q", script)
+		}
+	}
+	// A real scripting call is accepted.
+	rc := Check([]byte("T=Turtle()\nRepeat(8, TurtleForward(T, 1), TurtleRight(T, 45))\n"), Options{})
+	if !rc.OK {
+		t.Fatalf("expected Repeat with scripting calls to pass, got %v", rc.Errors)
+	}
+}
+
+func TestStartAnimationAcceptsPointsAndSliders(t *testing.T) {
+	// The manual says StartAnimation(<Point or Slider>, <Point or Slider>, ...):
+	// one Point or Slider per argument, not a list. The catalog had
+	// List<PointOrSlider> here, which rejected every call.
+	for _, script := range []string{
+		"A=(0,0)\nB=(1,1)\nStartAnimation(A, B)\n",
+		"n=Slider(0, 10, 0.1)\nStartAnimation(n)\n",
+		"A=(0,0)\nStartAnimation()\n",
+	} {
+		rc := Check([]byte(script), Options{})
+		if !rc.OK {
+			t.Errorf("expected ok for %q, got %v", script, rc.Errors)
+		}
+	}
+}
+
+func TestScriptingCommandResultIsNotUsableAsObject(t *testing.T) {
+	// KScript results stay out of the Any/Object wildcard slots, matching the
+	// manual's rule that scripting commands cannot be nested.
+	rc := Check([]byte("A=(1,0)\nT=Turtle()\nSetColor(ShowAxes(true), \"red\")\n"), Options{})
+	if rc.OK {
+		t.Fatal("expected nesting a scripting call as an object to be rejected")
+	}
+}
+
+func TestVarArgMinimumIsRequiredParamCount(t *testing.T) {
+	// For a variadic overload the minimum argument count is the number of
+	// REQUIRED params. Comparing against the total param count rejected valid
+	// GeoGebra usages wherever trailing params are optional.
+	for _, script := range []string{
+		"a={1,2}\nb={3,4}\nj=Join(a,b)\n",                         // Join(<List>,<List>,…): 2 required of 3
+		"x=1\ny=2\nf=Function(x^2)\nk=3\nl={1,2}\nz=Zip(f,k,l)\n", // Zip: first pair only
+		"z=If(true, 1, true, 2)\n",                                // If: no Else
+		"z=ExportImage()\n",                                       // all 16 params optional
+		"A=(0,0)\nB=(1,0)\nC=(1,1)\na=Area(A,B,C)\n",              // Area(<Point>,…,<Point>): 3 required of 4
+	} {
+		rc := Check([]byte(script), Options{})
+		if !rc.OK {
+			t.Errorf("expected ok for %q, got %v", script, rc.Errors)
+		}
+	}
+	// The maximum is still enforced: a non-vararg overload cannot grow.
+	rc := Check([]byte("A=(0,0)\nB=(1,1)\nC=(2,0)\nD=(3,1)\nM=Midpoint(A,B,C)\n"), Options{})
+	if rc.OK {
+		t.Fatal("expected Midpoint with 3 args to be rejected")
+	}
+}
+
+func TestNestedCommandKindIsChecked(t *testing.T) {
+	// A nested call becomes a synthetic object (A.Midpoint1) whose id contains a
+	// '.'. sig.isIdent must accept '.' so the synthetic object's real kind is
+	// consulted instead of resolving to KUnknown and passing the lenient
+	// fallback. Midpoint wants two Points, so a nested Line must be rejected.
+	rc := Check([]byte("A=(0,0)\nB=(1,1)\nC=(2,0)\nM=Midpoint(Line(A,B), C)\n"), Options{})
+	if rc.OK {
+		t.Fatal("expected Midpoint(Line(A,B), C) to be rejected: a Line is not a Point")
+	}
+	// The same shape with a genuine Point result passes.
+	rc = Check([]byte("A=(0,0)\nB=(1,1)\nC=(2,0)\nM=Midpoint(Midpoint(A,B), C)\n"), Options{})
+	if !rc.OK {
+		t.Fatalf("expected Midpoint(Midpoint(A,B), C) to pass, got %v", rc.Errors)
+	}
+	// A nested Number-producing call still fills a Number slot.
+	rc = Check([]byte("A=(0,0)\nB=(4,0)\ns=Segment(A,B)\nR=Round(Length(s), 1)\n"), Options{})
+	if !rc.OK {
+		t.Fatalf("expected Round(Length(s), 1) to pass, got %v", rc.Errors)
 	}
 }

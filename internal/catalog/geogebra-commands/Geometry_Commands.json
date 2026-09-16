@@ -794,11 +794,13 @@
         "url": "https://geogebra.github.io/docs/manual/en/commands/Incircle/",
         "overloads": [
           {
-            "syntax": "Incircle(<Triangle>)",
+            "syntax": "Incircle(<Point>, <Point>, <Point>)",
             "params": [
-              { "name": "<Triangle>", "role": "tri", "type": "Triangle", "optional": false }
+              { "name": "<Point A>", "role": "a", "type": "Point", "optional": false },
+              { "name": "<Point B>", "role": "b", "type": "Point", "optional": false },
+              { "name": "<Point C>", "role": "c", "type": "Point", "optional": false }
             ],
-            "description": "计算三角形的内切圆"
+            "description": "计算三点所成三角形的内切圆。官方语法见 https://geogebra.github.io/docs/manual/en/commands/Incircle/ （GeoGebra 无 <Triangle> 参数类型，三角形由三个点给出）"
           }
         ]
       },
@@ -1226,12 +1228,14 @@
         "url": "https://geogebra.github.io/docs/manual/en/commands/TriangleCenter/",
         "overloads": [
           {
-            "syntax": "TriangleCenter(<Triangle>, <Number>)",
+            "syntax": "TriangleCenter(<Point>, <Point>, <Point>, <Number>)",
             "params": [
-              { "name": "<Triangle>", "role": "tri", "type": "Triangle", "optional": false },
+              { "name": "<Point A>", "role": "a", "type": "Point", "optional": false },
+              { "name": "<Point B>", "role": "b", "type": "Point", "optional": false },
+              { "name": "<Point C>", "role": "c", "type": "Point", "optional": false },
               { "name": "<Number>", "role": "n", "type": "Number", "optional": false }
             ],
-            "description": "计算三角形的特殊中心"
+            "description": "计算三角形 ABC 的第 n 个特殊中心，n < 3054。编号：1=内心(Incenter) 2=重心(Centroid) 3=外心(Circumcenter) 4=垂心(Orthocenter) 5=九点圆心 6=对称中线点 7=Gergonne 8=Nagel。官方语法见 https://geogebra.github.io/docs/manual/en/commands/TriangleCenter/"
           }
         ]
       },
@@ -1240,12 +1244,14 @@
         "url": "https://geogebra.github.io/docs/manual/en/commands/TriangleCurve/",
         "overloads": [
           {
-            "syntax": "TriangleCurve(<Triangle>, <Equation>)",
+            "syntax": "TriangleCurve(<Point>, <Point>, <Point>, <Equation>)",
             "params": [
-              { "name": "<Triangle>", "role": "tri", "type": "Triangle", "optional": false },
+              { "name": "<Point P>", "role": "p", "type": "Point", "optional": false },
+              { "name": "<Point Q>", "role": "q", "type": "Point", "optional": false },
+              { "name": "<Point R>", "role": "r", "type": "Point", "optional": false },
               { "name": "<Equation>", "role": "eq", "type": "Expression", "optional": false }
             ],
-            "description": "创建三角形曲线"
+            "description": "创建关于点 P,Q,R 的重心坐标 A,B,C 的隐式多项式曲线。官方语法见 https://geogebra.github.io/docs/manual/en/commands/TriangleCurve/"
           }
         ]
       },
@@ -1254,14 +1260,16 @@
         "url": "https://geogebra.github.io/docs/manual/en/commands/Trilinear/",
         "overloads": [
           {
-            "syntax": "Trilinear(<Triangle>, <Number>, <Number>, <Number>)",
+            "syntax": "Trilinear(<Point>, <Point>, <Point>, <Number>, <Number>, <Number>)",
             "params": [
-              { "name": "<Triangle>", "role": "tri", "type": "Triangle", "optional": false },
-              { "name": "<Number>", "role": "a", "type": "Number", "optional": false },
-              { "name": "<Number>", "role": "b", "type": "Number", "optional": false },
-              { "name": "<Number>", "role": "c", "type": "Number", "optional": false }
+              { "name": "<Point A>", "role": "a", "type": "Point", "optional": false },
+              { "name": "<Point B>", "role": "b", "type": "Point", "optional": false },
+              { "name": "<Point C>", "role": "c", "type": "Point", "optional": false },
+              { "name": "<Number>", "role": "u", "type": "Number", "optional": false },
+              { "name": "<Number>", "role": "v", "type": "Number", "optional": false },
+              { "name": "<Number>", "role": "w", "type": "Number", "optional": false }
             ],
-            "description": "创建三线性坐标点"
+            "description": "创建关于给定三点三角形的三线性坐标点。官方语法见 https://geogebra.github.io/docs/manual/en/commands/Trilinear/"
           }
         ]
       },
