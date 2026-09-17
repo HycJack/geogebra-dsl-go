@@ -1,348 +1,2456 @@
 {
   "command_category": "Supplement (from kernel source)",
-  "total_commands": 60,
+  "total_commands": 80,
   "commands": [
-    { "name": "CircleArc", "url": "", "overloads": [
-      { "syntax": "CircleArc(<Point>,<Point>,<Point>)", "params": [
-        {"name":"<Center>","role":"center","type":"Point"},{"name":"<Start Point>","role":"start","type":"Point"},{"name":"<End Point>","role":"end","type":"Point"}]},
-      { "syntax": "CircleArc(<Conic>,<Point>,<Point>)", "params": [
-        {"name":"<Conic>","role":"conic","type":"Conic"},{"name":"<Start Point>","role":"start","type":"Point"},{"name":"<End Point>","role":"end","type":"Point"}]}
-    ]},
-    { "name": "CircleSector", "url": "", "overloads": [
-      { "syntax": "CircleSector(<Point>,<Point>,<Point>)", "params": [
-        {"name":"<Center>","role":"center","type":"Point"},{"name":"<Start Point>","role":"start","type":"Point"},{"name":"<End Point>","role":"end","type":"Point"}]},
-      { "syntax": "CircleSector(<Conic>,<Point>,<Point>)", "params": [
-        {"name":"<Conic>","role":"conic","type":"Conic"},{"name":"<Start>","role":"start","type":"Point"},{"name":"<End>","role":"end","type":"Point"}]}
-    ]},
-    { "name": "CircumcircleArc", "url": "", "overloads": [
-      { "syntax": "CircumcircleArc(<Point>,<Point>,<Point>)", "params": [
-        {"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"},{"name":"<Point>","role":"c","type":"Point"}]}
-    ]},
-    { "name": "CircumcircleSector", "url": "", "overloads": [
-      { "syntax": "CircumcircleSector(<Point>,<Point>,<Point>)", "params": [
-        {"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"},{"name":"<Point>","role":"c","type":"Point"}]}
-    ]},
-    { "name": "Diameter", "url": "", "overloads": [
-      { "syntax": "Diameter(<Line>,<Conic>)", "params": [
-        {"name":"<Line>","role":"line","type":"Line"},{"name":"<Conic>","role":"conic","type":"Conic"}]},
-      { "syntax": "Diameter(<Vector>,<Conic>)", "params": [
-        {"name":"<Vector>","role":"vector","type":"Vector"},{"name":"<Conic>","role":"conic","type":"Conic"}]}
-    ]},
-    { "name": "Mirror", "url": "", "overloads": [
-      { "syntax": "Mirror(<Object>,<Point>)", "params": [
-        {"name":"<Object>","role":"object","type":"GeoObject"},{"name":"<Point>","role":"point","type":"Point"}]},
-      { "syntax": "Mirror(<Object>,<Line>)", "params": [
-        {"name":"<Object>","role":"object","type":"GeoObject"},{"name":"<Line>","role":"line","type":"Line"}]},
-      { "syntax": "Mirror(<Object>,<Circle>)", "params": [
-        {"name":"<Object>","role":"object","type":"GeoObject"},{"name":"<Circle>","role":"circle","type":"Circle"}]}
-    ]},
-    { "name": "OrthogonalLine", "url": "", "overloads": [
-      { "syntax": "OrthogonalLine(<Point>,<Line>)", "params": [
-        {"name":"<Point>","role":"point","type":"Point"},{"name":"<Line>","role":"line","type":"Line"}]},
-      { "syntax": "OrthogonalLine(<Point>,<Vector>)", "params": [
-        {"name":"<Point>","role":"point","type":"Point"},{"name":"<Vector>","role":"vector","type":"Vector"}]},
-      { "syntax": "OrthogonalLine(<Point>,<Plane>)", "params": [
-        {"name":"<Point>","role":"point","type":"Point"},{"name":"<Plane>","role":"plane","type":"Plane"}]}
-    ]},
-    { "name": "OrthogonalVector", "url": "", "overloads": [
-      { "syntax": "OrthogonalVector(<Vector>)", "params": [{"name":"<Vector>","role":"vector","type":"Vector"}]},
-      { "syntax": "OrthogonalVector(<Line>)", "params": [{"name":"<Line>","role":"line","type":"Line"}]}
-    ]},
-    { "name": "UnitOrthogonalVector", "url": "", "overloads": [
-      { "syntax": "UnitOrthogonalVector(<Vector>)", "params": [{"name":"<Vector>","role":"vector","type":"Vector"}]},
-      { "syntax": "UnitOrthogonalVector(<Line>)", "params": [{"name":"<Line>","role":"line","type":"Line"}]}
-    ]},
-    { "name": "LineBisector", "url": "", "overloads": [
-      { "syntax": "LineBisector(<Segment>)", "params": [{"name":"<Segment>","role":"segment","type":"Segment"}]},
-      { "syntax": "LineBisector(<Point>,<Point>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"}]},
-      { "syntax": "LineBisector(<Function>)", "params": [{"name":"<Function>","role":"f","type":"Function"}]}
-    ]},
-    { "name": "BezierCurve", "url": "", "overloads": [
-      { "syntax": "BezierCurve(<List>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
-    ]},
-    { "name": "Stadium", "url": "", "overloads": [
-      { "syntax": "Stadium(<Point>,<Point>,<Number>)", "params": [
-        {"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"},{"name":"<Number>","role":"height","type":"Number"}]}
-    ]},
-    { "name": "TurningPoint", "url": "", "overloads": [
-      { "syntax": "TurningPoint(<Polynomial>)", "params": [{"name":"<Polynomial>","role":"poly","type":"Function"}]}
-    ]},
-    { "name": "Defined", "url": "", "overloads": [
-      { "syntax": "Defined(<Object>)", "params": [{"name":"<Object>","role":"object","type":"GeoObject"}]}
-    ]},
-    { "name": "Random", "url": "", "overloads": [
-      { "syntax": "Random()", "params": []},
-      { "syntax": "Random(<Number>,<Number>)", "params": [{"name":"<Min>","role":"min","type":"Number"},{"name":"<Max>","role":"max","type":"Number"}]},
-      { "syntax": "Random(<Number>,<Number>,<Number>)", "params": [{"name":"<Min>","role":"min","type":"Number"},{"name":"<Max>","role":"max","type":"Number"},{"name":"<Count>","role":"count","type":"Number"}]}
-    ]},
-    { "name": "LaTeX", "url": "", "overloads": [
-      { "syntax": "LaTeX(<Object>)", "params": [{"name":"<Object>","role":"object","type":"GeoObject"}]},
-      { "syntax": "LaTeX(<Object>,<Boolean>)", "params": [{"name":"<Object>","role":"object","type":"GeoObject"},{"name":"<Kernel>","role":"kernel","type":"Boolean"}]},
-      { "syntax": "LaTeX(<Object>,<Boolean>,<Boolean>)", "params": [{"name":"<Object>","role":"o","type":"GeoObject"},{"name":"<Kernel>","role":"k","type":"Boolean"},{"name":"<Symbols>","role":"s","type":"Boolean"}]}
-    ]},
-    { "name": "Textfield", "url": "", "overloads": [
-      { "syntax": "Textfield()", "params": []},
-      { "syntax": "Textfield(<Object>)", "params": [{"name":"<Text>","role":"text","type":"GeoObject"}]}
-    ]},
-    { "name": "CurveCartesian", "url": "", "overloads": [
-      { "syntax": "Curve(<Expression>,<Expression>,<Variable>,<Number>,<Number>)", "params": [
-        {"name":"<x>","role":"x","type":"Expression"},{"name":"<y>","role":"y","type":"Expression"},{"name":"<Variable>","role":"var","type":"Variable"},{"name":"<Start>","role":"start","type":"Number"},{"name":"<End>","role":"end","type":"Number"}]}
-    ]},
-    { "name": "DelauneyTriangulation", "url": "", "overloads": [
-      { "syntax": "DelauneyTriangulation(<List>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
-    ]},
-    { "name": "AngularBisector", "url": "", "overloads": [
-      { "syntax": "AngularBisector(<Line>,<Line>)", "params": [{"name":"<Line>","role":"a","type":"Line"},{"name":"<Line>","role":"b","type":"Line"}]},
-      { "syntax": "AngularBisector(<Point>,<Point>,<Point>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"},{"name":"<Point>","role":"c","type":"Point"}]},
-      { "syntax": "AngularBisector(<Point>,<Point>,<Point>,<Boolean>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"},{"name":"<Point>","role":"c","type":"Point"},{"name":"<Boolean>","role":"dir","type":"Boolean"}]}
-    ]},
-    { "name": "Hull", "url": "", "overloads": [
-      { "syntax": "Hull(<List>,<Number>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"},{"name":"<Ratio>","role":"ratio","type":"Number"}]}
-    ]},
-    { "name": "Q1", "url": "", "overloads": [
-      { "syntax": "Q1(<List>)", "params": [{"name":"<List>","role":"list","type":"List"}]},
-      { "syntax": "Q1(<List>,<List>)", "params": [{"name":"<List>","role":"list","type":"List"},{"name":"<Frequencies>","role":"freq","type":"List"}]}
-    ]},
-    { "name": "Q3", "url": "", "overloads": [
-      { "syntax": "Q3(<List>)", "params": [{"name":"<List>","role":"list","type":"List"}]},
-      { "syntax": "Q3(<List>,<List>)", "params": [{"name":"<List>","role":"list","type":"List"},{"name":"<Frequencies>","role":"freq","type":"List"}]}
-    ]},
-    { "name": "IntersectCircle", "url": "", "overloads": [
-      { "syntax": "IntersectCircle(<Circle>,<Circle>)", "params": [{"name":"<Circle>","role":"c1","type":"Circle"},{"name":"<Circle>","role":"c2","type":"Circle"}]},
-      { "syntax": "IntersectCircle(<Circle>,<Circle>,<Number>)", "params": [{"name":"<Circle>","role":"c1","type":"Circle"},{"name":"<Circle>","role":"c2","type":"Circle"},{"name":"<Index>","role":"index","type":"Number"}]}
-    ]},
-    { "name": "FirstAxis", "url": "", "overloads": [
-      { "syntax": "FirstAxis(<Conic>)", "params": [{"name":"<Conic>","role":"conic","type":"Conic"}]}
-    ]},
-    { "name": "SecondAxis", "url": "", "overloads": [
-      { "syntax": "SecondAxis(<Conic>)", "params": [{"name":"<Conic>","role":"conic","type":"Conic"}]}
-    ]},
-    { "name": "FirstAxisLength", "url": "", "overloads": [
-      { "syntax": "FirstAxisLength(<Conic>)", "params": [{"name":"<Conic>","role":"conic","type":"Conic"}]}
-    ]},
-    { "name": "SecondAxisLength", "url": "", "overloads": [
-      { "syntax": "SecondAxisLength(<Conic>)", "params": [{"name":"<Conic>","role":"conic","type":"Conic"}]}
-    ]},
-    { "name": "OrthogonalPlane", "url": "", "overloads": [
-      { "syntax": "OrthogonalPlane(<Point>,<Plane>)", "params": [{"name":"<Point>","role":"point","type":"Point"},{"name":"<Plane>","role":"plane","type":"Plane"}]},
-      { "syntax": "OrthogonalPlane(<Point>,<Line>)", "params": [{"name":"<Point>","role":"point","type":"Point"},{"name":"<Line>","role":"line","type":"Line"}]},
-      { "syntax": "OrthogonalPlane(<Point>,<Vector>)", "params": [{"name":"<Point>","role":"point","type":"Point"},{"name":"<Vector>","role":"vector","type":"Vector"}]}
-    ]},
-    { "name": "Evaluate", "url": "", "overloads": [
-      { "syntax": "Evaluate(<Expression>)", "params": [{"name":"<Expression>","role":"expr","type":"Expression"}]},
-      { "syntax": "Evaluate(<Function>)", "params": [{"name":"<Function>","role":"f","type":"Function"}]}
-    ]},
-    { "name": "TaylorSeries", "url": "", "overloads": [
-      { "syntax": "TaylorSeries(<Function>,<Number>,<Number>)", "params": [{"name":"<Function>","role":"f","type":"Function"},{"name":"<x>","role":"x","type":"Number"},{"name":"<order>","role":"order","type":"Number"}]},
-      { "syntax": "TaylorSeries(<Function>,<Number>,<Number>,<Number>)", "params": [{"name":"<Function>","role":"f","type":"Function"},{"name":"<x>","role":"x","type":"Number"},{"name":"<y>","role":"y","type":"Number"},{"name":"<order>","role":"order","type":"Number"}]}
-    ]},
-    { "name": "Binomial", "url": "", "overloads": [
-      { "syntax": "Binomial(<Number>,<Number>)", "params": [{"name":"<Trials>","role":"n","type":"Number"},{"name":"<Probability>","role":"p","type":"Number"}]},
-      { "syntax": "Binomial(<Number>,<Number>,<Boolean>)", "params": [{"name":"<Trials>","role":"n","type":"Number"},{"name":"<Probability>","role":"p","type":"Number"},{"name":"<Cumulative>","role":"cum","type":"Boolean"}]}
-    ]},
-    { "name": "Logistic", "url": "", "overloads": [
-      { "syntax": "Logistic(<Number>,<Number>)", "params": [{"name":"<Mean>","role":"m","type":"Number"},{"name":"<Scale>","role":"s","type":"Number"}]},
-      { "syntax": "Logistic(<Number>,<Number>,<Boolean>)", "params": [{"name":"<Mean>","role":"m","type":"Number"},{"name":"<Scale>","role":"s","type":"Number"},{"name":"<Cumulative>","role":"cum","type":"Boolean"}]}
-    ]},
-    { "name": "ConeInfinite", "url": "", "overloads": [
-      { "syntax": "InfiniteCone(<Point>,<Point>,<Number>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"},{"name":"<Radius>","role":"r","type":"Number"}]},
-      { "syntax": "InfiniteCone(<Point>,<Vector>,<Number>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Vector>","role":"v","type":"Vector"},{"name":"<Radius>","role":"r","type":"Number"}]},
-      { "syntax": "InfiniteCone(<Point>,<Line>,<Number>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Line>","role":"l","type":"Line"},{"name":"<Radius>","role":"r","type":"Number"}]}
-    ]},
-    { "name": "CylinderInfinite", "url": "", "overloads": [
-      { "syntax": "InfiniteCylinder(<Point>,<Point>,<Number>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"},{"name":"<Radius>","role":"r","type":"Number"}]},
-      { "syntax": "InfiniteCylinder(<Point>,<Vector>,<Number>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Vector>","role":"v","type":"Vector"},{"name":"<Radius>","role":"r","type":"Number"}]},
-      { "syntax": "InfiniteCylinder(<Point>,<Line>,<Number>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Line>","role":"l","type":"Line"},{"name":"<Radius>","role":"r","type":"Number"}]}
-    ]},
-    { "name": "QuadricSide", "url": "", "overloads": [
-      { "syntax": "QuadricSide(<Quadric>)", "params": [{"name":"<Quadric>","role":"quadric","type":"Quadric"}]}
-    ]},
-    { "name": "ImplicitSurface", "url": "", "overloads": [
-      { "syntax": "ImplicitSurface(<Function>)", "params": [{"name":"<f(x,y,z)>","role":"f","type":"Function"}]}
-    ]},
-    { "name": "Polyhedron", "url": "", "overloads": [
-      { "syntax": "Polyhedron(<Point>,<Point>,<Point>,<Point>,...)", "params": [{"name":"<Point>","role":"p1","type":"Point"},{"name":"<Point>","role":"p2","type":"Point"},{"name":"<Point>","role":"p3","type":"Point"},{"name":"<Point>","role":"p4","type":"Point"}]}
-    ]},
-    { "name": "CornerThreeD", "url": "", "overloads": [
-      { "syntax": "Corner3D(<Number>)", "params": [{"name":"<Number>","role":"corner","type":"Number"}]},
-      { "syntax": "Corner3D(<Number>,<Number>)", "params": [{"name":"<Number>","role":"corner","type":"Number"},{"name":"<Axis>","role":"axis","type":"Number"}]}
-    ]},
-    { "name": "IntersectRegion", "url": "", "overloads": [
-      { "syntax": "IntersectRegion(<Object>,<Object>)", "params": [{"name":"<Object>","role":"a","type":"GeoObject"},{"name":"<Object>","role":"b","type":"GeoObject"}]},
-      { "syntax": "IntersectRegion(<Object>,<Object>,<Object>)", "params": [{"name":"<Object>","role":"a","type":"GeoObject"},{"name":"<Object>","role":"b","type":"GeoObject"},{"name":"<Object>","role":"c","type":"GeoObject"}]}
-    ]},
-    { "name": "IntersectionPaths", "url": "", "overloads": [
-      { "syntax": "IntersectionPaths(<Object>,<Object>)", "params": [{"name":"<Object>","role":"a","type":"GeoObject"},{"name":"<Object>","role":"b","type":"GeoObject"}]},
-      { "syntax": "IntersectionPaths(<Object>,<Object>,<Object>)", "params": [{"name":"<Object>","role":"a","type":"GeoObject"},{"name":"<Object>","role":"b","type":"GeoObject"},{"name":"<Object>","role":"c","type":"GeoObject"}]}
-    ]},
-    { "name": "PenStroke", "url": "", "overloads": [
-      { "syntax": "PenStroke(<Number>,<Number>,<Number>,<Number>,...)", "params": [{"name":"<x>","role":"x","type":"Number"},{"name":"<y>","role":"y","type":"Number"},{"name":"<x>","role":"x2","type":"Number"},{"name":"<y>","role":"y2","type":"Number"}]},
-      { "syntax": "PenStroke(<Point>,<Point>,...)", "params": [{"name":"<Point>","role":"p","type":"Point"}]}
-    ]},
-    { "name": "Excentricity", "url": "", "overloads": [
-      { "syntax": "Excentricity(<Conic>)", "params": [{"name":"<Conic>","role":"conic","type":"Conic"}]}
-    ]},
-    { "name": "PMCC", "url": "", "overloads": [
-      { "syntax": "PMCC(<List>)", "params": [{"name":"<List>","role":"list","type":"List"}]},
-      { "syntax": "PMCC(<List>,<List>)", "params": [{"name":"<List>","role":"x","type":"List"},{"name":"<List>","role":"y","type":"List"}]}
-    ]},
-    { "name": "FitLineY", "url": "", "overloads": [
-      { "syntax": "FitLineY(<List>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
-    ]},
-    { "name": "TableToChart", "url": "", "overloads": [
-      { "syntax": "TableToChart(<Object>,<Text>,<Number>,<Number>)", "params": [{"name":"<Table>","role":"table","type":"GeoObject"},{"name":"<Type>","role":"type","type":"Text"},{"name":"<Column>","role":"col","type":"Number"},{"name":"<EmbedID>","role":"id","type":"Number"}]}
-    ]},
-    { "name": "RegularPolygon", "url": "https://geogebra.github.io/docs/manual/en/commands/RegularPolygon/", "overloads": [
-      { "syntax": "RegularPolygon(<Point>,<Point>,<Number>)", "params": [{"name":"<Point>","role":"vertex1","type":"Point"},{"name":"<Point>","role":"vertex2","type":"Point"},{"name":"<Number>","role":"vertices","type":"Number"}]},
-      { "syntax": "RegularPolygon(<Point>,<Point>,<Number>,<Direction>)", "params": [{"name":"<Point>","role":"vertex1","type":"Point"},{"name":"<Point>","role":"vertex2","type":"Point"},{"name":"<Number>","role":"vertices","type":"Number"},{"name":"<Direction>","role":"direction","type":"Vector/Plane"}]}
-    ]},
-    { "name": "Circumcircle", "url": "https://geogebra.github.io/docs/manual/en/commands/Circumcircle/", "overloads": [
-      { "syntax": "Circumcircle(<Point>,<Point>,<Point>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"},{"name":"<Point>","role":"c","type":"Point"}]}
-    ]},
-    { "name": "Incenter", "url": "https://geogebra.github.io/docs/manual/en/commands/Incenter/", "overloads": [
-      { "syntax": "Incenter(<Polygon>)", "params": [{"name":"<Polygon>","role":"polygon","type":"Polygon"}]},
-      { "syntax": "Incenter(<Point>,<Point>,<Point>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"},{"name":"<Point>","role":"c","type":"Point"}]}
-    ]},
-    { "name": "Circumcenter", "url": "https://geogebra.github.io/docs/manual/en/commands/Circumcenter/", "overloads": [
-      { "syntax": "Circumcenter(<Point>,<Point>,<Point>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"},{"name":"<Point>","role":"c","type":"Point"}]},
-      { "syntax": "Circumcenter(<Polygon>)", "params": [{"name":"<Polygon>","role":"polygon","type":"Polygon"}]}
-    ]},
-    { "name": "Orthocenter", "url": "https://geogebra.github.io/docs/manual/en/commands/Orthocenter/", "overloads": [
-      { "syntax": "Orthocenter(<Point>,<Point>,<Point>)", "params": [{"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"},{"name":"<Point>","role":"c","type":"Point"}]},
-      { "syntax": "Orthocenter(<Polygon>)", "params": [{"name":"<Polygon>","role":"polygon","type":"Polygon"}]}
-    ]},
-    { "name": "Excenter", "url": "https://geogebra.github.io/docs/manual/en/commands/Excenter/", "overloads": [
-      { "syntax": "Excenter(<Polygon>,<Number>)", "params": [{"name":"<Polygon>","role":"polygon","type":"Polygon"},{"name":"<Number>","role":"index","type":"Number"}]}
-    ]},
-    { "name": "FitLine", "url": "https://geogebra.github.io/docs/manual/en/commands/FitLine/", "overloads": [
-      { "syntax": "FitLine(<List of Points>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
-    ]},
-    { "name": "FitExp", "url": "https://geogebra.github.io/docs/manual/en/commands/FitExp/", "overloads": [
-      { "syntax": "FitExp(<List of Points>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
-    ]},
-    { "name": "FitLog", "url": "https://geogebra.github.io/docs/manual/en/commands/FitLog/", "overloads": [
-      { "syntax": "FitLog(<List of Points>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
-    ]},
-    { "name": "FitGrowth", "url": "https://geogebra.github.io/docs/manual/en/commands/FitGrowth/", "overloads": [
-      { "syntax": "FitGrowth(<List of Points>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
-    ]},
-    { "name": "FitImplicit", "url": "https://geogebra.github.io/docs/manual/en/commands/FitImplicit/", "overloads": [
-      { "syntax": "FitImplicit(<List of Points>,<Function>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"},{"name":"<Function>","role":"pattern","type":"Function"}]}
-    ]},
-    { "name": "FitSin", "url": "https://geogebra.github.io/docs/manual/en/commands/FitSin/", "overloads": [
-      { "syntax": "FitSin(<List of Points>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
-    ]},
-    { "name": "FitPow", "url": "https://geogebra.github.io/docs/manual/en/commands/FitPow/", "overloads": [
-      { "syntax": "FitPow(<List of Points>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
-    ]},
-    { "name": "StDev", "url": "https://geogebra.github.io/docs/manual/en/commands/StDev/", "overloads": [
-      { "syntax": "StDev(<List of Raw Data>)", "params": [{"name":"<List of Raw Data>","role":"list","type":"List"}]},
-      { "syntax": "StDev(<List of Numbers>,<List of Frequencies>)", "params": [{"name":"<List of Numbers>","role":"list","type":"List"},{"name":"<List of Frequencies>","role":"freq","type":"List"}]}
-    ]},
-    { "name": "Correlation", "url": "https://geogebra.github.io/docs/manual/en/commands/Correlation/", "overloads": [
-      { "syntax": "Correlation(<List of Points>)", "params": [{"name":"<List of Points>","role":"pts","type":"List"}]}
-    ]},
-    { "name": "TextBox", "url": "https://geogebra.github.io/docs/manual/en/commands/TextBox/", "overloads": [
-      { "syntax": "TextBox(<Text>,<Point>)", "params": [{"name":"<Text>","role":"text","type":"Text"},{"name":"<Point>","role":"corner","type":"Point"}]}
-    ]},
-    { "name": "Sqrt", "url": "https://geogebra.github.io/docs/manual/en/commands/Sqrt/", "overloads": [
-      { "syntax": "Sqrt(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
-      { "syntax": "Sqrt(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
-    ]},
-    { "name": "Cbrt", "url": "https://geogebra.github.io/docs/manual/en/commands/Cbrt/", "overloads": [
-      { "syntax": "Cbrt(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
-      { "syntax": "Cbrt(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
-    ]},
-    { "name": "NRoot", "url": "https://geogebra.github.io/docs/manual/en/commands/NRoot/", "overloads": [
-      { "syntax": "NRoot(<Expression>,<Number>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"},{"name":"<Number>","role":"index","type":"Number"}]}
-    ]},
-    { "name": "Abs", "url": "https://geogebra.github.io/docs/manual/en/commands/Abs/", "overloads": [
-      { "syntax": "Abs(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
-      { "syntax": "Abs(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]},
-      { "syntax": "Abs(<Vector>)", "params": [{"name":"<Vector>","role":"vector","type":"Vector"}]}
-    ]},
-    { "name": "Sign", "url": "https://geogebra.github.io/docs/manual/en/commands/Sign/", "overloads": [
-      { "syntax": "Sign(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
-      { "syntax": "Sign(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
-    ]},
-    { "name": "Floor", "url": "https://geogebra.github.io/docs/manual/en/commands/Floor/", "overloads": [
-      { "syntax": "Floor(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
-      { "syntax": "Floor(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
-    ]},
-    { "name": "Ceil", "url": "https://geogebra.github.io/docs/manual/en/commands/Ceil/", "overloads": [
-      { "syntax": "Ceil(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
-      { "syntax": "Ceil(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
-    ]},
-    { "name": "Round", "url": "https://geogebra.github.io/docs/manual/en/commands/Round/", "overloads": [
-      { "syntax": "Round(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
-      { "syntax": "Round(<Number>,<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"},{"name":"<Number>","role":"decimals","type":"Number"}]},
-      { "syntax": "Round(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
-    ]},
-    { "name": "exp", "url": "https://geogebra.github.io/docs/manual/en/commands/exp/", "overloads": [
-      { "syntax": "exp(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
-      { "syntax": "exp(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
-    ]},
-    { "name": "ln", "url": "https://geogebra.github.io/docs/manual/en/commands/ln/", "overloads": [
-      { "syntax": "ln(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
-      { "syntax": "ln(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
-    ]},
-    { "name": "Log", "url": "https://geogebra.github.io/docs/manual/en/commands/Log/", "overloads": [
-      { "syntax": "Log(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
-      { "syntax": "Log(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]},
-      { "syntax": "Log(<Expression>,<Number>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"},{"name":"<Number>","role":"base","type":"Number"}]}
-    ]},
-    { "name": "log10", "url": "https://geogebra.github.io/docs/manual/en/commands/log10/", "overloads": [
-      { "syntax": "log10(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
-      { "syntax": "log10(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
-    ]},
-    { "name": "Sin", "url": "https://geogebra.github.io/docs/manual/en/commands/Sin/", "overloads": [
-      { "syntax": "Sin(<Number>)", "params": [{"name":"<Number>","role":"angle","type":"Number"}]},
-      { "syntax": "Sin(<Expression>)", "params": [{"name":"<Expression>","role":"angle","type":"Expression"}]}
-    ]},
-    { "name": "Cos", "url": "https://geogebra.github.io/docs/manual/en/commands/Cos/", "overloads": [
-      { "syntax": "Cos(<Number>)", "params": [{"name":"<Number>","role":"angle","type":"Number"}]},
-      { "syntax": "Cos(<Expression>)", "params": [{"name":"<Expression>","role":"angle","type":"Expression"}]}
-    ]},
-    { "name": "Tan", "url": "https://geogebra.github.io/docs/manual/en/commands/Tan/", "overloads": [
-      { "syntax": "Tan(<Number>)", "params": [{"name":"<Number>","role":"angle","type":"Number"}]},
-      { "syntax": "Tan(<Expression>)", "params": [{"name":"<Expression>","role":"angle","type":"Expression"}]}
-    ]},
-    { "name": "Cot", "url": "https://geogebra.github.io/docs/manual/en/commands/Cot/", "overloads": [
-      { "syntax": "Cot(<Number>)", "params": [{"name":"<Number>","role":"angle","type":"Number"}]},
-      { "syntax": "Cot(<Expression>)", "params": [{"name":"<Expression>","role":"angle","type":"Expression"}]}
-    ]},
-    { "name": "Sec", "url": "https://geogebra.github.io/docs/manual/en/commands/Sec/", "overloads": [
-      { "syntax": "Sec(<Number>)", "params": [{"name":"<Number>","role":"angle","type":"Number"}]},
-      { "syntax": "Sec(<Expression>)", "params": [{"name":"<Expression>","role":"angle","type":"Expression"}]}
-    ]},
-    { "name": "Csc", "url": "https://geogebra.github.io/docs/manual/en/commands/Csc/", "overloads": [
-      { "syntax": "Csc(<Number>)", "params": [{"name":"<Number>","role":"angle","type":"Number"}]},
-      { "syntax": "Csc(<Expression>)", "params": [{"name":"<Expression>","role":"angle","type":"Expression"}]}
-    ]},
-    { "name": "ArcSin", "url": "https://geogebra.github.io/docs/manual/en/commands/ArcSin/", "overloads": [
-      { "syntax": "ArcSin(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
-      { "syntax": "ArcSin(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
-    ]},
-    { "name": "ArcCos", "url": "https://geogebra.github.io/docs/manual/en/commands/ArcCos/", "overloads": [
-      { "syntax": "ArcCos(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
-      { "syntax": "ArcCos(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
-    ]},
-    { "name": "ArcTan", "url": "https://geogebra.github.io/docs/manual/en/commands/ArcTan/", "overloads": [
-      { "syntax": "ArcTan(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
-      { "syntax": "ArcTan(<Number>,<Number>)", "params": [{"name":"<Number>","role":"y","type":"Number"},{"name":"<Number>","role":"x","type":"Number"}]},
-      { "syntax": "ArcTan(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
-    ]},
-    { "name": "ArcCot", "url": "https://geogebra.github.io/docs/manual/en/commands/ArcCot/", "overloads": [
-      { "syntax": "ArcCot(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
-      { "syntax": "ArcCot(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
-    ]},
-    { "name": "ArcSec", "url": "https://geogebra.github.io/docs/manual/en/commands/ArcSec/", "overloads": [
-      { "syntax": "ArcSec(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
-      { "syntax": "ArcSec(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
-    ]},
-    { "name": "ArcCsc", "url": "https://geogebra.github.io/docs/manual/en/commands/ArcCsc/", "overloads": [
-      { "syntax": "ArcCsc(<Number>)", "params": [{"name":"<Number>","role":"value","type":"Number"}]},
-      { "syntax": "ArcCsc(<Expression>)", "params": [{"name":"<Expression>","role":"value","type":"Expression"}]}
-    ]}
+    {
+      "name": "CircleArc",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "CircleArc(<Point>,<Point>,<Point>)",
+          "params": [
+            {
+              "name": "<Center>",
+              "role": "center",
+              "type": "Point"
+            },
+            {
+              "name": "<Start Point>",
+              "role": "start",
+              "type": "Point"
+            },
+            {
+              "name": "<End Point>",
+              "role": "end",
+              "type": "Point"
+            }
+          ]
+        },
+        {
+          "syntax": "CircleArc(<Conic>,<Point>,<Point>)",
+          "params": [
+            {
+              "name": "<Conic>",
+              "role": "conic",
+              "type": "Conic"
+            },
+            {
+              "name": "<Start Point>",
+              "role": "start",
+              "type": "Point"
+            },
+            {
+              "name": "<End Point>",
+              "role": "end",
+              "type": "Point"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CircleSector",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "CircleSector(<Point>,<Point>,<Point>)",
+          "params": [
+            {
+              "name": "<Center>",
+              "role": "center",
+              "type": "Point"
+            },
+            {
+              "name": "<Start Point>",
+              "role": "start",
+              "type": "Point"
+            },
+            {
+              "name": "<End Point>",
+              "role": "end",
+              "type": "Point"
+            }
+          ]
+        },
+        {
+          "syntax": "CircleSector(<Conic>,<Point>,<Point>)",
+          "params": [
+            {
+              "name": "<Conic>",
+              "role": "conic",
+              "type": "Conic"
+            },
+            {
+              "name": "<Start>",
+              "role": "start",
+              "type": "Point"
+            },
+            {
+              "name": "<End>",
+              "role": "end",
+              "type": "Point"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CircumcircleArc",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "CircumcircleArc(<Point>,<Point>,<Point>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "a",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "b",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "c",
+              "type": "Point"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CircumcircleSector",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "CircumcircleSector(<Point>,<Point>,<Point>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "a",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "b",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "c",
+              "type": "Point"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Diameter",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "Diameter(<Line>,<Conic>)",
+          "params": [
+            {
+              "name": "<Line>",
+              "role": "line",
+              "type": "Line"
+            },
+            {
+              "name": "<Conic>",
+              "role": "conic",
+              "type": "Conic"
+            }
+          ]
+        },
+        {
+          "syntax": "Diameter(<Vector>,<Conic>)",
+          "params": [
+            {
+              "name": "<Vector>",
+              "role": "vector",
+              "type": "Vector"
+            },
+            {
+              "name": "<Conic>",
+              "role": "conic",
+              "type": "Conic"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Mirror",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "Mirror(<Object>,<Point>)",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object",
+              "type": "GeoObject"
+            },
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            }
+          ]
+        },
+        {
+          "syntax": "Mirror(<Object>,<Line>)",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object",
+              "type": "GeoObject"
+            },
+            {
+              "name": "<Line>",
+              "role": "line",
+              "type": "Line"
+            }
+          ]
+        },
+        {
+          "syntax": "Mirror(<Object>,<Circle>)",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object",
+              "type": "GeoObject"
+            },
+            {
+              "name": "<Circle>",
+              "role": "circle",
+              "type": "Circle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "OrthogonalLine",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "OrthogonalLine(<Point>,<Line>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Line>",
+              "role": "line",
+              "type": "Line"
+            }
+          ]
+        },
+        {
+          "syntax": "OrthogonalLine(<Point>,<Vector>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Vector>",
+              "role": "vector",
+              "type": "Vector"
+            }
+          ]
+        },
+        {
+          "syntax": "OrthogonalLine(<Point>,<Plane>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Plane>",
+              "role": "plane",
+              "type": "Plane"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "OrthogonalVector",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "OrthogonalVector(<Vector>)",
+          "params": [
+            {
+              "name": "<Vector>",
+              "role": "vector",
+              "type": "Vector"
+            }
+          ]
+        },
+        {
+          "syntax": "OrthogonalVector(<Line>)",
+          "params": [
+            {
+              "name": "<Line>",
+              "role": "line",
+              "type": "Line"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "UnitOrthogonalVector",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "UnitOrthogonalVector(<Vector>)",
+          "params": [
+            {
+              "name": "<Vector>",
+              "role": "vector",
+              "type": "Vector"
+            }
+          ]
+        },
+        {
+          "syntax": "UnitOrthogonalVector(<Line>)",
+          "params": [
+            {
+              "name": "<Line>",
+              "role": "line",
+              "type": "Line"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "LineBisector",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "LineBisector(<Segment>)",
+          "params": [
+            {
+              "name": "<Segment>",
+              "role": "segment",
+              "type": "Segment"
+            }
+          ]
+        },
+        {
+          "syntax": "LineBisector(<Point>,<Point>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "a",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "b",
+              "type": "Point"
+            }
+          ]
+        },
+        {
+          "syntax": "LineBisector(<Function>)",
+          "params": [
+            {
+              "name": "<Function>",
+              "role": "f",
+              "type": "Function"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "BezierCurve",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "BezierCurve(<List>)",
+          "params": [
+            {
+              "name": "<List of Points>",
+              "role": "pts",
+              "type": "List"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Stadium",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "Stadium(<Point>,<Point>,<Number>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "a",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "b",
+              "type": "Point"
+            },
+            {
+              "name": "<Number>",
+              "role": "height",
+              "type": "Number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TurningPoint",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "TurningPoint(<Polynomial>)",
+          "params": [
+            {
+              "name": "<Polynomial>",
+              "role": "poly",
+              "type": "Function"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Defined",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "Defined(<Object>)",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object",
+              "type": "GeoObject"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Random",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "Random()",
+          "params": []
+        },
+        {
+          "syntax": "Random(<Number>,<Number>)",
+          "params": [
+            {
+              "name": "<Min>",
+              "role": "min",
+              "type": "Number"
+            },
+            {
+              "name": "<Max>",
+              "role": "max",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Random(<Number>,<Number>,<Number>)",
+          "params": [
+            {
+              "name": "<Min>",
+              "role": "min",
+              "type": "Number"
+            },
+            {
+              "name": "<Max>",
+              "role": "max",
+              "type": "Number"
+            },
+            {
+              "name": "<Count>",
+              "role": "count",
+              "type": "Number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "LaTeX",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "LaTeX(<Object>)",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object",
+              "type": "GeoObject"
+            }
+          ]
+        },
+        {
+          "syntax": "LaTeX(<Object>,<Boolean>)",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "object",
+              "type": "GeoObject"
+            },
+            {
+              "name": "<Kernel>",
+              "role": "kernel",
+              "type": "Boolean"
+            }
+          ]
+        },
+        {
+          "syntax": "LaTeX(<Object>,<Boolean>,<Boolean>)",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "o",
+              "type": "GeoObject"
+            },
+            {
+              "name": "<Kernel>",
+              "role": "k",
+              "type": "Boolean"
+            },
+            {
+              "name": "<Symbols>",
+              "role": "s",
+              "type": "Boolean"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Textfield",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "Textfield()",
+          "params": []
+        },
+        {
+          "syntax": "Textfield(<Object>)",
+          "params": [
+            {
+              "name": "<Text>",
+              "role": "text",
+              "type": "GeoObject"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CurveCartesian",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "Curve(<Expression>,<Expression>,<Variable>,<Number>,<Number>)",
+          "params": [
+            {
+              "name": "<x>",
+              "role": "x",
+              "type": "Expression"
+            },
+            {
+              "name": "<y>",
+              "role": "y",
+              "type": "Expression"
+            },
+            {
+              "name": "<Variable>",
+              "role": "var",
+              "type": "Variable"
+            },
+            {
+              "name": "<Start>",
+              "role": "start",
+              "type": "Number"
+            },
+            {
+              "name": "<End>",
+              "role": "end",
+              "type": "Number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DelauneyTriangulation",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "DelauneyTriangulation(<List>)",
+          "params": [
+            {
+              "name": "<List of Points>",
+              "role": "pts",
+              "type": "List"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AngularBisector",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "AngularBisector(<Line>,<Line>)",
+          "params": [
+            {
+              "name": "<Line>",
+              "role": "a",
+              "type": "Line"
+            },
+            {
+              "name": "<Line>",
+              "role": "b",
+              "type": "Line"
+            }
+          ]
+        },
+        {
+          "syntax": "AngularBisector(<Point>,<Point>,<Point>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "a",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "b",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "c",
+              "type": "Point"
+            }
+          ]
+        },
+        {
+          "syntax": "AngularBisector(<Point>,<Point>,<Point>,<Boolean>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "a",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "b",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "c",
+              "type": "Point"
+            },
+            {
+              "name": "<Boolean>",
+              "role": "dir",
+              "type": "Boolean"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Hull",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "Hull(<List>,<Number>)",
+          "params": [
+            {
+              "name": "<List of Points>",
+              "role": "pts",
+              "type": "List"
+            },
+            {
+              "name": "<Ratio>",
+              "role": "ratio",
+              "type": "Number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Q1",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "Q1(<List>)",
+          "params": [
+            {
+              "name": "<List>",
+              "role": "list",
+              "type": "List"
+            }
+          ]
+        },
+        {
+          "syntax": "Q1(<List>,<List>)",
+          "params": [
+            {
+              "name": "<List>",
+              "role": "list",
+              "type": "List"
+            },
+            {
+              "name": "<Frequencies>",
+              "role": "freq",
+              "type": "List"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Q3",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "Q3(<List>)",
+          "params": [
+            {
+              "name": "<List>",
+              "role": "list",
+              "type": "List"
+            }
+          ]
+        },
+        {
+          "syntax": "Q3(<List>,<List>)",
+          "params": [
+            {
+              "name": "<List>",
+              "role": "list",
+              "type": "List"
+            },
+            {
+              "name": "<Frequencies>",
+              "role": "freq",
+              "type": "List"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IntersectCircle",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "IntersectCircle(<Circle>,<Circle>)",
+          "params": [
+            {
+              "name": "<Circle>",
+              "role": "c1",
+              "type": "Circle"
+            },
+            {
+              "name": "<Circle>",
+              "role": "c2",
+              "type": "Circle"
+            }
+          ]
+        },
+        {
+          "syntax": "IntersectCircle(<Circle>,<Circle>,<Number>)",
+          "params": [
+            {
+              "name": "<Circle>",
+              "role": "c1",
+              "type": "Circle"
+            },
+            {
+              "name": "<Circle>",
+              "role": "c2",
+              "type": "Circle"
+            },
+            {
+              "name": "<Index>",
+              "role": "index",
+              "type": "Number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FirstAxis",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "FirstAxis(<Conic>)",
+          "params": [
+            {
+              "name": "<Conic>",
+              "role": "conic",
+              "type": "Conic"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SecondAxis",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "SecondAxis(<Conic>)",
+          "params": [
+            {
+              "name": "<Conic>",
+              "role": "conic",
+              "type": "Conic"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FirstAxisLength",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "FirstAxisLength(<Conic>)",
+          "params": [
+            {
+              "name": "<Conic>",
+              "role": "conic",
+              "type": "Conic"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SecondAxisLength",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "SecondAxisLength(<Conic>)",
+          "params": [
+            {
+              "name": "<Conic>",
+              "role": "conic",
+              "type": "Conic"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "OrthogonalPlane",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "OrthogonalPlane(<Point>,<Plane>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Plane>",
+              "role": "plane",
+              "type": "Plane"
+            }
+          ]
+        },
+        {
+          "syntax": "OrthogonalPlane(<Point>,<Line>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Line>",
+              "role": "line",
+              "type": "Line"
+            }
+          ]
+        },
+        {
+          "syntax": "OrthogonalPlane(<Point>,<Vector>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Vector>",
+              "role": "vector",
+              "type": "Vector"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Evaluate",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "Evaluate(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "expr",
+              "type": "Expression"
+            }
+          ]
+        },
+        {
+          "syntax": "Evaluate(<Function>)",
+          "params": [
+            {
+              "name": "<Function>",
+              "role": "f",
+              "type": "Function"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TaylorSeries",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "TaylorSeries(<Function>,<Number>,<Number>)",
+          "params": [
+            {
+              "name": "<Function>",
+              "role": "f",
+              "type": "Function"
+            },
+            {
+              "name": "<x>",
+              "role": "x",
+              "type": "Number"
+            },
+            {
+              "name": "<order>",
+              "role": "order",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "TaylorSeries(<Function>,<Number>,<Number>,<Number>)",
+          "params": [
+            {
+              "name": "<Function>",
+              "role": "f",
+              "type": "Function"
+            },
+            {
+              "name": "<x>",
+              "role": "x",
+              "type": "Number"
+            },
+            {
+              "name": "<y>",
+              "role": "y",
+              "type": "Number"
+            },
+            {
+              "name": "<order>",
+              "role": "order",
+              "type": "Number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Binomial",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "Binomial(<Number>,<Number>)",
+          "params": [
+            {
+              "name": "<Trials>",
+              "role": "n",
+              "type": "Number"
+            },
+            {
+              "name": "<Probability>",
+              "role": "p",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Binomial(<Number>,<Number>,<Boolean>)",
+          "params": [
+            {
+              "name": "<Trials>",
+              "role": "n",
+              "type": "Number"
+            },
+            {
+              "name": "<Probability>",
+              "role": "p",
+              "type": "Number"
+            },
+            {
+              "name": "<Cumulative>",
+              "role": "cum",
+              "type": "Boolean"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Logistic",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "Logistic(<Number>,<Number>)",
+          "params": [
+            {
+              "name": "<Mean>",
+              "role": "m",
+              "type": "Number"
+            },
+            {
+              "name": "<Scale>",
+              "role": "s",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Logistic(<Number>,<Number>,<Boolean>)",
+          "params": [
+            {
+              "name": "<Mean>",
+              "role": "m",
+              "type": "Number"
+            },
+            {
+              "name": "<Scale>",
+              "role": "s",
+              "type": "Number"
+            },
+            {
+              "name": "<Cumulative>",
+              "role": "cum",
+              "type": "Boolean"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ConeInfinite",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "InfiniteCone(<Point>,<Point>,<Number>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "a",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "b",
+              "type": "Point"
+            },
+            {
+              "name": "<Radius>",
+              "role": "r",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "InfiniteCone(<Point>,<Vector>,<Number>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "a",
+              "type": "Point"
+            },
+            {
+              "name": "<Vector>",
+              "role": "v",
+              "type": "Vector"
+            },
+            {
+              "name": "<Radius>",
+              "role": "r",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "InfiniteCone(<Point>,<Line>,<Number>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "a",
+              "type": "Point"
+            },
+            {
+              "name": "<Line>",
+              "role": "l",
+              "type": "Line"
+            },
+            {
+              "name": "<Radius>",
+              "role": "r",
+              "type": "Number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CylinderInfinite",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "InfiniteCylinder(<Point>,<Point>,<Number>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "a",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "b",
+              "type": "Point"
+            },
+            {
+              "name": "<Radius>",
+              "role": "r",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "InfiniteCylinder(<Point>,<Vector>,<Number>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "a",
+              "type": "Point"
+            },
+            {
+              "name": "<Vector>",
+              "role": "v",
+              "type": "Vector"
+            },
+            {
+              "name": "<Radius>",
+              "role": "r",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "InfiniteCylinder(<Point>,<Line>,<Number>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "a",
+              "type": "Point"
+            },
+            {
+              "name": "<Line>",
+              "role": "l",
+              "type": "Line"
+            },
+            {
+              "name": "<Radius>",
+              "role": "r",
+              "type": "Number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "QuadricSide",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "QuadricSide(<Quadric>)",
+          "params": [
+            {
+              "name": "<Quadric>",
+              "role": "quadric",
+              "type": "Quadric"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ImplicitSurface",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "ImplicitSurface(<Function>)",
+          "params": [
+            {
+              "name": "<f(x,y,z)>",
+              "role": "f",
+              "type": "Function"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Polyhedron",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "Polyhedron(<Point>,<Point>,<Point>,<Point>,...)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "p1",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "p2",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "p3",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "p4",
+              "type": "Point"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CornerThreeD",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "Corner3D(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "corner",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Corner3D(<Number>,<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "corner",
+              "type": "Number"
+            },
+            {
+              "name": "<Axis>",
+              "role": "axis",
+              "type": "Number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IntersectRegion",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "IntersectRegion(<Object>,<Object>)",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "a",
+              "type": "GeoObject"
+            },
+            {
+              "name": "<Object>",
+              "role": "b",
+              "type": "GeoObject"
+            }
+          ]
+        },
+        {
+          "syntax": "IntersectRegion(<Object>,<Object>,<Object>)",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "a",
+              "type": "GeoObject"
+            },
+            {
+              "name": "<Object>",
+              "role": "b",
+              "type": "GeoObject"
+            },
+            {
+              "name": "<Object>",
+              "role": "c",
+              "type": "GeoObject"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IntersectionPaths",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "IntersectionPaths(<Object>,<Object>)",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "a",
+              "type": "GeoObject"
+            },
+            {
+              "name": "<Object>",
+              "role": "b",
+              "type": "GeoObject"
+            }
+          ]
+        },
+        {
+          "syntax": "IntersectionPaths(<Object>,<Object>,<Object>)",
+          "params": [
+            {
+              "name": "<Object>",
+              "role": "a",
+              "type": "GeoObject"
+            },
+            {
+              "name": "<Object>",
+              "role": "b",
+              "type": "GeoObject"
+            },
+            {
+              "name": "<Object>",
+              "role": "c",
+              "type": "GeoObject"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PenStroke",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "PenStroke(<Number>,<Number>,<Number>,<Number>,...)",
+          "params": [
+            {
+              "name": "<x>",
+              "role": "x",
+              "type": "Number"
+            },
+            {
+              "name": "<y>",
+              "role": "y",
+              "type": "Number"
+            },
+            {
+              "name": "<x>",
+              "role": "x2",
+              "type": "Number"
+            },
+            {
+              "name": "<y>",
+              "role": "y2",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "PenStroke(<Point>,<Point>,...)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "p",
+              "type": "Point"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Excentricity",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "Excentricity(<Conic>)",
+          "params": [
+            {
+              "name": "<Conic>",
+              "role": "conic",
+              "type": "Conic"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PMCC",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "PMCC(<List>)",
+          "params": [
+            {
+              "name": "<List>",
+              "role": "list",
+              "type": "List"
+            }
+          ]
+        },
+        {
+          "syntax": "PMCC(<List>,<List>)",
+          "params": [
+            {
+              "name": "<List>",
+              "role": "x",
+              "type": "List"
+            },
+            {
+              "name": "<List>",
+              "role": "y",
+              "type": "List"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FitLineY",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "FitLineY(<List>)",
+          "params": [
+            {
+              "name": "<List of Points>",
+              "role": "pts",
+              "type": "List"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TableToChart",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "TableToChart(<Object>,<Text>,<Number>,<Number>)",
+          "params": [
+            {
+              "name": "<Table>",
+              "role": "table",
+              "type": "GeoObject"
+            },
+            {
+              "name": "<Type>",
+              "role": "type",
+              "type": "Text"
+            },
+            {
+              "name": "<Column>",
+              "role": "col",
+              "type": "Number"
+            },
+            {
+              "name": "<EmbedID>",
+              "role": "id",
+              "type": "Number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FitLine",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitLine/",
+      "overloads": [
+        {
+          "syntax": "FitLine(<List of Points>)",
+          "params": [
+            {
+              "name": "<List of Points>",
+              "role": "pts",
+              "type": "List"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FitExp",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitExp/",
+      "overloads": [
+        {
+          "syntax": "FitExp(<List of Points>)",
+          "params": [
+            {
+              "name": "<List of Points>",
+              "role": "pts",
+              "type": "List"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FitLog",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitLog/",
+      "overloads": [
+        {
+          "syntax": "FitLog(<List of Points>)",
+          "params": [
+            {
+              "name": "<List of Points>",
+              "role": "pts",
+              "type": "List"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FitGrowth",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitGrowth/",
+      "overloads": [
+        {
+          "syntax": "FitGrowth(<List of Points>)",
+          "params": [
+            {
+              "name": "<List of Points>",
+              "role": "pts",
+              "type": "List"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FitImplicit",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitImplicit/",
+      "overloads": [
+        {
+          "syntax": "FitImplicit(<List of Points>,<Function>)",
+          "params": [
+            {
+              "name": "<List of Points>",
+              "role": "pts",
+              "type": "List"
+            },
+            {
+              "name": "<Function>",
+              "role": "pattern",
+              "type": "Function"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FitSin",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitSin/",
+      "overloads": [
+        {
+          "syntax": "FitSin(<List of Points>)",
+          "params": [
+            {
+              "name": "<List of Points>",
+              "role": "pts",
+              "type": "List"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FitPow",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/FitPow/",
+      "overloads": [
+        {
+          "syntax": "FitPow(<List of Points>)",
+          "params": [
+            {
+              "name": "<List of Points>",
+              "role": "pts",
+              "type": "List"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Sqrt",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Sqrt/",
+      "overloads": [
+        {
+          "syntax": "Sqrt(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Sqrt(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "value",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cbrt",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Cbrt/",
+      "overloads": [
+        {
+          "syntax": "Cbrt(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Cbrt(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "value",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "NRoot",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/NRoot/",
+      "overloads": [
+        {
+          "syntax": "NRoot(<Expression>,<Number>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "value",
+              "type": "Expression"
+            },
+            {
+              "name": "<Number>",
+              "role": "index",
+              "type": "Number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Abs",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Abs/",
+      "overloads": [
+        {
+          "syntax": "Abs(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Abs(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "value",
+              "type": "Expression"
+            }
+          ]
+        },
+        {
+          "syntax": "Abs(<Vector>)",
+          "params": [
+            {
+              "name": "<Vector>",
+              "role": "vector",
+              "type": "Vector"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Sign",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Sign/",
+      "overloads": [
+        {
+          "syntax": "Sign(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Sign(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "value",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Floor",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Floor/",
+      "overloads": [
+        {
+          "syntax": "Floor(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Floor(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "value",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Ceil",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Ceil/",
+      "overloads": [
+        {
+          "syntax": "Ceil(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Ceil(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "value",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Round",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Round/",
+      "overloads": [
+        {
+          "syntax": "Round(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Round(<Number>,<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number"
+            },
+            {
+              "name": "<Number>",
+              "role": "decimals",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Round(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "value",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "exp",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/exp/",
+      "overloads": [
+        {
+          "syntax": "exp(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "exp(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "value",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ln",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ln/",
+      "overloads": [
+        {
+          "syntax": "ln(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "ln(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "value",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Log",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Log/",
+      "overloads": [
+        {
+          "syntax": "Log(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Log(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "value",
+              "type": "Expression"
+            }
+          ]
+        },
+        {
+          "syntax": "Log(<Expression>,<Number>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "value",
+              "type": "Expression"
+            },
+            {
+              "name": "<Number>",
+              "role": "base",
+              "type": "Number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "log10",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/log10/",
+      "overloads": [
+        {
+          "syntax": "log10(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "log10(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "value",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Sin",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Sin/",
+      "overloads": [
+        {
+          "syntax": "Sin(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "angle",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Sin(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "angle",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cos",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Cos/",
+      "overloads": [
+        {
+          "syntax": "Cos(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "angle",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Cos(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "angle",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tan",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Tan/",
+      "overloads": [
+        {
+          "syntax": "Tan(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "angle",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Tan(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "angle",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cot",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Cot/",
+      "overloads": [
+        {
+          "syntax": "Cot(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "angle",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Cot(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "angle",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Sec",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Sec/",
+      "overloads": [
+        {
+          "syntax": "Sec(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "angle",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Sec(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "angle",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Csc",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Csc/",
+      "overloads": [
+        {
+          "syntax": "Csc(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "angle",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "Csc(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "angle",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ArcSin",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ArcSin/",
+      "overloads": [
+        {
+          "syntax": "ArcSin(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "ArcSin(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "value",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ArcCos",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ArcCos/",
+      "overloads": [
+        {
+          "syntax": "ArcCos(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "ArcCos(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "value",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ArcTan",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ArcTan/",
+      "overloads": [
+        {
+          "syntax": "ArcTan(<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "value",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "ArcTan(<Number>,<Number>)",
+          "params": [
+            {
+              "name": "<Number>",
+              "role": "y",
+              "type": "Number"
+            },
+            {
+              "name": "<Number>",
+              "role": "x",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "ArcTan(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "value",
+              "type": "Expression"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "If",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/If/",
+      "note": "Logic_Commands.json types <Then>/<Else> as <Object>, but the kernel evaluates them as expressions, so a bare value literal is legal (If(cond, 1, 2)). Re-declaring them as <Expression> keeps those calls valid while object wildcards stay strict.",
+      "overloads": [
+        {
+          "syntax": "If(<Condition>, <Then>)",
+          "params": [
+            {
+              "name": "<Condition>",
+              "role": "cond",
+              "type": "Boolean"
+            },
+            {
+              "name": "<Then>",
+              "role": "then",
+              "type": "Expression"
+            }
+          ]
+        },
+        {
+          "syntax": "If(<Condition>, <Then>, <Else>)",
+          "params": [
+            {
+              "name": "<Condition>",
+              "role": "cond",
+              "type": "Boolean"
+            },
+            {
+              "name": "<Then>",
+              "role": "then",
+              "type": "Expression"
+            },
+            {
+              "name": "<Else>",
+              "role": "else",
+              "type": "Expression"
+            }
+          ]
+        },
+        {
+          "syntax": "If(<Condition 1>, <Then 1>, <Condition 2>, <Then 2>, …, <Else>)",
+          "params": [
+            {
+              "name": "<Condition 1>",
+              "role": "c1",
+              "type": "Boolean"
+            },
+            {
+              "name": "<Then 1>",
+              "role": "t1",
+              "type": "Expression"
+            },
+            {
+              "name": "<Condition 2>",
+              "role": "c2",
+              "type": "Boolean"
+            },
+            {
+              "name": "<Then 2>",
+              "role": "t2",
+              "type": "Expression"
+            },
+            {
+              "name": "<Else>",
+              "role": "else",
+              "type": "Expression",
+              "optional": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "stdev",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "stdev(<List of Numbers>)",
+          "params": [
+            {
+              "name": "<List>",
+              "role": "list",
+              "type": "List"
+            }
+          ]
+        },
+        {
+          "syntax": "stdev(<List of Numbers>,<List of Weights>)",
+          "params": [
+            {
+              "name": "<List>",
+              "role": "list",
+              "type": "List"
+            },
+            {
+              "name": "<Weights>",
+              "role": "weights",
+              "type": "List"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "stdevp",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "stdevp(<List of Numbers>)",
+          "params": [
+            {
+              "name": "<List>",
+              "role": "list",
+              "type": "List"
+            }
+          ]
+        },
+        {
+          "syntax": "stdevp(<List of Numbers>,<List of Weights>)",
+          "params": [
+            {
+              "name": "<List>",
+              "role": "list",
+              "type": "List"
+            },
+            {
+              "name": "<Weights>",
+              "role": "weights",
+              "type": "List"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cov",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "cov(<List1>,<List2>)",
+          "params": [
+            {
+              "name": "<List1>",
+              "role": "list1",
+              "type": "List"
+            },
+            {
+              "name": "<List2>",
+              "role": "list2",
+              "type": "List"
+            }
+          ]
+        },
+        {
+          "syntax": "cov(<PointList>)",
+          "params": [
+            {
+              "name": "<Points>",
+              "role": "points",
+              "type": "List"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "var",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "var(<List of Numbers>)",
+          "params": [
+            {
+              "name": "<List>",
+              "role": "list",
+              "type": "List"
+            }
+          ]
+        },
+        {
+          "syntax": "var(<List of Numbers>,<List of Weights>)",
+          "params": [
+            {
+              "name": "<List>",
+              "role": "list",
+              "type": "List"
+            },
+            {
+              "name": "<Weights>",
+              "role": "weights",
+              "type": "List"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ExecuteBatch",
+      "url": "",
+      "overloads": [
+        {
+          "syntax": "ExecuteBatch(<String>)",
+          "params": [
+            {
+              "name": "<Script>",
+              "role": "script",
+              "type": "String"
+            }
+          ]
+        }
+      ]
+    }
   ]
 }

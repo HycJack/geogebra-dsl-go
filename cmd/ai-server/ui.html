@@ -607,6 +607,19 @@
     }
   }
 
+  // Async wrapper for GeoGebra's asyncEvalCommand (handles CommandNotLoadedError
+  // for lazily-loaded modules like DISCRETE). Resolves on success, rejects on failure.
+  function evalCmdAsync(cmd) {
+    return new Promise(function (resolve, reject) {
+      if (typeof ggb.asyncEvalCommand === "function") {
+        ggb.asyncEvalCommand(cmd, resolve, reject);
+      } else {
+        // Fallback: synchronous evalCommand
+        try { resolve(ggb.evalCommand(cmd)); } catch (e) { reject(e); }
+      }
+    });
+  }
+
   function loadScript(script) {
     $("emptyCanvas").style.display = "none";
     if (!appletReady || !ggb) {
@@ -615,18 +628,29 @@
     }
     state.lastScript = script;
     try { ggb.newConstruction(); } catch (e) {}
-    var lines = String(script || "").split("\n");
+    var lines = String(script || "").split("\n").filter(function (l) {
+      l = l.trim();
+      return l && l[0] !== "#" && l.slice(0, 2) !== "//";
+    });
     var executed = 0, failed = 0;
-    for (var i = 0; i < lines.length; i++) {
-      var line = lines[i].trim();
-      if (!line) continue;
-      if (line.indexOf("#") === 0 || line.indexOf("//") === 0) continue;
-      try { ggb.evalCommand(line); executed++; }
-      catch (e) { failed++; }
-    }
-    applyGGBRuntimeDisplay();
-    if (executed === 0 && failed > 0) { setBadge("命令执行可能失败", false); }
-    logEntry(executed > 0 ? "ok" : "warn", "[GeoGebra] 载入脚本：" + executed + " 条命令执行成功" + (failed > 0 ? "，" + failed + " 条失败" : ""));
+    var pending = lines.length;
+    if (pending === 0) { applyGGBRuntimeDisplay(); return; }
+
+    lines.forEach(function (line) {
+      evalCmdAsync(line).then(function () {
+        executed++;
+      }, function (e) {
+        failed++;
+      }).then(function () {
+        if (--pending === 0) {
+          applyGGBRuntimeDisplay();
+          if (executed === 0 && failed > 0) setBadge("命令执行可能失败", false);
+          logEntry(executed > 0 ? "ok" : "warn",
+            "[GeoGebra] 载入脚本：" + executed + " 条命令执行成功" +
+            (failed > 0 ? "，" + failed + " 条失败" : ""));
+        }
+      });
+    });
   }
 
   // ---------- 请求后端 ----------

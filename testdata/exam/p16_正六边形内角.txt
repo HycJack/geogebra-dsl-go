@@ -1,5 +1,6 @@
 # p16_正六边形内角 — 中考·正六边形的内角
+# 注：GeoGebra 用 Polygon(A, B, n) 生成正 n 边形（无 RegularPolygon 命令）。
 A = (3, 0)
 B = (1.5, 2.598076211)
-hex = RegularPolygon(A, B, 6)
+hex = Polygon(A, B, 6)
 angs = InteriorAngles(hex)

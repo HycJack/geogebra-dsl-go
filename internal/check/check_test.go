@@ -18,10 +18,10 @@ func hasCode(rc *diag.Receipt, code diag.Code) bool {
 }
 
 func TestTextOk(t *testing.T) {
-	script := `A = Point(0, 2)
-B = Point(4, 2)
-C = Point(0, -2)
-T = Point(0, 4)
+	script := `A = (0, 2)
+B = (4, 2)
+C = (0, -2)
+T = (0, 4)
 l = Line(A, B)
 c = Circle(C, T)
 P1 = Intersect(c, l)`
@@ -99,7 +99,7 @@ func TestVarArgCommandsOk(t *testing.T) {
 }
 
 func TestUndefinedRef(t *testing.T) {
-	rc := Check([]byte("A = Point(0, 2)\nl = Line(A, X)\n"), Options{})
+	rc := Check([]byte("A = (0, 2)\nl = Line(A, X)\n"), Options{})
 	if rc.OK {
 		t.Fatal("expected failure")
 	}
@@ -109,7 +109,7 @@ func TestUndefinedRef(t *testing.T) {
 }
 
 func TestUnknownCommand(t *testing.T) {
-	rc := Check([]byte("A = Point(0, 2)\nl = Foobar(A, A)\n"), Options{})
+	rc := Check([]byte("A = (0, 2)\nl = Foobar(A, A)\n"), Options{})
 	if rc.OK {
 		t.Fatal("expected failure")
 	}
@@ -192,7 +192,7 @@ P = (sqrt(2), cos(0), 0)`
 }
 
 func TestDegenerateLine(t *testing.T) {
-	rc := Check([]byte("A = Point(1, 1)\nl = Line(A, A)\n"), Options{})
+	rc := Check([]byte("A = (1, 1)\nl = Line(A, A)\n"), Options{})
 	if rc.OK {
 		t.Fatal("expected failure")
 	}
@@ -202,7 +202,7 @@ func TestDegenerateLine(t *testing.T) {
 }
 
 func TestCycle(t *testing.T) {
-	script := `A = Point(0, 0)
+	script := `A = (0, 0)
 B = Line(A, C)
 C = Line(A, B)`
 	rc := Check([]byte(script), Options{})
@@ -217,8 +217,8 @@ C = Line(A, B)`
 func TestIRJSONOk(t *testing.T) {
 	ir := `{
   "objects": [
-    {"id":"A","cmd":"Point","args":["0","2"],"kind":"Point"},
-    {"id":"B","cmd":"Point","args":["4","2"],"kind":"Point"},
+    {"id":"A","args":["0","2"],"kind":"Point"},
+    {"id":"B","args":["4","2"],"kind":"Point"},
     {"id":"l","cmd":"Line","args":["A","B"],"refs":["A","B"],"kind":"Line"}
   ],
   "goals": ["l"]
@@ -293,7 +293,7 @@ func TestSniff(t *testing.T) {
 	if s := sniff([]byte("{  \"objects\": []}"), ""); s != "ir" {
 		t.Fatalf("expected ir sniff, got %s", s)
 	}
-	if s := sniff([]byte("A = Point(0,2)"), ""); s != "text" {
+	if s := sniff([]byte("A = (0, 2)"), ""); s != "text" {
 		t.Fatalf("expected text sniff, got %s", s)
 	}
 	if s := sniff([]byte("{"), "text"); s != "text" {
@@ -338,14 +338,6 @@ func TestFunctionDefBuiltinBody(t *testing.T) {
 	}
 }
 
-func TestRegularPolygonOk(t *testing.T) {
-	script := "A=(0,0)\nB=(2,0)\np = RegularPolygon(A, B, 5)\n"
-	rc := Check([]byte(script), Options{})
-	if !rc.OK {
-		t.Fatalf("expected ok, got %v", rc.Errors)
-	}
-}
-
 func TestPolygonVerticesNumberOk(t *testing.T) {
 	script := "A=(0,0)\nB=(2,0)\np = Polygon(A, B, 5)\n"
 	rc := Check([]byte(script), Options{})
@@ -354,8 +346,9 @@ func TestPolygonVerticesNumberOk(t *testing.T) {
 	}
 }
 
-func TestCircumcircleOk(t *testing.T) {
-	script := "A=(0,0)\nB=(2,0)\nC=(1,2)\nc = Circumcircle(A, B, C)\n"
+func TestCircumcircleViaCircle3PtsOk(t *testing.T) {
+	// GeoGebra: Circle(A,B,C) creates the circumcircle through three points.
+	script := "A=(0,0)\nB=(2,0)\nC=(1,2)\nc = Circle(A, B, C)\n"
 	rc := Check([]byte(script), Options{})
 	if !rc.OK {
 		t.Fatalf("expected ok, got %v", rc.Errors)
@@ -363,7 +356,12 @@ func TestCircumcircleOk(t *testing.T) {
 }
 
 func TestTriangleCentersOk(t *testing.T) {
-	script := "A=(0,0)\nB=(2,0)\nC=(1,2)\nI = Incenter(A, B, C)\no = Orthocenter(A,B,C)\n"
+	// Incenter = Center(Incircle(...)); Orthocenter = intersection of two altitudes.
+	script := "A=(0,0)\nB=(2,0)\nC=(1,2)\n" +
+		"inc = Incircle(A, B, C)\nI = Center(inc)\n" +
+		"mAB = Midpoint(A, B)\nmAC = Midpoint(A, C)\n" +
+		"altC = Line(C, mAB)\naltB = Line(B, mAC)\n" +
+		"H = Intersect(altC, altB)\n"
 	rc := Check([]byte(script), Options{})
 	if !rc.OK {
 		t.Fatalf("expected ok, got %v", rc.Errors)
@@ -562,6 +560,7 @@ func TestExamSuite(t *testing.T) {
 //	b07                          Rotate's axis slot must be a line
 //	b09                          an undefined reference is an undefined reference
 //	b15                          a scripting command result is not an object
+//	b17                          numeric coordinates are not Point's <Object> slot
 func TestExamBadSuite(t *testing.T) {
 	for _, entry := range listFixture("../../testdata/exam-bad") {
 		rc := Check(mustRead(t, "../../testdata/exam-bad/", entry), Options{})
@@ -672,7 +671,7 @@ func TestRotateAxisMustBeALine(t *testing.T) {
 // validate. Before the fix the expression RHS was always typed KFunction and
 // the circle was falsely rejected with cmd/arg.
 func TestArithmeticNumberAsRadiusOk(t *testing.T) {
-	rc := Check([]byte("r = 2/3\nO = Point(0, 0)\nc1 = Circle(O, r)\n"), Options{})
+	rc := Check([]byte("r = 2/3\nO = (0, 0)\nc1 = Circle(O, r)\n"), Options{})
 	if !rc.OK {
 		t.Fatalf("expected arithmetic number to satisfy a <Number> slot, got %v", rc.Errors)
 	}
@@ -682,7 +681,7 @@ func TestArithmeticNumberAsRadiusOk(t *testing.T) {
 // notation (1e3); the number-literal detector must too, so `r = 1e3` becomes a
 // Number object instead of an expression.
 func TestScientificNotationNumberOk(t *testing.T) {
-	rc := Check([]byte("r = 1e3\nO = Point(0, 0)\nc1 = Circle(O, r)\n"), Options{})
+	rc := Check([]byte("r = 1e3\nO = (0, 0)\nc1 = Circle(O, r)\n"), Options{})
 	if !rc.OK {
 		t.Fatalf("expected scientific-notation literal to satisfy a <Number> slot, got %v", rc.Errors)
 	}
@@ -703,7 +702,7 @@ func TestNumberExprOverCommandNumberOk(t *testing.T) {
 // double-quoted string, so Text("hello, world", A) keeps two arguments. Before
 // the fix the comma in the string produced three args and a false cmd/arg.
 func TestStringArgWithCommaOk(t *testing.T) {
-	rc := Check([]byte("A = Point(0, 0)\nt1 = Text(\"hello, world\", A)\n"), Options{})
+	rc := Check([]byte("A = (0, 0)\nt1 = Text(\"hello, world\", A)\n"), Options{})
 	if !rc.OK {
 		t.Fatalf("expected a string literal containing a comma to stay one arg, got %v", rc.Errors)
 	}
@@ -714,7 +713,7 @@ func TestStringArgWithCommaOk(t *testing.T) {
 // blocked, not lump them into the "环" list. The old implementation reported
 // "环：B, C, D, E" and sent the AI repair loop after innocent objects.
 func TestCycleAttributionPrecise(t *testing.T) {
-	rc := Check([]byte("A = Point(0, 0)\nB = Midpoint(C, A)\nC = Midpoint(A, B)\nD = Circle(C, 2)\nE = Line(D, A)\n"), Options{})
+	rc := Check([]byte("A = (0, 0)\nB = Midpoint(C, A)\nC = Midpoint(A, B)\nD = Circle(C, 2)\nE = Line(D, A)\n"), Options{})
 	if rc.OK {
 		t.Fatal("expected failure")
 	}
@@ -743,7 +742,7 @@ func TestCycleAttributionPrecise(t *testing.T) {
 // tell the caller (and the LLM repair loop) the accepted overload syntaxes, so
 // a bare rejection becomes a self-correctable instruction.
 func TestCmdArgDiagnosticCarriesSignatures(t *testing.T) {
-	rc := Check([]byte("O = Point(0, 0)\nc1 = Circle(O)\n"), Options{})
+	rc := Check([]byte("O = (0, 0)\nc1 = Circle(O)\n"), Options{})
 	if rc.OK {
 		t.Fatal("expected failure")
 	}
@@ -758,5 +757,42 @@ func TestCmdArgDiagnosticCarriesSignatures(t *testing.T) {
 	}
 	if !strings.Contains(msg, "Circle(<Point>") {
 		t.Fatalf("cmd/arg diagnostic should carry the accepted signatures, got %q", msg)
+	}
+}
+
+// TestPointCoordinateArgsRejected — Point's <Object> slot is an object slot, so
+// a numeric coordinate call must not be read as "the point on object 0 at
+// parameter 0". The literal-point form for this tool is the parenthesised
+// assignment, which keeps working (as does the list form).
+func TestPointCoordinateArgsRejected(t *testing.T) {
+	for _, script := range []string{
+		"A = Point(0, 0)",
+		"A = Point(2)",
+		"A = Point(0, 0, 0)",
+	} {
+		rc := Check([]byte(script), Options{})
+		if rc.OK {
+			t.Fatalf("%s: expected a rejection", script)
+		}
+		msg := ""
+		for _, p := range rc.Errors {
+			if p.Code == diag.CodeCmdArg {
+				msg = p.Msg
+			}
+		}
+		if !strings.Contains(msg, "A = (x, y)") {
+			t.Fatalf("%s: diagnostic should suggest the coordinate syntax, got %q", script, msg)
+		}
+	}
+	for _, script := range []string{
+		"A = (0, 0)\nB = (1, 1)\nl = Line(A, B)",
+		"A = (0, 0)\nt = 1\nP = Point(A, t)",
+		"A = Point({0, 0})",
+		"A = Point((0, 0))",
+	} {
+		rc := Check([]byte(script), Options{})
+		if !rc.OK {
+			t.Fatalf("%s: expected it to pass, got %v", script, rc.Errors)
+		}
 	}
 }

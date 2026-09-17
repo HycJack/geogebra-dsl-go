@@ -1,9 +1,18 @@
 # p01_三角形四心 — 中考·三角形四心：内心/外心/重心/垂心
+# 注：GeoGebra 没有 Incenter/Circumcenter/Orthocenter 命令，
+# 内心 = Center(Incircle(...))，外心 = Center(Circle(A,B,C))，
+# 垂心 = 两条高的交点。
 A = (0, 0)
 B = (6, 0)
 C = (2, 5)
 tri = Polygon(A, B, C)
-I = Incenter(tri)
-O = Circumcenter(A, B, C)
+inc = Incircle(A, B, C)
+I = Center(inc)
+circ = Circle(A, B, C)
+O = Center(circ)
 G = Centroid(tri)
-H = Orthocenter(A, B, C)
+mAB = Midpoint(A, B)
+mAC = Midpoint(A, C)
+altC = Line(C, mAB)
+altB = Line(B, mAC)
+H = Intersect(altC, altB)
