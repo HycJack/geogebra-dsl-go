@@ -57,7 +57,7 @@ func TestCompleteEmitsRequestAndResponse(t *testing.T) {
 
 func TestLogFuncNilIsNoop(t *testing.T) {
 	// Config without Log must not panic through the whole flow.
-	script := "A = Point(0, 0)\nB = Point(4, 0)\nl = Line(A, B)"
+	script := "A = (0, 0)\nB = (4, 0)\nl = Line(A, B)"
 	stub := &stubClient{replies: []string{goodReply(script)}}
 	cfg := Config{Temperature: 0.2, MaxTokens: 2048, MaxRepair: 1, MaxHistory: 20}
 	res := Generate(context.Background(), stub, cfg, GenerateRequest{

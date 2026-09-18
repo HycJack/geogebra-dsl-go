@@ -166,8 +166,8 @@ GGCM_AI_REQUEST_TIMEOUT_S  # 默认 900（整个 /api/chat 请求预算秒数，
 输出格式：只输出脚本。脚本可以这样包裹，便于我解析：
 ```
 <gg>
-A = Point(0, 2)
-B = Point(4, 2)
+A = (0, 2)
+B = (4, 2)
 c = Circle(C, T)
 </gg>
 ```
@@ -272,7 +272,7 @@ for attempt := 1; attempt <= cfg.MaxRepair; attempt++ {
 {
   "session_id": "sess-1700000000", // 已解析/新建的会话 id，后续 append 轮用它
   "ok": true,
-  "script": "A = Point(...)\n…",
+  "script": "A = (0, 2)\n…",
   "executable": ["A","B","C","l"],
   "teaching_note": "第一段为已知量…",
   "fallback": "",                  // 无 <gg> 可构造时降级为纯文字解答

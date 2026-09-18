@@ -8,7 +8,7 @@ import (
 )
 
 func TestGateOKScript(t *testing.T) {
-	script := "A = Point(0, 2)\nB = Point(4, 2)\nl = Line(A, B)"
+	script := "A = (0, 2)\nB = (4, 2)\nl = Line(A, B)"
 	r := runGate(script)
 	if !r.OK {
 		t.Fatalf("expected OK, diagnostics=%v", r.Diagnostics)
@@ -49,9 +49,9 @@ func TestFormatProblemEmptyObj(t *testing.T) {
 }
 
 func TestNormalizeScript(t *testing.T) {
-	in := []string{"A = Point(0, 2)", "", "   ", "B = Point(4, 2)"}
+	in := []string{"A = (0, 2)", "", "   ", "B = (4, 2)"}
 	out := normalizeScript(in)
-	if out != "A = Point(0, 2)\nB = Point(4, 2)" {
+	if out != "A = (0, 2)\nB = (4, 2)" {
 		t.Fatalf("normalize mismatch: %q", out)
 	}
 }

@@ -607,18 +607,25 @@
     }
   }
 
-  // Async wrapper for GeoGebra's asyncEvalCommand (handles CommandNotLoadedError
-  // for lazily-loaded modules like DISCRETE). Resolves on success, rejects on failure.
+  // Async wrapper for GeoGebra's asyncEvalCommandGetLabels (handles
+  // CommandNotLoadedError for lazily-loaded modules like DISCRETE).
+  // Resolves with the comma-separated labels of created objects, rejects on failure.
   function evalCmdAsync(cmd) {
     return new Promise(function (resolve, reject) {
-      if (typeof ggb.asyncEvalCommand === "function") {
-        ggb.asyncEvalCommand(cmd, resolve, reject);
+      if (typeof ggb.asyncEvalCommandGetLabels === "function") {
+        ggb.asyncEvalCommandGetLabels(cmd, resolve, reject);
+      } else if (typeof ggb.asyncEvalCommand === "function") {
+        ggb.asyncEvalCommand(cmd, function () { resolve(""); }, reject);
       } else {
         // Fallback: synchronous evalCommand
-        try { resolve(ggb.evalCommand(cmd)); } catch (e) { reject(e); }
+        try { resolve(ggb.evalCommandGetLabels(cmd) || ""); } catch (e) { reject(e); }
       }
     });
   }
+
+  // Track auto-generated labels from bare commands so we can reference them
+  // in subsequent lines if needed.
+  var labelTracker = {};
 
   function loadScript(script) {
     $("emptyCanvas").style.display = "none";
@@ -627,6 +634,7 @@
       return;
     }
     state.lastScript = script;
+    labelTracker = {};
     try { ggb.newConstruction(); } catch (e) {}
     var lines = String(script || "").split("\n").filter(function (l) {
       l = l.trim();
@@ -637,8 +645,15 @@
     if (pending === 0) { applyGGBRuntimeDisplay(); return; }
 
     lines.forEach(function (line) {
-      evalCmdAsync(line).then(function () {
+      evalCmdAsync(line).then(function (labels) {
         executed++;
+        // Track auto-generated labels for bare commands (no "=" in line)
+        if (labels && labels.length > 0 && line.indexOf("=") < 0) {
+          var parts = labels.split(",").map(function (s) { return s.trim(); });
+          parts.forEach(function (l) {
+            if (l) labelTracker[l] = line;
+          });
+        }
       }, function (e) {
         failed++;
       }).then(function () {

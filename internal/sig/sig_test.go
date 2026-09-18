@@ -14,7 +14,9 @@ func testCatalog() *catalog.Catalog {
 	const js = `{"commands": {
   "Point": {"name":"Point","overloads":[
     {"syntax":"Point(<Object>)","params":[{"name":"<Object>","role":"o","type":"GeoObject","optional":false}]},
-    {"syntax":"Point(<Point>, <Vector>)","params":[{"name":"<Point>","role":"s","type":"Point"},{"name":"<Vector>","role":"v","type":"Vector"}]}
+    {"syntax":"Point(<Object>, <Parameter>)","params":[{"name":"<Object>","role":"o","type":"GeoObject"},{"name":"<Parameter>","role":"p","type":"Number"}]},
+    {"syntax":"Point(<Point>, <Vector>)","params":[{"name":"<Point>","role":"s","type":"Point"},{"name":"<Vector>","role":"v","type":"Vector"}]},
+    {"syntax":"Point(<List>)","params":[{"name":"<List>","role":"l","type":"List"}]}
   ]},
   "Line": {"name":"Line","overloads":[
     {"syntax":"Line(<Point>, <Point>)","params":[{"name":"<Point>","role":"a","type":"Point"},{"name":"<Point>","role":"b","type":"Point"}]},
@@ -131,6 +133,110 @@ func TestLookupNumberLiteralNotPoint(t *testing.T) {
 	m := Lookup(testCatalog(), g, g.Objects["c"])
 	if m.OK {
 		t.Fatalf("expected no match for Circle(0,3), got OK; explain=%s", m.Explain)
+	}
+}
+
+// TestLookupValueLiteralNotObject — regression for the case where a numeric
+// coordinate call slipped through by matching the wrong overload. Point's
+// <Object> overload is a wildcard, so Point(0, 0) used to be read as "the point
+// on object 0 at parameter 0" and Point(2) as "the point on object 2". GeoGebra
+// needs a real object there, so both must be rejected.
+func TestLookupValueLiteralNotObject(t *testing.T) {
+	c := testCatalog()
+	for _, args := range [][]string{{"0", "0"}, {"0"}, {"2*pi", "0"}} {
+		g := graphWith(t, &ir.Object{ID: "p", Cmd: "Point", Args: args})
+		m := Lookup(c, g, g.Objects["p"])
+		if m.OK {
+			t.Fatalf("Point(%v) must not match: a number is not an object, explain=%s", args, m.Explain)
+		}
+	}
+}
+
+// TestLookupObjectWildcardRejectsValue — the same rule applies to every object
+// wildcard, not just Point: a number may never be the object being transformed
+// or inspected.
+func TestLookupObjectWildcardRejectsValue(t *testing.T) {
+	g := graphWith(t,
+		&ir.Object{ID: "O", Kind: ir.KPoint, Args: []string{"0", "0"}},
+		&ir.Object{ID: "R", Cmd: "Rotate", Args: []string{"0", "90", "O"}},
+		&ir.Object{ID: "F", Cmd: "Reflect", Args: []string{"0", "O"}},
+	)
+	for _, id := range []string{"R", "F"} {
+		m := Lookup(testCatalog(), g, g.Objects[id])
+		if m.OK {
+			t.Fatalf("%s(0, ...) must not match: <Object> is not a value slot, explain=%s", id, m.Explain)
+		}
+	}
+}
+
+// TestLookupObjectWildcardAcceptsObject — tightening the object wildcards must
+// not block the geometric uses they exist for, nor the list-literal coordinate
+// form Point({x, y}).
+func TestLookupObjectWildcardAcceptsObject(t *testing.T) {
+	c := testCatalog()
+	g := graphWith(t,
+		&ir.Object{ID: "A", Kind: ir.KPoint, Args: []string{"0", "0"}},
+		&ir.Object{ID: "t", Kind: ir.KNumber, Args: []string{"1"}},
+		&ir.Object{ID: "v", Kind: ir.KVector, Args: []string{"1", "1"}},
+		&ir.Object{ID: "L", Kind: ir.KList, Args: []string{"0", "0"}},
+		&ir.Object{ID: "p1", Cmd: "Point", Args: []string{"A"}},
+		&ir.Object{ID: "p2", Cmd: "Point", Args: []string{"A", "t"}},
+		&ir.Object{ID: "p3", Cmd: "Point", Args: []string{"A", "v"}},
+		&ir.Object{ID: "p4", Cmd: "Point", Args: []string{"L"}},
+	)
+	for _, id := range []string{"p1", "p2", "p3", "p4"} {
+		m := Lookup(c, g, g.Objects[id])
+		if !m.OK {
+			t.Fatalf("%s must match, explain=%s", id, m.Explain)
+		}
+	}
+}
+
+// TestLookupExpressionWildcardAcceptsValue — the object wildcards are the only
+// wildcards that reject a value literal. <Expression>/<Variable>/<Any> slots
+// take numbers legitimately, so the tightening must not reach them: a constant
+// sequence is a real GeoGebra construction.
+func TestLookupExpressionWildcardAcceptsValue(t *testing.T) {
+	c := fullCatalog()
+	for _, script := range []struct {
+		id, cmd string
+		args    []string
+	}{
+		{"S", "Sequence", []string{"2", "k", "1", "10"}},
+		{"Su", "Sum", []string{"2", "k", "1", "3"}},
+		{"Tx", "Text", []string{"0"}},
+		{"Lg", "Length", []string{"0"}},
+	} {
+		g := graphWith(t, &ir.Object{ID: script.id, Cmd: script.cmd, Args: script.args})
+		m := Lookup(c, g, g.Objects[script.id])
+		if !m.OK {
+			t.Fatalf("%s(%v) must keep matching an expression/value slot, explain=%s",
+				script.cmd, script.args, m.Explain)
+		}
+	}
+}
+
+// TestLookupValueLiteralExplainSuggestsCoordinates — a coordinate-style call
+// that fails must tell the repair loop the syntax that works, not just list the
+// overloads it cannot satisfy.
+func TestLookupValueLiteralExplainSuggestsCoordinates(t *testing.T) {
+	g := graphWith(t, &ir.Object{ID: "p", Cmd: "Point", Args: []string{"0", "0"}})
+	m := Lookup(testCatalog(), g, g.Objects["p"])
+	if m.OK {
+		t.Fatal("expected Point(0,0) to be rejected")
+	}
+	if !strings.Contains(m.Explain, "A = (x, y)") {
+		t.Fatalf("explain should suggest the coordinate syntax, got %q", m.Explain)
+	}
+	// A call with an object reference is not a coordinate call, so it must not
+	// get the hint attached.
+	g2 := graphWith(t,
+		&ir.Object{ID: "A", Kind: ir.KPoint, Args: []string{"0", "0"}},
+		&ir.Object{ID: "p2", Cmd: "Center", Args: []string{"A"}},
+	)
+	m2 := Lookup(testCatalog(), g2, g2.Objects["p2"])
+	if strings.Contains(m2.Explain, "A = (x, y)") {
+		t.Fatalf("non-literal call should not get the coordinate hint, got %q", m2.Explain)
 	}
 }
 

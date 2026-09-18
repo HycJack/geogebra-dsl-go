@@ -49,7 +49,7 @@ func goodReply(script string) string {
 func TestGenerateOneShot(t *testing.T) {
 	// A fully-defined, non-degenerate teaching construction passes on the first
 	// attempt with no repair round.
-	script := "A = Point(0, 0)\nB = Point(4, 0)\nC = Point(2, 4)\nl = Line(A, B)\nc = Circle(C, A)"
+	script := "A = (0, 0)\nB = (4, 0)\nC = (2, 4)\nl = Line(A, B)\nc = Circle(C, A)"
 	stub := &stubClient{replies: []string{goodReply(script)}}
 	cfg := Config{Temperature: 0.2, MaxTokens: 2048, MaxRepair: 1}
 	res := Generate(context.Background(), stub, cfg, GenerateRequest{
@@ -73,7 +73,7 @@ func TestGenerateOneShot(t *testing.T) {
 
 func TestGenerateRepairsOnce(t *testing.T) {
 	bad := "l = Line(A, Missing)" // dep/undefined: Missing undefined
-	good := "A = Point(0, 0)\nB = Point(4, 0)\nl = Line(A, B)"
+	good := "A = (0, 0)\nB = (4, 0)\nl = Line(A, B)"
 	stub := &stubClient{replies: []string{goodReply(bad), goodReply(good)}}
 	cfg := Config{Temperature: 0.2, MaxTokens: 2048, MaxRepair: 3}
 	res := Generate(context.Background(), stub, cfg, GenerateRequest{
@@ -138,7 +138,7 @@ func TestGenerateNoScriptBlock(t *testing.T) {
 // content must not be lost to the hiccup.
 func TestGenerateTransientMidRepairKeepsContent(t *testing.T) {
 	bad := "l = Line(A, Missing)" // gate fails: dep/undefined Missing
-	good := "A = Point(0, 0)\nB = Point(4, 0)\nl = Line(A, B)"
+	good := "A = (0, 0)\nB = (4, 0)\nl = Line(A, B)"
 
 	// Call #0 (attempt 1): returns the bad script → gate fails.
 	// Call #1 (attempt 2): transient error, like a backend that keeps failing.
@@ -174,7 +174,7 @@ func TestGenerateTransientMidRepairKeepsContent(t *testing.T) {
 // call transiently fails (no content was ever produced), the loop does not panic
 // and still attempts a plain regeneration rather than an artificial repair.
 func TestGenerateFirstCallTransientStillSucceeds(t *testing.T) {
-	good := "A = Point(0, 0)\nB = Point(4, 0)\nl = Line(A, B)"
+	good := "A = (0, 0)\nB = (4, 0)\nl = Line(A, B)"
 	stub := &stubClient{
 		replies:  []string{"", goodReply(good)},
 		callErrs: []error{errors.New("connection refused"), nil},
@@ -195,7 +195,7 @@ func TestGenerateFirstCallTransientStillSucceeds(t *testing.T) {
 // and any transient error (mid-repair network failure).
 func TestGenerateTraceRecordsSteps(t *testing.T) {
 	bad := "l = Line(A, Missing)"
-	good := "A = Point(0, 0)\nB = Point(4, 0)\nl = Line(A, B)"
+	good := "A = (0, 0)\nB = (4, 0)\nl = Line(A, B)"
 	stub := &stubClient{
 		replies:  []string{goodReply(bad), "", goodReply(good)},
 		callErrs: []error{nil, errors.New("chat backend 503 transient"), nil},

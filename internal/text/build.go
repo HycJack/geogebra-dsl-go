@@ -5,7 +5,7 @@
 //	// comment               // JavaScript's comment marker
 //	/* block comment */       // JavaScript's block comment, may span lines
 //	                        // all three are ignored; "#" is also this DSL's own
-//	A = Point(0, 2)      # command object
+//	A = (0, 2)      # command object
 //	l = Line(A, B)
 //	c = Circle(C, T)
 //	M = (1, 2)           # literal point
@@ -90,9 +90,10 @@ func parseLine(line string, lineNo int, cat *catalog.Catalog) (statement, bool, 
 	// split on '=' at top level.
 	eq := topLevelIndex(line, '=')
 	if eq < 0 {
-		// No '=' — allow statement-style modifier/scripting commands such as
-		// `SetColor(c, "red")` or `StartAnimation(a)`. Anything else without
-		// '=' remains a syntax error.
+		// No '=' — accept any bare command call. GeoGebra allows all commands
+		// without "="; the object gets an auto-generated label. We mark all
+		// bare calls as modifier initially; Build() converts non-scripting
+		// ones into regular objects with predicted labels.
 		if cmdArgs, ok, prob := parseCommandCall(line, lineNo, cat); ok {
 			return statement{cmd: cmdArgs.cmd, args: cmdArgs.args, lineNo: lineNo, modifier: true}, true, diag.Problem{}
 		} else if prob != nil {
@@ -209,9 +210,9 @@ func braceArgs(rhs string, lineNo int) ([]string, bool, diag.Problem) {
 	return splitArgs(inner), true, diag.Problem{}
 }
 
-// parseCommandCall parses a bare `Cmd(args)` line (no "="). It only accepts
-// commands in the scripting set, so a non-scripting command with no "=" is a
-// syntax error rather than being silently accepted.
+// parseCommandCall parses a bare `Cmd(args)` line (no "="). GeoGebra allows
+// any command without "=" — the object gets an auto-generated label. We accept
+// all bare commands so the validator matches GeoGebra's behavior.
 func parseCommandCall(s string, lineNo int, cat *catalog.Catalog) (argCommand, bool, *diag.Problem) {
 	lp := strings.IndexByte(s, '(')
 	if lp <= 0 || !strings.HasSuffix(s, ")") {
@@ -220,18 +221,6 @@ func parseCommandCall(s string, lineNo int, cat *catalog.Catalog) (argCommand, b
 	cmd := strings.TrimSpace(s[:lp])
 	if !isIdentName(cmd) {
 		return argCommand{}, false, nil
-	}
-	// Modifier command names are matched case-insensitively (setcolor == SetColor),
-	// consistent with the rest of the command handling.
-	if !cat.IsScriptingCommand(cmd) {
-		// A real command must be written as Object = Command(...). Reject with a
-		// hint so the model learns the expected assignment syntax.
-		return argCommand{}, false, &diag.Problem{
-			Code: diag.CodeParseSyntax,
-			Msg: "指令 " + cmd + " 会返回对象，必须写成 对象名 = " + cmd +
-				"(…) 的形式；无赋值号的裸语句仅限官方 Scripting 类指令（Set*/Show*/Slider/Turtle* 等 67 条，见 manual 的 Scripting_Commands 页）",
-			Line: lineNo,
-		}
 	}
 	inner := strings.TrimSpace(s[lp+1 : len(s)-1])
 	return argCommand{cmd: cmd, args: splitArgs(inner)}, true, nil
@@ -290,23 +279,43 @@ func splitArgs(s string) []string {
 // undefined references; both are fail-closed errors. Ref resolution uses the
 // whole set of defined objects (order-insensitive) so forward references that
 // exist resolve fine — the cycle check handles dependency order afterwards.
-func Build(stmts []statement) (*ir.Graph, []diag.Problem) {
+//
+// Bare commands (no "=") are allowed for all command types, matching GeoGebra.
+// Non-scripting bare commands get an auto-generated label predicted from the
+// command's type (mirroring GeoGebra's LabelType + LabelManager).
+func Build(stmts []statement, cat *catalog.Catalog) (*ir.Graph, []diag.Problem) {
 	g := ir.New()
 	var probs []diag.Problem
-	// Pass 0: modifiers are statement-style commands (SetColor etc.) that modify
-	// existing objects; their targets must refer to a defined object, so they
-	// are validated after all named ids are known. Bare no-"=" modifiers are NOT
-	// registered as objects.
+	// usedLabels tracks labels already taken (from named statements and
+	// predicted labels) to avoid duplicates in prediction.
+	usedLabels := map[string]bool{}
+	// Pass 0: collect modifiers (scripting commands that modify existing
+	// objects) and register all object-producing statements. Bare non-scripting
+	// commands are converted to regular objects with predicted labels.
 	modifiers := make([]statement, 0)
 	for _, s := range stmts {
 		if s.modifier {
-			modifiers = append(modifiers, s)
+			// If it's a scripting command (SetColor, Slider, ...), keep as modifier.
+			// Otherwise, predict a label and treat as a regular object.
+			if cat.IsScriptingCommand(s.cmd) {
+				modifiers = append(modifiers, s)
+			} else {
+				// Predict the auto-label for this bare command.
+				label := predictLabel(s.cmd, usedLabels)
+				usedLabels[label] = true
+				s.id = label
+				s.modifier = false
+				// Fall through to register as a regular object.
+			}
+		}
+		if s.modifier {
 			continue
 		}
 		if _, exists := g.Get(s.id); exists {
 			// redefinition detected below; but keep first occurrence
 			continue
 		}
+		usedLabels[s.id] = true
 		g.Add(&ir.Object{ID: s.id})
 	}
 	seen := map[string]bool{}

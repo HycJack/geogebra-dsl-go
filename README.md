@@ -8,8 +8,8 @@
 
 | 形态 | 示例 |
 |---|---|
-| 文本脚本 | `A = Point(0, 2)` / `c = Circle(Midpoint(A, B), 2)` |
-| IR JSON | `{ "objects": [{"id":"A","cmd":"Point","args":["0","2"]}], "goals": ["l"] }` |
+| 文本脚本 | `A = (0, 2)` / `c = Circle(Midpoint(A, B), 2)` |
+| IR JSON | `{ "objects": [{"id":"A","args":["0","2"],"kind":"Point"}], "goals": ["l"] }` |
 
 > 你的目的就是这一个：**人多眼杂地挑出 AI 输出里的错，一条命令看全部**。所以它只做"能不能建立"，不做数值求坐标、不产 `.ggb` 文件、不内置绘图——绘图交给 GeoGebra 自己。
 
@@ -54,7 +54,8 @@ ggbcheck check /dev/stdin                # Unix 管道/重定向（不支持 `-`
 ### 文本脚本的边界特性
 
 - **科学计数法**：`1e3`、`2.5E-2`、`1E-16` 都被接受为数字字面量，与 GeoGebra 一致；`e - 3`（保留字 `e` 减 3）不会被误读成 `e-3` 的科学计数法，由 `number` 包的 `mantissaEndsWithE` 显式区分。
-- **字符串感知**：`Text("a, b")` 里的逗号不算参数分隔符，`Point(0, "x, y")` 也不会被误切——`splitArgs` 与 `stripComment` 共用同一套引号感知逻辑。
+- **字符串感知**：`Text("a, b")` 里的逗号不算参数分隔符，`Text("x, y", P)` 也不会被误切——`splitArgs` 与 `stripComment` 共用同一套引号感知逻辑。
+- **字面点写法**：直接给坐标写 `A = (x, y)` 或 `A = (x, y, z)`。`Point(0, 0)`、`Point(2)` 会报 `cmd/arg`——`Point` 的 `<Object>` 是对象槽，数字不是对象，否则 `Point(0, 0)` 会被误读成"对象 0 上的参数点 0"。报错信息会附上正确写法；要经过 `Point` 命令，用 `Point({x, y})` / `Point((x, y))` 或传对象引用 `Point(A, t)`。
 - **注释**：`# ...` 与 `// ...` 行注释、`/* ... */` 跨行块注释（在切行前剥离）；UTF-8 BOM 自动剥离。
 - **裸语句**：仅**官方 67 条 Scripting 命令**（`SetColor`、`StartAnimation`、`TurtleForward` 等）可写成 `Cmd(args)` 无赋值号；`Circle(A, B)` 这类必须报语法错误——这是"打错赋值"的典型形态，不应静默接受。
 - **代数表达式后置数值化**：`r = d + 1` 在 build 阶段先按 `KFunction` 物化，`catalog.ApplyKinds` 把 `d = Distance(...)` 标成 `KNumber` 后，`text.ReclassifyNumericExprs` 再把 `r` 升级为 `KNumber`；函数定义 `f(x) = 2x+1` 保持 `KFunction`。

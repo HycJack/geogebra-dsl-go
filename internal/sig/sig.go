@@ -24,6 +24,12 @@ import (
 // <List<...>> and <List of ...> variants are handled by kindForToken's prefix
 // rule rather than enumerated here — there are ~18 spellings and they are all
 // KList.
+//
+// The "any" wildcards are deliberately split into two classes (see
+// strictWildcardObjectTokens): <Object>/<GeoObject>/<Region>/... reference a
+// real geometric object and so must reject a bare value literal, while
+// <Expression>/<Symbol>/<Variable>/<Name>/... are expression or name slots
+// where a number is a legal argument (Sequence(2, k, 1, 10), If(cond, 1, 2)).
 var kindTokens = map[string]struct {
 	kind ir.Kind
 	any  bool
@@ -136,6 +142,51 @@ var kindTokens = map[string]struct {
 	"Composite(ListOfText+FrequencyTable)": {any: true},
 }
 
+// strictWildcardObjectTokens holds the catalog type tokens that our coarse
+// model types as a wildcard but which, in GeoGebra, are references to a real
+// geometric object — a <Object>/<GeoObject> transform target, a <Region>, an
+// <Image>, a spreadsheet <Cell>, a scripting <ActionObject>. They accept any
+// object kind, but they must NOT accept a bare value literal: in GeoGebra a
+// number is not an object, so `Point(0, 2)`, `Point(2)`, `Rotate(0, 90, O)`
+// and `Delete(0)` do not construct anything.
+//
+// The remaining "any" wildcards are expression or name slots, where a number is
+// a perfectly legal argument: Sequence(2, k, 1, 10), Sum(2, k, 1, 3),
+// If(cond, 1, 2), `Text(0)` (any expression rendered as text), the numeric
+// enum `StemPlot(l, -1)`. Those stay permissive and are listed here only so the
+// two classes are visible next to each other:
+//
+//	Expression / Expression …  Symbol  Variable  Name  FunctionName
+//	Keyword  Equation  Inequality  Boolean expression  Any  Quadratic Function
+//	Enum(-1|0|1)
+//
+// Keeping them permissive is what stops this rule from becoming a blunt
+// instrument: Sequence(2, k, 1, 10) must keep validating.
+var strictWildcardObjectTokens = map[string]bool{
+	"Object":                               true,
+	"GeoObject":                            true,
+	"Geometric Object":                     true,
+	"Region":                               true,
+	"Image":                                true,
+	"GraphicsView":                         true,
+	"PointOrObjectWithPosition":            true,
+	"SurfaceOr3DObject":                    true,
+	"3DObject":                             true,
+	"Composite(ListOfText+FrequencyTable)": true,
+	"Spreadsheet Cell":                     true,
+	"Column":                               true,
+	"Row":                                  true,
+	"Cell":                                 true,
+	"CellRange":                            true,
+	"Start Cell":                           true,
+	"End Cell":                             true,
+	"Face":                                 true,
+	"Edge":                                 true,
+	"Axes":                                 true,
+	"Button":                               true,
+	"ActionObject":                         true,
+}
+
 // unionTokens maps a catalog type token that is genuinely a union of two or
 // more concrete kinds to those kinds. kindTokens holds one kind per token,
 // which cannot express "Line, Vector or Plane". Such a token is returned
@@ -166,6 +217,14 @@ func subkind(want, actual ir.Kind) bool {
 
 // tokenAccepts reports whether an actual ir.Kind satisfies a catalog type token.
 func tokenAccepts(token string, actual ir.Kind) bool {
+	// An object wildcard does not accept a value literal: a bare number or
+	// boolean is never an object in GeoGebra, so Point(0, 2) must not be read
+	// as "the point on object 0 at parameter 2". Expression/name wildcards
+	// (<Expression>, <Symbol>, <Variable>, <Name>, <Any>, the numeric enums)
+	// are left permissive on purpose — see strictWildcardObjectTokens.
+	if strictWildcardObjectTokens[token] && isValueLiteralKind(actual) {
+		return false
+	}
 	for _, alt := range tokenAlternatives(token) {
 		if ks, ok := unionTokens[alt]; ok {
 			for _, k := range ks {
@@ -197,6 +256,13 @@ func tokenAccepts(token string, actual ir.Kind) bool {
 		return true
 	}
 	return false
+}
+
+// isValueLiteralKind reports whether kind is a bare value literal (a number or
+// a boolean). Those kinds can fill a value slot (<Number>, <Boolean>,
+// <Angle>, ...) and an expression/name slot, but never an object slot.
+func isValueLiteralKind(k ir.Kind) bool {
+	return k == ir.KNumber || k == ir.KBool
 }
 
 // tokenAlternatives expands one catalog type token into the atomic tokens it
@@ -304,11 +370,40 @@ func Lookup(c *catalog.Catalog, g *ir.Graph, o *ir.Object) Match {
 	if matched != nil {
 		return Match{Known: true, OK: true, Matched: matched}
 	}
-	return Match{
-		Known:   true,
-		OK:      false,
-		Explain: "命令 " + o.Cmd + " 的参数个数或类型不匹配任何签名；正确签名：" + syntaxList(cmd.Overloads),
+	explain := "命令 " + o.Cmd + " 的参数个数或类型不匹配任何签名；正确签名：" + syntaxList(cmd.Overloads)
+	if allValueLiteralArgs(g, o) {
+		explain += coordinateHint(o.Cmd)
 	}
+	return Match{Known: true, OK: false, Explain: explain}
+}
+
+// allValueLiteralArgs reports whether every argument of o is a bare value
+// literal — a number, a constant arithmetic expression, or true/false — with no
+// object reference among them. That is the signature of a coordinate-style call
+// (Point(0, 2), Vector(1, 1), Circle(0, 0, 2)) aimed at a command whose
+// overloads all want objects, so the diagnostic can point at the coordinate
+// syntax that actually works.
+func allValueLiteralArgs(g *ir.Graph, o *ir.Object) bool {
+	if len(o.Args) == 0 {
+		return false
+	}
+	for _, a := range o.Args {
+		if !isValueLiteralKind(argKind(g, a)) {
+			return false
+		}
+	}
+	return true
+}
+
+// coordinateHint appends the GeoGebra coordinate syntax for a call that passed
+// value literals where the overloads want objects, so an AI repair loop can
+// rewrite the line rather than guessing against the listed overloads.
+func coordinateHint(cmd string) string {
+	hint := "；这些参数都是数字/布尔字面量，但匹配到的重载要的是对象引用——先把它们建成对象再传引用"
+	if strings.EqualFold(cmd, "Point") {
+		hint += "；构造点请写 A = (x, y) 或 A = (x, y, z)，也可 Point({x, y}) / Point((x, y, z))"
+	}
+	return hint
 }
 
 // syntaxList renders the accepted overload syntaxes of a command for a

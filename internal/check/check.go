@@ -114,8 +114,84 @@ func Check(input []byte, opt Options) *diag.Receipt {
 	if len(cycleProbs) == 0 {
 		rc.Executable = order
 	}
+	// Snapshot the resolved object kinds for hosts that want to reason about
+	// the constructed geometry (e.g. pick the 2D vs 3D GeoGebra view) without
+	// re-running the pipeline.
+	rc.Kinds = kindsOf(g)
 	rc.OK = len(rc.Errors) == 0
 	return rc
+}
+
+// kindsOf records each object's resolved coarse kind, skipping objects whose
+// kind was never determined. Order follows the graph's definition order so a
+// host sees them in the order the script introduced them.
+func kindsOf(g *ir.Graph) map[string]string {
+	out := map[string]string{}
+	for _, id := range g.Order {
+		if name := irKindName(g.Objects[id].Kind); name != "" {
+			out[id] = name
+		}
+	}
+	return out
+}
+
+// irKindName maps the ir.Kind enum to its name. ir.Kind.String only names the
+// kinds a signature can bind to, which leaves Plane, Quadric and Solid all
+// reporting "Unknown" — exactly the 3D indicators a host needs.
+func irKindName(k ir.Kind) string {
+	switch k {
+	case ir.KPoint:
+		return "Point"
+	case ir.KLine:
+		return "Line"
+	case ir.KSegment:
+		return "Segment"
+	case ir.KRay:
+		return "Ray"
+	case ir.KVector:
+		return "Vector"
+	case ir.KCircle:
+		return "Circle"
+	case ir.KConic:
+		return "Conic"
+	case ir.KPolygon:
+		return "Polygon"
+	case ir.KNumber:
+		return "Number"
+	case ir.KBool:
+		return "Bool"
+	case ir.KFunction:
+		return "Function"
+	case ir.KObject:
+		return "Object"
+	case ir.KList:
+		return "List"
+	case ir.KPlane:
+		return "Plane"
+	case ir.KQuadric:
+		return "Quadric"
+	case ir.KSolid:
+		return "Solid"
+	case ir.KPolyhedron:
+		return "Polyhedron"
+	case ir.KScript:
+		return "Script"
+	case ir.KText:
+		return "Text"
+	case ir.KMatrix:
+		return "Matrix"
+	case ir.KPolynomial:
+		return "Polynomial"
+	case ir.KCurve:
+		return "Curve"
+	case ir.KLocus:
+		return "Locus"
+	case ir.KSet:
+		return "Set"
+	case ir.KTurtle:
+		return "Turtle"
+	}
+	return ""
 }
 
 // sniff decides input shape. Explicit forceSource wins; otherwise leading '{'
@@ -141,7 +217,7 @@ func buildText(input []byte, cat *catalog.Catalog) (g *ir.Graph, fatal []diag.Pr
 		// downstream can run.
 		return nil, parseProbs, nil
 	}
-	g, buildProbs := text.Build(stmts)
+	g, buildProbs := text.Build(stmts, cat)
 	// Build problems (redefine / undefined ref) are collected but the graph is
 	// still usable for reporting further independent problems.
 	return g, nil, buildProbs

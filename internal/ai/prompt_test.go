@@ -6,12 +6,12 @@ import (
 )
 
 func TestExtractScript(t *testing.T) {
-	reply := "你好\n<gg>\nA = Point(0, 2)\nB = Point(4, 2)\n</gg>\n<!-- 说明：先做点 -->"
+	reply := "你好\n<gg>\nA = (0, 2)\nB = (4, 2)\n</gg>\n<!-- 说明：先做点 -->"
 	as, ok := extractScript(reply)
 	if !ok {
 		t.Fatal("expected <gg> block extracted")
 	}
-	if as.Script != "A = Point(0, 2)\nB = Point(4, 2)" {
+	if as.Script != "A = (0, 2)\nB = (4, 2)" {
 		t.Fatalf("script mismatch: %q", as.Script)
 	}
 	if as.TeachingNote != "先做点" {

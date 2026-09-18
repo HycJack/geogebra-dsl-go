@@ -69,7 +69,7 @@
 - **命令嵌套**：参数里出现 `SubCmd(...)` 会**物化为合成对象**（如 `c.Midpoint1`），带自己的 cmd/args/refs，参与签名/依赖/退化全链校验；外层对象把它当依赖。嵌套可任意加深。
 - **绑定变量**：`Sequence/Sum/Product/Curve/Surface` 等的迭代参数（如 `k`）是命令绑定符号，不作对象引用、不报未定义。
 - **保留常量**：`pi` / `e` / `euler` / `gamma` / `i` 是保留字常量，不作对象引用（不会误报 `dep/undefined`）；`deg` / `freehand` 等同样是保留字。
-- **字符串感知**：`splitArgs` 与 `stripComment` 都用同一套字符串引号感知——`Text("a, b")` 里的逗号不算分隔符，`Point(0, "x, y")` 也不会被误切。
+- **字符串感知**：`splitArgs` 与 `stripComment` 都用同一套字符串引号感知——`Text("a, b")` 里的逗号不算分隔符，`Text("x, y", P)` 也不会被误切。
 - **数字字面量**：`isNumber` 接受整数、小数、`+/-` 前缀、科学计数法（`1e3`、`2.5E-2`），与 GeoGebra 一致；至少一位数字（`.` 或 `+` 单独不算数字）。
 
 ### 3.2 IR JSON
@@ -88,13 +88,13 @@
 ## 4. 命令表（549 条，与内核对齐）
 
 - **主源**：20 个官方分类 JSON（`geogebra-commands/*.json`，`commands` 的 map 与 array 两种 shape 都支持），`go:embed` 进二进制。
-- **补充**：`supplement.json`（238 条签名，逐一对照内核 `Cmd*` 处理器核实）。
+- **补充**：`supplement.json`（87 条命令 / 157 条签名，逐一对照内核 `Cmd*` 处理器核实；也用于纠正主源的类型标注，如 `If` 的 `<Then>/<Else>` 主源写成 `<Object>` 但内核按表达式求值）。
 - **元数据**：`cmdmeta.json` 两份数据：
   - `returns`：命令 → 返回粗类型（`Point` / `Line` / `Number` / `Polygon` / `Quadric` / `Plane` / `Polyhedron` / `List` / `Text` / `Matrix` / `Curve` / `Conic` / `Boolean` / `Script` …），数据驱动替代了原来 200+ 行的 `kindForCmd` switch。
   - `scripting`：官方 67 条 Scripting 命令集合（返回 "Script"），也是"裸语句合法性"的**唯一权威源**。
 - **进程级缓存**：`catalog.Default()` 用 `sync.OnceValues` 缓存——旧实现在每次 `Check` 都重解析全部 20+ JSON（约 16 ms/call），现在降至 ~7.5 µs/call；AI 修复循环（`MaxRepair+1` 次）在长会话下不再重复付出这个代价。
 - **覆盖核查**：对内核权威枚举 `Commands.java`（548 个命令常量）逐一比对——**缺失 0**；JSON 仅多收一个 parser 函数 `REAL`（保留字，非命令）。
-- **匹配粒度**：命令名精确 + 参数个数 + 粗类型（按 overload 匹配）；字面量参数宽松通过（不阻塞有效性判定）。
+- **匹配粒度**：命令名精确 + 参数个数 + 粗类型（按 overload 匹配）；字面量参数宽松通过（不阻塞有效性判定），**但只限值槽与表达式槽**。对象通配槽（`<Object>` / `<GeoObject>` / `<Geometric Object>` / `<Region>` / `<Image>` / 表格单元格 / UI 控件等）只收真实对象，裸数字/布尔一律拒绝——否则 `Point(0, 0)` 会被误读成"对象 0 上的参数点 0"、`Rotate(0, 90, O)` 会被当成平移一个数字。字面点请写 `A = (0, 0)` 或 `Point({0, 0})`；`<Expression>` / `<Any>` / `<Variable>` / `<Name>` / 枚举值等槽保持宽松（`Sequence(2, k, 1, 10)`、`Text(0)`、`If(cond, 1, 2)` 都合法）。
 - **诊断增援**：`sig` 报告 `cmd/arg` 时，诊断**附该命令的正确 overload 签名（前 3 条 + 总数）**，AI 修复循环据此直接改正；`cmd/unknown` 附最近命令名 + 官方 URL。
 
 ---

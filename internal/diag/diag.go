@@ -43,19 +43,22 @@ func (c Code) String() string { return string(c) }
 
 // Receipt is the full result of a check run.
 type Receipt struct {
-	OK         bool      `json:"ok"`         // true iff all checks passed
-	Errors     []Problem `json:"errors"`     // blocking problems (any makes OK=false)
-	Warnings   []Problem `json:"warnings"`   // non-blocking notes
-	Executable []string  `json:"executable"` // object ids in topological (build) order
-	SourceIn   string    `json:"source_in"`  // "text" or "ir"
+	OK         bool              `json:"ok"`         // true iff all checks passed
+	Errors     []Problem         `json:"errors"`     // blocking problems (any makes OK=false)
+	Warnings   []Problem         `json:"warnings"`   // non-blocking notes
+	Executable []string          `json:"executable"` // object ids in topological (build) order
+	Kinds      map[string]string `json:"kinds"`      // object id -> resolved coarse kind
+	SourceIn   string            `json:"source_in"`  // "text" or "ir"
 }
 
 // NewReceipt builds an empty receipt. Warnings is initialized to an empty
 // slice (rather than nil) so the documented `warnings[]` field always
 // serializes as `[]`, not `null`; it is reserved for non-blocking notes and
-// may remain empty when the validator has nothing to warn about.
+// may remain empty when the validator has nothing to warn about. Kinds is
+// likewise always present so hosts can read it without a nil check; it is
+// empty when the input could not be turned into a graph.
 func NewReceipt(source string) *Receipt {
-	return &Receipt{SourceIn: source, Warnings: []Problem{}, Executable: []string{}}
+	return &Receipt{SourceIn: source, Warnings: []Problem{}, Executable: []string{}, Kinds: map[string]string{}}
 }
 
 // Fail marks the receipt as failed (OK=false). Used by fail-closed stages.

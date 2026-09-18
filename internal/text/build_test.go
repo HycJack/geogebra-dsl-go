@@ -21,7 +21,7 @@ var testCat = func() *catalog.Catalog {
 
 func TestParseDispatch(t *testing.T) {
 	src := `# comment
-A = Point(0, 2)
+A = Point(L, t)
 l = Line(A, B)
 M = (1, 2)
 r = 3`
@@ -44,9 +44,9 @@ r = 3`
 }
 
 func TestBuildKindsAndRefs(t *testing.T) {
-	src := "A = Point(0, 2)\nB = Point(4, 2)\nl = Line(A, B)\n"
+	src := "A = (0, 2)\nB = (4, 2)\nl = Line(A, B)\n"
 	stmts, _ := Parse(src, testCat)
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected build problems: %v", probs)
 	}
@@ -64,9 +64,9 @@ func TestBuildKindsAndRefs(t *testing.T) {
 }
 
 func TestUndefinedRefReported(t *testing.T) {
-	src := "A = Point(0,2)\nl = Line(A, Missing)\n"
+	src := "A = (0, 2)\nl = Line(A, Missing)\n"
 	stmts, _ := Parse(src, testCat)
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	if len(probs) != 1 {
 		t.Fatalf("expected 1 problem, got %v", probs)
 	}
@@ -81,9 +81,9 @@ func TestUndefinedRefReported(t *testing.T) {
 }
 
 func TestRedefinitionReported(t *testing.T) {
-	src := "A = Point(0,0)\nA = Point(1,1)\n"
+	src := "A = (0, 0)\nA = (1, 1)\n"
 	stmts, _ := Parse(src, testCat)
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	if len(probs) != 1 {
 		t.Fatalf("expected 1 redefinition problem, got %v", probs)
 	}
@@ -102,7 +102,7 @@ func TestBoundVariableNotUndefined(t *testing.T) {
 	// nor become a ref targeting a nonexistent object.
 	src := "n = 8\npts = Sequence(B + (k, 0), k, 1, n)\n"
 	stmts, _ := Parse(src, testCat)
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("expected no problems (k is bound), got %v", probs)
 	}
@@ -117,9 +117,9 @@ func TestBoundVariableNotUndefined(t *testing.T) {
 func TestReservedConstantsNotUndefinedRefs(t *testing.T) {
 	// pi / e are reserved constants, not object references; they must not be
 	// reported as undefined and must not become dependency refs.
-	src := "A = Point(0, 0)\nc1 = Circle(A, pi)\nc2 = Circle(A, 2*e)\n"
+	src := "A = (0, 0)\nc1 = Circle(A, pi)\nc2 = Circle(A, 2*e)\n"
 	stmts, _ := Parse(src, testCat)
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("expected no problems for reserved constants, got %v", probs)
 	}
@@ -141,7 +141,7 @@ func TestHashInsideStringIsNotComment(t *testing.T) {
 	if len(parseProbs) != 0 {
 		t.Fatalf("unexpected parse errors: %v", parseProbs)
 	}
-	_, probs := Build(stmts)
+	_, probs := Build(stmts, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("expected clean build, got %v", probs)
 	}
@@ -159,9 +159,9 @@ func TestHashInsideStringIsNotComment(t *testing.T) {
 // with a name that is also a reserved constant (pi/e/...), a later reference to
 // that object is treated as a real dependency rather than silently dropped.
 func TestReservedNameShadowingKeepsRef(t *testing.T) {
-	src := "pi = Point(0, 0)\nc = Circle(pi, 3)\n"
+	src := "pi = (0, 0)\nc = Circle(pi, 3)\n"
 	stmts, _ := Parse(src, testCat)
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("expected clean build, got %v", probs)
 	}
@@ -180,9 +180,9 @@ func TestReservedNameShadowingKeepsRef(t *testing.T) {
 func TestNestedCommandMaterialized(t *testing.T) {
 	// Circle(Midpoint(A,B), 3) creates a synthetic object for Midpoint(A,B)
 	// that participates in the graph with correct dependencies.
-	src := "A = Point(0, 0)\nB = Point(4, 0)\nc = Circle(Midpoint(A, B), 3)\n"
+	src := "A = (0, 0)\nB = (4, 0)\nc = Circle(Midpoint(A, B), 3)\n"
 	stmts, _ := Parse(src, testCat)
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("expected no problems, got %v", probs)
 	}
@@ -205,9 +205,9 @@ func TestNestedCommandMaterialized(t *testing.T) {
 
 func TestNestedCommandUnknown(t *testing.T) {
 	// An unknown command nested in an arg is not silently dropped: build flags it.
-	src := "A = Point(0, 0)\nB = Point(4, 0)\nc = Circle(Nope(A, B), 2)\n"
+	src := "A = (0, 0)\nB = (4, 0)\nc = Circle(Nope(A, B), 2)\n"
 	stmts, _ := Parse(src, testCat)
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	// build itself doesn't know the command table; it synthesizes the object.
 	// The existence of "c.Nope1" is what the sig stage checks. No dep problems here.
 	if len(probs) != 0 {
@@ -244,22 +244,29 @@ func TestParseModifierStatements(t *testing.T) {
 	}
 }
 
-func TestParseNonModifierNoEqualsRejected(t *testing.T) {
-	// A construct command written without '=' is a syntax error, not silently ok.
+func TestParseBareConstructAllowed(t *testing.T) {
+	// A construct command written without '=' is now accepted (matching GeoGebra).
+	// It gets an auto-generated label at Build time.
 	src := "Line(A, B)\n"
 	stmts, probs := Parse(src, testCat)
-	if len(stmts) != 0 {
-		t.Fatalf("expected no statements, got %v", stmts)
+	if len(probs) != 0 {
+		t.Fatalf("unexpected parse problems: %v", probs)
 	}
-	if len(probs) == 0 {
-		t.Fatal("expected a parse problem for bare non-modifier command")
+	if len(stmts) != 1 {
+		t.Fatalf("expected 1 statement, got %d", len(stmts))
+	}
+	if stmts[0].cmd != "Line" {
+		t.Errorf("expected cmd=Line, got %q", stmts[0].cmd)
+	}
+	if !stmts[0].modifier {
+		t.Error("expected modifier flag")
 	}
 }
 
 func TestBuildModifiersDoNotCreateObjects(t *testing.T) {
 	src := "a = Slider(1, 5, 0.1)\nA = (0, 0)\nB = (4, 0)\nc = Circle(A, B)\nSetColor(c, \"red\")\nSetLineThickness(c, 4)\nStartAnimation(a)\n"
 	stmts, _ := Parse(src, testCat)
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected build problems: %v", probs)
 	}
@@ -284,7 +291,7 @@ func TestBuildModifierUndefinedTargetReports(t *testing.T) {
 	// A modifier whose target isn't defined is an undefined-ref error.
 	src := "SetColor(missing, \"red\")\n"
 	stmts, _ := Parse(src, testCat)
-	_, probs := Build(stmts)
+	_, probs := Build(stmts, testCat)
 	if len(probs) == 0 {
 		t.Fatal("expected undefined-target error for modifier")
 	}
@@ -305,7 +312,7 @@ func TestParseListLiteral(t *testing.T) {
 	if len(probs) != 0 {
 		t.Fatalf("unexpected parse problems: %v", probs)
 	}
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected build problems: %v", probs)
 	}
@@ -330,7 +337,7 @@ func TestParseExpressionRHS(t *testing.T) {
 	if len(probs) != 0 {
 		t.Fatalf("unexpected parse problems: %v", probs)
 	}
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected build problems (free var x must be tolerated): %v", probs)
 	}
@@ -351,7 +358,7 @@ func TestParseFunctionDef(t *testing.T) {
 	if len(probs) != 0 {
 		t.Fatalf("unexpected parse problems: %v", probs)
 	}
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected build problems: %v", probs)
 	}
@@ -374,7 +381,7 @@ func TestParseFunctionDefCommandLikeBody(t *testing.T) {
 	if len(probs) != 0 {
 		t.Fatalf("unexpected parse problems: %v", probs)
 	}
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected build problems (body must be expression): %v", probs)
 	}
@@ -392,7 +399,7 @@ func TestListElementsResolveRefs(t *testing.T) {
 	// an undefined standalone identifier is reported.
 	src := "A = (0, 0)\nB = (2, 0)\nl = {A, B, Seven}\n"
 	stmts, _ := Parse(src, testCat)
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	foundUndef := false
 	for _, p := range probs {
 		if p.Code == diag.CodeDepUndefined {
@@ -416,7 +423,7 @@ func TestNestedCommandInPointCoords(t *testing.T) {
 	if len(probs) != 0 {
 		t.Fatalf("unexpected parse problems: %v", probs)
 	}
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected build problems: %v", probs)
 	}
@@ -445,7 +452,7 @@ func TestNestedCommandEmbeddedInPointCoord(t *testing.T) {
 	// and materialized, not just whole-argument calls.
 	src := "D = (Sqrt(3)/2, 3/2, 0)\n"
 	stmts, _ := Parse(src, testCat)
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected build problems: %v", probs)
 	}
@@ -467,7 +474,7 @@ func TestNestedCommandInListLiteral(t *testing.T) {
 	// depends on the synthetic object.
 	src := "L = {Sqrt(2), 3}\n"
 	stmts, _ := Parse(src, testCat)
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected build problems: %v", probs)
 	}
@@ -492,7 +499,7 @@ func TestNestedCommandUnknownInPoint(t *testing.T) {
 	// reported (cmd/unknown via the sig stage) instead of being silently ignored.
 	src := "B = (Sqrrt(3), 0, 0)\n"
 	stmts, _ := Parse(src, testCat)
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("build should still succeed (sig stage flags cmd/unknown): %v", probs)
 	}
@@ -524,7 +531,7 @@ func TestBuildBoolLiteralKind(t *testing.T) {
 	// could produce it, so no <Boolean> parameter slot was satisfiable.
 	src := "flag = false\non = true\n"
 	stmts, _ := Parse(src, testCat)
-	g, probs := Build(stmts)
+	g, probs := Build(stmts, testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected build problems: %v", probs)
 	}
@@ -547,7 +554,7 @@ func TestBoolLiteralArgumentNotUndefinedRef(t *testing.T) {
 	if len(probs) != 0 {
 		t.Fatalf("parse problems: %v", probs)
 	}
-	_, bprobs := Build(stmts)
+	_, bprobs := Build(stmts, testCat)
 	if len(bprobs) != 0 {
 		t.Fatalf("build problems: %v", bprobs)
 	}
@@ -586,28 +593,32 @@ func TestParseScriptingCategoryAcceptsBare(t *testing.T) {
 	}
 }
 
-func TestParseNonScriptingCommandStillRejected(t *testing.T) {
-	// A command that returns an object must not be accepted bare: that is how a
-	// typo'd assignment looks, and rejecting it is what makes the error useful.
+func TestParseBareConstructCommandAllowed(t *testing.T) {
+	// Bare construct commands are now accepted (matching GeoGebra). They get
+	// auto-generated labels at Build time.
 	for _, line := range []string{"Segment(A, B)", "Line(A, B)", "Circle(A, B)", "Polygon(A, B, C)", "Text(A, \"hi\")"} {
 		stmts, probs := Parse(line+"\n", testCat)
-		if len(probs) == 0 {
-			t.Errorf("%q: expected a parse problem for a bare construct command", line)
+		if len(probs) != 0 {
+			t.Errorf("%q: unexpected parse problem: %v", line, probs)
 		}
-		if len(stmts) != 0 {
-			t.Errorf("%q: expected no statements", line)
+		if len(stmts) != 1 {
+			t.Errorf("%q: expected 1 statement, got %d", line, len(stmts))
+		}
+		if !stmts[0].modifier {
+			t.Errorf("%q: expected modifier flag", line)
 		}
 	}
 }
 
 func TestDeadModifierAliasesRemoved(t *testing.T) {
 	// SETVISIBLE and SETLABELVISIBLE were in the old allowlist but are absent
-	// from the catalog entirely (GeoGebra has ShowLabel, not SetLabelVisible),
-	// so they must no longer parse as modifiers.
+	// from the catalog entirely (GeoGebra has ShowLabel, not SetLabelVisible).
+	// They are now parsed (bare commands are accepted) but will fail at the
+	// catalog check stage.
 	for _, line := range []string{"SetVisible(A, false)", "SetLabelVisible(A, false)"} {
 		_, probs := Parse(line+"\n", testCat)
-		if len(probs) == 0 {
-			t.Errorf("%q: expected a parse problem for a non-existent command", line)
+		if len(probs) != 0 {
+			t.Errorf("%q: unexpected parse problem (should be caught at catalog check): %v", line, probs)
 		}
 	}
 }
@@ -757,7 +768,7 @@ func TestArithmeticExpressionIsNumberObject(t *testing.T) {
 	if len(probs) != 0 {
 		t.Fatalf("unexpected problems: %v", probs)
 	}
-	g, bprobs := Build(stmts)
+	g, bprobs := Build(stmts, testCat)
 	if len(bprobs) != 0 {
 		t.Fatalf("unexpected build problems: %v", bprobs)
 	}
@@ -777,7 +788,7 @@ func TestNumberExprWithNumberRefIsNumberObject(t *testing.T) {
 	if len(probs) != 0 {
 		t.Fatalf("unexpected problems: %v", probs)
 	}
-	g, bprobs := Build(stmts)
+	g, bprobs := Build(stmts, testCat)
 	if len(bprobs) != 0 {
 		t.Fatalf("unexpected build problems: %v", bprobs)
 	}
@@ -800,7 +811,7 @@ func TestNumberExprWithCommandNumberRef(t *testing.T) {
 	if len(probs) != 0 {
 		t.Fatalf("unexpected problems: %v", probs)
 	}
-	g, bprobs := Build(stmts)
+	g, bprobs := Build(stmts, testCat)
 	if len(bprobs) != 0 {
 		t.Fatalf("unexpected build problems: %v", bprobs)
 	}
@@ -818,7 +829,7 @@ func TestNumberExprForwardRefResolves(t *testing.T) {
 	if len(probs) != 0 {
 		t.Fatalf("unexpected problems: %v", probs)
 	}
-	g, bprobs := Build(stmts)
+	g, bprobs := Build(stmts, testCat)
 	if len(bprobs) != 0 {
 		t.Fatalf("unexpected build problems: %v", bprobs)
 	}
@@ -837,7 +848,7 @@ func TestFunctionDefStaysFunction(t *testing.T) {
 	if len(probs) != 0 {
 		t.Fatalf("unexpected problems: %v", probs)
 	}
-	g, bprobs := Build(stmts)
+	g, bprobs := Build(stmts, testCat)
 	if len(bprobs) != 0 {
 		t.Fatalf("unexpected build problems: %v", bprobs)
 	}
@@ -853,7 +864,7 @@ func TestFunctionDefStaysFunction(t *testing.T) {
 // TestSplitArgsQuoteAware — regression: splitArgs must not split on commas
 // inside double-quoted strings, so Text("hello, world", A) has two arguments.
 func TestSplitArgsQuoteAware(t *testing.T) {
-	got := splitArgs(`"hello, world", A, Point(1, 2)`)
+	got := splitArgs(`"hello, world", A, (1, 2)`)
 	if len(got) != 3 {
 		t.Fatalf("splitArgs = %v, want 3 args", got)
 	}
@@ -863,8 +874,8 @@ func TestSplitArgsQuoteAware(t *testing.T) {
 	if got[1] != "A" {
 		t.Errorf("arg1=%q, want A", got[1])
 	}
-	if got[2] != "Point(1, 2)" {
-		t.Errorf("arg2=%q, want Point(1, 2)", got[2])
+	if got[2] != "(1, 2)" {
+		t.Errorf("arg2=%q, want (1, 2)", got[2])
 	}
 }
 
@@ -872,11 +883,11 @@ func TestSplitArgsQuoteAware(t *testing.T) {
 // argument containing a comma is one arg, produces no undefined refs, and the
 // object keeps two args.
 func TestQuotedStringArgBuildsCleanly(t *testing.T) {
-	stmts, probs := Parse("A = Point(0, 0)\nt1 = Text(\"hello, world\", A)\n", testCat)
+	stmts, probs := Parse("A = (0, 0)\nt1 = Text(\"hello, world\", A)\n", testCat)
 	if len(probs) != 0 {
 		t.Fatalf("unexpected problems: %v", probs)
 	}
-	g, bprobs := Build(stmts)
+	g, bprobs := Build(stmts, testCat)
 	if len(bprobs) != 0 {
 		t.Fatalf("unexpected build problems: %v", bprobs)
 	}
