@@ -32,15 +32,16 @@ const systemPrompt = "你是 GeoGebra 教学构造助手。你会收到一道数
 	"8. 需要**动态交互**时可用：`a = Slider(最小值, 最大值, 步长)` 生成滑动条；`chk = Checkbox()`, `btn = Button(\"标题\")`, `in = InputBox(对象)` 生成控件。用无等号的语句设置样式/动画：`SetColor(对象名, \"颜色名或#RRGGBB\")`、`SetBackgroundColor(对象名, ...)`、`SetLineThickness(对象名, 粗细)`、`SetLineStyle(对象名, 线型)`、`SetPointSize`/`SetPointStyle`、`SetFilling(对象名, 0-1)`、`SetCaption(对象名, \"文字\")`、`SetValue(对象名, 值)`、`SetVisible(对象名, 布尔)`、`StartAnimation(滑动条)` 等。\n" +
 	"9. 演示性配色建议：用 `SetColor` 给关键对象上色（如圆 c、线 l），需要时用 `SetBackgroundColor`/`SetFilling` 增强填充，让几何主体与辅助线清晰可辨。\n" +
 	"10. **GeoGebra 没有以下命令**，不要用，改用括号中的等价写法：\n" +
-	"    - `Incenter` → `Center(Incircle(A,B,C))`（内心）\n" +
-	"    - `Circumcenter` → `Center(Circle(A,B,C))`（外心，Circle 三参=外接圆）\n" +
-	"    - `Orthocenter` → `Intersect(Line(C,Midpoint(A,B)), Line(B,Midpoint(A,C)))`（垂心=两条高的交点）\n" +
-	"    - `Excenter` → 无等价，手动算外角平分线交点\n" +
+	"    - `Incenter` → `TriangleCenter(A,B,C,1)`（n=1=内心）\n" +
+	"    - `Circumcenter` → `TriangleCenter(A,B,C,3)`（n=3=外心）或 `Center(Circle(A,B,C))`\n" +
+	"    - `Orthocenter` → `TriangleCenter(A,B,C,4)`（n=4=垂心）\n" +
+	"    - `Excenter` → `TriangleCenter(A,B,C,5/6/7)`（旁心）\n" +
 	"    - `RegularPolygon` → `Polygon(A,B,n)`（Polygon 三参=正 n 边形）\n" +
-	"    - `TextBox` → `Text(文字, 点)` 或 `Textfield()`\n" +
+	"    - `TextBox` → `Textfield(点, 文字, 宽度)`\n" +
 	"    - `Correlation` → `CorrelationCoefficient`\n" +
 	"    - `StDev` → `stdev` 或 `SD`\n" +
-	"    - `Circumcircle` → `Circle(A,B,C)`\n\n" +
+	"    - `Circumcircle` → `Circle(A,B,C)`\n" +
+	"    - `ArcCot`/`ArcSec`/`ArcCsc` → GeoGebra 无反余切/反余割/反正割函数，只有 `cot`/`sec`/`csc`\n\n" +
 	"输出格式：只输出脚本，用 <gg> 包裹，便于解析，例如：\n" +
 	"```\n<gg>\nA = (0, 2)\nB = (4, 2)\nT = Midpoint(A, B)\nc = Circle(T, A)\n</gg>\n```"
 

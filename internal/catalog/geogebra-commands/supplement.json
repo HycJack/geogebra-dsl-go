@@ -1,6 +1,6 @@
 {
   "command_category": "Supplement (from kernel source)",
-  "total_commands": 83,
+  "total_commands": 92,
   "commands": [
     {
       "name": "CircleArc",
@@ -2453,6 +2453,118 @@
       ]
     },
     {
+      "name": "Incenter",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Incenter/",
+      "note": "幻觉命令。GeoGebra 真实命令是 TriangleCenter(<Polygon>, <Number>)，n=1 表示内心。等价于 TriangleCenter(Polygon(<A>,<B>,<C>), 1)。",
+      "overloads": [
+        {
+          "syntax": "Incenter(<Point>,<Point>,<Point>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            }
+          ]
+        }
+      ],
+      "alias": "TriangleCenter"
+    },
+    {
+      "name": "Circumcenter",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Circumcenter/",
+      "note": "幻觉命令。GeoGebra 真实命令是 TriangleCenter(<Polygon>, <Number>)，n=3 表示外心。等价于 TriangleCenter(Polygon(<A>,<B>,<C>), 3) 或 Center(Circle(<A>,<B>,<C>))。",
+      "overloads": [
+        {
+          "syntax": "Circumcenter(<Point>,<Point>,<Point>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            }
+          ]
+        }
+      ],
+      "alias": "TriangleCenter"
+    },
+    {
+      "name": "Orthocenter",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Orthocenter/",
+      "note": "幻觉命令。GeoGebra 真实命令是 TriangleCenter(<Polygon>, <Number>)，n=4 表示垂心。等价于 TriangleCenter(Polygon(<A>,<B>,<C>), 4)。",
+      "overloads": [
+        {
+          "syntax": "Orthocenter(<Point>,<Point>,<Point>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            }
+          ]
+        }
+      ],
+      "alias": "TriangleCenter"
+    },
+    {
+      "name": "Circumcircle",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/Circumcircle/",
+      "note": "幻觉命令。GeoGebra 真实命令是 Circle(<Point>, <Point>, <Point>) 通过三点画圆，或 CircleWithCenter(<Center>, <Radius>)。",
+      "overloads": [
+        {
+          "syntax": "Circumcircle(<Point>,<Point>,<Point>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            }
+          ]
+        }
+      ],
+      "alias": "Circle"
+    },
+    {
       "name": "CircleWithCenter",
       "url": "https://geogebra.github.io/docs/manual/en/commands/CircleWithCenter/",
       "note": "Referenced by cmdmeta as CIRCLEWITHCENTER but absent from the command table.",
@@ -2562,6 +2674,171 @@
           ]
         }
       ]
+    },
+    {
+      "name": "RegularPolygon",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/RegularPolygon/",
+      "note": "幻觉命令。GeoGebra 真实命令是 Polygon(<Point>, <Point>, <Number>) 通过两个顶点和边数画正多边形。",
+      "overloads": [
+        {
+          "syntax": "RegularPolygon(<Point>,<Point>,<Number of Vertices>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Number Of Vertices>",
+              "role": "number of vertices",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "RegularPolygon(<Point>,<Point>,<Number of Vertices>,<Direction>)",
+          "params": [
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Point>",
+              "role": "point",
+              "type": "Point"
+            },
+            {
+              "name": "<Number Of Vertices>",
+              "role": "number of vertices",
+              "type": "Number"
+            },
+            {
+              "name": "<Direction>",
+              "role": "direction",
+              "type": "Number"
+            }
+          ]
+        }
+      ],
+      "alias": "Polygon"
+    },
+    {
+      "name": "TextBox",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/TextBox/",
+      "note": "幻觉命令。GeoGebra 真实命令是 Textfield(<Point>, <String>, <Width>) 创建文本输入框。",
+      "overloads": [
+        {
+          "syntax": "TextBox(<Text>,<Position>,<Anchor Point>)",
+          "params": [
+            {
+              "name": "<Text>",
+              "role": "text",
+              "type": "Text"
+            },
+            {
+              "name": "<Position>",
+              "role": "position",
+              "type": "Number"
+            },
+            {
+              "name": "<Anchor Point>",
+              "role": "anchor point",
+              "type": "Point"
+            }
+          ]
+        }
+      ],
+      "alias": "Textfield"
+    },
+    {
+      "name": "ArcCot",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ArcCot/",
+      "note": "幻觉命令。GeoGebra 没有反余切函数（arccot），只有 cot(x)。",
+      "overloads": [
+        {
+          "syntax": "ArcCot(<Number>)",
+          "params": [
+            {
+              "name": "<Angle>",
+              "role": "angle",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "ArcCot(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "expression",
+              "type": "Expression"
+            }
+          ]
+        }
+      ],
+      "alias": ""
+    },
+    {
+      "name": "ArcCsc",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ArcCsc/",
+      "note": "幻觉命令。GeoGebra 没有反余割函数（arccsc），只有 csc(x)。",
+      "overloads": [
+        {
+          "syntax": "ArcCsc(<Number>)",
+          "params": [
+            {
+              "name": "<Value>",
+              "role": "value",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "ArcCsc(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "expression",
+              "type": "Expression"
+            }
+          ]
+        }
+      ],
+      "alias": ""
+    },
+    {
+      "name": "ArcSec",
+      "url": "https://geogebra.github.io/docs/manual/en/commands/ArcSec/",
+      "note": "幻觉命令。GeoGebra 没有反正割函数（arcsec），只有 sec(x)。",
+      "overloads": [
+        {
+          "syntax": "ArcSec(<Number>)",
+          "params": [
+            {
+              "name": "<Value>",
+              "role": "value",
+              "type": "Number"
+            }
+          ]
+        },
+        {
+          "syntax": "ArcSec(<Expression>)",
+          "params": [
+            {
+              "name": "<Expression>",
+              "role": "expression",
+              "type": "Expression"
+            }
+          ]
+        }
+      ],
+      "alias": ""
     }
   ]
 }
