@@ -292,13 +292,16 @@ func Build(stmts []statement, cat *catalog.Catalog) (*ir.Graph, []diag.Problem) 
 	// Pass 0: collect modifiers (scripting commands that modify existing
 	// objects) and register all object-producing statements. Bare non-scripting
 	// commands are converted to regular objects with predicted labels.
+	// We modify stmts in-place (via index) so the second pass sees the updated
+	// id/modifier for converted statements.
 	modifiers := make([]statement, 0)
-	for _, s := range stmts {
+	for i := range stmts {
+		s := &stmts[i]
 		if s.modifier {
 			// If it's a scripting command (SetColor, Slider, ...), keep as modifier.
 			// Otherwise, predict a label and treat as a regular object.
 			if cat.IsScriptingCommand(s.cmd) {
-				modifiers = append(modifiers, s)
+				modifiers = append(modifiers, *s)
 			} else {
 				// Predict the auto-label for this bare command.
 				label := predictLabel(s.cmd, usedLabels)
