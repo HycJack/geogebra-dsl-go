@@ -331,11 +331,10 @@ func TestKindForCmdConicsAndCenters(t *testing.T) {
 	// Commands that used to fall through to KUnknown (and so slipped through the
 	// lenient fallback everywhere) must now resolve to a real kind.
 	want := map[string]ir.Kind{
-		"Circumcircle":   ir.KCircle,
 		"Ellipse":        ir.KConic,
-		"Incenter":       ir.KPoint,
-		"Circumcenter":   ir.KPoint,
 		"TriangleCenter": ir.KPoint,
+		"Centroid":       ir.KPoint,
+		"Circle":         ir.KCircle,
 	}
 	for cmd, k := range want {
 		g := graphWith(t, &ir.Object{ID: "o", Cmd: cmd})
@@ -344,23 +343,69 @@ func TestKindForCmdConicsAndCenters(t *testing.T) {
 			t.Errorf("%s: expected kind %v, got %v", cmd, k, got)
 		}
 	}
+	// Names GeoGebra does not have must stay KUnknown. They are retired into
+	// the alias table, so an object can never legitimately carry one of these
+	// as its Cmd — and if one ever slipped through, an untyped Cmd would make
+	// every slot that referenced it match via the lenient fallback.
+	notCommands := []string{"Circumcircle", "Incenter", "Circumcenter", "Orthocenter"}
+	for _, cmd := range notCommands {
+		g := graphWith(t, &ir.Object{ID: "o", Cmd: cmd})
+		fullCatalog().ApplyKinds(g)
+		if got := g.Objects["o"].Kind; got != ir.KUnknown {
+			t.Errorf("%s: expected KUnknown for a non-command, got %v", cmd, got)
+		}
+	}
 }
 
 func TestCenterCircumcircle(t *testing.T) {
-	// End-to-end: Circumcircle yields a Circle kind, and Center(<Conic>) then
-	// accepts it through the subtype rule — no reliance on the KUnknown
-	// lenient fallback.
+	// End-to-end: GeoGebra's circumcircle through three points is Circle(A,B,C).
+	// It yields a Circle kind, and Center(<Conic>) then accepts it through the
+	// subtype rule — no reliance on the KUnknown lenient fallback, which is the
+	// whole point of this test.
+	//
+	// This used to be written with `Circumcircle`, a name GeoGebra does not
+	// have. It still passed, but only because the retired command left the
+	// circle KUnknown and Center's <Conic> slot then accepted it via the
+	// lenient fallback — i.e. it verified nothing it claimed to verify.
 	g := graphWith(t,
 		&ir.Object{ID: "A", Kind: ir.KPoint, Args: []string{"0", "0"}},
 		&ir.Object{ID: "B", Kind: ir.KPoint, Args: []string{"1", "0"}},
 		&ir.Object{ID: "C", Kind: ir.KPoint, Args: []string{"0", "1"}},
-		&ir.Object{ID: "c", Cmd: "Circumcircle", Args: []string{"A", "B", "C"}},
+		&ir.Object{ID: "c", Cmd: "Circle", Args: []string{"A", "B", "C"}},
 		&ir.Object{ID: "O", Cmd: "Center", Args: []string{"c"}, Refs: []string{"c"}},
 	)
 	fullCatalog().ApplyKinds(g)
+	if got := g.Objects["c"].Kind; got != ir.KCircle {
+		t.Fatalf("precondition: Circle(A,B,C) should be KCircle, got %v", got)
+	}
 	m := Lookup(testCatalog(), g, g.Objects["O"])
 	if !m.OK {
-		t.Fatalf("expected Center(Circumcircle(...)) to match, got %+v (explain=%s)", m, m.Explain)
+		t.Fatalf("expected Center(Circle(A,B,C)) to match, got %+v (explain=%s)", m, m.Explain)
+	}
+}
+
+// TestNonCommandDiagnosticNamesRealCommand — a retired name must be reported as
+// "not a GeoGebra command, use X", not as a generic miss. The generic
+// did-you-mean for `Incenter` used to be `If`, which teaches the caller (and the
+// AI repair loop) nothing.
+func TestNonCommandDiagnosticNamesRealCommand(t *testing.T) {
+	for name, wantMention := range map[string]string{
+		"Incenter":     "TriangleCenter",
+		"ParallelLine": "Line",
+		"ArcCot":       "cot",
+		"Circumcircle": "Circle",
+	} {
+		g := graphWith(t, &ir.Object{ID: "o", Cmd: name, Args: []string{"1"}})
+		m := Lookup(fullCatalog(), g, g.Objects["o"])
+		if m.Known {
+			t.Errorf("%s must not be treated as a known command", name)
+		}
+		if !strings.Contains(m.Explain, wantMention) {
+			t.Errorf("%s: diagnostic should name %q, got %q", name, wantMention, m.Explain)
+		}
+		if !strings.Contains(m.Explain, "不是 GeoGebra 的命令") {
+			t.Errorf("%s: diagnostic should say it is not a GeoGebra command, got %q", name, m.Explain)
+		}
 	}
 }
 

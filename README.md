@@ -81,7 +81,7 @@ ggbcheck check /dev/stdin                # Unix 管道/重定向（不支持 `-`
 `ggb-gen-api/geogebra-commands`），内嵌全部 20 个分类 JSON 并合并成一份，
 再补充 `supplement.json`（所有签名逐一对照 GeoGebra 内核源码
 `org.geogebra.common.kernel.commands` 的 Cmd 处理器手动核验），当前
-**合并去重 587 条**（官方分类 495 + supplement 92），共 1742 条 overload。
+**可执行命令 575 条**（官方分类 495 + supplement 80），共 1723 条 overload；另有 **12 条「非命令别名」**只用于诊断提示，不进入命令表。
 命令 → 粗类型返回值与官方 67 条 Scripting 命令集合为数据驱动（`cmdmeta.json`），
 命令表加载一次后进程级缓存（`catalog.Default()`），不随每次校验重复解析。
 
@@ -102,7 +102,7 @@ grep -oE '^\s{1,2}[A-Z][A-Za-z0-9_]*\(' Commands.java | tr -d ' (' | sort -u
 | 方向 | 数量 | 定性 |
 |---|---|---|
 | 内核有、命令表缺 | **0** | ✅ 完全对齐 |
-| 命令表有、内核无 | 38 | 约 28 条是 `ParserFunctionsFactory` 的 **parser 函数**（`Sin`/`Cos`/`Sqrt`/`Ln`/`Abs`…，非 `Commands` 枚举成员），`supplement.json` 有意并入以支持 `h = Sqrt(5)` 这类 AI 常见写法——**合法**；`Real` 是保留字；6 条是带 `alias` 的"恢复命令"；**3 条是确认的幻觉残留**。 |
+| 命令表有、内核无 | 38 | 约 28 条是 `ParserFunctionsFactory` 的 **parser 函数**（`Sin`/`Cos`/`Sqrt`/`Ln`/`Abs`…，非 `Commands` 枚举成员），`supplement.json` 有意并入以支持 `h = Sqrt(5)` 这类 AI 常见写法——**合法**；`Real` 是保留字；**12 条是确认的非命令，已转入 alias 表不再作为命令接受**。 |
 
 表内覆盖 3D 曲面体（`ConeInfinite`、`CylinderInfinite`、`Polyhedron`、`QuadricSide`）、
 统计（`PMCC`、`FitLineY`、`TableToChart`、`Q1`/`Q3`）、CAS（`Evaluate`、`TaylorSeries`）、
@@ -110,17 +110,21 @@ grep -oE '^\s{1,2}[A-Z][A-Za-z0-9_]*\(' Commands.java | tr -d ' (' | sort -u
 （`IntersectRegion`、`IntersectionPaths`）仍收录，便于兼容老脚本。JSON 侧多收一个 parser
 函数名 `Real`（保留字而非命令）。
 
-> **⚠️ 三处已知欠账**
-> 1. **`alias` 是死数据**：`Incenter→TriangleCenter`、`Circumcenter→TriangleCenter`、
->    `Orthocenter→TriangleCenter`、`Circumcircle→Circle`、`RegularPolygon→Polygon`、
->    `TextBox→Textfield` 在 JSON 里标了真实命令，但 `catalog.go` 根本没定义 `Alias` 字段，
->    全仓无 Go 代码读它。用户写 `Incenter(A,B,C)` 能通过，但**永远看不到"真实命令是
->    TriangleCenter"的提示**——`f296d71` 的意图没落地。另 3 条（`ArcCot`/`ArcSec`/`ArcCsc`）
->    连 alias 字段都没有。
-> 2. **3 条幻觉残留**：`ParallelLine` / `LineThrough` / `CircleWithCenter` 全内核源码
->    0 命中或仅命中 GUI 常量类，`232e6d2` 的清理漏了这 3 条，目前仍会被当成合法命令接受。
-> 3. **自动核查缺位**：`catalog` 单测只有 `len(Names()) >= 400` 的单向下限，检测不到单条
->    命令缺失（少一条真命令 587→586，测试照样绿）。上面的比对依赖内核源码路径，无法进 CI。
+> **⚠️ 两处已知的遗留欠账**
+> 1. **12 条「非命令别名」被有意接受为「不是命令」**：`supplement.json` 里带 `alias`
+>    字段的条目不进命令表，改进 `aliases` 表，校验器**拒绝**它们并在 `cmd/unknown`
+>    里直接点名该用哪个真命令。被拒的 12 条是：`Incenter`/`Circumcenter`/
+>    `Orthocenter`（→ `TriangleCenter(A,B,C,1/3/4)`，官方手册的**四点形式**；
+>    旁心用负指标 `-1..-4`，正指标 5/6/7 是九点中心/等角共轭重心/Gergonne 点）、
+>    `Circumcircle`（→ `Circle(A,B,C)`）、`RegularPolygon`（→ `Polygon(A,B,n)`）、
+>    `TextBox`（→ `Textfield`）、`ParallelLine`（→ `Line(过点, 参考直线)`）、
+>    `LineThrough`（→ `Line`）、`CircleWithCenter`（→ `Circle`）、
+>    `ArcCot`/`ArcSec`/`ArcCsc`（→ `cot`/`sec`/`csc`）。
+>    其中 `ParallelLine` 最隐蔽：**内核里它只是工具栏 `MODE_PARALLEL` 的界面字符串**
+>    （`EuclidianConstants` 的 `case MODE_PARALLEL: return "ParallelLine"`），
+>    不是可输入命令；而 `PerpendicularLine` 恰好两者都是，所以它是真的。
+> 2. **自动核查缺位**：`catalog` 单测只有 `len(Names()) >= 400` 的单向下限，检测不到单条
+>    命令缺失（少一条真命令 575→574，测试照样绿）。上面的比对依赖内核源码路径，无法进 CI。
 >    待办：把权威命令名清单（纯文本）随仓库固化，断言从下限换成**差集双向比对**。
 
 > 合并时每个分类文件的 `commands`（map 与 array 两种 shape 均支持）逐一并入；
@@ -157,7 +161,7 @@ internal/
   text/          文本脚本 → 对象图（解析+命令嵌套物化+绑定变量+字符串感知+科学计数法）
   ir/            共享对象图 + IR JSON 解析（两条输入的汇合点）
   number/        精确算术求值器（big.Rat + π/e + 嵌套算式 + 科学计数法）
-  catalog/       命令表（go:embed 全部分类 JSON + supplement + cmdmeta.json，合并 587 条，进程级缓存）
+  catalog/       命令表（go:embed 全部分类 JSON + supplement + cmdmeta.json，575 条可执行命令 + 12 条非命令别名，进程级缓存）
   sig/           签名匹配（命令名/参数个数/粗类型，含嵌套命令；诊断附正确签名）
   deps/          依赖无环：邻接表 Kahn + Tarjan SCC 真环归因 + blocked 下游
   geo/           退化判定（复用 number 精确求值）

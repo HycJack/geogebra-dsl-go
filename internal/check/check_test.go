@@ -1001,3 +1001,125 @@ func contains(xs []string, want string) bool {
 	}
 	return false
 }
+
+// ---------------------------------------------------------------------------
+// Regressions: parenthesised sub-expressions, and the alias table.
+// ---------------------------------------------------------------------------
+
+// TestParenthesisedExpressionIsNotALiteralPoint — parseLine dispatched on the
+// "(" prefix alone, and parenArgs also demanded a trailing ")", so `r = (-1)^2`
+// — whose parens are perfectly balanced — failed closed with "括号不配对".
+// A "(" only starts a literal point when the group it opens is the whole RHS.
+func TestParenthesisedExpressionIsNotALiteralPoint(t *testing.T) {
+	// Balanced group with trailing content: an expression, not a point.
+	for _, script := range []string{
+		"r = (-1)^2\nc = Circle((0,0), r)\n",
+		"r = (-2)^3\nc = Circle((0,0), r)\n",
+		"r = (1+1) * 2\nc = Circle((0,0), r)\n",
+		"r = -(1)\nc = Circle((0,0), r)\n",
+		"r = (1+1) / (1-1)\nc = Circle((0,0), r)\n",
+		"r = (1+1) * (2+3)\nc = Circle((0,0), r)\n",
+	} {
+		rc := Check([]byte(script), Options{})
+		if hasCode(rc, diag.CodeParseSyntax) {
+			t.Errorf("%s: must not be a parse error, got %v", script, rc.Errors)
+		}
+	}
+	// (-2)^3 is -8, so the radius is negative and the circle is degenerate —
+	// proof the expression really was evaluated, not just tolerated.
+	if rc := Check([]byte("r = (-2)^3\nc = Circle((0,0), r)\n"), Options{}); !hasCode(rc, diag.CodeGeoDegenerate) {
+		t.Errorf("expected geo/degenerate for a negative radius, got %v", rc.Errors)
+	}
+	// The literal-point form is untouched: the group spans the whole RHS.
+	rc := Check([]byte("A = (0, 2)\nB = (1, 1)\nl = Line(A, B)\n"), Options{})
+	if !rc.OK {
+		t.Fatalf("literal point form must still work, got %v", rc.Errors)
+	}
+	// A genuinely unclosed group is still a parse error — the fix must not
+	// have turned malformed input into a silently accepted expression.
+	for _, script := range []string{"A = (0, 2\n", "A = ((0, 2)\n"} {
+		if rc := Check([]byte(script), Options{}); !hasCode(rc, diag.CodeParseSyntax) {
+			t.Errorf("%s: expected parse/syntax, got %v", script, rc.Errors)
+		}
+	}
+}
+
+// TestRetiredNonCommandsAreRejected — these names are not GeoGebra commands.
+// The catalog used to accept them (they sat in supplement.json with overloads
+// and in cmdmeta's returns map), so a script using one passed validation and
+// then failed inside GeoGebra — the one thing this tool exists to prevent. The
+// project's own system prompt already forbade them; now the validator agrees.
+// retiredCommands maps every name GeoGebra does not have to the real command
+// that replaces it. Shared by the rejection test and the replacement test.
+func retiredCommands() map[string]string {
+	return map[string]string{
+		"Incenter":         "TriangleCenter",
+		"Circumcenter":     "TriangleCenter",
+		"Orthocenter":      "TriangleCenter",
+		"Circumcircle":     "Circle",
+		"RegularPolygon":   "Polygon",
+		"TextBox":          "Textfield",
+		"ParallelLine":     "Line",
+		"LineThrough":      "Line",
+		"CircleWithCenter": "Circle",
+		"ArcCot":           "cot",
+		"ArcSec":           "sec",
+		"ArcCsc":           "csc",
+	}
+}
+
+func TestRetiredNonCommandsAreRejected(t *testing.T) {
+	pts := "A = (0, 0)\nB = (6, 0)\nC = (2, 5)\ntri = Polygon(A, B, C)\n"
+	for name, realCmd := range retiredCommands() {
+		// Assigned, bare, and nested — none may slip through.
+		for _, script := range []string{
+			pts + "o = " + name + "(A, B, C)\n",
+			pts + name + "(A, B, C)\n",
+			pts + "o = Midpoint(A, " + name + "(A, B))\n",
+			pts + "o = " + name + "(tri)\n",
+		} {
+			rc := Check([]byte(script), Options{})
+			if rc.OK {
+				t.Errorf("%s: a script using it must not pass validation", name)
+				continue
+			}
+			if !hasCode(rc, diag.CodeCmdUnknown) {
+				t.Errorf("%s: expected cmd/unknown, got %v", name, rc.Errors)
+				continue
+			}
+			var said string
+			for _, p := range rc.Errors {
+				if p.Code == diag.CodeCmdUnknown {
+					said = p.Msg
+				}
+			}
+			// The diagnostic must name the real command. The generic
+			// did-you-mean for `Incenter` used to be `If`, which teaches the AI
+			// repair loop nothing.
+			if !strings.Contains(said, realCmd) {
+				t.Errorf("%s: diagnostic should name %q, got %q", name, realCmd, said)
+			}
+		}
+	}
+}
+
+// TestRealReplacementsStillValidate — retiring the aliases must not break the
+// scripts the AI is actually told to write.
+func TestRealReplacementsStillValidate(t *testing.T) {
+	pts := "A = (0, 0)\nB = (6, 0)\nC = (2, 5)\n"
+	for _, script := range []string{
+		pts + "I = TriangleCenter(A, B, C, 1)\n",     // Incenter (手册: 四点形式, n<3054)
+		pts + "O = TriangleCenter(A, B, C, 3)\n",     // Circumcenter
+		pts + "H = TriangleCenter(A, B, C, 4)\n",     // Orthocenter
+		pts + "c = Circle(A, B, C)\nO = Center(c)\n", // Circumcircle
+		pts + "p = Polygon(A, B, 6)\n",               // RegularPolygon
+		pts + "l = Line(A, B)\nm = Line(A, l)\n",     // ParallelLine
+		pts + "l = Line(A, B)\n",                     // LineThrough
+		"r = cot(1)\ns = sec(1)\nc2 = csc(1)\n",      // ArcCot/ArcSec/ArcCsc
+	} {
+		rc := Check([]byte(script), Options{})
+		if !rc.OK {
+			t.Errorf("%s: expected ok, got %v", script, rc.Errors)
+		}
+	}
+}

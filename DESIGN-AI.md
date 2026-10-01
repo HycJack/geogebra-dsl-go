@@ -337,7 +337,7 @@ type ChatClient interface {
 
 - `ggbcheck` 校验器**不改**；`ai/gate.go` 是它在新场景的唯一新调用方。
 - 生成器只输出 ggbcheck grammar **能解析**的指令（单行一条、`ID = Command(args)`/`ID = 数字`/字面点/列表 `{...}`/代数表达式 `y = x^2+1`/函数定义 `f(x)=...`,以及无赋值号的 `Set…`/`StartAnimation` 等修饰语句）。这与 DESIGN.md 的文本输入 grammar 一致。
-- 若未来某命令确实需要但不在现有 587 条表内，属于 `catalog` 层扩展，不在本设计范围。
+- 若未来某命令确实需要但不在现有 575 条表内，属于 `catalog` 层扩展，不在本设计范围。
 
 ---
 

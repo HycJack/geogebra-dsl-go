@@ -70,6 +70,10 @@ type rawDoc struct {
 	Name      string            `json:"name"`
 	URL       string            `json:"url"`
 	Overloads []json.RawMessage `json:"overloads"`
+	// Alias names the real GeoGebra command when this entry is a plausible
+	// name that GeoGebra does NOT have (`Incenter` → `TriangleCenter`).
+	// Empty or absent means "this really is a command".
+	Alias string `json:"alias"`
 }
 
 type rawOverload struct {
@@ -90,6 +94,13 @@ type Catalog struct {
 	// regardless of whether some of its members also produce a usable object
 	// (Slider, GetTime, Turtle, ReadText, ...).
 	scripting map[string]bool
+	// aliases maps a name GeoGebra does NOT have to the real command that does
+	// (`Incenter` → `TriangleCenter`, `ParallelLine` → `Line`). These entries are
+	// deliberately kept OUT of byName: accepting them as commands would make
+	// the validator pass scripts GeoGebra then refuses, which breaks the one
+	// promise this tool makes. They exist only so cmd/unknown can say which
+	// real command to use instead.
+	aliases map[string]string
 }
 
 // defaultCatalog is built once and reused for the life of the process. Parsing
@@ -97,7 +108,7 @@ type Catalog struct {
 // cost (≈16ms/call), and the AI repair loop calls Check up to MaxRepair+1 times
 // per request — so the catalog is cached behind sync.OnceValues.
 var defaultCatalog = sync.OnceValues(func() (*Catalog, error) {
-	c := &Catalog{byName: map[string]*Command{}, returns: map[string]string{}, scripting: map[string]bool{}}
+	c := &Catalog{byName: map[string]*Command{}, returns: map[string]string{}, scripting: map[string]bool{}, aliases: map[string]string{}}
 	entries, err := fs.Glob(embedded, "geogebra-commands/*.json")
 	if err != nil {
 		return nil, fmt.Errorf("list embedded catalog: %w", err)
@@ -129,7 +140,7 @@ func Default() (*Catalog, error) {
 // return empty on a Load-built catalog — tests that need kind resolution should
 // use Default (or call mergeMeta directly).
 func Load(data []byte) (*Catalog, error) {
-	c := &Catalog{byName: map[string]*Command{}, returns: map[string]string{}, scripting: map[string]bool{}}
+	c := &Catalog{byName: map[string]*Command{}, returns: map[string]string{}, scripting: map[string]bool{}, aliases: map[string]string{}}
 	if err := c.mergeDoc(data); err != nil {
 		return nil, err
 	}
@@ -175,6 +186,12 @@ func (c *Catalog) mergeDoc(data []byte) error {
 
 func (c *Catalog) add(rd rawDoc) {
 	key := strings.ToUpper(rd.Name)
+	// An entry that names a real replacement is a name GeoGebra does not have.
+	// Record the pointer to that real command and stop — see Catalog.aliases.
+	if a := strings.TrimSpace(rd.Alias); a != "" {
+		c.aliases[key] = a
+		return
+	}
 	cmd, ok := c.byName[key]
 	if !ok {
 		cmd = &Command{Name: rd.Name, URL: rd.URL}
@@ -260,6 +277,27 @@ func (c *Catalog) ApplyKinds(g *ir.Graph) {
 			o.Kind = ir.KindFromToken(tok)
 		}
 	}
+}
+
+// AliasOf reports the real GeoGebra command for a name that looks like a
+// command but is not one — the `Incenter` → `TriangleCenter` family, plus
+// `ParallelLine` → `Line` and friends. ok is false for names that are genuine
+// commands (or that the table has never heard of), so callers must not treat a
+// missing entry as "unknown command": that is Lookup's job.
+func (c *Catalog) AliasOf(name string) (string, bool) {
+	a, ok := c.aliases[strings.ToUpper(name)]
+	return a, ok
+}
+
+// AliasNames returns every non-command name the table knows about, sorted. Used
+// by tests to keep the alias set honest.
+func (c *Catalog) AliasNames() []string {
+	out := make([]string, 0, len(c.aliases))
+	for n := range c.aliases {
+		out = append(out, n)
+	}
+	sort.Strings(out)
+	return out
 }
 
 // Lookup returns the command by the given (case-insensitive) name.

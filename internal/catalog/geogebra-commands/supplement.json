@@ -2455,7 +2455,7 @@
     {
       "name": "Incenter",
       "url": "https://geogebra.github.io/docs/manual/en/commands/Incenter/",
-      "note": "幻觉命令。GeoGebra 真实命令是 TriangleCenter(<Polygon>, <Number>)，n=1 表示内心。等价于 TriangleCenter(Polygon(<A>,<B>,<C>), 1)。",
+      "note": "幻觉命令。官方手册 geogebra.github.io/docs/manual/en/commands/TriangleCenter/ 确认 TriangleCenter 的签名是 <Point>,<Point>,<Point>,<Number>（四点形，n<3054），真实写法为 TriangleCenter(A,B,C,1)（n=1 内心）。此前本文件误记为 TriangleCenter(<Polygon>, <Number>)，已更正。",
       "overloads": [
         {
           "syntax": "Incenter(<Point>,<Point>,<Point>)",
@@ -2483,7 +2483,7 @@
     {
       "name": "Circumcenter",
       "url": "https://geogebra.github.io/docs/manual/en/commands/Circumcenter/",
-      "note": "幻觉命令。GeoGebra 真实命令是 TriangleCenter(<Polygon>, <Number>)，n=3 表示外心。等价于 TriangleCenter(Polygon(<A>,<B>,<C>), 3) 或 Center(Circle(<A>,<B>,<C>))。",
+      "note": "幻觉命令。官方手册 geogebra.github.io/docs/manual/en/commands/TriangleCenter/ 确认 TriangleCenter 的签名是 <Point>,<Point>,<Point>,<Number>（四点形，n<3054），真实写法为 TriangleCenter(A,B,C,3)（n=3 外心）或 Center(Circle(A,B,C))。此前本文件误记为 TriangleCenter(<Polygon>, <Number>)，已更正。",
       "overloads": [
         {
           "syntax": "Circumcenter(<Point>,<Point>,<Point>)",
@@ -2511,7 +2511,7 @@
     {
       "name": "Orthocenter",
       "url": "https://geogebra.github.io/docs/manual/en/commands/Orthocenter/",
-      "note": "幻觉命令。GeoGebra 真实命令是 TriangleCenter(<Polygon>, <Number>)，n=4 表示垂心。等价于 TriangleCenter(Polygon(<A>,<B>,<C>), 4)。",
+      "note": "幻觉命令。官方手册 geogebra.github.io/docs/manual/en/commands/TriangleCenter/ 确认 TriangleCenter 的签名是 <Point>,<Point>,<Point>,<Number>（四点形，n<3054），真实写法为 TriangleCenter(A,B,C,4)（n=4 垂心）。此前本文件误记为 TriangleCenter(<Polygon>, <Number>)，已更正。",
       "overloads": [
         {
           "syntax": "Orthocenter(<Point>,<Point>,<Point>)",
@@ -2539,7 +2539,7 @@
     {
       "name": "Circumcircle",
       "url": "https://geogebra.github.io/docs/manual/en/commands/Circumcircle/",
-      "note": "幻觉命令。GeoGebra 真实命令是 Circle(<Point>, <Point>, <Point>) 通过三点画圆，或 CircleWithCenter(<Center>, <Radius>)。",
+      "note": "幻觉命令。GeoGebra 真实命令是 Circle(<Point>, <Point>, <Point>)，三参即外接圆。",
       "overloads": [
         {
           "syntax": "Circumcircle(<Point>,<Point>,<Point>)",
@@ -2567,113 +2567,23 @@
     {
       "name": "CircleWithCenter",
       "url": "https://geogebra.github.io/docs/manual/en/commands/CircleWithCenter/",
-      "note": "Referenced by cmdmeta as CIRCLEWITHCENTER but absent from the command table.",
-      "overloads": [
-        {
-          "syntax": "CircleWithCenter(<Center>,<Radius>)",
-          "params": [
-            {
-              "name": "<Center>",
-              "role": "center",
-              "type": "Point"
-            },
-            {
-              "name": "<Radius>",
-              "role": "radius",
-              "type": "Number"
-            }
-          ]
-        },
-        {
-          "syntax": "CircleWithCenter(<Center>,<Point>)",
-          "params": [
-            {
-              "name": "<Center>",
-              "role": "center",
-              "type": "Point"
-            },
-            {
-              "name": "<Point>",
-              "role": "point",
-              "type": "Point"
-            }
-          ]
-        }
-      ]
+      "note": "幻觉命令。全内核源码 0 命中。仅由 cmdmeta 反向引用而被补进来——cmdmeta 提到它并不能让它成为命令。3D 圆用 Circle(<Point>,<Point>,<Point>)。",
+      "overloads": [],
+      "alias": "Circle"
     },
     {
       "name": "LineThrough",
       "url": "https://geogebra.github.io/docs/manual/en/commands/LineThrough/",
-      "note": "Referenced by cmdmeta as LINETHROUGH but absent from the command table.",
-      "overloads": [
-        {
-          "syntax": "LineThrough(<Point>,<Point>)",
-          "params": [
-            {
-              "name": "<Point>",
-              "role": "point",
-              "type": "Point"
-            },
-            {
-              "name": "<Point>",
-              "role": "point",
-              "type": "Point"
-            }
-          ]
-        },
-        {
-          "syntax": "LineThrough(<Point>,<Direction Vector>)",
-          "params": [
-            {
-              "name": "<Point>",
-              "role": "point",
-              "type": "Point"
-            },
-            {
-              "name": "<Direction Vector>",
-              "role": "direction vector",
-              "type": "Vector"
-            }
-          ]
-        }
-      ]
+      "note": "幻觉命令。全内核源码 0 命中。真实写法是 Line(<Point>, <Point>)。",
+      "overloads": [],
+      "alias": "Line"
     },
     {
       "name": "ParallelLine",
       "url": "https://geogebra.github.io/docs/manual/en/commands/ParallelLine/",
-      "note": "Referenced by cmdmeta as PARALLELLINE but absent from the command table.",
-      "overloads": [
-        {
-          "syntax": "ParallelLine(<Point>,<Line>)",
-          "params": [
-            {
-              "name": "<Point>",
-              "role": "point",
-              "type": "Point"
-            },
-            {
-              "name": "<Line>",
-              "role": "line",
-              "type": "Line"
-            }
-          ]
-        },
-        {
-          "syntax": "ParallelLine(<Line>,<Line>)",
-          "params": [
-            {
-              "name": "<Line>",
-              "role": "line",
-              "type": "Line"
-            },
-            {
-              "name": "<Line>",
-              "role": "line",
-              "type": "Line"
-            }
-          ]
-        }
-      ]
+      "note": "幻觉命令。内核全源码仅在 EuclidianConstants.MODE_PARALLEL 的工具栏字符串里出现，不是可输入命令。真实写法是 Line(<Point>, <Line>)。",
+      "overloads": [],
+      "alias": "Line"
     },
     {
       "name": "RegularPolygon",
@@ -2760,85 +2670,22 @@
       "name": "ArcCot",
       "url": "https://geogebra.github.io/docs/manual/en/commands/ArcCot/",
       "note": "幻觉命令。GeoGebra 没有反余切函数（arccot），只有 cot(x)。",
-      "overloads": [
-        {
-          "syntax": "ArcCot(<Number>)",
-          "params": [
-            {
-              "name": "<Angle>",
-              "role": "angle",
-              "type": "Number"
-            }
-          ]
-        },
-        {
-          "syntax": "ArcCot(<Expression>)",
-          "params": [
-            {
-              "name": "<Expression>",
-              "role": "expression",
-              "type": "Expression"
-            }
-          ]
-        }
-      ],
-      "alias": ""
+      "overloads": [],
+      "alias": "cot"
     },
     {
       "name": "ArcCsc",
       "url": "https://geogebra.github.io/docs/manual/en/commands/ArcCsc/",
       "note": "幻觉命令。GeoGebra 没有反余割函数（arccsc），只有 csc(x)。",
-      "overloads": [
-        {
-          "syntax": "ArcCsc(<Number>)",
-          "params": [
-            {
-              "name": "<Value>",
-              "role": "value",
-              "type": "Number"
-            }
-          ]
-        },
-        {
-          "syntax": "ArcCsc(<Expression>)",
-          "params": [
-            {
-              "name": "<Expression>",
-              "role": "expression",
-              "type": "Expression"
-            }
-          ]
-        }
-      ],
-      "alias": ""
+      "overloads": [],
+      "alias": "csc"
     },
     {
       "name": "ArcSec",
       "url": "https://geogebra.github.io/docs/manual/en/commands/ArcSec/",
       "note": "幻觉命令。GeoGebra 没有反正割函数（arcsec），只有 sec(x)。",
-      "overloads": [
-        {
-          "syntax": "ArcSec(<Number>)",
-          "params": [
-            {
-              "name": "<Value>",
-              "role": "value",
-              "type": "Number"
-            }
-          ]
-        },
-        {
-          "syntax": "ArcSec(<Expression>)",
-          "params": [
-            {
-              "name": "<Expression>",
-              "role": "expression",
-              "type": "Expression"
-            }
-          ]
-        }
-      ],
-      "alias": ""
+      "overloads": [],
+      "alias": "sec"
     }
   ]
 }

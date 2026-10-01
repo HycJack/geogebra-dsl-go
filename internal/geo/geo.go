@@ -24,7 +24,12 @@ func Check(g *ir.Graph, order []string) []diag.Problem {
 			if prob := lineThroughIdenticalPoints(g, o); prob != nil {
 				probs = append(probs, *prob)
 			}
-		case "CIRCLE", "CIRCLEWITHCENTER", "CIRCLEBYRADIUSM":
+		case "CIRCLE":
+			// Only CIRCLE reaches here. CIRCLEWITHCENTER / CIRCLEBYRADIUSM used
+			// to be listed alongside it, but neither is a GeoGebra command
+			// (CircleByRadiusM was not even defined in any catalog file — it
+			// existed only as a cmdmeta entry and this case), so the branches
+			// were unreachable. Both names now resolve through catalog aliases.
 			if prob := zeroRadius(g, o); prob != nil {
 				probs = append(probs, *prob)
 			}

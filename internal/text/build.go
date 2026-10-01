@@ -131,12 +131,30 @@ func parseLine(line string, lineNo int, cat *catalog.Catalog) (statement, bool, 
 		return statement{id: name, fnParams: fnParams, boolLiteral: rhs, lineNo: lineNo}, true, diag.Problem{}
 	}
 	// Literal point: ID = (0, 2)
+	//
+	// A leading "(" is only a literal point when the group it opens is the WHOLE
+	// right-hand side. Testing the prefix alone misread every parenthesised
+	// sub-expression as a point: `r = (-1)^2` closed its group at index 3 but
+	// parenArgs also demanded a trailing ")", so the script failed closed with
+	// "括号不配对" — yet the parens were perfectly balanced. Three cases:
+	//
+	//	(0, 2)        group spans the whole rhs  → literal point
+	//	(-1)^2        group closes early        → an expression, not a point
+	//	(0, 2        never closed              → genuinely malformed, keep the error
 	if strings.HasPrefix(rhs, "(") {
-		inner, ok, prob := parenArgs(rhs, lineNo)
-		if !ok {
-			return statement{}, false, prob
+		switch close := matchParen(rhs, 0); {
+		case close == len(rhs)-1:
+			inner, ok, prob := parenArgs(rhs, lineNo)
+			if !ok {
+				return statement{}, false, prob
+			}
+			return statement{id: name, literalPoint: true, args: inner, lineNo: lineNo}, true, diag.Problem{}
+		case close < 0:
+			return statement{}, false, diag.Problem{
+				Code: diag.CodeParseSyntax, Msg: "括号不配对", Line: lineNo,
+			}
 		}
-		return statement{id: name, literalPoint: true, args: inner, lineNo: lineNo}, true, diag.Problem{}
+		// Falls through: a balanced group with trailing content is an expression.
 	}
 	// Literal list: ID = {a, b, c}
 	if strings.HasPrefix(rhs, "{") {
@@ -150,8 +168,13 @@ func parseLine(line string, lineNo int, cat *catalog.Catalog) (statement, bool, 
 	// is a command call. Anything else that merely ends in ')' (e.g.
 	// `g = 2*k + Sqrt(4)`) is an arithmetic expression, routed below, so a
 	// nested call embedded in an expression isn't misread as a command name.
+	//
+	// lp must be > 0: an rhs that *starts* with '(' has no command name in
+	// front of it, and `HasSuffix(rhs, ")")` is true for things like
+	// `(1+1) / (1-1)`, so testing only the suffix sent those to the
+	// "缺命令名" error instead of the expression branch below.
 	lp := strings.IndexByte(rhs, '(')
-	if lp >= 0 && strings.HasSuffix(rhs, ")") {
+	if lp > 0 && strings.HasSuffix(rhs, ")") {
 		cmd := strings.TrimSpace(rhs[:lp])
 		if cmd == "" {
 			return statement{}, false, diag.Problem{Code: diag.CodeParseSyntax, Msg: "缺命令名：" + rhs, Line: lineNo}

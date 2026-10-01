@@ -155,7 +155,7 @@ func TestKindOfAndScripting(t *testing.T) {
 	}{
 		{"Point", "Point", false},
 		{"circle", "Circle", false}, // case-insensitive
-		{"Circumcircle", "Circle", false},
+		{"Circumcircle", "", false}, // not a GeoGebra command; see the alias table
 		{"Sqrt", "Number", false},
 		{"Slider", "Number", true}, // scripting command that yields a usable number
 		{"SetColor", "Script", true},
@@ -184,16 +184,23 @@ func TestKindOfCoversAllKindForCmdCases(t *testing.T) {
 	// Every command in the catalog that the old kindForCmd knew must still
 	// resolve to a non-empty kind. Commands outside the old switch resolve to
 	// "" and stay KUnknown — that is expected, so only spot-check known ones.
+	//
+	// Names that are NOT GeoGebra commands are deliberately absent from this
+	// list AND from cmdmeta's returns map: LINETHROUGH, PARALLELLINE,
+	// CIRCLEWITHCENTER, CIRCLEBYRADIUSM, CIRCUMCIRCLE and the ArcCot/ArcSec/
+	// ArcCsc family. Mapping them to a kind was what let a script pass
+	// validation and then fail in GeoGebra. TestAliasTableRetiresNonCommands
+	// is the positive counterpart.
 	for _, cmd := range []string{
-		"POINTIN", "VERTEX", "INTERSECT", "TRIANGLECENTER", "LINETHROUGH",
-		"PERPENDICULARLINE", "PARALLELLINE", "TANGENT", "PERPENDICULARBISECTOR",
-		"ANGLEBISECTOR", "SIDE", "CIRCLEWITHCENTER", "CIRCLEBYRADIUSM",
-		"SEMICIRCLE", "CIRCUMCIRCLE", "PARABOLA", "HYPERBOLA", "ARC",
+		"POINTIN", "VERTEX", "INTERSECT", "TRIANGLECENTER",
+		"PERPENDICULARLINE", "TANGENT", "PERPENDICULARBISECTOR",
+		"ANGLEBISECTOR", "SIDE",
+		"SEMICIRCLE", "PARABOLA", "HYPERBOLA", "ARC",
 		"CIRCULARARC", "CIRCUMCIRCULARARC", "IMPLICITCURVE", "POLYLINE",
 		"PERIMETER", "SLOPE", "RADIUS", "VOLUME", "CIRCUMFERENCE", "SIGN",
 		"FLOOR", "CEIL", "ROUND", "CBRT", "NROOT", "EXP", "LN", "LOG", "LOG10",
-		"COT", "SEC", "CSC", "ARCSIN", "ARCCOS", "ARCTAN", "ARCCOT", "ARCSEC",
-		"ARCCSC", "SPHERE", "CONE", "CYLINDER", "QUADRIC", "ELLIPSOID",
+		"COT", "SEC", "CSC", "ARCSIN", "ARCCOS", "ARCTAN",
+		"SPHERE", "CONE", "CYLINDER", "QUADRIC", "ELLIPSOID",
 		"HYPERBOLOID", "SURFACE", "ORTHOGONALPLANE", "PERPENDICULARPLANE",
 		"PARALLELPLANE", "PRISM", "PYRAMID", "POLYHEDRON", "TETRAHEDRON",
 		"OCTAHEDRON", "HEXAHEDRON", "ICOSAHEDRON", "DODECAHEDRON", "LIST",
@@ -203,6 +210,60 @@ func TestKindOfCoversAllKindForCmdCases(t *testing.T) {
 		if c.KindOf(cmd) == "" {
 			t.Errorf("KindOf(%s) is empty; the old kindForCmd mapped this command", cmd)
 		}
+	}
+}
+
+// TestAliasTableRetiresNonCommands — the positive counterpart to the list
+// above. Every name GeoGebra does not have must live in the alias table, must
+// NOT resolve to a kind, and must NOT be reachable as a command — so a script
+// using it is refused with a pointer to the real command instead of being
+// accepted and then failing inside GeoGebra.
+//
+// This is the check that `alias` in supplement.json is live data. It was
+// written to the JSON by f296d71 and read by nothing until now, which is how
+// `Incenter(A,B,C)` could pass validation while GeoGebra has no such command.
+func TestAliasTableRetiresNonCommands(t *testing.T) {
+	c, err := Default()
+	if err != nil {
+		t.Fatalf("Default: %v", err)
+	}
+	cases := map[string]string{
+		"Incenter":         "TriangleCenter",
+		"Circumcenter":     "TriangleCenter",
+		"Orthocenter":      "TriangleCenter",
+		"Circumcircle":     "Circle",
+		"RegularPolygon":   "Polygon",
+		"TextBox":          "Textfield",
+		"ParallelLine":     "Line",
+		"LineThrough":      "Line",
+		"CircleWithCenter": "Circle",
+		"ArcCot":           "cot",
+		"ArcSec":           "sec",
+		"ArcCsc":           "csc",
+	}
+	for name, wantAlias := range cases {
+		if got, ok := c.AliasOf(name); !ok || got != wantAlias {
+			t.Errorf("AliasOf(%s) = %q,%v; want %q,true", name, got, ok, wantAlias)
+		}
+		// The whole point: it must not be a usable command any more.
+		if _, ok := c.Lookup(name); ok {
+			t.Errorf("%s is still a command; a script using it would pass validation and fail in GeoGebra", name)
+		}
+		// And it must not carry a result kind, or ApplyKinds would type it.
+		if k := c.KindOf(name); k != "" {
+			t.Errorf("KindOf(%s) = %q; a non-command must have no result kind", name, k)
+		}
+		// The alias target has to be a real command, or the hint is useless.
+		if _, ok := c.Lookup(wantAlias); !ok {
+			t.Errorf("alias target %q for %s is not a command", wantAlias, name)
+		}
+	}
+	// Case-insensitive like every other lookup.
+	if got, ok := c.AliasOf("incenter"); !ok || got != "TriangleCenter" {
+		t.Errorf("AliasOf(incenter) = %q,%v; want TriangleCenter,true", got, ok)
+	}
+	if len(c.AliasNames()) < len(cases) {
+		t.Errorf("AliasNames returned %d entries, want at least %d", len(c.AliasNames()), len(cases))
 	}
 }
 

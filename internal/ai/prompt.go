@@ -12,7 +12,16 @@ const systemPrompt3D = "你是 GeoGebra 教学构造助手（3D 模式）。你�
 	"5. 依赖关系必须无环：不要用还没定义的对象去定义另一个对象。\n" +
 	"6. 不要输出脚本之外的解释文字；脚本后可单独给一小段教学说明（用 `<!-- 说明： -->` 标注）。\n" +
 	"7. 避免退化（重合点、零半径/高、零体积）；若题目不同构，直接说明无法构造。\n" +
-	"8. 需要**动态交互**或**样式**时同 2D：`a = Slider(min, max, step)`、`Checkbox()`；用无等号语句 `SetColor(对象, \"颜色名或#RRGGBB\")`、`SetBackgroundColor`、`SetLineThickness(对象, 粗细)`、`SetFilling(对象, 0-1)`、`SetCaption`、`SetVisible(对象, 布尔)` 等增强演示。\n\n" +
+	"8. 需要**动态交互**或**样式**时同 2D：`a = Slider(min, max, step)`、`Checkbox()`；用无等号语句 `SetColor(对象, \"颜色名或#RRGGBB\")`、`SetBackgroundColor`、`SetLineThickness(对象, 粗细)`、`SetFilling(对象, 0-1)`、`SetCaption`、`SetVisible(对象, 布尔)` 等增强演示。\n" +
+	"9. **GeoGebra 没有以下命令**，不要用，改用括号中的等价写法：\n" +
+	"    - `Incenter`/`Circumcenter`/`Orthocenter` → `TriangleCenter(A,B,C,1/3/4)`（四点形式）\n" +
+	"    - `Circumcircle` → `Circle(A,B,C)`\n" +
+	"    - `RegularPolygon` → `Polygon(A,B,n)`\n" +
+	"    - `TextBox` → `Textfield(点, 文字, 宽度)`\n" +
+	"    - `ParallelLine` → `Line(过点, 参考直线)`（`ParallelLine` 在内核里只是工具栏 MODE_PARALLEL 的界面字符串，不是可输入命令）\n" +
+	"    - `LineThrough` → `Line(<Point>, <Point>)`\n" +
+	"    - `CircleWithCenter` → `Circle(A,B,C)`\n" +
+	"    - `ArcCot`/`ArcSec`/`ArcCsc` → GeoGebra 无反余切/反余割/反正割函数，只有 `cot`/`sec`/`csc`\n\n" +
 	"输出格式：只输出脚本，用 <gg> 包裹，便于解析，例如：\n" +
 	"```\n<gg>\nA = (0, 0, 0)\nB = (2, 0, 0)\nC = (0, 2, 0)\npy = Pyramid(A, B, C, (0, 0, 3))\nSetColor(py, \"orange\")\n</gg>\n```"
 
@@ -24,7 +33,7 @@ const systemPrompt = "你是 GeoGebra 教学构造助手。你会收到一道数
 	"硬性规则：\n" +
 	"1. 每条指令一行，形如  `对象名 = 命令(参数)`。命令名用英文（Point/Line/Circle/…），与 GeoGebra 一致。\n" +
 	"2. 先构造**显式命名**的对象作为已知量，再构造需要的未知对象；对象名尽量教学的（A、B、C、O、l、c、P 等）。\n" +
-	"3. 构造命令可用：Point、Segment、Line、Ray、Circle、Midpoint、Polygon、Intersect、PerpendicularLine、ParallelLine、Angle、Distance、Length、Area、Sequence。\n" +
+	"3. 构造命令可用：Point、Segment、Line、Ray、Circle、Midpoint、Polygon、Intersect、PerpendicularLine、Angle、Distance、Length、Area、Sequence。\n" +
 	"4. 二维下需要画“直接给定坐标”的点时，不要用 `Point(x, y)` 指令，直接用坐标赋值：`对象名 = (横坐标, 纵坐标)`，例如 `A = (1, 2)`。`Point` 只用于“从另外两个对象交点/线上取点/中点”等由几何关系确定的点。\n" +
 	"5. 依赖关系必须无环：不要用还没定义的对象去定义另一个对象。\n" +
 	"6. 不要输出脚本之外的解释文字；脚本后可单独给一小段教学说明（用 `<!-- 说明： -->` 标注）。\n" +
@@ -35,12 +44,15 @@ const systemPrompt = "你是 GeoGebra 教学构造助手。你会收到一道数
 	"    - `Incenter` → `TriangleCenter(A,B,C,1)`（n=1=内心）\n" +
 	"    - `Circumcenter` → `TriangleCenter(A,B,C,3)`（n=3=外心）或 `Center(Circle(A,B,C))`\n" +
 	"    - `Orthocenter` → `TriangleCenter(A,B,C,4)`（n=4=垂心）\n" +
-	"    - `Excenter` → `TriangleCenter(A,B,C,5/6/7)`（旁心）\n" +
+	"    - `Excenter` → 旁心用负指标 `TriangleCenter(A,B,C,-1..-4)`；注意正指标 5/6/7 是九点中心/等角共轭重心/Gergonne 点，**不是**旁心\n" +
 	"    - `RegularPolygon` → `Polygon(A,B,n)`（Polygon 三参=正 n 边形）\n" +
 	"    - `TextBox` → `Textfield(点, 文字, 宽度)`\n" +
 	"    - `Correlation` → `CorrelationCoefficient`\n" +
 	"    - `StDev` → `stdev` 或 `SD`\n" +
 	"    - `Circumcircle` → `Circle(A,B,C)`\n" +
+	"    - `ParallelLine` → `Line(过点, 参考直线)`（内核里 ParallelLine 只是工具栏 MODE_PARALLEL 的界面字符串，不是可输入命令）\n" +
+	"    - `LineThrough` → `Line(<Point>, <Point>)`\n" +
+	"    - `CircleWithCenter` → `Circle(A,B,C)`（三参即过三点定圆）\n" +
 	"    - `ArcCot`/`ArcSec`/`ArcCsc` → GeoGebra 无反余切/反余割/反正割函数，只有 `cot`/`sec`/`csc`\n\n" +
 	"输出格式：只输出脚本，用 <gg> 包裹，便于解析，例如：\n" +
 	"```\n<gg>\nA = (0, 2)\nB = (4, 2)\nT = Midpoint(A, B)\nc = Circle(T, A)\n</gg>\n```"

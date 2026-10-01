@@ -325,7 +325,26 @@ type Match struct {
 // Besides saying it's unknown, it points at the nearest catalog command and its
 // official GeoGebra manual URL, so an AI or a human sees the correct syntax
 // instead of just a rejection.
+//
+// A name that carries an alias (Incenter, ParallelLine, ArcCot, ...) is the
+// more valuable case: it is a plausible name GeoGebra does NOT have, and we
+// know exactly which real command replaces it. That is checked first, because
+// "不在命令表里；可能是 If" is actively misleading for `Incenter`, and because
+// the AI prompt already forbids these names — a script using one will not
+// build, so a did-you-mean for an unrelated command teaches the model nothing.
 func unknownExplain(c *catalog.Catalog, name string) string {
+	if real, ok := c.AliasOf(name); ok {
+		msg := "命令 " + name + " 不是 GeoGebra 的命令，请改用 " + real
+		if cmd, ok := c.Lookup(real); ok {
+			if syncs := syntaxList(cmd.Overloads); syncs != "" {
+				msg += "：" + syncs
+			}
+			if cmd.URL != "" {
+				msg += "，官方用法见 " + cmd.URL
+			}
+		}
+		return msg
+	}
 	msg := "命令 " + name + " 不在命令表里"
 	sugg := c.Suggest(name, 3)
 	if len(sugg) == 0 {

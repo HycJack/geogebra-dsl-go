@@ -136,3 +136,89 @@ func TestRepairMessageContent(t *testing.T) {
 		}
 	}
 }
+
+// retiredCommands are names GeoGebra does not have. They are retired into the
+// catalog's alias table, so the validator now refuses them — which means the
+// prompt must neither recommend nor silently allow them.
+//
+// prompt.go used to list ParallelLine among "构造命令可用" while the same
+// prompt's blacklist forbade Incenter and friends. Every generated script that
+// took that advice would have passed the old validator and then failed inside
+// GeoGebra; now it fails validation instead, which is the point.
+var retiredCommands = map[string]string{
+	"Incenter":         "TriangleCenter",
+	"Circumcenter":     "TriangleCenter",
+	"Orthocenter":      "TriangleCenter",
+	"Circumcircle":     "Circle",
+	"RegularPolygon":   "Polygon",
+	"TextBox":          "Textfield",
+	"ParallelLine":     "Line",
+	"LineThrough":      "Line",
+	"CircleWithCenter": "Circle",
+	"ArcCot":           "cot",
+	"ArcSec":           "sec",
+	"ArcCsc":           "csc",
+}
+
+func promptText(t *testing.T, mode string) string {
+	t.Helper()
+	var sb strings.Builder
+	for _, p := range SystemMessageFor(mode).Content {
+		sb.WriteString(p.Text)
+	}
+	return sb.String()
+}
+
+func TestPromptNeverRecommendsRetiredCommands(t *testing.T) {
+	for _, mode := range []string{"2d", "classic", "geometry", "3d", ""} {
+		text := promptText(t, mode)
+		// The "构造命令可用" whitelist must not name any retired command.
+		for _, line := range strings.Split(text, "\n") {
+			if !strings.Contains(line, "构造命令可用") {
+				continue
+			}
+			for name := range retiredCommands {
+				if strings.Contains(line, name) {
+					t.Errorf("mode %q: prompt recommends retired command %q in: %s", mode, name, line)
+				}
+			}
+		}
+		// Each retired command must be named in the blacklist together with the
+		// replacement, so the model has somewhere to go.
+		for name, realCmd := range retiredCommands {
+			if !strings.Contains(text, name) {
+				t.Errorf("mode %q: prompt should mention %q so the model avoids it", mode, name)
+			}
+			if !strings.Contains(text, realCmd) {
+				t.Errorf("mode %q: prompt should offer %q as the replacement for %q", mode, realCmd, name)
+			}
+		}
+	}
+}
+
+// TestPromptTriangleCenterSignatureMatchesManual — the official manual
+// (geogebra.github.io/docs/manual/en/commands/TriangleCenter/) specifies the
+// four-point form TriangleCenter(<Point>,<Point>,<Point>,<Number>), and the
+// catalog agrees. The prompt's Excenter line claimed positive indices 5/6/7 are
+// the excentres; the manual lists 5 = nine-point centre, 6 = symmedian point,
+// 7 = Gergonne point.
+func TestPromptTriangleCenterSignatureMatchesManual(t *testing.T) {
+	text := promptText(t, "2d")
+	for _, want := range []string{"TriangleCenter(A,B,C,1)", "TriangleCenter(A,B,C,3)", "TriangleCenter(A,B,C,4)"} {
+		if !strings.Contains(text, want) {
+			t.Errorf("prompt should use the documented four-point form %q", want)
+		}
+	}
+	if i := strings.Index(text, "Excenter"); i >= 0 {
+		line := text[i:]
+		if j := strings.IndexByte(line, '\n'); j >= 0 {
+			line = line[:j]
+		}
+		if !strings.Contains(line, "TriangleCenter(A,B,C,-1..-4)") {
+			t.Errorf("Excenter should map to a negative index; got %q", line)
+		}
+		if strings.Contains(line, "5/6/7") && !strings.Contains(line, "不是**旁心") {
+			t.Errorf("Excenter line must state that 5/6/7 are NOT excentres; got %q", line)
+		}
+	}
+}
