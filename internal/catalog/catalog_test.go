@@ -1,6 +1,8 @@
 package catalog
 
 import (
+	"sort"
+	"strings"
 	"testing"
 
 	"github.com/hycjack/geogebra-dsl-go/internal/ir"
@@ -287,5 +289,122 @@ func TestReturnsTokensAllResolve(t *testing.T) {
 		if c.KindOf(cmd) == "" {
 			t.Errorf("KindOf(%s) empty; scripting command must at least resolve to Script", cmd)
 		}
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Authoritative coverage check — bidirectional, replacing the >= 400 floor.
+// ---------------------------------------------------------------------------
+
+// TestCatalogCoversEveryKernelCommand — every command in GeoGebra's own
+// Commands.java must be in the catalog. The old assertion was
+// `len(Names()) >= 400`, a one-way floor: it caught the table collapsing but
+// nothing else, so losing one real command (575 → 574) left it green. This is
+// the direction that actually matters — a missing command is reported to the
+// user as cmd/unknown on a perfectly valid script.
+func TestCatalogCoversEveryKernelCommand(t *testing.T) {
+	c, err := Default()
+	if err != nil {
+		t.Fatalf("Default: %v", err)
+	}
+	var missing []string
+	for name := range kernelCommandNames {
+		if _, ok := c.Lookup(name); !ok {
+			missing = append(missing, name)
+		}
+	}
+	sort.Strings(missing)
+	if len(missing) > 0 {
+		t.Errorf("%d kernel command(s) missing from the catalog: %v", len(missing), missing)
+	}
+	if got := len(kernelCommandNames); got != 549 {
+		t.Errorf("kernel-commands.txt holds %d names; the header says 549 — regenerate it", got)
+	}
+}
+
+// TestCatalogHasNoUnexplainedNonKernelCommands — the other direction. A
+// catalog command that is neither a kernel command nor a listed non-kernel
+// command is a fabricated name, and the catalog would accept a script using it
+// and then fail inside GeoGebra. Each allowed extra must carry its reason in
+// non-kernel-commands.txt, so this cannot rot into a blanket allowlist.
+func TestCatalogHasNoUnexplainedNonKernelCommands(t *testing.T) {
+	c, err := Default()
+	if err != nil {
+		t.Fatalf("Default: %v", err)
+	}
+	var unexplained []string
+	for _, name := range c.Names() {
+		if kernelCommandNames[name] {
+			continue
+		}
+		if !nonKernelCommandNames[name] {
+			unexplained = append(unexplained, name)
+		}
+	}
+	if len(unexplained) > 0 {
+		t.Errorf("%d catalog command(s) are neither kernel commands nor listed "+
+			"non-kernel commands — either a hallucination or a missing entry in "+
+			"non-kernel-commands.txt: %v", len(unexplained), unexplained)
+	}
+	// The reverse: an entry excused in the file but no longer in the catalog is
+	// a stale excuse, which hides a real removal.
+	var stale []string
+	for name := range nonKernelCommandNames {
+		if _, ok := c.Lookup(name); !ok {
+			stale = append(stale, name)
+		}
+	}
+	sort.Strings(stale)
+	if len(stale) > 0 {
+		t.Errorf("non-kernel-commands.txt excuses %d name(s) no longer in the catalog: %v", len(stale), stale)
+	}
+}
+
+// TestNonKernelListDocumentsItsCategories — every excused entry must declare a
+// known category and a non-empty reason, so the file stays reviewable data
+// rather than a list of names.
+func TestNonKernelListDocumentsItsCategories(t *testing.T) {
+	known := map[string]bool{"parser-function": true, "reserved-word": true}
+	seen := 0
+	for _, raw := range strings.Split(string(nonKernelCommandsTXT), "\n") {
+		if i := strings.IndexByte(raw, '#'); i >= 0 {
+			raw = raw[:i]
+		}
+		raw = strings.TrimSpace(raw)
+		if raw == "" {
+			continue
+		}
+		seen++
+		parts := strings.Split(raw, "\t")
+		if len(parts) != 3 {
+			t.Errorf("entry %q must be <NAME>\\t<category>\\t<reason>", raw)
+			continue
+		}
+		if !known[parts[1]] {
+			t.Errorf("entry %q has unknown category %q", parts[0], parts[1])
+		}
+		if len(parts[2]) < 20 {
+			t.Errorf("entry %q needs a real reason, got %q", parts[0], parts[2])
+		}
+	}
+	if seen == 0 {
+		t.Fatal("non-kernel-commands.txt parsed as empty")
+	}
+}
+
+// TestDefaultLoadsAllCountIsPinned — the totals are pinned so an accidental
+// bulk edit to the JSON files cannot quietly reshape the table. A deliberate
+// change must update these numbers in the same commit.
+func TestDefaultLoadsAllCountIsPinned(t *testing.T) {
+	c, err := Default()
+	if err != nil {
+		t.Fatalf("Default: %v", err)
+	}
+	const wantCommands, wantAliases = 575, 12
+	if got := len(c.Names()); got != wantCommands {
+		t.Errorf("catalog has %d commands, want %d", got, wantCommands)
+	}
+	if got := len(c.AliasNames()); got != wantAliases {
+		t.Errorf("catalog has %d non-command aliases, want %d", got, wantAliases)
 	}
 }

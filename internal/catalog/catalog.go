@@ -22,6 +22,66 @@ var embedded embed.FS
 //go:embed cmdmeta.json
 var cmdmetaJSON []byte
 
+//go:embed kernel-commands.txt
+var kernelCommandsTXT []byte
+
+//go:embed non-kernel-commands.txt
+var nonKernelCommandsTXT []byte
+
+// The two vendored command lists above are the authoritative coverage check.
+// They replace the old `len(Names()) >= 400` floor, which could only notice the
+// table collapsing wholesale: dropping one real command took 575 → 574 and the
+// test stayed green. Both directions are now asserted, so a missing command and
+// an unexplained extra one are each a hard failure.
+//
+// kernel-commands.txt was extracted from GeoGebra's own Commands.java:
+//
+//	grep -oE '^\s{1,2}[A-Z][A-Za-z0-9_]*\([^)]*\)\s*[,;]' Commands.java \
+//	  | sed -E 's/^[^A-Za-z]*//; s/\(.*//' | sort -u
+//
+// Upstream restructured that file into an enum (see kernel-commands.txt's
+// header), which is why the older "grep for CommandName constants" recipe
+// matched nothing and the 2026-09-18 hallucination sweep deleted nine real
+// commands. Re-run the extraction above when bumping against a newer GeoGebra
+// and update the count in the file's header.
+var (
+	kernelCommandNames    = parseNameList(kernelCommandsTXT)
+	nonKernelCommandNames = parseNameList(nonKernelCommandsTXT)
+)
+
+// parseNameList reads a newline-separated name list, skipping blanks and #
+// comments, and upper-cases every name. Entries may be tab-separated
+// ("<NAME>\t<category>\t<reason>"); only the first field is the name — taking
+// the whole line would make every excused entry unmatchable.
+func parseNameList(data []byte) map[string]bool {
+	out := map[string]bool{}
+	for _, line := range strings.Split(string(data), "\n") {
+		if i := strings.IndexByte(line, '#'); i >= 0 {
+			line = line[:i]
+		}
+		name := line
+		if i := strings.IndexByte(name, '\t'); i >= 0 {
+			name = name[:i]
+		}
+		if n := strings.ToUpper(strings.TrimSpace(name)); n != "" {
+			out[n] = true
+		}
+	}
+	return out
+}
+
+// KernelCommandNames returns the vendored authoritative GeoGebra command names.
+// Exposed so the coverage test (and any host that wants to cross-check) can
+// iterate them.
+func KernelCommandNames() []string {
+	out := make([]string, 0, len(kernelCommandNames))
+	for n := range kernelCommandNames {
+		out = append(out, n)
+	}
+	sort.Strings(out)
+	return out
+}
+
 // TypeExpr is a catalog-typed parameter (e.g. "Point", "Line", "Number",
 // "Point", "Vector/Line/Ray", "GeoObject"). The ordering separated by '/'
 // expresses allowed alternatives.

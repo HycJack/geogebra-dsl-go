@@ -87,30 +87,34 @@ ggbcheck check /dev/stdin                # Unix 管道/重定向（不支持 `-`
 
 ### 与内核源码对齐（覆盖核查）
 
-**2026-10-01 已对本地 GeoGebra 内核源码做过完整差集比对，结果：真实缺失 0 条。**
+**2026-10-02 起，两个方向的差集比对已进 CI：真实缺失 0 条。**
 
 内核命令枚举在 `source/shared/common/src/main/java/org/geogebra/common/kernel/commands/Commands.java`。
 **注意它已从"一堆 `public static final CommandName` 常量"重构为 `enum Commands`**——按旧结构写的
-核查脚本必然失效，这正是本项长期无法自动维护的原因。现在抓 enum 条目即可：
+核查脚本必然 0 命中，这正是 2026-09-18 那次「幻觉命令」清理误删 9 条真命令的真正成因。
+现在抓枚举条目即可（注意最后一条常量以 `;` 结尾，构造函数要排除）：
 
 ```bash
-grep -oE '^\s{1,2}[A-Z][A-Za-z0-9_]*\(' Commands.java | tr -d ' (' | sort -u
+grep -oE '^\s{1,2}[A-Z][A-Za-z0-9_]*\([^)]*\)\s*[,;]' Commands.java \
+  | sed -E 's/^[^A-Za-z]*//; s/\(.*//' | sort -u
 ```
 
-实测 **550 条**（去重大写）。与命令表比对：
+实测 **549 条**（大小写归一后）。权威清单已随仓库固化，两个方向都有单测守住：
 
-| 方向 | 数量 | 定性 |
+| 方向 | 数量 | 检查 |
 |---|---|---|
-| 内核有、命令表缺 | **0** | ✅ 完全对齐 |
-| 命令表有、内核无 | 38 | 约 28 条是 `ParserFunctionsFactory` 的 **parser 函数**（`Sin`/`Cos`/`Sqrt`/`Ln`/`Abs`…，非 `Commands` 枚举成员），`supplement.json` 有意并入以支持 `h = Sqrt(5)` 这类 AI 常见写法——**合法**；`Real` 是保留字；**12 条是确认的非命令，已转入 alias 表不再作为命令接受**。 |
+| 内核有、命令表缺 | **0** | `kernel-commands.txt` + `TestCatalogCoversEveryKernelCommand` |
+| 命令表有、既非内核又未列理由 | **0** | `non-kernel-commands.txt` + `TestCatalogHasNoUnexplainedNonKernelCommands` |
 
-表内覆盖 3D 曲面体（`ConeInfinite`、`CylinderInfinite`、`Polyhedron`、`QuadricSide`）、
-统计（`PMCC`、`FitLineY`、`TableToChart`、`Q1`/`Q3`）、CAS（`Evaluate`、`TaylorSeries`）、
-变换（`Mirror`、`OrthogonalLine`、`Dilate`）等全部分类；少数内核已标 **deprecated** 的条目
-（`IntersectRegion`、`IntersectionPaths`）仍收录，便于兼容老脚本。JSON 侧多收一个 parser
-函数名 `Real`（保留字而非命令）。
+这**取代了**原来的 `len(Names()) >= 400` 单向下限——它只能发现命令表整体崩塌，
+少一条真命令（575→574）测试照样绿。注入一个假命令、删掉一个真命令，新断言都立刻失败。
 
-> **⚠️ 两处已知的遗留欠账**
+26 条「有表无内核」的例外逐条带理由写在 `non-kernel-commands.txt`：
+**25 条 `parser-function`**（`Sin`/`Cos`/`Sqrt`/`Ln`/`Abs`/`Round`/`Floor`/`Sign`/`Stdev`/`Var` 等，
+来自 `ParserFunctionsFactory`，不是 `Commands` 枚举成员，但 GeoGebra 输入栏接受，
+且是 AI 脚本最常写的东西——删掉会拒掉大量合法脚本）+ **1 条 `reserved-word`**（`Real`）。
+
+> **⚠️ 一处已知的遗留欠账**
 > 1. **12 条「非命令别名」被有意接受为「不是命令」**：`supplement.json` 里带 `alias`
 >    字段的条目不进命令表，改进 `aliases` 表，校验器**拒绝**它们并在 `cmd/unknown`
 >    里直接点名该用哪个真命令。被拒的 12 条是：`Incenter`/`Circumcenter`/
@@ -123,9 +127,9 @@ grep -oE '^\s{1,2}[A-Z][A-Za-z0-9_]*\(' Commands.java | tr -d ' (' | sort -u
 >    其中 `ParallelLine` 最隐蔽：**内核里它只是工具栏 `MODE_PARALLEL` 的界面字符串**
 >    （`EuclidianConstants` 的 `case MODE_PARALLEL: return "ParallelLine"`），
 >    不是可输入命令；而 `PerpendicularLine` 恰好两者都是，所以它是真的。
-> 2. **自动核查缺位**：`catalog` 单测只有 `len(Names()) >= 400` 的单向下限，检测不到单条
->    命令缺失（少一条真命令 575→574，测试照样绿）。上面的比对依赖内核源码路径，无法进 CI。
->    待办：把权威命令名清单（纯文本）随仓库固化，断言从下限换成**差集双向比对**。
+>
+> （原先并列为第 2 条的「自动核查缺位」已于 2026-10-02 补齐：权威清单随仓库固化，
+> 断言从 `>= 400` 单向下限换成双向差集比对，见上一节。）
 
 > 合并时每个分类文件的 `commands`（map 与 array 两种 shape 均支持）逐一并入；
 > 同一条命令出现在多个分类时 overloads 全部累积，任何分类的签名都能命中。
@@ -161,7 +165,7 @@ internal/
   text/          文本脚本 → 对象图（解析+命令嵌套物化+绑定变量+字符串感知+科学计数法）
   ir/            共享对象图 + IR JSON 解析（两条输入的汇合点）
   number/        精确算术求值器（big.Rat + π/e + 嵌套算式 + 科学计数法）
-  catalog/       命令表（go:embed 全部分类 JSON + supplement + cmdmeta.json，575 条可执行命令 + 12 条非命令别名，进程级缓存）
+  catalog/       命令表（go:embed 全部分类 JSON + supplement + cmdmeta + 权威命令清单，575 条可执行命令 + 12 条非命令别名，进程级缓存）
   sig/           签名匹配（命令名/参数个数/粗类型，含嵌套命令；诊断附正确签名）
   deps/          依赖无环：邻接表 Kahn + Tarjan SCC 真环归因 + blocked 下游
   geo/           退化判定（复用 number 精确求值）

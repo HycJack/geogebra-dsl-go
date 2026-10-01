@@ -1,0 +1,47 @@
+# Names in the command table that are NOT GeoGebra kernel commands.
+#
+# This is the *other* side of the coverage check in kernel-commands.txt: the
+# set difference `table - kernel` must equal this file, name for name. Every
+# entry here needs a reason, because a table name with no kernel command behind
+# it is either a typo for a real command or a hallucination that should be
+# dropped — both are bugs, and both used to pass unnoticed.
+#
+# Two categories are represented:
+#   parser-function  elementary functions from ParserFunctionsFactory. Not
+#                    Commands enum members, but valid input-bar syntax, and
+#                    Sin/Cos/Sqrt/... are among the most common things an AI
+#                    emits. Rejecting them would fail correct scripts.
+#   reserved-word    parser-level keywords rather than functions.
+#
+# 26 names, tab-separated as <NAME>\t<category>\t<reason>. Names are
+# upper-cased by the loader; GeoGebra's own spelling is preserved here because
+# the point of the file is to be readable next to the source.
+#
+# Regenerate: run the coverage test; every name it reports as unexplained
+# belongs here with a reason, or in the table as an alias, or nowhere.
+ABS	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+ARCCOS	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+ARCSIN	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+ARCTAN	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+CBRT	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+CEIL	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+COS	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+COT	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+COV	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+CSC	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+EXP	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+FLOOR	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+LN	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+LOG	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+LOG10	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+NROOT	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+REAL	reserved-word	parser-level keyword, not a command.
+ROUND	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+SEC	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+SIGN	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+SIN	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+SQRT	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+STDEV	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+STDEVP	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+TAN	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.
+VAR	parser-function	ParserFunctionsFactory elementary function, not a Commands enum member; accepted in the GeoGebra input bar.

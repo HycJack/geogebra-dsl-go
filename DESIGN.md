@@ -4,7 +4,7 @@
 > **输入**：文本脚本 / IR JSON 两种形态，走同一份对象图，共享同一条判定链。
 > **判定**：构造可建立（命令存在且签名对、依赖无环、对象无退化、目标可达）。
 > **交付**：只要收据/报告——不产 `.ggb` 文件、不数值求解、不内置绘图。
-> **命令表**：内嵌 GeoGebra 官方分类命令库（20 个 JSON）+ 源码核验的 `supplement.json`，**可执行命令 575 条**（官方 495 + supplement 80），共 1723 条 overload；另有 **12 条「非命令别名」**只用于诊断提示，不进入命令表。**与本地内核 `Commands.java`（550 条）差集比对：真实缺失 0 条**（详见 §4）。
+> **命令表**：内嵌 GeoGebra 官方分类命令库（20 个 JSON）+ 源码核验的 `supplement.json`，**可执行命令 575 条**（官方 495 + supplement 80），共 1723 条 overload；另有 **12 条「非命令别名」**只用于诊断提示，不进入命令表。**与内核 `Commands.java`（549 条）差集比对：真实缺失 0 条**，两个方向均已自动化（详见 §4）。
 > **数据驱动**：命令→返回粗类型、Scripting 命令集合都放在 `cmdmeta.json`——加/改一个命令的类型只需改这一份 JSON，不碰 Go。
 
 ---
@@ -96,26 +96,13 @@
   - `scripting`：官方 67 条 Scripting 命令集合（返回 "Script"），也是"裸语句合法性"的**唯一权威源**。
 - **进程级缓存**：`catalog.Default()` 用 `sync.OnceValues` 缓存——旧实现在每次 `Check` 都重解析全部 20+ JSON（约 16 ms/call），现在降至 ~7.5 µs/call；AI 修复循环（`MaxRepair+1` 次）在长会话下不再重复付出这个代价。
 - **计数口径**：575 = 21 个 JSON 文件去重合并后**可执行**命令名总数（官方分类 495 + supplement 80），同一命令出现在多个分类文件时 overload 会累加但只计一条。带 `alias` 的条目不计入——见下。
-- **覆盖核查（2026-10-01 对本地内核源码实测）**：内核命令枚举位于
-  `source/shared/common/src/main/java/org/geogebra/common/kernel/commands/Commands.java`。
-  **注意它已从"一堆 `public static final CommandName` 常量"重构为 `enum Commands implements CommandsConstants`**，表下标常量移到了 `CommandsConstants`——所以按旧结构 grep 的核查脚本必然失效，这正是本项长期无法自动化的原因。当前应改为抓 enum 条目（行首缩进的 `Name(TABLE_*)`）：
-  ```
-  grep -oE '^\s{1,2}[A-Z][A-Za-z0-9_]*\(' Commands.java | tr -d ' (' | sort -u
-  ```
-  实测 **550 条**（去重大写；原始条目 554，含 4 组大小写变体）。与命令表差集：
-  - **内核有、命令表缺：0 条。** 表与这版内核**完全对齐**。
-  - 命令表有、内核无：**38 条**，逐条定性如下：
-    - **约 28 条数学函数**（`Sin`/`Cos`/`Sqrt`/`Ln`/`Abs`/`Round`/`Floor`/`Sign`/`Stdev`/`Var`…）——它们是 `ParserFunctionsFactory` 的 **parser 函数**，不是 `Commands` 枚举成员。`supplement.json` 有意并入，好让 `h = Sqrt(5)`、`r = Cos(0)` 这类 AI 常见写法通过。**合法，非幻觉**。
-    - `Real`——parser 保留字，非命令，符合预期。
-    - **6 条带 `alias` 字段的"恢复命令"**（见下条），有意保留。
-    - **3 条确认的幻觉残留**：`ParallelLine` / `LineThrough` / `CircleWithCenter`——全内核源码搜索 0 命中或仅命中 GUI 常量类。`232e6d2` 的幻觉清理漏了这 3 条。
-- **⚠️ 12 条「非命令别名」：有意接受、但不是命令**：`supplement.json` 里带 `alias` 字段的条目**不进入 `byName`**，而是进 `aliases` 表。它们是「看起来像命令、GeoGebra 其实没有」的名字，校验器**必须拒绝**它们——否则脚本通过校验、到 GeoGebra 里再建不出来，正好破坏本工具唯一的承诺。`alias` 字段的用途是让 `cmd/unknown` 直接说出该用哪个真命令，而不是给一个不相干的编辑距离建议（`Incenter` 的「可能是 If」对调用方毫无价值）。
-  - `Incenter` / `Circumcenter` / `Orthocenter` → `TriangleCenter`（**四点形式** `TriangleCenter(A,B,C,n)`，官方手册确认 `n<3054`；`n=1` 内心 / `3` 外心 / `4` 垂心。旁心用**负**指标 `-1..-4`，正指标 5/6/7 是九点中心/等角共轭重心/Gergonne 点）
-  - `Circumcircle` → `Circle(A,B,C)`；`RegularPolygon` → `Polygon(A,B,n)`；`TextBox` → `Textfield(点, 文字, 宽度)`
-  - `ParallelLine` → `Line(过点, 参考直线)`——**内核里 `ParallelLine` 只是工具栏 `MODE_PARALLEL` 的界面字符串**（`EuclidianConstants` 中 `case MODE_PARALLEL: return "ParallelLine"`），不是可输入命令；`PerpendicularLine` 恰好两者都是，所以它是真的
-  - `LineThrough` → `Line(<Point>,<Point>)`；`CircleWithCenter` → `Circle(A,B,C)`；`ArcCot`/`ArcSec`/`ArcCsc` → `cot`/`sec`/`csc`（GeoGebra 无反余切族函数）
-  - **prompt 必须与之一致**：`ai/prompt.go` 的 2D 与 3D 两套 system prompt 都带同一份黑名单。此前 3D prompt 完全没有这份黑名单，且 2D prompt 一边在「构造命令可用」里**推荐** `ParallelLine`、一边在黑名单里禁 `Incenter`——自相矛盾，且推荐的命令会被校验器拒。`TestPromptNeverRecommendsRetiredCommands` 锁住这一点。
-- **自动覆盖核查仍缺位**：`catalog` 单测只有 `len(Names()) >= 400` 的单向下限，检测不到单条命令缺失（少一条真命令 575→574，测试照样绿）。差集比对脚本依赖本地内核源码路径，无法进 CI——待办：把权威命令名清单（纯文本，550 行）随仓库固化，测试从下限换成差集双向比对。
+- **覆盖核查：已自动化，双向差集**（2026-10-02）。权威清单已随仓库固化，因此不再依赖本地内核路径：
+  - `internal/catalog/kernel-commands.txt`——549 条权威命令名，抽取自内核 `Commands.java`（见文件头的抽取命令与坑）。
+  - `internal/catalog/non-kernel-commands.txt`——26 条「不是内核命令但表里要有」的例外，每条带 `<类别>\t<理由>`。
+  - `catalog` 单测两个方向都断言：`TestCatalogCoversEveryKernelCommand`（内核有、表缺 → 失败）与 `TestCatalogHasNoUnexplainedNonKernelCommands`（表有、既非内核又未列理由 → 失败；反向还查「已从表里删掉但仍被豁免」的过期条目）。`TestDefaultLoadsAllCountIsPinned` 另外钉住 575 / 12 两个总数。
+  - **这取代了原来的 `len(Names()) >= 400` 单向下限**——那个断言只能发现命令表整体崩塌，少一条真命令（575→574）测试照样绿。实测：注入一个假命令、删掉一个真命令（`Stadium`），新断言都立刻失败。
+  - 26条例外的构成：**25 条 `parser-function`**（`Sin`/`Cos`/`Sqrt`/`Ln`/`Abs`/`Round`/`Floor`/`Sign`/`Stdev`/`Var`…，来自 `ParserFunctionsFactory`，**不是** `Commands` 枚举成员；`supplement.json` 有意并入以支持 `h = Sqrt(5)` 这类 AI 常见写法）+ **1 条 `reserved-word`**（`Real`）。
+  - **抽取时的两个坑**（都写进文件头了）：内核 `Commands` 已从「一堆 `public static final CommandName` 常量」重构为 `enum Commands implements CommandsConstants`，按旧结构 grep 必然 0 命中——这正是 `232e6d2`「源码 0 命中」判据的真正成因，不是那 9 条命令是幻觉的证据；枚举**最后一条常量以 `;` 结尾**（`Stadium(TABLE_ENGLISH);`），只匹配 `,` 会漏掉它；构造函数 `Commands(int table) {` 必须排除。仅大小写不同的名字（`SXX`/`Sxx`、`PolyLine`/`Polyline`）是同一条命令。
 - **匹配粒度**：命令名精确 + 参数个数 + 粗类型（按 overload 匹配）；字面量参数宽松通过（不阻塞有效性判定），**但只限值槽与表达式槽**。对象通配槽（`<Object>` / `<GeoObject>` / `<Geometric Object>` / `<Region>` / `<Image>` / 表格单元格 / UI 控件等）只收真实对象，裸数字/布尔一律拒绝——否则 `Point(0, 0)` 会被误读成"对象 0 上的参数点 0"、`Rotate(0, 90, O)` 会被当成平移一个数字。字面点请写 `A = (0, 0)` 或 `Point({0, 0})`；`<Expression>` / `<Any>` / `<Variable>` / `<Name>` / 枚举值等槽保持宽松（`Sequence(2, k, 1, 10)`、`Text(0)`、`If(cond, 1, 2)` 都合法）。
   - **命令名大小写不敏感**：查表、签名匹配、标签类型预测三处统一按大写处理。标签类型表若按原始大小写查，`midpoint(A,B)` 会掉进 `General` 字符集拿到标签 `a`，与脚本里后面的 `a = 5` 冲突并误报 `dep/redefine`。
   - **用户自定义函数**：`f(x) = ...` 的调用名不在命令表内，但它是图里真实存在的对象。目录未命中时先查图中的函数定义并按其 `Params` 校验元数（错则报 `cmd/arg`，绝不报 `cmd/unknown`）；**目录优先**——真命令永远压过同名用户定义，与 GeoGebra 一致。参数类型未建模，故只校验元数。
@@ -218,7 +205,7 @@ ggbcheck check /dev/stdin             # Unix 管道/重定向；不支持 `-` �
   - `deps`：Kahn 拓扑序 + **Tarjan SCC 真环归因** + **blocked 下游**；
   - `check`：端到端多场景（**56 个**测试函数）。
 - 集成夹具在 `testdata/exam/`（**18 道**中考/高考风格正例：注释、四心、切线、椭圆焦点、函数拟合、3D 等）与 `testdata/exam-bad/`（**14 道**应拒绝的反例：传点、退化、环、未知命令等），由 `internal/check` 端到端测试统一驱动。
-- 覆盖核查（`catalog` 单测）：**只是** `len(Names()) >= 400` 的单向下限，检测不到单条命令缺失；实际合并后 575 条可执行命令（另有 12 条非命令别名）。**2026-10-01 已用本地内核源码做过一次完整差集比对，真实缺失 0 条**，方法与 38 条反向差异的逐条定性见 §4；但该比对依赖内核源码路径，尚无法进 CI 自动执行。
+- 覆盖核查（`catalog` 单测）：**双向差集**，取代了原来的 `len(Names()) >= 400` 单向下限。实际合并后 575 条可执行命令（另有 12 条非命令别名）。权威清单已随仓库固化（`kernel-commands.txt` 549 条 + `non-kernel-commands.txt` 26 条），两个方向都由单测断言，**不再依赖本地内核路径**——内核升级时按文件头的抽取命令重新生成即可。
 
 ---
 
