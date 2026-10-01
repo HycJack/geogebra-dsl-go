@@ -22,6 +22,28 @@ func TestReceiptWarningsShape(t *testing.T) {
 	}
 }
 
+// TestReceiptCollectionsAreAllArrays — errors was the one collection left nil,
+// so a clean run serialized `"errors": null`. Hosts drive their repair loop by
+// iterating the receipt's arrays, and a null breaks that (the WASM entry point
+// documents the receipt as directly consumable). All four collections are part
+// of the same contract, so they are asserted together.
+func TestReceiptCollectionsAreAllArrays(t *testing.T) {
+	b, err := json.Marshal(NewReceipt("ir"))
+	if err != nil {
+		t.Fatalf("marshal: %v", err)
+	}
+	for _, field := range []string{`"errors":[]`, `"warnings":[]`, `"executable":[]`, `"kinds":{}`} {
+		if !strings.Contains(string(b), field) {
+			t.Errorf("expected %s in receipt JSON, got %s", field, b)
+		}
+	}
+	for _, field := range []string{`"errors":null`, `"warnings":null`, `"executable":null`, `"kinds":null`} {
+		if strings.Contains(string(b), field) {
+			t.Errorf("%s must not appear in receipt JSON, got %s", field, b)
+		}
+	}
+}
+
 func TestFailSetsOKFalse(t *testing.T) {
 	rc := NewReceipt("text")
 	rc.Fail(Problem{Code: CodeDepCycle, Msg: "cycle"})

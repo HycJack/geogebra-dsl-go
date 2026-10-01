@@ -39,15 +39,32 @@ func LoadConfig() Config {
 		APIKey:         os.Getenv("GGCM_AI_API_KEY"),
 		Temperature:    envFloat("GGCM_AI_TEMP", 0.2),
 		MaxTokens:      envInt("GGCM_AI_MAX_TOKENS", 16384),
-		MaxRepair:      envInt("GGCM_AI_MAX_REPAIR", 3),
+		MaxRepair:      envIntClamped("GGCM_AI_MAX_REPAIR", 3, 0, 20),
 		MaxImageBytes:  envInt("GGCM_AI_MAX_IMAGE_BYTES", 10<<20), // 10 MiB
 		DisableVision:  envBool("GGCM_AI_DISABLE_VISION"),
 		MaxHistory:     envInt("GGCM_AI_MAX_HISTORY", 20),
 		HTTPTimeoutS:   envInt("GGCM_AI_HTTP_TIMEOUT_S", 300),
-		HTTPRetries:    envInt("GGCM_AI_HTTP_RETRIES", 5),
-		HTTPRetryBase:  envInt("GGCM_AI_HTTP_RETRY_BASE_MS", 500),
+		HTTPRetries:    envIntClamped("GGCM_AI_HTTP_RETRIES", 5, 0, 20),
+		HTTPRetryBase:  envIntClamped("GGCM_AI_HTTP_RETRY_BASE_MS", 500, 1, 60_000),
 		RequestBudgetS: envInt("GGCM_AI_REQUEST_TIMEOUT_S", 900),
 	}
+}
+
+// envIntClamped reads an int env var and clamps it into [lo, hi]. The knobs that
+// multiply outbound LLM calls (MaxRepair, HTTPRetries) and the backoff base are
+// operator-supplied and were previously unbounded, so a typo like
+// GGCM_AI_HTTP_RETRIES=100000 turned "retry a few times" into a sustained load
+// on a paid endpoint. Out-of-range values fall back to the default's side of the
+// range rather than erroring, keeping the service self-healing.
+func envIntClamped(key string, def, lo, hi int) int {
+	n := envInt(key, def)
+	if n < lo {
+		return lo
+	}
+	if n > hi {
+		return hi
+	}
+	return n
 }
 
 func envOr(key, def string) string {

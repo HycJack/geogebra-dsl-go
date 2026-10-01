@@ -258,6 +258,20 @@ func powRat(base, exp *big.Rat) (*big.Rat, bool) {
 		// not needed; require integer exponent.
 		return nil, false
 	}
+	if !exp.Num().IsInt64() {
+		// The exponent is certainly above maxExponent, so only the sign can
+		// matter. It must NOT be converted: big.Int.Int64 keeps the low 64 bits,
+		// so 2^64 became 0 and "0^n == 0" silently turned into "0^0 == 1".
+		// The lowest bit is the exponent's parity for any magnitude, and parity
+		// is exactly what a negative base needs.
+		if base.Sign() == 0 {
+			return big.NewRat(0, 1), true // 0^n == 0 for n > 0
+		}
+		if base.Sign() < 0 && exp.Num().Bit(0) == 1 {
+			return big.NewRat(-1, 1), true
+		}
+		return big.NewRat(1, 1), true
+	}
 	n := exp.Num().Int64()
 	if n < 0 {
 		return nil, false

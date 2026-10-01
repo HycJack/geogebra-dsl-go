@@ -49,6 +49,30 @@ func ParseJSON(data []byte) (*Graph, []diag.Problem, error) {
 			})
 			continue
 		}
+		// IR is the authoritative input: it must say what each object IS (kind)
+		// or at least what builds it (cmd). An object with neither has no type
+		// and no command, so sig has no signature to check, geo has nothing to
+		// test, and reach finds it "present" — it would sail through as a
+		// constructible object while carrying no information at all.
+		kind := KindFromString(jo.Kind)
+		switch {
+		case jo.Kind == "" && jo.Cmd == "":
+			probs = append(probs, diag.Problem{
+				Code: diag.CodeParseJSON,
+				Msg:  fmt.Sprintf("objects[%d] (%s) 必须提供 kind 或 cmd", i, jo.ID),
+				Obj:  jo.ID,
+			})
+			continue
+		case jo.Kind != "" && kind == KUnknown:
+			// A misspelled kind silently degraded to KUnknown, which is the same
+			// hole as the case above whenever cmd is also absent. Say so instead.
+			probs = append(probs, diag.Problem{
+				Code: diag.CodeParseJSON,
+				Msg:  fmt.Sprintf("objects[%d] (%s) 的 kind %q 无法识别", i, jo.ID, jo.Kind),
+				Obj:  jo.ID,
+			})
+			continue
+		}
 		if _, exists := g.Get(jo.ID); exists {
 			probs = append(probs, diag.Problem{
 				Code: diag.CodeDepRedefine,
@@ -57,7 +81,6 @@ func ParseJSON(data []byte) (*Graph, []diag.Problem, error) {
 			})
 			continue // keep the first definition; skip the redefinition
 		}
-		kind := KindFromString(jo.Kind)
 		g.Add(&Object{
 			ID:   jo.ID,
 			Cmd:  jo.Cmd,

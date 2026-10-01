@@ -230,3 +230,74 @@ func TestCappedMaxTokens(t *testing.T) {
 		}
 	}
 }
+
+// TestBackoffDelaySaturates — the delay used to be base<<(attempt-1) computed in
+// int64, which wraps negative near attempt 40 and collapses to 0 from attempt 62
+// on. A large (but plausible) HTTPRetries then turned the exponential backoff
+// into a hot retry loop against the LLM endpoint, because time.NewTimer fires
+// immediately for a zero or negative duration.
+func TestBackoffDelaySaturates(t *testing.T) {
+	if got := backoffDelay(500, 1); got != 500*time.Millisecond {
+		t.Errorf("attempt 1 = %v, want 500ms", got)
+	}
+	if got := backoffDelay(500, 2); got != time.Second {
+		t.Errorf("attempt 2 = %v, want 1s", got)
+	}
+	if got := backoffDelay(500, 5); got != 8*time.Second {
+		t.Errorf("attempt 5 = %v, want 8s", got)
+	}
+	// The regression: these used to be negative or exactly zero.
+	for _, attempt := range []int{40, 62, 63, 64, 100, 1 << 20} {
+		got := backoffDelay(500, attempt)
+		if got <= 0 {
+			t.Errorf("attempt %d = %v, must be positive", attempt, got)
+		}
+		if got > maxBackoff {
+			t.Errorf("attempt %d = %v, must not exceed %v", attempt, got, maxBackoff)
+		}
+	}
+	// Monotonic non-decreasing, then flat at the cap.
+	prev := time.Duration(0)
+	for attempt := 1; attempt <= 80; attempt++ {
+		got := backoffDelay(500, attempt)
+		if got < prev {
+			t.Fatalf("attempt %d = %v went backwards from %v", attempt, got, prev)
+		}
+		prev = got
+	}
+	if got := backoffDelay(500, 80); got != maxBackoff {
+		t.Errorf("saturated delay = %v, want %v", got, maxBackoff)
+	}
+	// A non-positive base must not collapse the delay to zero either.
+	for _, base := range []int{0, -1} {
+		if got := backoffDelay(base, 1); got != maxBackoff {
+			t.Errorf("base %d attempt 1 = %v, want %v", base, got, maxBackoff)
+		}
+	}
+}
+
+// TestLoadConfigClampsRetryKnobs — MaxRepair and HTTPRetries multiply outbound
+// LLM calls, so an unbounded env value turns a typo into sustained load on a paid
+// endpoint. They are now clamped into a sane range.
+func TestLoadConfigClampsRetryKnobs(t *testing.T) {
+	t.Setenv("GGCM_AI_HTTP_RETRIES", "100000")
+	t.Setenv("GGCM_AI_MAX_REPAIR", "-5")
+	t.Setenv("GGCM_AI_HTTP_RETRY_BASE_MS", "0")
+	cfg := LoadConfig()
+	if cfg.HTTPRetries != 20 {
+		t.Errorf("HTTPRetries = %d, want 20", cfg.HTTPRetries)
+	}
+	if cfg.MaxRepair != 0 {
+		t.Errorf("MaxRepair = %d, want 0", cfg.MaxRepair)
+	}
+	if cfg.HTTPRetryBase != 1 {
+		t.Errorf("HTTPRetryBase = %d, want 1", cfg.HTTPRetryBase)
+	}
+	t.Setenv("GGCM_AI_HTTP_RETRIES", "3")
+	t.Setenv("GGCM_AI_MAX_REPAIR", "2")
+	cfg = LoadConfig()
+	if cfg.HTTPRetries != 3 || cfg.MaxRepair != 2 {
+		t.Errorf("in-range values must pass through, got retries=%d repair=%d",
+			cfg.HTTPRetries, cfg.MaxRepair)
+	}
+}

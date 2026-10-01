@@ -115,7 +115,7 @@ func (c *openAIClient) Complete(ctx context.Context, messages []Message, opts Co
 		}
 		// Transient failure: exponential backoff (base, then doubles), still
 		// within the caller's context.
-		delay := time.Duration(c.cfg.HTTPRetryBase) * time.Millisecond * time.Duration(1<<uint(attempt-1))
+		delay := backoffDelay(c.cfg.HTTPRetryBase, attempt)
 		c.logRetry(attempt, delay, err)
 		// Record the retry for the UI trace (attempt counts backoff ordinals 1..).
 		opts.Trace.add(Step{
@@ -209,6 +209,33 @@ func cappedMaxTokens(v int) int {
 		return maxTokensCeiling
 	}
 	return v
+}
+
+// maxBackoff caps a single retry delay. HTTPRetries is an unvalidated env knob,
+// so the delay used to be computed as base<<(attempt-1) in int64: that wraps
+// negative around attempt 40 and collapses to 0 from attempt 62 on, at which
+// point time.NewTimer fires immediately and the exponential backoff degrades
+// into a hot retry loop hammering the LLM endpoint. Saturating keeps the shape
+// of the curve and removes the overflow.
+const maxBackoff = 30 * time.Second
+
+// backoffDelay returns the wait before retry number attempt (1-based), doubling
+// from baseMS and saturating at maxBackoff rather than overflowing.
+func backoffDelay(baseMS, attempt int) time.Duration {
+	if baseMS <= 0 {
+		return maxBackoff
+	}
+	d := time.Duration(baseMS) * time.Millisecond
+	for i := 1; i < attempt; i++ {
+		if d >= maxBackoff/2 {
+			return maxBackoff
+		}
+		d *= 2
+	}
+	if d > maxBackoff {
+		return maxBackoff
+	}
+	return d
 }
 
 // sleepCtx waits for delay, aborting early if ctx is done.

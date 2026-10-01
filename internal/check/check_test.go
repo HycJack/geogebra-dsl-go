@@ -1,6 +1,7 @@
 package check
 
 import (
+	"encoding/json"
 	"os"
 	"strings"
 	"testing"
@@ -795,4 +796,208 @@ func TestPointCoordinateArgsRejected(t *testing.T) {
 			t.Fatalf("%s: expected it to pass, got %v", script, rc.Errors)
 		}
 	}
+}
+
+// ---------------------------------------------------------------------------
+// Regressions from the 2026-10 architecture audit. Each of these reproduced
+// against the released binary before the fix.
+// ---------------------------------------------------------------------------
+
+// TestIRFunctionWithoutArgsDoesNotPanic — an IR object may declare a kind with
+// no args and no cmd. That combination satisfies every guard in
+// ReclassifyNumericExprs, which then indexed Args[0] out of range and took the
+// whole process (or, under WASM, the whole module) down. check.Check documents
+// that it never panics.
+func TestIRFunctionWithoutArgsDoesNotPanic(t *testing.T) {
+	// The regression is the crash, not the verdict: a kind with no body is
+	// unusual but not structurally broken, so these must simply come back with
+	// a receipt instead of taking the process down.
+	for _, ir := range []string{
+		`{"objects":[{"id":"f","kind":"Function"}],"goals":["f"]}`,
+		`{"objects":[{"id":"f","kind":"function"}],"goals":["f"]}`,
+		`{"objects":[{"id":"a","kind":"Function","args":[]},{"id":"b","kind":"Function","args":[]}]}`,
+		`{"objects":[{"id":"f","kind":"Function"}]}`,
+	} {
+		if rc := Check([]byte(ir), Options{ForceSource: "ir"}); rc == nil {
+			t.Fatalf("%s: expected a receipt, got nil", ir)
+		}
+	}
+	// A Function kind WITH an expression must still be classified, not skipped:
+	// this is the pass that panicked, so it must keep doing its real job.
+	rc := Check([]byte(`{"objects":[{"id":"f","kind":"Function","args":["1-1"]}],"goals":["f"]}`),
+		Options{ForceSource: "ir"})
+	if !rc.OK {
+		t.Fatalf("a Function object with a resolvable expression should pass, got %v", rc.Errors)
+	}
+	if got := rc.Kinds["f"]; got != "Number" {
+		t.Fatalf("expected f to reclassify to Number, got %q", got)
+	}
+}
+
+// TestUserDefinedFunctionCall — calling a function the script itself defined
+// is ordinary GeoGebra. The name is absent from the command table, so it used to
+// be reported cmd/unknown with a nonsense "did you mean If?" hint, while the
+// same call written as arithmetic (g = 2*f(3)+1) passed. Arity was never
+// checked at all.
+func TestUserDefinedFunctionCall(t *testing.T) {
+	for _, script := range []string{
+		"f(x) = x^2 + 1\ng = f(2)\n",
+		"f(x, y) = x + y\ng = f(1, 2)\n",
+		"f(x) = x^2 + 1\nA = (f(2), 3)\n",
+		"d(x) = Distance((0,0), (x, 0))\nA = (0,0)\nB = (1,1)\nl = d(B)\n",
+		"f(x) = x^2 + 1\ng = 2 * f(3) + 1\n",
+		// A defined function is a KFunction whatever it returns, so a point
+		// argument is fine even though the arity is the only thing we model.
+		"f(p) = p\nA = (0,0)\ng = f(A)\n",
+	} {
+		rc := Check([]byte(script), Options{})
+		if !rc.OK {
+			t.Errorf("%s: expected ok, got %v", script, rc.Errors)
+		}
+	}
+	// Wrong arity is an argument error against a function that demonstrably
+	// exists — never cmd/unknown.
+	rc := Check([]byte("f(x, y) = x + y\ng = f(1)\n"), Options{})
+	if hasCode(rc, diag.CodeCmdUnknown) {
+		t.Fatalf("a defined function must not be reported unknown, got %v", rc.Errors)
+	}
+	if !hasCode(rc, diag.CodeCmdArg) {
+		t.Fatalf("expected cmd/arg for the wrong argument count, got %v", rc.Errors)
+	}
+	// A name that is neither a catalog command nor a local definition is still
+	// a hallucinated command.
+	rc = Check([]byte("A = (0,0)\nx = TotallyBogusName(1, 2)\n"), Options{})
+	if !hasCode(rc, diag.CodeCmdUnknown) {
+		t.Fatalf("expected cmd/unknown for a truly unknown command, got %v", rc.Errors)
+	}
+}
+
+// TestDegenerateRadiusThroughVariable — a radius held in a number variable
+// carries exactly the value the graph already knows, so both spellings of a
+// zero radius must be refused. The literal form was caught and the variable
+// form silently passed.
+func TestDegenerateRadiusThroughVariable(t *testing.T) {
+	degenerate := []string{
+		"c = Circle((0,0), 1 - 1)\n",
+		"c = Circle((0,0), 0)\n",
+		"r = 1 - 1\nc = Circle((0,0), r)\n",
+		"r = 0\nc = Circle((0,0), r)\n",
+		"r = -3\nc = Circle((0,0), r)\n",
+		// A short reference chain resolves too.
+		"s = 0\nr = s + 1 - 1\nc = Circle((0,0), r)\n",
+	}
+	for _, script := range degenerate {
+		rc := Check([]byte(script), Options{})
+		if !hasCode(rc, diag.CodeGeoDegenerate) {
+			t.Errorf("%s: expected geo/degenerate, got %v", script, rc.Errors)
+		}
+	}
+	// A positive radius reached through a variable must still be accepted, and
+	// the expression form must not be mistaken for a reference.
+	for _, script := range []string{
+		"r = 2\nc = Circle((0,0), r)\n",
+		"s = 1\nr = s + 1\nc = Circle((0,0), r)\n",
+		"r = 2\nc = Circle((0,0), 2 * r)\n",
+	} {
+		rc := Check([]byte(script), Options{})
+		if !rc.OK {
+			t.Errorf("%s: expected ok, got %v", script, rc.Errors)
+		}
+	}
+	// A reference cycle must not make the resolver spin; deps reports the cycle.
+	rc := Check([]byte("r = s + 1\ns = r + 1\nc = Circle((0,0), r)\n"), Options{})
+	if !hasCode(rc, diag.CodeDepCycle) {
+		t.Fatalf("expected dep/cycle, got %v", rc.Errors)
+	}
+}
+
+// TestBareCommandLabelIsCaseInsensitive — command names are case-insensitive in
+// GeoGebra and in the catalog, but the label-type table was consulted with the
+// raw name, so `midpoint(A,B)` fell through to the General charset and took the
+// label "a" — which then collided with a later `a = 5` and raised a bogus
+// dep/redefine that the capitalised spelling did not.
+func TestBareCommandLabelIsCaseInsensitive(t *testing.T) {
+	for _, script := range []string{
+		"A = (0,0)\nB = (1,1)\nCircle(A, B)\na = 5\n",
+		"A = (0,0)\nB = (1,1)\ncircle(A, B)\na = 5\n",
+		"A = (0,0)\nB = (1,1)\nMIDPOINT(A, B)\na = 5\n",
+	} {
+		rc := Check([]byte(script), Options{})
+		if !rc.OK {
+			t.Errorf("%s: expected ok, got %v", script, rc.Errors)
+		}
+	}
+	// Every spelling of a Point command must predict the same Point label.
+	for _, cmd := range []string{"Midpoint", "midpoint", "MIDPOINT"} {
+		rc := Check([]byte("A = (0,0)\nB = (1,1)\n"+cmd+"(A, B)\n"), Options{})
+		if !rc.OK {
+			t.Fatalf("%s: expected ok, got %v", cmd, rc.Errors)
+		}
+		if !contains(rc.Executable, "C") {
+			t.Errorf("%s: expected the predicted label C, got %v", cmd, rc.Executable)
+		}
+	}
+}
+
+// TestIRObjectNeedsKindOrCmd — IR is the authoritative input, so an object with
+// neither a kind nor a cmd has no type and no command. sig had no signature to
+// check, geo had nothing to test, and reach found it present: it passed as a
+// constructible object while carrying no information at all.
+func TestIRObjectNeedsKindOrCmd(t *testing.T) {
+	for _, ir := range []string{
+		`{"objects":[{"id":"x"}],"goals":["x"]}`,
+		`{"objects":[{"id":"x","args":["0","0"]}],"goals":["x"]}`,
+		// A misspelled kind degrades to KUnknown, which is the same hole.
+		`{"objects":[{"id":"x","kind":"Piont"}],"goals":["x"]}`,
+	} {
+		rc := Check([]byte(ir), Options{ForceSource: "ir"})
+		if rc.OK {
+			t.Errorf("%s: expected a rejection", ir)
+		}
+		if !hasCode(rc, diag.CodeParseJSON) {
+			t.Errorf("%s: expected parse/json, got %v", ir, rc.Errors)
+		}
+	}
+	// Supplying either one is enough, and a valid object is unaffected. Note
+	// that `cmd:"Point"` with numeric args is still refused — a bare number
+	// cannot fill Point's <Object> slot, so use a Number-valued command here.
+	for _, ir := range []string{
+		`{"objects":[{"id":"A","args":["0","2"],"kind":"Point"}],"goals":["A"]}`,
+		`{"objects":[{"id":"r","cmd":"Sqrt","args":["4"]}],"goals":["r"]}`,
+		`{"objects":[{"id":"A","cmd":"Sqrt","args":["4"],"kind":"Number"}],"goals":["A"]}`,
+	} {
+		rc := Check([]byte(ir), Options{ForceSource: "ir"})
+		if !rc.OK {
+			t.Errorf("%s: expected ok, got %v", ir, rc.Errors)
+		}
+	}
+}
+
+// TestReceiptErrorsSerializesAsArray — the receipt is the integration surface
+// for the CLI, the HTTP service and the WASM host, and a host drives its repair
+// loop by iterating errors. Errors was the one slice left nil, so a clean run
+// serialized `"errors": null` and threw on the JS side.
+func TestReceiptErrorsSerializesAsArray(t *testing.T) {
+	rc := Check([]byte("A = (0,0)\n"), Options{})
+	if !rc.OK {
+		t.Fatalf("expected ok, got %v", rc.Errors)
+	}
+	b, err := json.Marshal(rc)
+	if err != nil {
+		t.Fatalf("marshal: %v", err)
+	}
+	for _, field := range []string{`"errors":[]`, `"warnings":[]`, `"executable":[`, `"kinds":{`} {
+		if !strings.Contains(string(b), field) {
+			t.Errorf("expected %s in receipt JSON, got %s", field, b)
+		}
+	}
+}
+
+func contains(xs []string, want string) bool {
+	for _, x := range xs {
+		if x == want {
+			return true
+		}
+	}
+	return false
 }

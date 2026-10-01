@@ -13,11 +13,13 @@
 // for bare commands.
 package text
 
+import "strings"
+
 // labelCharSets mirrors GeoGebra's LabelType.java character arrays.
 // Each entry is the set of base characters for a GeoElement type.
 var labelCharSets = map[string][]rune{
 	// Points: A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, Z
-	"Point":   {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'Z'},
+	"Point": {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'Z'},
 	// Functions: f, g, h, p, q, r, s, t
 	"Function": {'f', 'g', 'h', 'p', 'q', 'r', 's', 't'},
 	// Lines: f, g, h, i, j, k, l, m, n, p, q, r, s, t, a, b, c, d, e
@@ -25,7 +27,7 @@ var labelCharSets = map[string][]rune{
 	// Vectors: u, v, w, a, b, c, d, e, f, g, h, i, j, k, l, m, n, p, q, r, s, t
 	"Vector": {'u', 'v', 'w', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't'},
 	// Conics (circles, ellipses, parabolas, hyperbolas): c, d, e, f, g, h, k, p, q, r, s, t
-	"Conic":  {'c', 'd', 'e', 'f', 'g', 'h', 'k', 'p', 'q', 'r', 's', 't'},
+	"Conic": {'c', 'd', 'e', 'f', 'g', 'h', 'k', 'p', 'q', 'r', 's', 't'},
 	// General lowercase (segments, polygons, curves, etc.): a, b, c, ..., w
 	"General": {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w'},
 	// Integer sliders: n, i, j, k, l, m
@@ -37,40 +39,46 @@ var labelCharSets = map[string][]rune{
 // labelTypeForCommand maps a command name to its label type key.
 // This mirrors how GeoGebra's GeoFactory assigns label types to commands.
 // Commands not listed here default to "General".
+//
+// Keys are UPPERCASE and looked up with strings.ToUpper, because GeoGebra
+// command names are case-insensitive (so is the catalog) while a Go map lookup
+// is not. With a case-sensitive table, `Midpoint(A,B)` correctly predicted the
+// Point label "C" but `midpoint(A,B)` fell through to "General" and took "a" —
+// which then collided with a later `a = 5` and raised a bogus dep/redefine.
 var labelTypeForCommand = map[string]string{
 	// Points
-	"Point":              "Point",
-	"Midpoint":           "Point",
-	"Intersect":          "Point",
-	"Intersection":       "Point",
-	"Foot":               "Point",
-	"OrthogonalLine":     "Point",
-	"ParallelLine":       "Point",
-	"AngularBisector":    "Point",
-	"LineBisector":       "Point",
-	"Circle":             "Conic",
-	"Circumcircle":       "Conic",
-	"Incircle":           "Conic",
-	"EllipticalSector":   "Conic",
+	"POINT":            "Point",
+	"MIDPOINT":         "Point",
+	"INTERSECT":        "Point",
+	"INTERSECTION":     "Point",
+	"FOOT":             "Point",
+	"ORTHOGONALLINE":   "Point",
+	"PARALLELLINE":     "Point",
+	"ANGULARBISECTOR":  "Point",
+	"LINEBISECTOR":     "Point",
+	"CIRCLE":           "Conic",
+	"CIRCUMCIRCLE":     "Conic",
+	"INCIRCLE":         "Conic",
+	"ELLIPTICALSECTOR": "Conic",
 	// Lines
-	"Line":               "Line",
-	"Segment":            "General",
-	"Ray":                "General",
+	"LINE":    "Line",
+	"SEGMENT": "General",
+	"RAY":     "General",
 	// Polygons
-	"Polygon":            "General",
-	"RegularPolygon":     "General",
+	"POLYGON":        "General",
+	"REGULARPOLYGON": "General",
 	// Functions
-	"Curve":              "Function",
-	"ParametricCurve":    "Function",
-	"Plot":               "Function",
+	"CURVE":           "Function",
+	"PARAMETRICCURVE": "Function",
+	"PLOT":            "Function",
 	// Vectors
-	"Vector":             "Vector",
+	"VECTOR": "Vector",
 	// Planes
-	"Plane":              "Plane",
+	"PLANE": "Plane",
 	// Sliders
-	"Slider":             "General",
+	"SLIDER": "General",
 	// Integer sliders
-	"Sequence":           "IntegerSlider",
+	"SEQUENCE": "IntegerSlider",
 }
 
 // predictLabel generates the next available label for a bare command,
@@ -79,7 +87,7 @@ var labelTypeForCommand = map[string]string{
 // usedLabels is the set of labels already taken (from prior statements).
 // cmdName is the command name (used to look up the label type).
 func predictLabel(cmdName string, usedLabels map[string]bool) string {
-	labelType := labelTypeForCommand[cmdName]
+	labelType := labelTypeForCommand[strings.ToUpper(cmdName)]
 	if labelType == "" {
 		labelType = "General"
 	}

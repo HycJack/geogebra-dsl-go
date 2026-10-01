@@ -654,7 +654,12 @@ func ReclassifyNumericExprs(g *ir.Graph) {
 		changed := false
 		for _, id := range g.Order {
 			o := g.Objects[id]
-			if o.Kind != ir.KFunction || o.Cmd != "" || len(o.Params) > 0 {
+			// len(o.Args) == 0 is reachable from the IR path: an object may
+			// declare {"kind":"Function"} with no args and no cmd, which passes
+			// every other guard and then indexed o.Args[0] out of range. An
+			// expression object always has exactly one arg, so an empty Args
+			// simply means there is nothing to classify.
+			if o.Kind != ir.KFunction || o.Cmd != "" || len(o.Params) > 0 || len(o.Args) == 0 {
 				continue
 			}
 			if numericExpr(g, o.Args[0]) {

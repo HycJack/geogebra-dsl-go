@@ -51,14 +51,23 @@ type Receipt struct {
 	SourceIn   string            `json:"source_in"`  // "text" or "ir"
 }
 
-// NewReceipt builds an empty receipt. Warnings is initialized to an empty
-// slice (rather than nil) so the documented `warnings[]` field always
-// serializes as `[]`, not `null`; it is reserved for non-blocking notes and
-// may remain empty when the validator has nothing to warn about. Kinds is
-// likewise always present so hosts can read it without a nil check; it is
-// empty when the input could not be turned into a graph.
+// NewReceipt builds an empty receipt. Errors and Warnings are initialized to
+// empty slices (rather than nil) so the documented `errors[]` / `warnings[]`
+// fields always serialize as `[]`, not `null` — a host driving a repair loop
+// from the receipt iterates them directly, and a nil slice would surface as
+// `null` in JSON and throw on the JS side. Warnings is reserved for
+// non-blocking notes and may remain empty; the validator has nothing to warn
+// about in most runs. Kinds is likewise always present so hosts can read it
+// without a nil check; it is empty when the input could not be turned into a
+// graph.
 func NewReceipt(source string) *Receipt {
-	return &Receipt{SourceIn: source, Warnings: []Problem{}, Executable: []string{}, Kinds: map[string]string{}}
+	return &Receipt{
+		SourceIn:   source,
+		Errors:     []Problem{},
+		Warnings:   []Problem{},
+		Executable: []string{},
+		Kinds:      map[string]string{},
+	}
 }
 
 // Fail marks the receipt as failed (OK=false). Used by fail-closed stages.

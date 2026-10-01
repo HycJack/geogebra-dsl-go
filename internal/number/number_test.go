@@ -193,3 +193,43 @@ func TestKnownConstantSingleLetterCaseSensitive(t *testing.T) {
 		}
 	}
 }
+
+// TestPowerHugeExponentDoesNotTruncate — the exponent used to be converted with
+// big.Int.Int64(), which keeps only the low 64 bits. 2^64 therefore became 0,
+// so the "0^n == 0" case never ran and `0^18446744073709551616` evaluated to 1.
+// The magnitude is irrelevant here (only sign and zero are consumed), so the
+// huge-exponent path returns the sign, and a negative base needs the
+// exponent's exact parity — read from the low bit, which is parity for any size.
+func TestPowerHugeExponentDoesNotTruncate(t *testing.T) {
+	cases := []struct {
+		expr string
+		want *big.Rat
+	}{
+		{"0^18446744073709551616", big.NewRat(0, 1)},     // 2^64: was truncated to 0 → 1
+		{"0^18446744073709551617", big.NewRat(0, 1)},     // 2^64+1: was truncated to 1 → 0
+		{"0^99999999999999999999", big.NewRat(0, 1)},     // well past int64
+		{"(-2)^18446744073709551616", big.NewRat(1, 1)},  // even exponent
+		{"(-2)^18446744073709551617", big.NewRat(-1, 1)}, // odd exponent
+		{"(-1)^99999999999999999999", big.NewRat(-1, 1)}, // odd, far beyond int64
+		// In-range exponents keep their exact values.
+		{"0^4097", big.NewRat(0, 1)},
+		{"2^10", big.NewRat(1024, 1)},
+		{"(-2)^3", big.NewRat(-8, 1)},
+		{"3^0", big.NewRat(1, 1)},
+	}
+	for _, tc := range cases {
+		got, ok := Eval(tc.expr)
+		if !ok {
+			t.Errorf("Eval(%q) = unresolvable, want %s", tc.expr, tc.want.RatString())
+			continue
+		}
+		if got.Cmp(tc.want) != 0 {
+			t.Errorf("Eval(%q) = %s, want %s", tc.expr, got.RatString(), tc.want.RatString())
+		}
+	}
+	// A negative base with a huge odd exponent must report a negative sign,
+	// since geo.zeroRadius tests exactly that.
+	if v, ok := Eval("(-2)^18446744073709551617"); !ok || v.Sign() >= 0 {
+		t.Fatalf("expected a negative value, got %v ok=%v", v, ok)
+	}
+}

@@ -117,11 +117,11 @@ func zeroRadius(g *ir.Graph, o *ir.Object) *diag.Problem {
 		return nil
 	}
 	radiusExpr := o.Args[len(o.Args)-1]
-	if r, ok := parseRat(radiusExpr); ok {
+	if r, ok := resolveNumeric(g, radiusExpr, map[string]bool{}); ok {
 		if r.Sign() <= 0 {
 			return &diag.Problem{
 				Code: diag.CodeGeoDegenerate,
-				Msg:  "退化：圆的半径不为正（" + o.Args[len(o.Args)-1] + "）",
+				Msg:  "退化：圆的半径不为正（" + radiusExpr + "）",
 				Obj:  o.ID,
 			}
 		}
@@ -140,6 +140,88 @@ func zeroRadius(g *ir.Graph, o *ir.Object) *diag.Problem {
 		}
 	}
 	return nil
+}
+
+// resolveNumeric evaluates an expression to an exact rational, first
+// substituting any reference to a number-valued object in the graph.
+//
+// This exists so the two spellings of the same radius agree: `Circle((0,0),
+// 1 - 1)` is caught, and so must `r = 1 - 1` followed by `Circle((0,0), r)`.
+// The value is right there in the graph — the object holds "1 - 1" — so
+// treating a reference as unresolvable was a missed degeneracy, not a
+// conservative choice. Substitution is per-identifier, so it also covers `r` and
+// arithmetic over it (`r = d + 1`, `r = s + 1 - 1`). seen guards against a
+// reference cycle, which deps reports on its own.
+func resolveNumeric(g *ir.Graph, expr string, seen map[string]bool) (*big.Rat, bool) {
+	if r, ok := parseRat(expr); ok {
+		return r, true
+	}
+	sub := substituteNumbers(g, expr, seen)
+	if sub == expr {
+		return nil, false // nothing to substitute: not a resolvable number
+	}
+	return parseRat(sub)
+}
+
+// substituteNumbers rewrites every identifier in expr that names a number-valued
+// object into that object's own value, leaving the result a literal-only
+// expression number.Eval can handle. Identifiers that do not resolve to a
+// number — a point, a function name, an undefined name — are left untouched,
+// which leaves an expression the evaluator will reject: the conservative
+// outcome, and the same one an unresolvable argument had before.
+func substituteNumbers(g *ir.Graph, expr string, seen map[string]bool) string {
+	var sb strings.Builder
+	sb.Grow(len(expr))
+	i, n := 0, len(expr)
+	for i < n {
+		c := expr[i]
+		if !isIdentStartByte(c) {
+			sb.WriteByte(c)
+			i++
+			continue
+		}
+		j := i
+		for j < n && isIdentCharByte(expr[j]) {
+			j++
+		}
+		name := expr[i:j]
+		if lit, ok := numberLiteral(g, name, seen); ok {
+			sb.WriteString(lit)
+		} else {
+			sb.WriteString(name)
+		}
+		i = j
+	}
+	return sb.String()
+}
+
+// numberLiteral returns the exact decimal form of the value of the number object
+// named name, or ok=false when it is not a resolvable number. Recursion is
+// bounded by seen, which both blocks reference cycles and stops a name from
+// being substituted into its own definition.
+func numberLiteral(g *ir.Graph, name string, seen map[string]bool) (string, bool) {
+	if name == "" || seen[name] {
+		return "", false
+	}
+	obj, ok := g.Get(name)
+	if !ok || obj.Kind != ir.KNumber || len(obj.Args) == 0 {
+		return "", false
+	}
+	seen[name] = true
+	defer delete(seen, name)
+	v, ok := resolveNumeric(g, obj.Args[0], seen)
+	if !ok {
+		return "", false
+	}
+	return v.RatString(), true
+}
+
+func isIdentStartByte(c byte) bool {
+	return c == '_' || ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')
+}
+
+func isIdentCharByte(c byte) bool {
+	return isIdentStartByte(c) || ('0' <= c && c <= '9')
 }
 
 // parseRat resolves an argument expression (a decimal, a reserved constant such

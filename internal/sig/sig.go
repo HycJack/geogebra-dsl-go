@@ -4,6 +4,7 @@ package sig
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/hycjack/geogebra-dsl-go/internal/catalog"
@@ -338,12 +339,52 @@ func unknownExplain(c *catalog.Catalog, name string) string {
 	return msg
 }
 
+// userFunction returns the object that defines a script-local function named
+// name, if the graph holds one. A function definition is an object whose kind
+// is KFunction and whose Params is non-empty (`f(x) = ...`); a parameterless
+// expression object (`y = x^2+1`) is not callable and does not qualify.
+func userFunction(g *ir.Graph, name string) (*ir.Object, bool) {
+	if g == nil || name == "" {
+		return nil, false
+	}
+	fn, ok := g.Get(name)
+	if !ok || fn.Kind != ir.KFunction || len(fn.Params) == 0 {
+		return nil, false
+	}
+	return fn, true
+}
+
+// matchUserFunction checks a call to a script-defined function against the
+// parameter list of its definition. Arity is the only thing the coarse model
+// can check: a user function is a KFunction whatever its body returns, and we
+// do not model parameter types for definitions, so every argument kind is
+// accepted. A wrong count is an argument-count error (cmd/arg), never
+// cmd/unknown — the function demonstrably exists.
+func matchUserFunction(fn, call *ir.Object) Match {
+	want, got := len(fn.Params), len(call.Args)
+	if got != want {
+		return Match{Known: true, OK: false, Explain: "函数 " + fn.ID + " 定义了 " +
+			strconv.Itoa(want) + " 个参数（" + strings.Join(fn.Params, ", ") +
+			"），此处传了 " + strconv.Itoa(got) + " 个"}
+	}
+	return Match{Known: true, OK: true}
+}
+
 // Lookup matches an object against the catalog. g provides the kinds of the
 // object's refs; args that are literal tokens (numbers etc.) are treated as
 // literals, not refs.
 func Lookup(c *catalog.Catalog, g *ir.Graph, o *ir.Object) Match {
 	cmd, known := c.Lookup(o.Cmd)
 	if !known {
+		// A name outside the command table may still be a function the same
+		// script defined (`f(x) = x^2+1` followed by `g = f(2)`). GeoGebra
+		// resolves those against the definition's parameter list, not the
+		// command table, so consult the graph before calling it a hallucinated
+		// command. The catalog is checked first on purpose: a real command
+		// always wins over a same-named user definition, matching GeoGebra.
+		if fn, ok := userFunction(g, o.Cmd); ok {
+			return matchUserFunction(fn, o)
+		}
 		return Match{Known: false, Explain: unknownExplain(c, o.Cmd)}
 	}
 	var matched *catalog.Overload
