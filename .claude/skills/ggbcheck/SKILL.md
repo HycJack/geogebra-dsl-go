@@ -81,7 +81,7 @@ ggbcheck check --input text|ir <file>    # 强制输入形态（默认自动识�
 | `geo/degenerate` | 退化构造 | 半径≤0 的圆、重合两点的直线 | 改参数 |
 | `goal/unreachable` | goals 里有不存在的目标对象 | IR 里 `goals` 提到未定义 id | 补定义或改 goals |
 
-命令表内嵌全部 **549 条** GeoGebra 指令（含 3D、统计、CAS、变换），由官方分类库
+命令表内嵌全部 **587 条** GeoGebra 指令（含 3D、统计、CAS、变换），由官方分类库
 合并而来。判断 `cmd/unknown` 时以命令表为准，不要凭记忆。
 
 ## 判定链（报告策略很重要）

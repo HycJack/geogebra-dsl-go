@@ -4,7 +4,7 @@
 > **输入**：文本脚本 / IR JSON 两种形态，走同一份对象图，共享同一条判定链。
 > **判定**：构造可建立（命令存在且签名对、依赖无环、对象无退化、目标可达）。
 > **交付**：只要收据/报告——不产 `.ggb` 文件、不数值求解、不内置绘图。
-> **命令表**：内嵌 GeoGebra 官方分类命令库（20 个 JSON）+ 源码核验的 `supplement.json`，**549 条**（与内核 `Commands.java` 548 个命令常量全对齐，仅多一个保留字 `REAL`）。
+> **命令表**：内嵌 GeoGebra 官方分类命令库（20 个 JSON）+ 源码核验的 `supplement.json`，**合并去重 587 条**（官方 495 + supplement 92），共 1742 条 overload。**与本地内核 `Commands.java`（550 条）差集比对：真实缺失 0 条**（详见 §4）。
 > **数据驱动**：命令→返回粗类型、Scripting 命令集合都放在 `cmdmeta.json`——加/改一个命令的类型只需改这一份 JSON，不碰 Go。
 
 ---
@@ -76,7 +76,9 @@
 
 - 结构：`{ "objects":[{id, kind?, cmd?, args?, refs?}], "goals":[id, ...] }`。
 - 命令名走同一套目录签名；IR 侧**必须**提供 `kind`（或 `cmd`），因为 IR 是权威输入，不承担"从命令名猜类型"的责任。
+  - **已强制执行**：`kind` 与 `cmd` 同时缺失、或 `kind` 写了无法识别的拼写，一律报 `parse/json`。此前这类空壳对象会被判为"可建立"——`sig` 无签名可查、`geo` 无从检验、`reach` 只看目标存在与否，于是 `{"objects":[{"id":"x"}],"goals":["x"]}` 直接 `ok:true`。
 - 若 `objects` 缺失、JSON 不合法、`goals` 类型错，直接 fail-closed。
+- **IR 也会走文本包的数值化**：`check.Check` 对两条输入统一调用 `text.ReclassifyNumericExprs`，因此 IR 对象声明 `kind:"Function"` 而 `args` 为空时必须跳过分类（不得越界）。这是已知的分层欠账——该函数只操作 `*ir.Graph`，与文本解析无关，理应属于独立的语义层而非 `text` 包。
 
 ### 3.3 形态自动识别
 
@@ -85,16 +87,33 @@
 
 ---
 
-## 4. 命令表（549 条，与内核对齐）
+## 4. 命令表（587 条）
 
 - **主源**：20 个官方分类 JSON（`geogebra-commands/*.json`，`commands` 的 map 与 array 两种 shape 都支持），`go:embed` 进二进制。
-- **补充**：`supplement.json`（87 条命令 / 157 条签名，逐一对照内核 `Cmd*` 处理器核实；也用于纠正主源的类型标注，如 `If` 的 `<Then>/<Else>` 主源写成 `<Object>` 但内核按表达式求值）。
+- **补充**：`supplement.json`（92 条命令 / 165 条 overload，逐一对照内核 `Cmd*` 处理器核实；也用于纠正主源的类型标注，如 `If` 的 `<Then>/<Else>` 主源写成 `<Object>` 但内核按表达式求值）。
 - **元数据**：`cmdmeta.json` 两份数据：
-  - `returns`：命令 → 返回粗类型（`Point` / `Line` / `Number` / `Polygon` / `Quadric` / `Plane` / `Polyhedron` / `List` / `Text` / `Matrix` / `Curve` / `Conic` / `Boolean` / `Script` …），数据驱动替代了原来 200+ 行的 `kindForCmd` switch。
+  - `returns`：命令 → 返回粗类型（`Point` / `Line` / `Number` / `Polygon` / `Quadric` / `Plane` / `Polyhedron` / `List` / `Text` / `Matrix` / `Curve` / `Conic` / `Boolean` / `Script` …），数据驱动替代了原来 200+ 行的 `kindForCmd` switch。当前 103 条。
   - `scripting`：官方 67 条 Scripting 命令集合（返回 "Script"），也是"裸语句合法性"的**唯一权威源**。
 - **进程级缓存**：`catalog.Default()` 用 `sync.OnceValues` 缓存——旧实现在每次 `Check` 都重解析全部 20+ JSON（约 16 ms/call），现在降至 ~7.5 µs/call；AI 修复循环（`MaxRepair+1` 次）在长会话下不再重复付出这个代价。
-- **覆盖核查**：对内核权威枚举 `Commands.java`（548 个命令常量）逐一比对——**缺失 0**；JSON 仅多收一个 parser 函数 `REAL`（保留字，非命令）。
+- **计数口径**：587 = 21 个 JSON 文件去重合并后的命令名总数（官方分类 495 + supplement 92），同一命令出现在多个分类文件时 overload 会累加但只计一条。
+- **覆盖核查（2026-10-01 对本地内核源码实测）**：内核命令枚举位于
+  `source/shared/common/src/main/java/org/geogebra/common/kernel/commands/Commands.java`。
+  **注意它已从"一堆 `public static final CommandName` 常量"重构为 `enum Commands implements CommandsConstants`**，表下标常量移到了 `CommandsConstants`——所以按旧结构 grep 的核查脚本必然失效，这正是本项长期无法自动化的原因。当前应改为抓 enum 条目（行首缩进的 `Name(TABLE_*)`）：
+  ```
+  grep -oE '^\s{1,2}[A-Z][A-Za-z0-9_]*\(' Commands.java | tr -d ' (' | sort -u
+  ```
+  实测 **550 条**（去重大写；原始条目 554，含 4 组大小写变体）。与命令表差集：
+  - **内核有、命令表缺：0 条。** 表与这版内核**完全对齐**。
+  - 命令表有、内核无：**38 条**，逐条定性如下：
+    - **约 28 条数学函数**（`Sin`/`Cos`/`Sqrt`/`Ln`/`Abs`/`Round`/`Floor`/`Sign`/`Stdev`/`Var`…）——它们是 `ParserFunctionsFactory` 的 **parser 函数**，不是 `Commands` 枚举成员。`supplement.json` 有意并入，好让 `h = Sqrt(5)`、`r = Cos(0)` 这类 AI 常见写法通过。**合法，非幻觉**。
+    - `Real`——parser 保留字，非命令，符合预期。
+    - **6 条带 `alias` 字段的"恢复命令"**（见下条），有意保留。
+    - **3 条确认的幻觉残留**：`ParallelLine` / `LineThrough` / `CircleWithCenter`——全内核源码搜索 0 命中或仅命中 GUI 常量类。`232e6d2` 的幻觉清理漏了这 3 条。
+- **⚠️ `alias` 字段目前是死数据**：`Incenter→TriangleCenter`、`Circumcenter→TriangleCenter`、`Orthocenter→TriangleCenter`、`Circumcircle→Circle`、`RegularPolygon→Polygon`、`TextBox→Textfield` 共 6 条在 JSON 里标了真实命令，但 `catalog.go` 的 `rawDoc` / `Command` **没有 `Alias` 字段**，全仓无任何 Go 代码读它。后果：`f296d71`「添加 alias 字段指向真实命令」的意图没有落地——用户写 `Incenter(A,B,C)` 会通过校验，但**永远不会看到"真实命令是 TriangleCenter"这条提示**。另 3 条（`ArcCot`/`ArcSec`/`ArcCsc`）连 alias 字段都没有。
+- **自动覆盖核查仍缺位**：`catalog` 单测只有 `len(Names()) >= 400` 的单向下限，检测不到单条命令缺失（少一条真命令 587→586，测试照样绿）。差集比对脚本依赖本地内核源码路径，无法进 CI——待办：把权威命令名清单（纯文本，554 行）随仓库固化，测试从下限换成差集双向比对。
 - **匹配粒度**：命令名精确 + 参数个数 + 粗类型（按 overload 匹配）；字面量参数宽松通过（不阻塞有效性判定），**但只限值槽与表达式槽**。对象通配槽（`<Object>` / `<GeoObject>` / `<Geometric Object>` / `<Region>` / `<Image>` / 表格单元格 / UI 控件等）只收真实对象，裸数字/布尔一律拒绝——否则 `Point(0, 0)` 会被误读成"对象 0 上的参数点 0"、`Rotate(0, 90, O)` 会被当成平移一个数字。字面点请写 `A = (0, 0)` 或 `Point({0, 0})`；`<Expression>` / `<Any>` / `<Variable>` / `<Name>` / 枚举值等槽保持宽松（`Sequence(2, k, 1, 10)`、`Text(0)`、`If(cond, 1, 2)` 都合法）。
+  - **命令名大小写不敏感**：查表、签名匹配、标签类型预测三处统一按大写处理。标签类型表若按原始大小写查，`midpoint(A,B)` 会掉进 `General` 字符集拿到标签 `a`，与脚本里后面的 `a = 5` 冲突并误报 `dep/redefine`。
+  - **用户自定义函数**：`f(x) = ...` 的调用名不在命令表内，但它是图里真实存在的对象。目录未命中时先查图中的函数定义并按其 `Params` 校验元数（错则报 `cmd/arg`，绝不报 `cmd/unknown`）；**目录优先**——真命令永远压过同名用户定义，与 GeoGebra 一致。参数类型未建模，故只校验元数。
 - **诊断增援**：`sig` 报告 `cmd/arg` 时，诊断**附该命令的正确 overload 签名（前 3 条 + 总数）**，AI 修复循环据此直接改正；`cmd/unknown` 附最近命令名 + 官方 URL。
 
 ---
@@ -157,7 +176,11 @@ ggbcheck check /dev/stdin             # Unix 管道/重定向；不支持 `-` �
 
 退出码：`0` 全部通过 / `1` 构造不可建立（有错误码）/ `2` 用法或输入错误。
 
-收据：`ok` / `errors[]`（码 + 中文 + 对象 + 行号 + 官方 URL）/ `warnings[]` / 可执行对象清单（拓扑序）/ `executable`。
+收据：`ok` / `errors[]`（码 + 中文 + 对象 + 行号 + 官方 URL）/ `warnings[]` / 可执行对象清单（拓扑序）/ `executable` / `kinds`。
+
+**收据契约**：`errors` / `warnings` / `executable` / `kinds` 四个集合字段**恒为 `[]` / `{}`，绝不序列化为 `null`**。`NewReceipt` 负责初始化——WASM 入口的文档明说宿主直接拿收据驱动修复循环，而 JS 侧 `receipt.errors.forEach(...)` 遇到 `null` 会直接抛。
+
+> 收据是 CLI / HTTP / WASM 三方的集成面，**目前没有 schema 版本**。加字段容易、改字段无保护；`errors` 曾是唯一漏初始化为 `[]` 的集合，就是缺契约的产物。
 
 ---
 
@@ -183,14 +206,14 @@ ggbcheck check /dev/stdin             # Unix 管道/重定向；不支持 `-` �
 - 纯标准库，无外部依赖，`go test ./...` 全绿。
 - 各包单元测试：
   - `text`：解析 / 嵌套 / 绑定变量 / 保留常量 / **科学计数法** / **字符串感知切分** / **KNumber 后置数值化**；
-  - `number`：求值 / 零判断 / **`e - 3` 与 `e-3` 的区别** / 幂运算 / 保留常量；
-  - `geo`：退化 / π/e / 嵌套算式；
-  - `sig`：overload / 诊断签名附注；
+  - `number`：求值 / 零判断 / **`e - 3` 与 `e-3` 的区别** / 幂运算 / 保留常量 / **超大指数不截断**（`IsInt64` 拦截 + 读最低位取奇偶性，`0^2^64` 必须为 0 而非 1）；
+  - `geo`：退化 / π/e / 嵌套算式 / **半径经变量与算式代入**；
+  - `sig`：overload / 诊断签名附注 / **用户自定义函数的元数校验**；
   - `catalog`：map+array 合并 / 缺漏 / **cmdmeta.json 加载 / KindOf / IsScriptingCommand**；
   - `deps`：Kahn 拓扑序 + **Tarjan SCC 真环归因** + **blocked 下游**；
-  - `check`：端到端多场景。
-- 集成夹具在 `testdata/exam/`（**18 道**中考/高考风格正例：注释、四心、切线、椭圆焦点、函数拟合、3D 等）与 `testdata/exam-bad/`（**13 道**应拒绝的反例：传点、退化、环、未知命令等），由 `internal/check` 端到端测试统一驱动。
-- 覆盖核查（`catalog` 单测）：命令总数 ≥ 400 是弱下限；实际合并后 549 条，与内核枚举全对齐。
+  - `check`：端到端多场景（**56 个**测试函数）。
+- 集成夹具在 `testdata/exam/`（**18 道**中考/高考风格正例：注释、四心、切线、椭圆焦点、函数拟合、3D 等）与 `testdata/exam-bad/`（**14 道**应拒绝的反例：传点、退化、环、未知命令等），由 `internal/check` 端到端测试统一驱动。
+- 覆盖核查（`catalog` 单测）：**只是** `len(Names()) >= 400` 的单向下限，检测不到单条命令缺失；实际合并后 587 条。**2026-10-01 已用本地内核源码做过一次完整差集比对，真实缺失 0 条**，方法与 38 条反向差异的逐条定性见 §4；但该比对依赖内核源码路径，尚无法进 CI 自动执行。
 
 ---
 

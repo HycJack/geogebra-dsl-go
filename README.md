@@ -80,22 +80,48 @@ ggbcheck check /dev/stdin                # Unix 管道/重定向（不支持 `-`
 命令表来自 GeoGebra 官方分类命令库 `geogebra-commands/`（取自
 `ggb-gen-api/geogebra-commands`），内嵌全部 20 个分类 JSON 并合并成一份，
 再补充 `supplement.json`（所有签名逐一对照 GeoGebra 内核源码
-`org.geogebra.common.kernel.commands` 的 Cmd 处理器手动核验），当前 **549 条**。
+`org.geogebra.common.kernel.commands` 的 Cmd 处理器手动核验），当前
+**合并去重 587 条**（官方分类 495 + supplement 92），共 1742 条 overload。
 命令 → 粗类型返回值与官方 67 条 Scripting 命令集合为数据驱动（`cmdmeta.json`），
 命令表加载一次后进程级缓存（`catalog.Default()`），不随每次校验重复解析。
 
 ### 与内核源码对齐（覆盖核查）
 
-拿 GeoGebra 内核源码里的权威命令枚举 `Commands.java`（548 个常量）逐一比对：
+**2026-10-01 已对本地 GeoGebra 内核源码做过完整差集比对，结果：真实缺失 0 条。**
 
-- **每一条 JSON 命令都能对到内核命令**，无错误/虚构条目（JSON 侧仅多收一个
-  parser 函数名 `REAL`，无碍——它是保留字而非命令）。
-- **内核 548 条命令已全部覆盖（缺失 0）**，含 3D 曲面体（`ConeInfinite`、
-  `CylinderInfinite`、`Polyhedron`、`QuadricSide`）、统计（`PMCC`、
-  `FitLineY`、`TableToChart`、`Q1/Q3`）、CAS（`Evaluate`、`TaylorSeries`）、
-  变换（`Mirror`、`OrthogonalLine`、`Dilate`）等全部分类。
-- 少数因内核已标 **deprecated**（`IntersectRegion`、`IntersectionPaths`）
-  仍收录，便于兼容老脚本。
+内核命令枚举在 `source/shared/common/src/main/java/org/geogebra/common/kernel/commands/Commands.java`。
+**注意它已从"一堆 `public static final CommandName` 常量"重构为 `enum Commands`**——按旧结构写的
+核查脚本必然失效，这正是本项长期无法自动维护的原因。现在抓 enum 条目即可：
+
+```bash
+grep -oE '^\s{1,2}[A-Z][A-Za-z0-9_]*\(' Commands.java | tr -d ' (' | sort -u
+```
+
+实测 **550 条**（去重大写）。与命令表比对：
+
+| 方向 | 数量 | 定性 |
+|---|---|---|
+| 内核有、命令表缺 | **0** | ✅ 完全对齐 |
+| 命令表有、内核无 | 38 | 约 28 条是 `ParserFunctionsFactory` 的 **parser 函数**（`Sin`/`Cos`/`Sqrt`/`Ln`/`Abs`…，非 `Commands` 枚举成员），`supplement.json` 有意并入以支持 `h = Sqrt(5)` 这类 AI 常见写法——**合法**；`Real` 是保留字；6 条是带 `alias` 的"恢复命令"；**3 条是确认的幻觉残留**。 |
+
+表内覆盖 3D 曲面体（`ConeInfinite`、`CylinderInfinite`、`Polyhedron`、`QuadricSide`）、
+统计（`PMCC`、`FitLineY`、`TableToChart`、`Q1`/`Q3`）、CAS（`Evaluate`、`TaylorSeries`）、
+变换（`Mirror`、`OrthogonalLine`、`Dilate`）等全部分类；少数内核已标 **deprecated** 的条目
+（`IntersectRegion`、`IntersectionPaths`）仍收录，便于兼容老脚本。JSON 侧多收一个 parser
+函数名 `Real`（保留字而非命令）。
+
+> **⚠️ 三处已知欠账**
+> 1. **`alias` 是死数据**：`Incenter→TriangleCenter`、`Circumcenter→TriangleCenter`、
+>    `Orthocenter→TriangleCenter`、`Circumcircle→Circle`、`RegularPolygon→Polygon`、
+>    `TextBox→Textfield` 在 JSON 里标了真实命令，但 `catalog.go` 根本没定义 `Alias` 字段，
+>    全仓无 Go 代码读它。用户写 `Incenter(A,B,C)` 能通过，但**永远看不到"真实命令是
+>    TriangleCenter"的提示**——`f296d71` 的意图没落地。另 3 条（`ArcCot`/`ArcSec`/`ArcCsc`）
+>    连 alias 字段都没有。
+> 2. **3 条幻觉残留**：`ParallelLine` / `LineThrough` / `CircleWithCenter` 全内核源码
+>    0 命中或仅命中 GUI 常量类，`232e6d2` 的清理漏了这 3 条，目前仍会被当成合法命令接受。
+> 3. **自动核查缺位**：`catalog` 单测只有 `len(Names()) >= 400` 的单向下限，检测不到单条
+>    命令缺失（少一条真命令 587→586，测试照样绿）。上面的比对依赖内核源码路径，无法进 CI。
+>    待办：把权威命令名清单（纯文本）随仓库固化，断言从下限换成**差集双向比对**。
 
 > 合并时每个分类文件的 `commands`（map 与 array 两种 shape 均支持）逐一并入；
 > 同一条命令出现在多个分类时 overloads 全部累积，任何分类的签名都能命中。
@@ -131,7 +157,7 @@ internal/
   text/          文本脚本 → 对象图（解析+命令嵌套物化+绑定变量+字符串感知+科学计数法）
   ir/            共享对象图 + IR JSON 解析（两条输入的汇合点）
   number/        精确算术求值器（big.Rat + π/e + 嵌套算式 + 科学计数法）
-  catalog/       命令表（go:embed 全部分类 JSON + supplement + cmdmeta.json，合并 549 条，进程级缓存）
+  catalog/       命令表（go:embed 全部分类 JSON + supplement + cmdmeta.json，合并 587 条，进程级缓存）
   sig/           签名匹配（命令名/参数个数/粗类型，含嵌套命令；诊断附正确签名）
   deps/          依赖无环：邻接表 Kahn + Tarjan SCC 真环归因 + blocked 下游
   geo/           退化判定（复用 number 精确求值）

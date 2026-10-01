@@ -115,7 +115,10 @@ internal/check/...           # 复用现有校验器(不改，只扩一个"可�
 
 标准 `choices[0].message.content`；当 stream 时解析 `choices[0].delta.content` 增量。
 
-**瞬态错误自动指数退避重试**：遇到网络错误或可重试状态码（`408`/`409`/`429`/`5xx`）时，在 `client.go` 内部对**同一份消息/请求体**做指数退避重发（初始退避 `GGCM_AI_HTTP_RETRY_BASE_MS`=500ms，每轮翻倍，最多重试 `GGCM_AI_HTTP_RETRIES`=5 次）。重试全程复用构建好的请求体，消息内容不被丢失或改写；`4xx` 以外的永久错误（`400`/`401`/`403`/`404`）不重试，直接返回用户。
+**瞬态错误自动指数退避重试**：遇到网络错误或可重试状态码（`408`/`409`/`429`/`5xx`）时，在 `client.go` 内部对**同一份消息/请求体**做指数退避重发（初始退避 `GGCM_AI_HTTP_RETRY_BASE_MS`=500ms，每轮翻倍，**单次退避封顶 30s**，最多重试 `GGCM_AI_HTTP_RETRIES`=5 次）。重试全程复用构建好的请求体，消息内容不被丢失或改写；`4xx` 以外的永久错误（`400`/`401`/`403`/`404`）不重试，直接返回用户。
+
+> 退避必须**饱和**而非裸算 `base<<(attempt-1)`：该式在 int64 里左移，attempt≈40 变负、≥62 变 0，而 `time.NewTimer` 对 0/负值立即触发——`HTTPRetries` 一旦被配大，退避会静默退化成对 LLM 端点的热重试循环。现由 `backoffDelay()` 封顶 30s。
+> 放大 LLM 调用量的两个 env 旋钮（`GGCM_AI_MAX_REPAIR`、`GGCM_AI_HTTP_RETRIES`，另加 `GGCM_AI_HTTP_RETRY_BASE_MS`）经 `envIntClamped` 约束在合理区间：超界取区间端点而非报错，保证服务自愈。
 
 ### 4.3 配置 env
 
@@ -290,7 +293,7 @@ for attempt := 1; attempt <= cfg.MaxRepair; attempt++ {
 
 - **图片后端不支持**：调用报错 → 降级提示"改用文本输入"；`DisableVision=true` 时可提前跳过图片 branch。
 - **LLM 弱：连续重试仍不过**：达到 `MaxRepair` 后不再空转，返回带诊断的失败收据（不吞错误）。
-- **瞬时网络/限流**：429/408/409/5xx/超时 → 指数退避重试，默认最多 `GGCM_AI_HTTP_RETRIES` 次（默认 5，`GGCM_AI_HTTP_RETRY_BASE_MS`=500ms 起、每轮翻倍；见 §4.2）。永久 4xx（400/401/403/404）不重试。
+- **瞬时网络/限流**：429/408/409/5xx/超时 → 指数退避重试，默认最多 `GGCM_AI_HTTP_RETRIES` 次（默认 5，`GGCM_AI_HTTP_RETRY_BASE_MS`=500ms 起、每轮翻倍、单次封顶 30s；见 §4.2）。永久 4xx（400/401/403/404）不重试。
 - **脚本抽取失败**：LLM 输出里没有 `<gg>` 区块 → 视为一次失败重试；仍无则报 `format` 错误。
 - **会话放大**：设 `MaxHistoryTurns`（默认 20）截断单会话历史，防止上下文膨胀。
 - **请求总预算**：`/api/chat` 用 `context.WithTimeout` 包住整个修复循环（默认 `GGCM_AI_REQUEST_TIMEOUT_S`=900s），防止一个坏请求在 `(MaxRepair+1)×HTTPTimeoutS` 的最坏路径上无限占用 handler；HTTP 层另设 `ReadHeaderTimeout`（30s）防 slowloris（不设 Read/WriteTimeout，保住 SSE 长连接）。
@@ -334,7 +337,7 @@ type ChatClient interface {
 
 - `ggbcheck` 校验器**不改**；`ai/gate.go` 是它在新场景的唯一新调用方。
 - 生成器只输出 ggbcheck grammar **能解析**的指令（单行一条、`ID = Command(args)`/`ID = 数字`/字面点/列表 `{...}`/代数表达式 `y = x^2+1`/函数定义 `f(x)=...`,以及无赋值号的 `Set…`/`StartAnimation` 等修饰语句）。这与 DESIGN.md 的文本输入 grammar 一致。
-- 若未来某命令确实需要但不在现有 549 条表内，属于 `catalog` 层扩展，不在本设计范围。
+- 若未来某命令确实需要但不在现有 587 条表内，属于 `catalog` 层扩展，不在本设计范围。
 
 ---
 
