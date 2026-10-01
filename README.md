@@ -182,8 +182,23 @@ go vet ./...
 ```
 
 集成用例在 `testdata/`：`exam/`（**18 道**中考/高考风格正例，覆盖注释、四心、
-圆的切线、椭圆焦点、函数拟合、3D 等）与 `exam-bad/`（**13 道**应被拒绝的反例），
+圆的切线、椭圆焦点、函数拟合、3D 等）与 `exam-bad/`（**14 道**应被拒绝的反例），
 由 `internal/check` 的端到端测试统一驱动。
+
+### CI
+
+`.github/workflows/ci.yml` 在 `main` 的每次 push 和所有 PR 上跑
+`ubuntu-latest` + `macos-latest`（`fail-fast: false`，一边挂了另一边仍要出结论）：
+
+```bash
+gofmt -l .        # 非空即失败
+go vet ./...
+go test -race -count=1 ./...
+GOOS=js GOARCH=wasm go build ./...
+```
+
+**命令表的双向差集断言就是靠这个 CI 守住的**——脱离 CI 手动跑，命令表随时可能悄悄
+漂移；`kernel-commands.txt` 少一条真命令、或凭空多一条无理由的条目，都会在 PR 上直接红。
 
 ## AI 对话服务（题目 → GeoGebra 指令）
 

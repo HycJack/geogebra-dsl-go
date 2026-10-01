@@ -206,6 +206,7 @@ ggbcheck check /dev/stdin             # Unix 管道/重定向；不支持 `-` �
   - `check`：端到端多场景（**56 个**测试函数）。
 - 集成夹具在 `testdata/exam/`（**18 道**中考/高考风格正例：注释、四心、切线、椭圆焦点、函数拟合、3D 等）与 `testdata/exam-bad/`（**14 道**应拒绝的反例：传点、退化、环、未知命令等），由 `internal/check` 端到端测试统一驱动。
 - 覆盖核查（`catalog` 单测）：**双向差集**，取代了原来的 `len(Names()) >= 400` 单向下限。实际合并后 575 条可执行命令（另有 12 条非命令别名）。权威清单已随仓库固化（`kernel-commands.txt` 549 条 + `non-kernel-commands.txt` 26 条），两个方向都由单测断言，**不再依赖本地内核路径**——内核升级时按文件头的抽取命令重新生成即可。
+- **CI**：`.github/workflows/ci.yml`，`main` push + 所有 PR，`ubuntu-latest` 与 `macos-latest` 双平台（`fail-fast: false`）。跑 `gofmt -l .`（非空即失败）、`go vet ./...`、`go test -race -count=1 ./...`、`GOOS=js GOARCH=wasm go build ./...`。**上面那条双向差集断言正是靠它守住**——本仓库在此之前没有任何 CI，测试全靠人手触发。
 
 ---
 
